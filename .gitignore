@@ -1,0 +1,17 @@
+# Kursmaterialet är upphovsrättsskyddat och ska INTE publiceras.
+# Appen fungerar utan mappen – den används bara som källa när frågor skrivs.
+sysb23-kursmaterial/
+
+# Separat publiceringsrepo (johanssonmira1/sysb23-plugg-2026) med egen historik
+sysb23-plugg/
+
+# Claude Code
+.claude/
+
+# Systemfiler
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Node
+node_modules/

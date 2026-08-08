@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#12324a">
+  <title>SYSB23 Plugg</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-rad">
+    <button id="btn-hem" class="logo">SYSB23 <span>Plugg</span></button>
+    <select id="sel-delkurs" class="delkursval" aria-label="Välj delkurs"></select>
+  </div>
+  <nav class="wrap navrad" id="mainnav">
+    <button class="navbtn active" data-vy="hem">Hem</button>
+    <button class="navbtn" data-vy="las">Läs</button>
+    <button class="navbtn" data-vy="ova">Öva</button>
+    <button class="navbtn" data-vy="prov">Prov</button>
+    <button class="navbtn" data-vy="essa">Essä</button>
+    <button class="navbtn" data-vy="statistik">Statistik</button>
+    <button class="navbtn" data-vy="schema">Schema</button>
+  </nav>
+</header>
+
+<main class="wrap">
+  <section id="vy-hem"       class="vy"></section>
+  <section id="vy-las"       class="vy dold"></section>
+  <section id="vy-ova"       class="vy dold"></section>
+  <section id="vy-prov"      class="vy dold"></section>
+  <section id="vy-essa"      class="vy dold"></section>
+  <section id="vy-statistik" class="vy dold"></section>
+  <section id="vy-schema"    class="vy dold"></section>
+</main>
+
+<footer class="wrap">
+  <p class="muted liten">
+    Innehållet bygger på kursmaterialet i <code>sysb23-kursmaterial/</code> och gamla tentor.
+    Kalendern är avläst mot TimeEdit 1 augusti 2026 – kontrollera alltid aktuell vecka själv.
+    All statistik sparas lokalt i din webbläsare.
+  </p>
+</footer>
+
+<!-- Data -->
+<script src="data/topics.js"></script>
+<script src="data/kalender.js"></script>
+<script src="data/ordlista.js"></script>
+<script src="data/kompendium-strategi-1.js"></script>
+<script src="data/kompendium-strategi-2.js"></script>
+<script src="data/kompendium-databaser-1.js"></script>
+<script src="data/kompendium-databaser-2.js"></script>
+<script src="data/questions-db-sql.js"></script>
+<script src="data/questions-db-joins.js"></script>
+<script src="data/questions-db-design.js"></script>
+<script src="data/questions-db-app.js"></script>
+<script src="data/questions-strategi-ekonomistyrning.js"></script>
+<script src="data/questions-strategi-styrning.js"></script>
+
+<!-- Applikation -->
+<script src="js/ui.js"></script>
+<script src="js/store.js"></script>
+<script src="js/hem.js"></script>
+<script src="js/las.js"></script>
+<script src="js/ova.js"></script>
+<script src="js/essa.js"></script>
+<script src="js/statistik.js"></script>
+<script src="js/schema.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
