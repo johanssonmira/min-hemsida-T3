@@ -490,7 +490,9 @@ window.SYSB23.ova = (function () {
       html += '<div class="altforklaring ' + (arRatt ? 'ar-ratt' : 'ar-fel') + '">';
       html += '<strong>' + (i + 1) + '. ' + U.esc(text) +
               (i === pass.valtIndex ? ' <span class="dittsvar">(ditt svar)</span>' : '') + '</strong>';
-      html += U.esc((f.forklaringar && f.forklaringar[i]) || '');
+      /* inline() i stället för esc() – då slår **fetstil** i frågedatan
+         igenom, precis som i kompendiet. Nyckelbegreppet ska fastna. */
+      html += U.inline((f.forklaringar && f.forklaringar[i]) || '');
       html += '</div>';
     });
 

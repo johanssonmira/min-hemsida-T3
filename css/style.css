@@ -92,7 +92,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-.wrap { max-width: 1240px; margin: 0 auto; padding-left: 1.5rem; padding-right: 1.5rem; }
+.wrap { max-width: 1680px; margin: 0 auto; padding-left: 2rem; padding-right: 2rem; }
 .dold { display: none !important; }
 .muted { color: var(--ink-soft); }
 .liten { font-size: .875rem; }
@@ -103,12 +103,22 @@ body {
 #vy-ova, #vy-prov, #vy-essa { max-width: 880px; margin: 0 auto; }
 #vy-las { max-width: 940px; margin: 0 auto; }
 
-/* Tvåkolumnsläge: huvudspalt till vänster, stödinformation till höger. */
-.kolumner { display: grid; grid-template-columns: 1fr; gap: 1.05rem; align-items: start; }
-.kolumner > * { min-width: 0; }
-@media (min-width: 980px) {
-  .kolumner { grid-template-columns: minmax(0, 1.9fr) minmax(285px, 1fr); }
+/* -------------------------------------------------------------------------
+   Rutnätet är hela layoutsystemet. Korten är fristående rutor som packas
+   om efter skärmens bredd: en spalt på mobil, två på en liten laptop, tre
+   eller fyra på en stor skärm. Ingen vy behöver egna brytpunkter.
+
+   .bred  – kortet spänner över alla spalter (kalendern, dagens plan)
+   .dubbel – kortet tar två spalter när det finns minst tre
+   ------------------------------------------------------------------------- */
+.rutnat {
+  display: grid; gap: 1.15rem; align-items: start;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
 }
+.rutnat > * { min-width: 0; }
+.rutnat > .kort { margin-bottom: 0; }
+.rutnat > .bred { grid-column: 1 / -1; }
+@media (min-width: 1180px) { .rutnat > .dubbel { grid-column: span 2; } }
 
 /* =========================== Topbar =========================== */
 /* Accentlinjen under topbaren tar aktiv delkurs färg. Det är den enda
@@ -130,8 +140,11 @@ body {
 .logo span { font-weight: 400; opacity: .68; font-style: italic; }
 
 /* ---- Delkursväljaren ---- */
+/* min-width:0 hela vägen ner, annars vägrar select krympa under sin
+   innehållsbredd och hela sidan får vågrät rullning på smala skärmar. */
 .delkursvaljare {
-  flex: 0 0 auto; margin-left: auto; display: flex; align-items: center; gap: .6rem;
+  flex: 0 1 auto; min-width: 0; margin-left: auto;
+  display: flex; align-items: center; gap: .6rem;
   background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.2);
   border-radius: 999px; padding: .18rem .3rem .18rem .85rem;
 }
@@ -139,7 +152,7 @@ body {
   font-size: .64rem; font-weight: 800; letter-spacing: .12em;
   text-transform: uppercase; color: rgba(255,255,255,.6); white-space: nowrap;
 }
-.dv-kontroll { display: flex; align-items: center; gap: .45rem;
+.dv-kontroll { display: flex; align-items: center; gap: .45rem; min-width: 0;
   background: rgba(255,255,255,.14); border-radius: 999px; padding: .16rem .5rem .16rem .6rem; }
 .dv-prick {
   width: 10px; height: 10px; border-radius: 50%; flex: 0 0 10px;
@@ -149,7 +162,8 @@ body {
 .delkursval {
   background: none; color: #fff; border: none;
   padding: .18rem 0; font-size: .9rem; font-weight: 600;
-  font-family: inherit; cursor: pointer; max-width: 15rem;
+  font-family: inherit; cursor: pointer;
+  min-width: 0; max-width: 100%; text-overflow: ellipsis;
 }
 .delkursval:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 .delkursval option { color: var(--ink); background: #fff; font-weight: 500; }
@@ -291,6 +305,20 @@ button:disabled:active { transform: none; }
   background: rgba(255,255,255,.15); color: #fff; border-color: rgba(255,255,255,.4);
 }
 .nedrakning .knapprad button:hover { background: #fff; color: var(--blaa-600); }
+/* Liggande variant, används där kortet spänner över hela bredden.
+   Samma innehåll, men på en rad i stället för som en hög blå kloss. */
+.nedrakning.banner {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 1.1rem 2rem;
+  padding: 1.1rem 1.6rem;
+}
+.nedrakning.banner .dagar { margin: 0; align-items: center; gap: .7rem; }
+.nedrakning.banner .siffra { font-size: 3.2rem; }
+.nedrakning.banner .dagar .text { line-height: 1.15; font-size: .85rem; }
+.nedrakning.banner .banner-kropp { flex: 1 1 16rem; min-width: 0; }
+.nedrakning.banner h1 { font-size: 1.35rem; margin: 0 0 .25rem; }
+.nedrakning.banner .etikett { margin-bottom: .2rem; }
+.nedrakning.banner .knapprad { margin-top: 0; flex: 0 0 auto; }
+
 .radtips {
   margin-top: .95rem; padding: .7rem .9rem;
   background: rgba(255,255,255,.12); border-radius: var(--r-s);
@@ -299,6 +327,16 @@ button:disabled:active { transform: none; }
 }
 
 /* ========================= Dagens plan ========================= */
+/* Dagsmålet. Litet, avbockningsbart och alltid samma – ett mål du klarar
+   varje dag driver mer än ett stort du klarar ibland. */
+.dagsmal {
+  background: var(--blaa-50); border: 1.5px solid var(--blaa-100);
+  border-radius: var(--r-s); padding: .7rem .9rem; margin-bottom: 1rem;
+}
+.dagsmal.klart { background: var(--gron-50); border-color: #B6E3CB; }
+.dagsmal .dm-text { font-size: .89rem; margin-bottom: .5rem; }
+.dagsmal .progress { margin: 0; }
+
 .plansteg {
   display: flex; gap: .85rem; align-items: flex-start; width: 100%;
   text-align: left; background: var(--creme-50);
@@ -754,9 +792,12 @@ button:disabled:active { transform: none; }
   padding: .14rem .3rem .18rem .34rem;
   font-size: .69rem; line-height: 1.3; overflow: hidden;
 }
-.hnd b { display: block; font-weight: 800; font-size: .68rem; letter-spacing: .01em; }
+/* Tid och passtyp ligger på samma rad när rutan är bred nog och radbryter
+   av sig själv när den inte är det. Inga extra brytpunkter behövs. */
+.hnd { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 .35rem; }
+.hnd b { font-weight: 800; font-size: .68rem; letter-spacing: .01em; }
 .hnd b i { font-style: normal; }
-.hnd span { display: block; color: var(--ink-mid); font-weight: 600;
+.hnd span { color: var(--ink-mid); font-weight: 600;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* Tenta är det enda som fyller hela brickan – den ska sticka ut på avstånd. */
@@ -860,8 +901,8 @@ button:disabled:active { transform: none; }
 .tk-namn { display: block; font-weight: 700; font-size: .95rem; }
 .tk-meta { display: block; font-size: .82rem; color: var(--ink-soft); margin-top: .1rem; }
 .tk-dagar {
-  flex: 0 0 auto; text-align: right; font-size: .82rem;
-  color: var(--ink-soft); white-space: nowrap; font-weight: 700;
+  flex: 0 1 auto; min-width: 0; text-align: right; font-size: .82rem;
+  color: var(--ink-soft); font-weight: 700;
 }
 
 .fas { padding: .78rem .55rem; border-bottom: 1px solid var(--creme-300); border-radius: 6px; }

@@ -34,16 +34,16 @@ window.SYSB23.schema = (function () {
   function rendera() {
     satterStartmanad();
 
-    /* Kalendern får huvudspalten, allt som stödjer läsningen av den
-       ligger i högerspalten. På smal skärm faller de ihop till en. */
-    var html = '<div class="kolumner">';
-    html += '<div class="kol-vanster">' + kalenderkort() + '</div>';
-    html += '<div class="kol-hoger">';
+    /* Ordningen är: vad som är närmast, sedan kalendern i egen full bredd,
+       sedan uppslagsinformationen bredvid varandra under. Kalendern ska
+       aldrig behöva samsas om ytan med en textspalt vid sidan. */
+    var html = '<div class="rutnat">';
     html += nedrakningskort();
+    html += kalenderkort();
     html += tentakort();
     html += faskort();
     html += praktisktkort();
-    html += '</div></div>';
+    html += '</div>';
 
     var vy = U.el('vy-schema');
     vy.innerHTML = html;
@@ -59,16 +59,21 @@ window.SYSB23.schema = (function () {
     var tenta = U.nastaTenta(null, true);
     if (!tenta) return '';
 
+    /* Liggande banner: siffran, vilken tenta det gäller och knappen på
+       en rad. Tar bredden utan att bli en vägg av blått. */
     var dagar = U.dagarTill(tenta.datum);
-    var html = '<div class="kort nedrakning">';
+    var html = '<div class="kort nedrakning banner bred">';
+
+    html += '<div class="dagar"><span class="siffra">' + dagar + '</span>' +
+            '<span class="text">' + (dagar === 1 ? 'dag<br>kvar' : 'dagar<br>kvar') + '</span></div>';
+
+    html += '<div class="banner-kropp">';
     html += '<div class="etikett">Nästa tenta · ' +
             (tenta.typ === 'omtenta' ? 'Omtenta' : 'Ordinarie') + '</div>';
     html += '<h1>' + U.esc(U.delkursNamn(tenta.delkurs)) + '</h1>';
-    html += '<div class="dagar"><span class="siffra">' + dagar + '</span>' +
-            '<span class="text">' + (dagar === 1 ? 'dag kvar' : 'dagar kvar') + '</span></div>';
-    html += '<div class="fakta">';
-    html += '<div>' + U.esc(U.langtDatum(tenta.datum)) + ', ' + U.esc(tenta.tid) + '</div>';
-    html += '<div>' + U.esc(tenta.sal) + (tenta.larare ? ' · ' + U.esc(tenta.larare) : '') + '</div>';
+    html += '<div class="fakta"><b>' + U.esc(U.langtDatum(tenta.datum)) + '</b> · ' +
+            U.esc(tenta.tid) + ' · ' + U.esc(tenta.sal) +
+            (tenta.larare ? ' · ' + U.esc(tenta.larare) : '') + '</div>';
     html += '</div>';
 
     if (harMaterial(tenta.delkurs)) {
@@ -90,7 +95,7 @@ window.SYSB23.schema = (function () {
   /* ================================================================ */
 
   function kalenderkort() {
-    var html = '<div class="kort">';
+    var html = '<div class="kort bred">';
 
     html += '<h2>Kalender</h2>';
     html += '<p class="muted liten">Färgen visar vilken delkurs passet hör till. ' +
@@ -404,8 +409,10 @@ window.SYSB23.schema = (function () {
   /* Terminen i faser                                                  */
   /* ================================================================ */
 
+  /* Faserna är fyra korta stycken – kortet får dubbel spaltbredd så att
+     raderna inte blir tre ord långa på stor skärm. */
   function faskort() {
-    var html = '<div class="kort">';
+    var html = '<div class="kort dubbel">';
     html += '<h2>Terminen i stort</h2>';
     S.terminsfaser.forEach(function (f) {
       html += '<div class="fas' + (f.tat ? ' tat' : '') + '">';

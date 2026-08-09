@@ -16,19 +16,17 @@ window.SYSB23.hem = (function () {
   function rendera() {
     var delkurs = S.store.delkurs();
 
-    /* Vänsterspalten är "vad gör jag nu", högerspalten "hur ligger jag till".
-       Ordningen är densamma när spalterna faller ihop på smal skärm. */
-    var html = '<div class="kolumner">';
-    html += '<div class="kol-vanster">';
+    /* Korten packar om sig efter skärmens bredd. Ordningen är densamma
+       oavsett antal spalter: först vad som är närmast, sedan vad du ska
+       göra nu, därefter hur det går och vad som händer i veckan. */
+    var html = '<div class="rutnat">';
     html += nedrakningskort(delkurs);
     html += dagensPlan(delkurs);
-    html += atgardskort(delkurs);
-    html += '</div>';
-    html += '<div class="kol-hoger">';
     html += lagekort(delkurs);
     html += veckanskort();
+    html += atgardskort(delkurs);
     html += tentaformatkort(delkurs);
-    html += '</div></div>';
+    html += '</div>';
 
     var vy = U.el('vy-hem');
     vy.innerHTML = html;
@@ -78,16 +76,18 @@ window.SYSB23.hem = (function () {
     var text;
 
     if (kvar === 0) {
-      text = 'Alla ' + totalt + ' kapitel lästa. Nu handlar det om att öva frågor och skriva essäsvar.';
+      text = '**Alla ' + totalt + ' kapitel lästa.** Nu handlar det om att öva frågor ' +
+             'och skriva essäsvar.';
     } else if (dagar <= 0) {
-      text = kvar + ' olästa kapitel och tentan är idag. Läs kapitlet om tentataktik om inget annat.';
+      text = kvar + ' olästa kapitel och **tentan är idag**. Läs kapitlet om tentataktik ' +
+             'om inget annat.';
     } else {
       var takt = Math.floor(dagar / kvar);
       text = kvar + ' olästa kapitel på ' + dagar + ' dagar — ' +
-             (takt >= 2 ? 'ett kapitel var ' + takt + ':e dag räcker.'
-                        : 'ungefär ' + Math.ceil(kvar / dagar) + ' kapitel om dagen.');
+             (takt >= 2 ? '**ett kapitel var ' + takt + ':e dag** räcker.'
+                        : '**ungefär ' + Math.ceil(kvar / dagar) + ' kapitel om dagen.**');
     }
-    return '<div class="radtips">' + U.esc(text) + '</div>';
+    return '<div class="radtips">' + U.inline(text) + '</div>';
   }
 
   /* ================================================================ */
@@ -98,12 +98,26 @@ window.SYSB23.hem = (function () {
     var steg = byggSteg(delkurs);
     var streak = S.store.streak();
 
-    var html = '<div class="kort">';
+    var mal = S.store.dagsmal();
+
+    var html = '<div class="kort dubbel">';
     html += '<h2>Dagens plan';
     if (streak > 0) {
       html += '<span class="streak">🔥 ' + streak + (streak === 1 ? ' dag' : ' dagar') + ' i rad</span>';
     }
     html += '</h2>';
+
+    /* Dagsmålet ligger överst: en liten, avbockningsbar sak som gör att
+       varje pass känns avslutat i stället för oändligt. */
+    html += '<div class="dagsmal' + (mal.klart ? ' klart' : '') + '">';
+    html += '<div class="dm-text">' + (mal.klart
+      ? '<strong>Dagens mål är klart.</strong> ' + mal.antal + ' frågor idag — allt utöver det är bonus.'
+      : '<strong>' + mal.antal + ' av ' + mal.mal + ' frågor idag.</strong> ' +
+        (mal.antal === 0 ? 'Tio frågor räcker för att dagen ska räknas.'
+                         : 'Bara ' + (mal.mal - mal.antal) + ' kvar.')) + '</div>';
+    html += '<div class="progress' + (mal.klart ? ' gron' : '') + '">' +
+            '<div style="width:' + mal.andel + '%"></div></div>';
+    html += '</div>';
 
     if (!steg.length) {
       html += '<p class="muted">Inget som brådskar just nu. Byt delkurs eller gör ett prov ' +
@@ -111,7 +125,7 @@ window.SYSB23.hem = (function () {
       return html + '</div>';
     }
 
-    html += '<p class="muted liten">Tre saker att göra härnäst, viktigast först. ' +
+    html += '<p class="muted liten">Tre saker att göra härnäst, <strong>viktigast först</strong>. ' +
             'Listan ändrar sig när du svarat på frågor.</p>';
 
     steg.forEach(function (s) {
@@ -123,7 +137,7 @@ window.SYSB23.hem = (function () {
       html += '<span class="plan-ikon plan-' + s.ikonKlass + '">' + s.ikon + '</span>';
       html += '<span class="plan-kropp">';
       html += '<span class="plan-rubrik">' + U.esc(s.rubrik) + '</span>';
-      html += '<span class="plan-under">' + U.esc(s.under) + '</span>';
+      html += '<span class="plan-under">' + U.inline(s.under) + '</span>';
       html += '</span>';
       html += '<span class="plan-pil">→</span>';
       html += '</button>';
@@ -146,7 +160,7 @@ window.SYSB23.hem = (function () {
       steg.push({
         ikon: '↻', ikonKlass: 'rep',
         rubrik: 'Repetera ' + rep.length + (rep.length === 1 ? ' fråga' : ' frågor'),
-        under: 'Frågor du svarat fel på. Här lär du dig mest.',
+        under: 'Frågor du svarat fel på. **Här lär du dig mest.**',
         repetition: true
       });
     }
@@ -158,7 +172,7 @@ window.SYSB23.hem = (function () {
         steg.push({
           ikon: '§', ikonKlass: 'las',
           rubrik: 'Läs kapitel ' + nasta.nr + ': ' + nasta.titel,
-          under: 'Ca ' + nasta.lastid + ' min. ' + nasta.ingress,
+          under: '**Ca ' + nasta.lastid + ' min.** ' + nasta.ingress,
           kapitel: nasta.id
         });
       }
@@ -170,8 +184,8 @@ window.SYSB23.hem = (function () {
       steg.push({
         ikon: '✎', ikonKlass: 'ova',
         rubrik: 'Öva ' + x.amne.namn,
-        under: 'Ditt svagaste ämne: nivå ' + x.niva.n + ' av 5, ' +
-               x.stat.procent + ' % rätt hittills.',
+        under: 'Ditt **svagaste ämne**: nivå ' + x.niva.n + ' av 5, **' +
+               x.stat.procent + ' % rätt** hittills.',
         amne: x.amne.id
       });
     } else {
@@ -180,7 +194,7 @@ window.SYSB23.hem = (function () {
         steg.push({
           ikon: '✎', ikonKlass: 'ova',
           rubrik: 'Öva ' + orord[0].namn,
-          under: 'Nytt ämne. ' +
+          under: '**Nytt ämne.** ' +
                  S.fragor.filter(function (f) { return f.amne === orord[0].id; }).length +
                  ' frågor att testa.',
           amne: orord[0].id
@@ -194,7 +208,7 @@ window.SYSB23.hem = (function () {
       steg.push({
         ikon: '★', ikonKlass: 'prov',
         rubrik: 'Gör ett prov',
-        under: 'Du kan tillräckligt för att testa hela kursen med tentans poäng.',
+        under: 'Du kan tillräckligt för att **testa hela kursen** med tentans poäng.',
         gatill: 'prov'
       });
     }
@@ -204,7 +218,7 @@ window.SYSB23.hem = (function () {
       steg.push({
         ikon: '✎', ikonKlass: 'ova',
         rubrik: 'Öva frågor',
-        under: 'Appen väljer frågorna åt dig utifrån vad du behöver mest.',
+        under: 'Appen **väljer frågorna åt dig** utifrån vad du behöver mest.',
         gatill: 'ova'
       });
     }

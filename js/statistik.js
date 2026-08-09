@@ -60,8 +60,9 @@ window.SYSB23.statistik = (function () {
     }
     html += '</div>';
 
-    /* Nivåtrappan förklarad */
-    html += '<div class="kort">';
+    /* Nivåtrappan förklarad. Listan är lång – den får dubbel spaltbredd
+       så att ämnesnamn och mätare får plats på samma rad. */
+    html += '<div class="kort dubbel">';
     html += '<h2>Nivåer per ämne</h2>';
     html += '<p class="muted liten">Varje ämne har fem nivåer. För att nå den högsta måste du ' +
             'kunna ämnet vid flera olika tillfällen och ha sett de flesta av frågorna — ' +
@@ -97,11 +98,6 @@ window.SYSB23.statistik = (function () {
       html += '</div>';
     });
     html += '</div>';
-
-    /* Här delas vyn i två spalter: läget och ämnesnivåerna till vänster,
-       det man gör något åt till höger. På smal skärm läggs de under varandra. */
-    var vansterspalt = html;
-    html = '';
 
     /* Svaga ämnen */
     var svaga = S.store.svagaAmnen(delkurs);
@@ -157,8 +153,7 @@ window.SYSB23.statistik = (function () {
     html += '</div>';
 
     var vy = U.el('vy-statistik');
-    vy.innerHTML = '<div class="kolumner"><div>' + vansterspalt +
-                   '</div><div>' + html + '</div></div>';
+    vy.innerHTML = '<div class="rutnat">' + html + '</div>';
     koppla(vy);
   }
 

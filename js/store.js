@@ -17,8 +17,14 @@ window.SYSB23.store = (function () {
     essaUtkast: {},           // fragaId -> { text, punkter: [bool], sparad }
     historik: [],             // [{ datum, lage, rubrik, antal, ratt, procent, poang, maxPoang }]
     studiedagar: [],          // ['ÅÅÅÅ-MM-DD', …] för streak
+    svarPerDag: {},           // 'ÅÅÅÅ-MM-DD' -> antal besvarade frågor
     datum: {}                 // egna anteckningar per etapp (kvar från v1)
   };
+
+  /* Dagsmålet. Tio frågor är kort nog att alltid hinnas med och långt nog
+     att ge effekt – poängen är att målet ska gå att bocka av, inte att
+     vara ambitiöst. Ett avklarat mål varje dag slår ett stort mål ibland. */
+  var DAGSMAL = 10;
 
   /* Nivåtrappan. Fem steg gör framsteg synliga och ger något att sikta på.
      Kraven kombinerar träffsäkerhet, antal svar och – för högsta nivån –
@@ -97,6 +103,8 @@ window.SYSB23.store = (function () {
       if (a.dagar.indexOf(idag) === -1) a.dagar.push(idag);
 
       if (data.studiedagar.indexOf(idag) === -1) data.studiedagar.push(idag);
+      if (!data.svarPerDag) data.svarPerDag = {};
+      data.svarPerDag[idag] = (data.svarPerDag[idag] || 0) + 1;
 
       if (!data.fragor[fraga.id]) {
         data.fragor[fraga.id] = { forsok: 0, ratt: 0, fel: 0, senast: null, prioritet: 0 };
@@ -281,6 +289,21 @@ window.SYSB23.store = (function () {
                String(x.getMonth() + 1).padStart(2, '0') + '-' +
                String(x.getDate()).padStart(2, '0');
       }
+    },
+
+    /* Dagens mål: hur många frågor du svarat på idag och hur långt kvar. */
+    dagsmal: function () {
+      var d = new Date();
+      var idag = d.getFullYear() + '-' +
+                 String(d.getMonth() + 1).padStart(2, '0') + '-' +
+                 String(d.getDate()).padStart(2, '0');
+      var antal = (data.svarPerDag && data.svarPerDag[idag]) || 0;
+      return {
+        antal: antal,
+        mal: DAGSMAL,
+        klart: antal >= DAGSMAL,
+        andel: Math.min(100, Math.round((antal / DAGSMAL) * 100))
+      };
     },
 
     pluggatIdag: function () {
