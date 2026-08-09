@@ -1,41 +1,38 @@
 # Så lägger du upp sidan på nätet
 
-Appen är redan förberedd och incheckad lokalt. Det som återstår är att skicka upp
-den till GitHub och slå på GitHub Pages. Räkna med fem minuter.
+Repot heter **min-hemsida-T3** och ligger redan på ditt GitHub-konto:
+<https://github.com/johanssonmira1/min-hemsida-T3>
+
+Den nya versionen är incheckad lokalt men **inte uppskickad än**. Det som
+återstår är ett kommando plus en inställning. Räkna med fem minuter.
 
 ---
 
-## Steg 1 – Skicka upp koden
+## Steg 1 – Skicka upp den nya versionen
 
-Öppna en terminal i den här mappen (`sysb23-plugg`) och kör:
+Öppna en terminal i mappen `sysb23-plugg` och kör:
 
 ```bash
-git push -u origin main
+git push
 ```
 
-Första gången frågar Git efter inloggning. Två alternativ:
+Det är allt. Nästa gång du ändrat något är det samma tre kommandon:
 
-**Om ett webbläsarfönster öppnas:** logga in med ditt GitHub-konto och godkänn. Klart.
+```bash
+git add -A
+git commit -m "Beskriv kort vad du ändrat"
+git push
+```
 
-**Om den frågar efter användarnamn och lösenord i terminalen:** ditt vanliga
-GitHub-lösenord fungerar inte längre. Du behöver en så kallad *personal access token*:
-
-1. Gå till <https://github.com/settings/tokens>
-2. Klicka **Generate new token** → **Generate new token (classic)**
-3. Sätt **Note** till `sysb23-plugg` och **Expiration** till exempelvis 90 dagar
-4. Kryssa i rutan **repo**
-5. Klicka **Generate token** längst ner
-6. Kopiera token-strängen direkt — den visas bara en gång
-
-När Git frågar:
-- **Username:** `johanssonmira1`
-- **Password:** klistra in token-strängen
+Om Git frågar efter inloggning: se **Om inloggningen krånglar** längst ner.
 
 ---
 
 ## Steg 2 – Slå på GitHub Pages
 
-1. Gå till <https://github.com/johanssonmira1/sysb23-plugg-2026>
+Det här behöver du bara göra en gång.
+
+1. Gå till <https://github.com/johanssonmira1/min-hemsida-T3>
 2. Klicka **Settings** högst upp
 3. Välj **Pages** i menyn till vänster
 4. Under **Source**, välj **Deploy from a branch**
@@ -44,13 +41,14 @@ När Git frågar:
 
 Vänta en till två minuter. Sidan hamnar på:
 
-**https://johanssonmira1.github.io/sysb23-plugg-2026/**
+**https://johanssonmira1.github.io/min-hemsida-T3/**
 
-Ladda om sidan i Settings → Pages om länken inte dyker upp direkt.
+Står det redan så under Pages är det påslaget sedan tidigare — då räcker
+steg 1, och sidan uppdaterar sig själv inom någon minut efter varje push.
 
 ---
 
-## Steg 3 – Lägg till den på mobilen
+## Steg 3 – Lägg den på mobilen
 
 Öppna länken i mobilen och spara den som en app-ikon:
 
@@ -59,71 +57,77 @@ Ladda om sidan i Settings → Pages om länken inte dyker upp direkt.
 
 Då öppnas den i helskärm utan adressfält, precis som en vanlig app.
 
----
-
-## Att uppdatera sidan senare
-
-När du ändrat något — lagt till en fråga, rättat en text — kör:
-
-```bash
-git add -A
-git commit -m "Beskriv kort vad du ändrat"
-git push
-```
-
-Sidan uppdateras automatiskt inom en minut eller två.
+Statistiken sparas i webbläsaren, inte på nätet. Det du övat på datorn
+följer alltså inte med till mobilen — de räknar var för sig. Vill du flytta
+över: **Statistik → Spara kopia** på den ena, **Läs in kopia** på den andra.
 
 ---
 
 ## Viktigt om kursmaterialet
 
-Mappen `sysb23-kursmaterial/` ligger kvar på din dator men skickas **aldrig** upp.
-Den står i `.gitignore` eftersom föreläsningar, artiklar och gamla tentor är
-upphovsrättsskyddade och inte får spridas publikt.
+Mappen `sysb23-kursmaterial/` ligger kvar på din dator men skickas **aldrig**
+upp. Den står i `.gitignore` eftersom föreläsningar, artiklar och gamla tentor
+är upphovsrättsskyddade och inte får spridas publikt.
 
-Appen fungerar utan mappen. Den behövs bara som källa när du eller jag skriver
-nya frågor.
+Appen fungerar utan mappen. Den behövs bara som källa när nya frågor skrivs.
 
-**Rör inte den raden i `.gitignore`.** Kontrollera med det här kommandot att inget
-kursmaterial ligger med — det ska inte skriva ut någonting alls:
+**Rör inte den raden i `.gitignore`.** Kontrollera före varje push att inget
+kursmaterial ligger med — kommandot ska inte skriva ut någonting alls:
 
 ```bash
 git ls-files sysb23-kursmaterial
 ```
 
----
-
-## Om du vill ha sidan privat istället
-
-Ett publikt repo betyder att vem som helst kan läsa koden och kompendiet.
-Vill du hellre hålla det för dig själv:
-
-1. Gå till **Settings** → längst ner under **Danger Zone**
-2. Välj **Change repository visibility** → **Make private**
-
-Notera dock att GitHub Pages på privata repon kräver ett betalkonto. Med gratiskontot
-måste repot vara publikt för att sidan ska fungera. Alternativet är att fortsätta köra
-lokalt med `node serve.js`.
+Tänk också på att ett publikt repo betyder att vem som helst kan läsa
+kompendiet. Texterna är skrivna för appen, men de bygger på kurslitteraturen.
+Vill du hellre hålla det för dig själv får du välja mellan att köra lokalt med
+`node serve.js` eller att betala för GitHub Pages på privat repo — gratiskontot
+kräver att repot är publikt för att sidan ska fungera.
 
 ---
 
-## Om något strular
+## Om inloggningen krånglar
+
+Ditt vanliga GitHub-lösenord fungerar inte i terminalen. Öppnas ett
+webbläsarfönster loggar du bara in där. Frågar den efter användarnamn och
+lösenord behöver du en *personal access token*:
+
+1. Gå till <https://github.com/settings/tokens>
+2. **Generate new token** → **Generate new token (classic)**
+3. **Note:** `min-hemsida-T3`, **Expiration:** exempelvis 90 dagar
+4. Kryssa i rutan **repo**
+5. **Generate token** längst ner
+6. Kopiera strängen direkt — den visas bara en gång
+
+När Git frågar:
+- **Username:** `johanssonmira1`
+- **Password:** klistra in token-strängen
+
+---
+
+## Om något annat strular
 
 **"Updates were rejected because the remote contains work that you do not have locally"**
 
-Repot på GitHub har något som saknas lokalt. Kör:
+Något ändrades på GitHub som saknas lokalt. Kör:
 
 ```bash
 git pull --rebase origin main
-git push
 ```
+
+och sedan `git push` igen.
 
 **Sidan visar 404**
 
 Kontrollera att `index.html` ligger i rotmappen på GitHub och att du valt
-`/ (root)` och inte `/docs` under Pages.
+`/ (root)`, inte `/docs`, under Pages.
 
-**Sidan visar bara rubriken men inget innehåll**
+**Sidan ser gammal ut**
 
-Något datafilnamn i `index.html` stämmer inte med filerna i `data/`. Öppna
-utvecklarkonsolen i webbläsaren med F12 och titta efter röda 404-rader.
+Webbläsaren har sparat den gamla versionen. Ladda om hårt med
+`Ctrl + Shift + R`.
+
+**Sidan visar rubriken men inget innehåll**
+
+Något filnamn i `index.html` stämmer inte med filerna i `data/`. Öppna
+utvecklarkonsolen med F12 och leta efter röda 404-rader.
