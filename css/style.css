@@ -92,58 +92,108 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-.wrap { max-width: 880px; margin: 0 auto; padding-left: 1.1rem; padding-right: 1.1rem; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: 1.5rem; padding-right: 1.5rem; }
 .dold { display: none !important; }
 .muted { color: var(--ink-soft); }
 .liten { font-size: .875rem; }
 .mini  { font-size: .78rem; }
 
+/* Läsbredd. Bred skärm ska ge fler kolumner, inte längre rader – över
+   ungefär 80 tecken tappar ögat raden på väg tillbaka. */
+#vy-ova, #vy-prov, #vy-essa { max-width: 880px; margin: 0 auto; }
+#vy-las { max-width: 940px; margin: 0 auto; }
+
+/* Tvåkolumnsläge: huvudspalt till vänster, stödinformation till höger. */
+.kolumner { display: grid; grid-template-columns: 1fr; gap: 1.05rem; align-items: start; }
+.kolumner > * { min-width: 0; }
+@media (min-width: 980px) {
+  .kolumner { grid-template-columns: minmax(0, 1.9fr) minmax(285px, 1fr); }
+}
+
 /* =========================== Topbar =========================== */
+/* Accentlinjen under topbaren tar aktiv delkurs färg. Det är den enda
+   platsen i gränssnittet där färgen byts – därav "var är jag"-känslan. */
 .topbar {
   background: var(--blaa-900);
   color: #fff;
   position: sticky; top: 0; z-index: 50;
 }
-.topbar::after {
-  content: ''; display: block; height: 4px;
-  background: linear-gradient(90deg,
-    var(--blaa-500) 0%, var(--blaa-500) 33%,
-    var(--ockra-500) 33%, var(--ockra-500) 66%,
-    var(--rosa-200) 66%);
-}
 .topbar-rad {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: .8rem; padding-top: .85rem; padding-bottom: .55rem;
+  display: flex; align-items: center; flex-wrap: wrap;
+  gap: .5rem 1.4rem; padding-top: .6rem; padding-bottom: .1rem;
 }
 .logo {
   background: none; border: none; color: #fff; cursor: pointer; padding: 0;
   font-family: var(--serif); font-size: 1.22rem; font-weight: 700;
-  letter-spacing: -.01em;
+  letter-spacing: -.01em; flex: 0 0 auto;
 }
 .logo span { font-weight: 400; opacity: .68; font-style: italic; }
 
-.delkursval {
-  background: rgba(255,255,255,.1); color: #fff;
-  border: 1px solid rgba(255,255,255,.3); border-radius: var(--r-s);
-  padding: .4rem .55rem; font-size: .85rem; max-width: 58%;
-  font-family: inherit; cursor: pointer;
+/* ---- Delkursväljaren ---- */
+.delkursvaljare {
+  flex: 0 0 auto; margin-left: auto; display: flex; align-items: center; gap: .6rem;
+  background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.2);
+  border-radius: 999px; padding: .18rem .3rem .18rem .85rem;
 }
-.delkursval:hover { background: rgba(255,255,255,.2); }
-.delkursval option { color: var(--ink); background: #fff; }
+.dv-etikett {
+  font-size: .64rem; font-weight: 800; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(255,255,255,.6); white-space: nowrap;
+}
+.dv-kontroll { display: flex; align-items: center; gap: .45rem;
+  background: rgba(255,255,255,.14); border-radius: 999px; padding: .16rem .5rem .16rem .6rem; }
+.dv-prick {
+  width: 10px; height: 10px; border-radius: 50%; flex: 0 0 10px;
+  background: var(--aktiv, var(--blaa-500));
+  box-shadow: 0 0 0 2px rgba(255,255,255,.28);
+}
+.delkursval {
+  background: none; color: #fff; border: none;
+  padding: .18rem 0; font-size: .9rem; font-weight: 600;
+  font-family: inherit; cursor: pointer; max-width: 15rem;
+}
+.delkursval:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.delkursval option { color: var(--ink); background: #fff; font-weight: 500; }
+
+/* ---- Kontextbandet: vilken delkurs som är aktiv, alltid synligt ---- */
+.delkursband { background: var(--blaa-900); border-top: 1px solid rgba(255,255,255,.1); }
+.dkb-rad {
+  display: flex; align-items: center; flex-wrap: wrap; gap: .3rem .85rem;
+  padding-top: .4rem; padding-bottom: .4rem;
+  font-size: .8rem; color: rgba(255,255,255,.66);
+}
+.dkb-namn {
+  display: flex; align-items: center; gap: .45rem;
+  font-weight: 700; color: #fff; font-size: .86rem;
+}
+.dkb-namn .fargprick { box-shadow: 0 0 0 2px rgba(255,255,255,.22); margin-right: 0; }
+.dkb-del { display: flex; align-items: center; gap: .35rem; white-space: nowrap; }
+.dkb-del b { color: rgba(255,255,255,.95); font-weight: 700; }
+.dkb-avdelare { color: rgba(255,255,255,.25); }
+
+.topbar::after {
+  content: ''; display: block; height: 4px;
+  background: var(--aktiv, var(--blaa-500));
+}
 
 .navrad {
-  display: flex; gap: .12rem; overflow-x: auto;
+  display: flex; gap: .12rem; overflow-x: auto; flex: 0 1 auto;
   scrollbar-width: none; -ms-overflow-style: none;
 }
 .navrad::-webkit-scrollbar { display: none; }
 .navbtn {
   background: none; border: none; border-bottom: 3px solid transparent;
   color: rgba(255,255,255,.72); cursor: pointer; white-space: nowrap;
-  padding: .55rem .85rem; font-size: .92rem; font-family: inherit;
+  padding: .55rem .8rem; font-size: .92rem; font-family: inherit;
   transition: color .15s, border-color .15s;
 }
 .navbtn:hover { color: #fff; }
-.navbtn.active { color: #fff; font-weight: 600; border-bottom-color: var(--ockra-500); }
+.navbtn.active { color: #fff; font-weight: 600; border-bottom-color: #fff; }
+
+@media (max-width: 860px) {
+  .navrad { order: 3; flex-basis: 100%; }
+  .delkursvaljare { padding-left: .6rem; }
+  .dv-etikett { display: none; }
+}
 
 main { padding-top: 1.4rem; padding-bottom: 2.5rem; }
 footer { padding-bottom: 2.5rem; }
@@ -638,6 +688,7 @@ button:disabled:active { transform: none; }
   display: flex; align-items: center; justify-content: space-between;
   gap: .6rem; margin: .3rem 0 .7rem;
 }
+.manadsrad-hoger { display: flex; align-items: center; gap: .45rem; }
 .manadsnamn {
   font-family: var(--serif); font-size: 1.15rem; font-weight: 700;
   text-transform: capitalize; letter-spacing: -.01em;
@@ -650,64 +701,124 @@ button:disabled:active { transform: none; }
 }
 .manadsknapp:hover { border-color: var(--blaa-500); background: var(--blaa-50); }
 
+/* Rutnätet: en smal veckonummerspalt plus sju dagar.
+   Färgen svarar på VILKEN DELKURS. Texten i brickan svarar på VAD det är
+   och NÄR. Två frågor, två kanaler – därför behövs inga fler färger. */
 .kalender {
-  display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px;
+  display: grid; grid-template-columns: 2.4rem repeat(7, minmax(0, 1fr)); gap: 4px;
 }
 .kal-veckodag {
-  text-align: center; font-size: .7rem; font-weight: 800;
-  color: var(--ink-soft); text-transform: uppercase; letter-spacing: .06em;
-  padding: .3rem 0 .15rem;
+  text-align: center; font-size: .68rem; font-weight: 800;
+  color: var(--ink-soft); text-transform: uppercase; letter-spacing: .08em;
+  padding: .3rem 0 .2rem;
+}
+.kal-veckonr {
+  display: flex; align-items: center; justify-content: center;
+  font-size: .72rem; font-weight: 800; color: var(--ink-soft);
+  background: var(--creme-100); border-radius: 6px;
 }
 .kal-dag {
-  aspect-ratio: 1 / 1;
-  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-  gap: .18rem; padding: .3rem .15rem;
+  display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start;
+  gap: 3px; padding: .28rem .28rem .34rem; min-height: 6.6rem; text-align: left;
   background: var(--creme-50); border: 1.5px solid var(--creme-200);
   border-radius: var(--r-s); cursor: default;
   font-family: inherit; color: var(--ink);
-  transition: border-color .12s, background .12s;
+  transition: border-color .12s, background .12s, box-shadow .12s;
 }
-.kal-dag.harpass { cursor: pointer; background: var(--creme-50); border-color: var(--creme-300); }
-.kal-dag.harpass:hover { border-color: var(--blaa-500); background: var(--blaa-50); }
-.kal-dag.utanfor { opacity: .32; }
-.kal-nr { font-size: .82rem; font-weight: 700; line-height: 1.1; }
+.kal-dag.helg { background: var(--creme-100); }
+.kal-dag.harpass { cursor: pointer; }
+.kal-dag.harpass:hover { border-color: var(--blaa-500); box-shadow: var(--skugga-s); }
+.kal-dag.utanfor { opacity: .38; }
+.kal-nr {
+  font-size: .82rem; font-weight: 700; line-height: 1.35; padding-left: .1rem;
+  color: var(--ink-mid);
+}
 .kal-dag.idag { border-color: var(--blaa-500); border-width: 2.5px; }
 .kal-dag.idag .kal-nr {
-  background: var(--blaa-500); color: #fff; border-radius: 50%;
-  width: 1.5rem; height: 1.5rem; display: flex;
-  align-items: center; justify-content: center;
+  background: var(--blaa-500); color: #fff; border-radius: 999px;
+  width: 1.45rem; height: 1.45rem; display: flex;
+  align-items: center; justify-content: center; font-size: .76rem;
 }
-.kal-dag.tenta { background: var(--ockra-50); border-color: var(--ockra-500); }
 .kal-dag.vald {
   border-color: var(--blaa-600); border-width: 2.5px;
   box-shadow: 0 0 0 3px var(--blaa-100);
 }
-.kal-prickar {
-  display: flex; flex-wrap: wrap; gap: 2.5px; justify-content: center;
-  align-content: flex-start; max-width: 100%;
+
+/* Händelsebricka. --dkf sätts inline till delkursens färg. */
+.hnd {
+  position: relative; display: block; text-align: left;
+  border-left: 3px solid var(--dkf, var(--creme-400));
+  background: var(--creme-100);                                    /* reserv */
+  background: color-mix(in srgb, var(--dkf, #999) 10%, transparent);
+  border-radius: 3px 5px 5px 3px;
+  padding: .14rem .3rem .18rem .34rem;
+  font-size: .69rem; line-height: 1.3; overflow: hidden;
 }
-.kal-prick { width: 7px; height: 7px; border-radius: 50%; display: block; }
-.kal-prick.kal-tenta { width: 100%; min-width: 22px; height: 5px; border-radius: 2px; }
+.hnd b { display: block; font-weight: 800; font-size: .68rem; letter-spacing: .01em; }
+.hnd b i { font-style: normal; }
+.hnd span { display: block; color: var(--ink-mid); font-weight: 600;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Tenta är det enda som fyller hela brickan – den ska sticka ut på avstånd. */
+/* Textfärgen sätts inline av U.kontrastfarg() – ockra tål inte vit text. */
+.hnd.h-tenta {
+  background: var(--dkf, var(--ink)); border-left-color: var(--dkf, var(--ink));
+  padding-left: .4rem;
+}
+.hnd.h-tenta b, .hnd.h-tenta span { color: inherit; }
+.hnd.h-tenta span { font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+
+/* Obligatoriskt pass markeras med en röd punkt, aldrig med egen färg. */
+.hnd.obl::after {
+  content: ''; position: absolute; top: 3px; right: 3px;
+  width: 5px; height: 5px; border-radius: 50%; background: var(--rod-500);
+}
+.hnd-fler { font-size: .66rem; font-weight: 700; color: var(--ink-soft); padding-left: .34rem; }
+
+/* Teckenförklaring för passtyper – samma brickor som i rutnätet */
+.teckenforklaring {
+  display: flex; flex-wrap: wrap; gap: .35rem .5rem; align-items: center;
+  margin: .85rem 0 .1rem; padding-top: .8rem; border-top: 1px solid var(--creme-300);
+}
+.teckenforklaring .tf-rubrik {
+  font-size: .7rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--ink-soft); margin-right: .2rem;
+}
+.tf-prov { --dkf: var(--ink-soft); min-width: 5.6rem; }
+.tf-prov.h-tenta { color: #fff; }
 
 .dagskort {
-  margin-top: .9rem; padding: .9rem 1rem;
+  margin-top: 1rem; padding: 1rem 1.1rem;
   background: var(--creme-100); border: 1.5px solid var(--creme-300);
-  border-radius: var(--r-s);
+  border-radius: var(--r-m);
 }
 /* Bara första bokstaven versal – "måndag 21 september", inte "Måndag 21 September" */
 .dagskort-rubrik {
-  font-family: var(--serif); font-weight: 700; font-size: 1.02rem;
-  margin-bottom: .6rem;
+  font-family: var(--serif); font-weight: 700; font-size: 1.08rem;
+  margin-bottom: .7rem;
 }
 .dagskort-rubrik::first-letter { text-transform: uppercase; }
 .dagspass {
-  border-left: 4px solid var(--creme-400); padding: .1rem 0 .1rem .7rem;
-  margin-bottom: .7rem;
+  display: flex; gap: .8rem; align-items: flex-start;
+  border-left: 4px solid var(--dkf, var(--creme-400));
+  background: var(--creme-50); border-radius: 3px var(--r-s) var(--r-s) 3px;
+  padding: .6rem .8rem; margin-bottom: .55rem;
 }
 .dagspass:last-child { margin-bottom: 0; }
-.dagspass-tid { font-size: .78rem; color: var(--ink-soft); font-weight: 700; }
-.dagspass-rubrik { font-weight: 600; font-size: .93rem; }
-.dagspass-meta { font-size: .82rem; color: var(--ink-soft); }
+.dagspass-tid {
+  flex: 0 0 5.6rem; font-size: .84rem; color: var(--ink); font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.dagspass-kropp { flex: 1; min-width: 0; }
+.dagspass-rubrik { display: block; font-weight: 700; font-size: .94rem; }
+.dagspass-meta { display: block; font-size: .82rem; color: var(--ink-soft); margin-top: .12rem; }
+.typmarke {
+  display: inline-block; font-size: .64rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .07em; padding: .12rem .42rem; border-radius: 4px;
+  border: 1.5px solid var(--dkf, var(--creme-400)); color: var(--ink-mid);
+  margin-right: .4rem; vertical-align: 1px;
+}
+.typmarke.tenta { background: var(--dkf, var(--ink)); border-color: transparent; }
 
 /* ============================ Schema ============================ */
 .veckorubrik {
@@ -717,9 +828,10 @@ button:disabled:active { transform: none; }
   border-bottom: 2.5px solid var(--blaa-100);
 }
 .pass {
-  display: flex; gap: .7rem; padding: .58rem .45rem;
+  display: flex; gap: .7rem; padding: .58rem .6rem;
   border-bottom: 1px solid var(--creme-200); font-size: .88rem;
-  border-radius: 5px;
+  border-left: 4px solid var(--dkf, transparent);
+  border-radius: 3px 5px 5px 3px;
 }
 .pass:last-child { border-bottom: none; }
 .pass.ar-tenta {
@@ -821,14 +933,26 @@ code {
   .tangenttips { display: none; }
   .niva i { width: 7.5px; height: 13px; }
 
-  .kalender { gap: 2px; }
-  .kal-dag { padding: .22rem .1rem; border-width: 1px; border-radius: 6px; }
-  .kal-nr { font-size: .76rem; }
-  .kal-dag.idag .kal-nr { width: 1.3rem; height: 1.3rem; }
-  .kal-prick { width: 5.5px; height: 5.5px; }
-  .kal-prick.kal-tenta { min-width: 14px; height: 4px; }
-  .kal-veckodag { font-size: .62rem; }
+  /* Rutnätet krymper till tid + färgstapel. Passtypen står i dagskortet
+     under kalendern istället – texten får inte bli oläsbart liten. */
+  .kalender { gap: 2px; grid-template-columns: 1.5rem repeat(7, minmax(0, 1fr)); }
+  .kal-dag { padding: .2rem .12rem .24rem; border-width: 1px; border-radius: 6px;
+             min-height: 3.7rem; gap: 2px; }
+  .kal-nr { font-size: .74rem; line-height: 1.2; }
+  .kal-dag.idag .kal-nr { width: 1.25rem; height: 1.25rem; font-size: .7rem; }
+  .kal-veckodag { font-size: .58rem; letter-spacing: .02em; }
+  .kal-veckonr { font-size: .62rem; }
+  .hnd { padding: .06rem .12rem .08rem .18rem; border-left-width: 2.5px; }
+  .hnd b { font-size: .58rem; }
+  .hnd span { display: none; }
+  .hnd .hnd-extratid { display: none; }
+  .hnd.h-tenta { padding-left: .18rem; }
+  .hnd.h-tenta span { display: block; font-size: .5rem; letter-spacing: 0; }
   .manadsnamn { font-size: 1.02rem; }
+  .dagspass { flex-wrap: wrap; gap: .1rem .6rem; }
+  .dagspass-tid { flex-basis: 100%; }
+  .teckenforklaring { display: none; }
+  .dkb-extra { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

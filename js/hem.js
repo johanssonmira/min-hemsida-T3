@@ -15,14 +15,20 @@ window.SYSB23.hem = (function () {
 
   function rendera() {
     var delkurs = S.store.delkurs();
-    var html = '';
 
+    /* Vänsterspalten är "vad gör jag nu", högerspalten "hur ligger jag till".
+       Ordningen är densamma när spalterna faller ihop på smal skärm. */
+    var html = '<div class="kolumner">';
+    html += '<div class="kol-vanster">';
     html += nedrakningskort(delkurs);
     html += dagensPlan(delkurs);
+    html += atgardskort(delkurs);
+    html += '</div>';
+    html += '<div class="kol-hoger">';
     html += lagekort(delkurs);
     html += veckanskort();
-    html += atgardskort(delkurs);
     html += tentaformatkort(delkurs);
+    html += '</div></div>';
 
     var vy = U.el('vy-hem');
     vy.innerHTML = html;
@@ -285,11 +291,12 @@ window.SYSB23.hem = (function () {
   }
 
   function passrad(p) {
-    var h = '<div class="pass' + (p.typ === 'tenta' ? ' ar-tenta' : '') + '">';
+    var h = '<div class="pass' + (p.typ === 'tenta' ? ' ar-tenta' : '') +
+            '" style="--dkf:' + U.delkursFarg(p.delkurs) + '">';
     h += '<span class="pass-dag">' + U.esc(U.kortDatum(p.datum)) + '</span>';
     h += '<span class="pass-tid">' + U.esc(p.tid) + '</span>';
-    h += '<span class="pass-kropp"><span class="pass-rubrik">' + U.esc(p.rubrik) +
-         (p.typ === 'tenta' ? '<span class="pass-etikett">Tenta</span>' : '') +
+    h += '<span class="pass-kropp"><span class="pass-rubrik">' +
+         U.typBadge(p) + U.esc(p.rubrik) +
          (p.obligatorisk ? '<span class="pass-etikett obl">Obl.</span>' : '') + '</span>';
     h += '<span class="pass-meta">' + U.esc(U.delkursKort(p.delkurs)) + ' · ' + U.esc(p.sal) + '</span>';
     return h + '</span></div>';

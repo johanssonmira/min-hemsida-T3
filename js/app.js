@@ -21,6 +21,7 @@
   function visaVy(namn) {
     if (!vyer[namn]) namn = 'hem';
     aktuellVy = namn;
+    uppdateraDelkursband();
 
     Object.keys(vyer).forEach(function (v) {
       U.el('vy-' + v).classList.toggle('dold', v !== namn);
@@ -34,6 +35,7 @@
   }
 
   function rendera() {
+    uppdateraDelkursband();
     vyer[aktuellVy]();
   }
 
@@ -44,6 +46,59 @@
     var sel = U.el('sel-delkurs');
     if (sel) sel.value = id;
     rendera();
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Kontextbandet under menyn.                                        */
+  /* Frågan "vilken delkurs är jag inne på?" ska aldrig behöva ställas: */
+  /* accentlinjen byter färg och bandet skriver ut läget i klartext.   */
+  /* ---------------------------------------------------------------- */
+
+  function uppdateraDelkursband() {
+    var id = S.store.delkurs();
+    var farg = U.delkursFarg(id);
+
+    document.documentElement.style.setProperty('--aktiv', farg);
+
+    var band = U.el('delkursband');
+    if (!band) return;
+
+    var kal = S.kalenderDelkurser.filter(function (d) { return d.id === id; })[0];
+    var tenta = U.nastaTenta(id, true);
+    var komp = S.kompendium[id];
+    var lage = S.store.delkursNiva(id);
+
+    var h = '<span class="dkb-namn"><i class="fargprick" style="background:' + farg +
+            '"></i>' + U.esc(U.delkursNamn(id)) + '</span>';
+
+    /* "extra" faller bort på smal skärm – bandet får inte äta halva mobilen */
+    var delar = [];
+    if (kal) delar.push({ text: kal.hp + ' hp', extra: true });
+    delar.push({
+      text: S.fragor.filter(function (f) { return f.delkurs === id; }).length + ' frågor',
+      extra: true
+    });
+
+    if (tenta) {
+      var dagar = U.dagarTill(tenta.datum);
+      delar.push({ text: '<b>Tenta om ' + dagar + (dagar === 1 ? ' dag' : ' dagar') + '</b> · ' +
+                         U.esc(U.kortDatum(tenta.datum)) });
+    }
+    if (komp && komp.kapitel.length) {
+      delar.push({ text: S.store.antalLasta(komp.kapitel) + ' av ' +
+                         komp.kapitel.length + ' kapitel lästa', extra: true });
+    }
+    if (lage.totalt) {
+      delar.push({ text: '<b>' + lage.andel + ' %</b> av kursen sitter' });
+    }
+
+    delar.forEach(function (d) {
+      var kl = 'dkb-del' + (d.extra ? ' dkb-extra' : '');
+      h += '<span class="dkb-avdelare' + (d.extra ? ' dkb-extra' : '') +
+           '" aria-hidden="true">/</span><span class="' + kl + '">' + d.text + '</span>';
+    });
+
+    band.innerHTML = h;
   }
 
   function ovaAmne(amneId) {
@@ -63,23 +118,29 @@
     var sel = U.el('sel-delkurs');
     sel.innerHTML = '';
 
+    /* Två grupper, så att det syns direkt vad man kan välja mellan */
+    var klara = document.createElement('optgroup');
+    klara.label = 'Delkurser du kan plugga här';
     S.delkurser.forEach(function (d) {
-      var antal = S.fragor.filter(function (f) { return f.delkurs === d.id; }).length;
       var o = document.createElement('option');
       o.value = d.id;
-      o.textContent = d.namn + ' (' + antal + ' frågor)';
-      sel.appendChild(o);
+      o.textContent = d.namn;
+      klara.appendChild(o);
     });
+    sel.appendChild(klara);
 
     /* Delkurser som finns i kalendern men saknar material – visas inaktiva */
+    var senare = document.createElement('optgroup');
+    senare.label = 'Ligger senare i terminen — inget material än';
     S.kalenderDelkurser.forEach(function (k) {
       if (S.delkurser.some(function (d) { return d.id === k.id; })) return;
       var o = document.createElement('option');
       o.value = k.id;
-      o.textContent = k.namn + ' (kommer senare)';
+      o.textContent = k.namn;
       o.disabled = true;
-      sel.appendChild(o);
+      senare.appendChild(o);
     });
+    if (senare.children.length) sel.appendChild(senare);
 
     sel.value = S.store.delkurs();
     sel.addEventListener('change', function () { bytDelkurs(sel.value); });

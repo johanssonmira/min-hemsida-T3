@@ -98,6 +98,11 @@ window.SYSB23.statistik = (function () {
     });
     html += '</div>';
 
+    /* Här delas vyn i två spalter: läget och ämnesnivåerna till vänster,
+       det man gör något åt till höger. På smal skärm läggs de under varandra. */
+    var vansterspalt = html;
+    html = '';
+
     /* Svaga ämnen */
     var svaga = S.store.svagaAmnen(delkurs);
     if (svaga.length) {
@@ -152,7 +157,8 @@ window.SYSB23.statistik = (function () {
     html += '</div>';
 
     var vy = U.el('vy-statistik');
-    vy.innerHTML = html;
+    vy.innerHTML = '<div class="kolumner"><div>' + vansterspalt +
+                   '</div><div>' + html + '</div></div>';
     koppla(vy);
   }
 

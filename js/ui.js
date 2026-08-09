@@ -218,6 +218,75 @@ window.SYSB23.ui = (function () {
     return (k && k.farg) || '#605E7E';
   }
 
+  /* Passtyper. Färgen i kalendern säger vilken delkurs det är – de här
+     namnen säger vad det är för sorts pass. Två skilda frågor, två skilda
+     kanaler, så slipper vi en färgkod som ingen orkar lära sig. */
+  var PASSTYPER = {
+    forelasning: { namn: 'Föreläsning',  kort: 'Föreläsning' },
+    laboration:  { namn: 'Laboration',   kort: 'Laboration' },
+    lektion:     { namn: 'Lektion',      kort: 'Lektion' },
+    seminarium:  { namn: 'Seminarium',   kort: 'Seminarium' },
+    workshop:    { namn: 'Workshop',     kort: 'Workshop' },
+    handledning: { namn: 'Handledning',  kort: 'Handledning' },
+    redovisning: { namn: 'Redovisning',  kort: 'Redovisning' },
+    tenta:       { namn: 'Tentamen',     kort: 'Tenta' },
+    ovrigt:      { namn: 'Övrigt',       kort: 'Övrigt' }
+  };
+
+  function passTyp(typ) {
+    return PASSTYPER[typ] || PASSTYPER.ovrigt;
+  }
+
+  /* Typmärket sätts bara ut när det tillför något. Står det redan
+     "Föreläsning 2" i rubriken behövs ingen etikett som säger föreläsning. */
+  function typBadge(p) {
+    if (!p || p.typ === 'ovrigt' || !p.typ) return '';
+    var typ = passTyp(p.typ);
+    var rubrik = String(p.rubrik || '').toLowerCase();
+    if (rubrik.indexOf(typ.namn.toLowerCase()) === 0) return '';
+    if (p.typ === 'tenta' && rubrik.indexOf('tent') === 0) return '';
+    var farg = delkursFarg(p.delkurs);
+    return '<span class="typmarke' + (p.typ === 'tenta' ? ' tenta' : '') +
+           '" style="--dkf:' + farg +
+           (p.typ === 'tenta' ? ';color:' + kontrastfarg(farg) : '') + '">' +
+           esc(typ.namn) + '</span>';
+  }
+
+  function passTypLista() {
+    return Object.keys(PASSTYPER).map(function (k) {
+      return { id: k, namn: PASSTYPER[k].namn, kort: PASSTYPER[k].kort };
+    });
+  }
+
+  /* Starttiden ur ett tidsfält.
+     "10:00–12:00" är ett intervall och ger 10:00.
+     "13:00 / 15:00" är två gruppomgångar och ger 13:00/15:00 – annars
+     skulle halva kursen tro att de missat sitt pass. */
+  function starttid(tid) {
+    var text = String(tid || '');
+    var alla = text.match(/\d{1,2}[:.]\d{2}/g);
+    if (!alla) return '';
+    if (text.indexOf('/') !== -1) {
+      return alla.map(function (t) { return t.replace('.', ':'); }).join('/');
+    }
+    return alla[0].replace('.', ':');
+  }
+
+  /* Läsbar textfärg mot en godtycklig bakgrund.
+     Delkursfärgerna spänner från mörkblått till ljus ockra – vit text
+     fungerar på de mörka men ger bara 2,8:1 mot ockran, långt under
+     WCAG AA. Vi räknar ut luminansen och väljer den som håller. */
+  function kontrastfarg(hex) {
+    var m = String(hex).replace('#', '');
+    if (m.length === 3) m = m[0] + m[0] + m[1] + m[1] + m[2] + m[2];
+    var kanal = [0, 2, 4].map(function (i) {
+      var v = parseInt(m.substr(i, 2), 16) / 255;
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    });
+    var L = 0.2126 * kanal[0] + 0.7152 * kanal[1] + 0.0722 * kanal[2];
+    return L > 0.22 ? '#1C1B4B' : '#ffffff';
+  }
+
   /* Alla dagar i månaden som ett rutnät med hela veckor, måndag först.
      Returnerar en lista av veckor, där varje vecka är sju datumobjekt. */
   function manadsrutnat(ar, manad) {
@@ -293,6 +362,8 @@ window.SYSB23.ui = (function () {
     amneNamn: amneNamn,
     nivaMatare: nivaMatare, nivaEtikett: nivaEtikett, nivaPrick: nivaPrick,
     manadsrutnat: manadsrutnat, isoDatum: isoDatum, manadsNamn: manadsNamn,
+    passTyp: passTyp, passTypLista: passTypLista, starttid: starttid,
+    typBadge: typBadge, kontrastfarg: kontrastfarg,
     blanda: blanda
   };
 })();

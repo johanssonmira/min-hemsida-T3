@@ -34,12 +34,16 @@ window.SYSB23.schema = (function () {
   function rendera() {
     satterStartmanad();
 
-    var html = '';
+    /* Kalendern får huvudspalten, allt som stödjer läsningen av den
+       ligger i högerspalten. På smal skärm faller de ihop till en. */
+    var html = '<div class="kolumner">';
+    html += '<div class="kol-vanster">' + kalenderkort() + '</div>';
+    html += '<div class="kol-hoger">';
     html += nedrakningskort();
-    html += kalenderkort();
     html += tentakort();
     html += faskort();
     html += praktisktkort();
+    html += '</div></div>';
 
     var vy = U.el('vy-schema');
     vy.innerHTML = html;
@@ -89,6 +93,9 @@ window.SYSB23.schema = (function () {
     var html = '<div class="kort">';
 
     html += '<h2>Kalender</h2>';
+    html += '<p class="muted liten">Färgen visar vilken delkurs passet hör till. ' +
+            'I varje ruta står starttiden och vad det är för sorts pass. ' +
+            'Klicka på en dag för salar och detaljer.</p>';
 
     /* Växel mellan månadsvy och lista */
     html += '<div class="chiprad">';
@@ -98,10 +105,10 @@ window.SYSB23.schema = (function () {
             '" data-visning="lista">Lista</button>';
     html += '</div>';
 
-    /* Färgförklaring */
+    /* Delkursfilter, tillika färgförklaring */
     html += '<div class="chiprad">';
     html += '<button class="chip' + (filterDelkurs === 'alla' ? ' vald' : '') +
-            '" data-filterdk="alla">Alla</button>';
+            '" data-filterdk="alla">Alla delkurser</button>';
     S.kalenderDelkurser.forEach(function (d) {
       var n = S.pass.filter(function (p) { return p.delkurs === d.id; }).length;
       if (!n) return;
@@ -115,6 +122,29 @@ window.SYSB23.schema = (function () {
     html += visning === 'kalender' ? manadsvy() : listvy();
 
     return html + '</div>';
+  }
+
+  /* En händelsebricka i en dagsruta: starttid överst, passtyp under.
+     Delkursfärgen ligger i --dkf och används av kantlinje och toning. */
+  function bricka(p) {
+    var typ = U.passTyp(p.typ);
+    var klasser = ['hnd'];
+    if (p.typ === 'tenta') klasser.push('h-tenta');
+    if (p.obligatorisk) klasser.push('obl');
+
+    var farg = U.delkursFarg(p.delkurs);
+    var h = '<span class="' + klasser.join(' ') + '" style="--dkf:' + farg +
+            (p.typ === 'tenta' ? ';color:' + U.kontrastfarg(farg) : '') + '"';
+    h += ' title="' + U.esc(p.tid + ' · ' + typ.namn + ' · ' +
+                            U.delkursNamn(p.delkurs) + ' · ' + p.sal) + '">';
+    /* Gruppomgångar ("13:00/15:00") delas upp så att den andra tiden kan
+       fällas bort på mobil, där rutan bara rymmer fem tecken. */
+    var tider = (U.starttid(p.tid) || p.tid).split('/');
+    h += '<b>' + U.esc(tider[0]) +
+         (tider.length > 1 ? '<i class="hnd-extratid">/' + U.esc(tider.slice(1).join('/')) + '</i>' : '') +
+         '</b>';
+    h += '<span>' + U.esc(typ.kort) + '</span>';
+    return h + '</span>';
   }
 
   function passForDatum(iso) {
@@ -138,26 +168,31 @@ window.SYSB23.schema = (function () {
     html += '<div class="manadsrad">';
     html += '<button class="manadsknapp" data-manad="-1" aria-label="Föregående månad">←</button>';
     html += '<span class="manadsnamn">' + U.esc(manadNamn) + '</span>';
+    html += '<span class="manadsrad-hoger">';
+    html += '<button class="chip" data-idag="1">Idag</button>';
     html += '<button class="manadsknapp" data-manad="1" aria-label="Nästa månad">→</button>';
+    html += '</span>';
     html += '</div>';
 
     html += '<div class="kalender">';
 
+    html += '<div class="kal-veckodag">v.</div>';
     ['Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör', 'Sön'].forEach(function (d) {
       html += '<div class="kal-veckodag">' + d + '</div>';
     });
 
     veckor.forEach(function (vecka) {
-      vecka.forEach(function (d) {
+      html += '<div class="kal-veckonr">' + U.veckonummer(U.isoDatum(vecka[0])) + '</div>';
+
+      vecka.forEach(function (d, index) {
         var iso = U.isoDatum(d);
         var utanfor = d.getMonth() !== manadNr;
         var pass = passForDatum(iso);
-        var harTenta = pass.some(function (p) { return p.typ === 'tenta'; });
 
         var klasser = ['kal-dag'];
         if (utanfor) klasser.push('utanfor');
+        if (index >= 5) klasser.push('helg');
         if (iso === idagIso) klasser.push('idag');
-        if (harTenta) klasser.push('tenta');
         if (iso === valdDag) klasser.push('vald');
         if (pass.length) klasser.push('harpass');
 
@@ -165,19 +200,24 @@ window.SYSB23.schema = (function () {
                 (pass.length ? '' : ' tabindex="-1"') + '>';
         html += '<span class="kal-nr">' + d.getDate() + '</span>';
 
-        if (pass.length) {
-          html += '<span class="kal-prickar">';
-          pass.slice(0, 4).forEach(function (p) {
-            html += '<i class="kal-prick' + (p.typ === 'tenta' ? ' kal-tenta' : '') +
-                    '" style="background:' + U.delkursFarg(p.delkurs) + '"></i>';
-          });
-          html += '</span>';
+        /* Tentor först – de ska aldrig hamna bakom ett "+2 till" */
+        var ordnade = pass.slice().sort(function (a, b) {
+          if ((a.typ === 'tenta') !== (b.typ === 'tenta')) return a.typ === 'tenta' ? -1 : 1;
+          return U.starttid(a.tid) < U.starttid(b.tid) ? -1 : 1;
+        });
+
+        ordnade.slice(0, 3).forEach(function (p) { html += bricka(p); });
+        if (ordnade.length > 3) {
+          html += '<span class="hnd-fler">+' + (ordnade.length - 3) + ' till</span>';
         }
         html += '</button>';
       });
     });
 
     html += '</div>';
+
+    /* Teckenförklaring för passtyper – bara de som faktiskt förekommer */
+    html += teckenforklaring();
 
     /* Vald dag i detalj */
     html += '<div id="dagsdetalj">' + dagsdetalj() + '</div>';
@@ -201,27 +241,59 @@ window.SYSB23.schema = (function () {
     return html;
   }
 
+  /* Teckenförklaring: samma brickor som i rutnätet, så att formen
+     förklarar sig själv i stället för att kräva en färgkod. */
+  function teckenforklaring() {
+    var förekommer = {};
+    S.pass.forEach(function (p) {
+      if (filterDelkurs !== 'alla' && p.delkurs !== filterDelkurs) return;
+      förekommer[p.typ || 'ovrigt'] = true;
+    });
+
+    var typer = U.passTypLista().filter(function (t) { return förekommer[t.id]; });
+    if (!typer.length) return '';
+
+    var html = '<div class="teckenforklaring">';
+    html += '<span class="tf-rubrik">Vad är vad</span>';
+    typer.forEach(function (t) {
+      html += '<span class="hnd tf-prov' + (t.id === 'tenta' ? ' h-tenta' : '') + '">' +
+              '<span>' + U.esc(t.namn) + '</span></span>';
+    });
+    html += '<span class="hnd tf-prov obl"><span>Obligatorisk</span></span>';
+    html += '</div>';
+    return html;
+  }
+
   function dagsdetalj() {
-    if (!valdDag) return '';
-    var pass = passForDatum(valdDag);
+    if (!valdDag) {
+      return '<p class="muted liten" style="margin:.9rem 0 0">' +
+             'Ingen dag vald. Klicka på en ruta i kalendern så visas tider, ' +
+             'salar och vilken delkurs passen tillhör här.</p>';
+    }
+
+    var pass = passForDatum(valdDag).slice().sort(function (a, b) {
+      return U.starttid(a.tid) < U.starttid(b.tid) ? -1 : 1;
+    });
 
     var html = '<div class="dagskort">';
-    html += '<div class="dagskort-rubrik">' + U.esc(U.langtDatum(valdDag)) + '</div>';
+    html += '<div class="dagskort-rubrik">' + U.esc(U.langtDatum(valdDag)) +
+            ' <span class="muted liten">· vecka ' + U.veckonummer(valdDag) + '</span></div>';
 
     if (!pass.length) {
-      html += '<p class="muted liten" style="margin-bottom:0">Inget inbokat den här dagen.</p>';
+      html += '<p class="muted liten" style="margin-bottom:0">Inget inbokat den här dagen. ' +
+              'Bra tillfälle att repetera.</p>';
       return html + '</div>';
     }
 
     pass.forEach(function (p) {
-      html += '<div class="dagspass" style="border-left-color:' + U.delkursFarg(p.delkurs) + '">';
+      html += '<div class="dagspass" style="--dkf:' + U.delkursFarg(p.delkurs) + '">';
       html += '<div class="dagspass-tid">' + U.esc(p.tid) + '</div>';
-      html += '<div class="dagspass-rubrik">' + U.esc(p.rubrik) +
-              (p.typ === 'tenta' ? '<span class="pass-etikett">Tenta</span>' : '') +
+      html += '<div class="dagspass-kropp">';
+      html += '<div class="dagspass-rubrik">' + U.typBadge(p) + U.esc(p.rubrik) +
               (p.obligatorisk ? '<span class="pass-etikett obl">Obligatorisk</span>' : '') + '</div>';
       html += '<div class="dagspass-meta">' + U.esc(U.delkursNamn(p.delkurs)) +
               ' · ' + U.esc(p.sal) + '</div>';
-      html += '</div>';
+      html += '</div></div>';
     });
 
     return html + '</div>';
@@ -247,13 +319,13 @@ window.SYSB23.schema = (function () {
         vecka = v;
         html += '<div class="veckorubrik">Vecka ' + v + '</div>';
       }
-      html += '<div class="pass' + (p.typ === 'tenta' ? ' ar-tenta' : '') + '">';
+      html += '<div class="pass' + (p.typ === 'tenta' ? ' ar-tenta' : '') +
+              '" style="--dkf:' + U.delkursFarg(p.delkurs) + '">';
       html += '<span class="pass-dag">' + U.esc(U.kortDatum(p.datum)) +
               (p.spannTill ? '–' + U.parse(p.spannTill).getDate() : '') + '</span>';
       html += '<span class="pass-tid">' + U.esc(p.tid) + '</span>';
       html += '<span class="pass-kropp">';
-      html += '<span class="pass-rubrik">' + U.esc(p.rubrik) +
-              (p.typ === 'tenta' ? '<span class="pass-etikett">Tenta</span>' : '') +
+      html += '<span class="pass-rubrik">' + U.typBadge(p) + U.esc(p.rubrik) +
               (p.obligatorisk ? '<span class="pass-etikett obl">Obligatorisk</span>' : '') + '</span>';
       html += '<span class="pass-meta"><i class="fargprick" style="background:' +
               U.delkursFarg(p.delkurs) + '"></i>' +
@@ -377,6 +449,16 @@ window.SYSB23.schema = (function () {
         if (manadNr < 0) { manadNr = 11; manadAr -= 1; }
         if (manadNr > 11) { manadNr = 0; manadAr += 1; }
         valdDag = null;
+        rendera();
+      });
+    });
+
+    Array.prototype.forEach.call(vy.querySelectorAll('[data-idag]'), function (b) {
+      b.addEventListener('click', function () {
+        var d = U.idag();
+        manadAr = d.getFullYear();
+        manadNr = d.getMonth();
+        valdDag = U.isoDatum(d);
         rendera();
       });
     });

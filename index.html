@@ -12,17 +12,28 @@
 <header class="topbar">
   <div class="wrap topbar-rad">
     <button id="btn-hem" class="logo">SYSB23 <span>Plugg</span></button>
-    <select id="sel-delkurs" class="delkursval" aria-label="Välj delkurs"></select>
+
+    <nav class="navrad" id="mainnav">
+      <button class="navbtn active" data-vy="hem">Hem</button>
+      <button class="navbtn" data-vy="las">Läs</button>
+      <button class="navbtn" data-vy="ova">Öva</button>
+      <button class="navbtn" data-vy="prov">Prov</button>
+      <button class="navbtn" data-vy="essa">Essä</button>
+      <button class="navbtn" data-vy="statistik">Statistik</button>
+      <button class="navbtn" data-vy="schema">Schema</button>
+    </nav>
+
+    <div class="delkursvaljare">
+      <span class="dv-etikett" aria-hidden="true">Delkurs</span>
+      <span class="dv-kontroll">
+        <i class="dv-prick" aria-hidden="true"></i>
+        <select id="sel-delkurs" class="delkursval" aria-label="Välj vilken delkurs du pluggar"></select>
+      </span>
+    </div>
   </div>
-  <nav class="wrap navrad" id="mainnav">
-    <button class="navbtn active" data-vy="hem">Hem</button>
-    <button class="navbtn" data-vy="las">Läs</button>
-    <button class="navbtn" data-vy="ova">Öva</button>
-    <button class="navbtn" data-vy="prov">Prov</button>
-    <button class="navbtn" data-vy="essa">Essä</button>
-    <button class="navbtn" data-vy="statistik">Statistik</button>
-    <button class="navbtn" data-vy="schema">Schema</button>
-  </nav>
+
+  <!-- Kontextband: visar hela tiden vilken delkurs som är vald och hur den går -->
+  <div class="delkursband"><div class="wrap dkb-rad" id="delkursband"></div></div>
 </header>
 
 <main class="wrap">
