@@ -16,16 +16,19 @@ window.SYSB23.hem = (function () {
   function rendera() {
     var delkurs = S.store.delkurs();
 
-    /* Korten packar om sig efter skärmens bredd. Ordningen är densamma
-       oavsett antal spalter: först vad som är närmast, sedan vad du ska
-       göra nu, därefter hur det går och vad som händer i veckan. */
-    var html = '<div class="rutnat">';
+    /* Huvudspalten är "vad gör jag nu", sidospalten "hur ligger jag till".
+       På smal skärm läggs sidospalten under huvudspalten, i samma ordning. */
+    var html = '<div class="sida">';
+    html += '<div class="huvud">';
     html += nedrakningskort(delkurs);
     html += dagensPlan(delkurs);
+    html += atgardskort(delkurs);
+    html += '</div>';
+    html += '<aside class="sido">';
     html += lagekort(delkurs);
     html += veckanskort();
-    html += atgardskort(delkurs);
     html += tentaformatkort(delkurs);
+    html += '</aside>';
     html += '</div>';
 
     var vy = U.el('vy-hem');
@@ -100,7 +103,7 @@ window.SYSB23.hem = (function () {
 
     var mal = S.store.dagsmal();
 
-    var html = '<div class="kort dubbel">';
+    var html = '<div class="kort">';
     html += '<h2>Dagens plan';
     if (streak > 0) {
       html += '<span class="streak">🔥 ' + streak + (streak === 1 ? ' dag' : ' dagar') + ' i rad</span>';

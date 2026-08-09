@@ -92,7 +92,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-.wrap { max-width: 1680px; margin: 0 auto; padding-left: 2rem; padding-right: 2rem; }
+.wrap { max-width: 1400px; margin: 0 auto; padding-left: 1.75rem; padding-right: 1.75rem; }
 .dold { display: none !important; }
 .muted { color: var(--ink-soft); }
 .liten { font-size: .875rem; }
@@ -104,21 +104,22 @@ body {
 #vy-las { max-width: 940px; margin: 0 auto; }
 
 /* -------------------------------------------------------------------------
-   Rutnätet är hela layoutsystemet. Korten är fristående rutor som packas
-   om efter skärmens bredd: en spalt på mobil, två på en liten laptop, tre
-   eller fyra på en stor skärm. Ingen vy behöver egna brytpunkter.
+   Sidlayouten: en huvudspalt och en smalare sidospalt, samma upplägg som
+   de flesta webbplatser. Korten staplas inuti sin spalt och fyller den
+   uppifrån och ner, så det uppstår aldrig hål mellan olika höga kort.
 
-   .bred  – kortet spänner över alla spalter (kalendern, dagens plan)
-   .dubbel – kortet tar två spalter när det finns minst tre
+   .sida   – behållaren
+   .huvud  – huvudspalten, det man håller på med
+   .sido   – sidospalten, sådant man sneglar på
+   .bred   – kort som ligger direkt i .sida och spänner över båda spalterna
    ------------------------------------------------------------------------- */
-.rutnat {
-  display: grid; gap: 1.15rem; align-items: start;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+.sida { display: grid; gap: 0; }
+.sida > * { min-width: 0; }
+
+@media (min-width: 1060px) {
+  .sida { grid-template-columns: minmax(0, 1fr) 21rem; column-gap: 1.25rem; }
+  .sida > .bred { grid-column: 1 / -1; }
 }
-.rutnat > * { min-width: 0; }
-.rutnat > .kort { margin-bottom: 0; }
-.rutnat > .bred { grid-column: 1 / -1; }
-@media (min-width: 1180px) { .rutnat > .dubbel { grid-column: span 2; } }
 
 /* =========================== Topbar =========================== */
 /* Accentlinjen under topbaren tar aktiv delkurs färg. Det är den enda
@@ -757,7 +758,7 @@ button:disabled:active { transform: none; }
 }
 .kal-dag {
   display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start;
-  gap: 3px; padding: .28rem .28rem .34rem; min-height: 6.6rem; text-align: left;
+  gap: 3px; padding: .28rem .28rem .34rem; min-height: 5.4rem; text-align: left;
   background: var(--creme-50); border: 1.5px solid var(--creme-200);
   border-radius: var(--r-s); cursor: default;
   font-family: inherit; color: var(--ink);

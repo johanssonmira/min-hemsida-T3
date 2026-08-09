@@ -34,15 +34,13 @@ window.SYSB23.schema = (function () {
   function rendera() {
     satterStartmanad();
 
-    /* Ordningen är: vad som är närmast, sedan kalendern i egen full bredd,
-       sedan uppslagsinformationen bredvid varandra under. Kalendern ska
-       aldrig behöva samsas om ytan med en textspalt vid sidan. */
-    var html = '<div class="rutnat">';
-    html += nedrakningskort();
-    html += kalenderkort();
-    html += tentakort();
-    html += faskort();
-    html += praktisktkort();
+    /* Kalendern får hela bredden för sig själv – den ska aldrig samsas om
+       ytan med en textspalt vid sidan. Uppslagsinformationen ligger under,
+       i vanlig huvudspalt och sidospalt. */
+    var html = '<div class="sida">';
+    html += '<div class="bred">' + nedrakningskort() + kalenderkort() + '</div>';
+    html += '<div class="huvud">' + faskort() + praktisktkort() + '</div>';
+    html += '<aside class="sido">' + tentakort() + '</aside>';
     html += '</div>';
 
     var vy = U.el('vy-schema');
@@ -62,7 +60,7 @@ window.SYSB23.schema = (function () {
     /* Liggande banner: siffran, vilken tenta det gäller och knappen på
        en rad. Tar bredden utan att bli en vägg av blått. */
     var dagar = U.dagarTill(tenta.datum);
-    var html = '<div class="kort nedrakning banner bred">';
+    var html = '<div class="kort nedrakning banner">';
 
     html += '<div class="dagar"><span class="siffra">' + dagar + '</span>' +
             '<span class="text">' + (dagar === 1 ? 'dag<br>kvar' : 'dagar<br>kvar') + '</span></div>';
@@ -95,7 +93,7 @@ window.SYSB23.schema = (function () {
   /* ================================================================ */
 
   function kalenderkort() {
-    var html = '<div class="kort bred">';
+    var html = '<div class="kort">';
 
     html += '<h2>Kalender</h2>';
     html += '<p class="muted liten">Färgen visar vilken delkurs passet hör till. ' +
@@ -409,10 +407,8 @@ window.SYSB23.schema = (function () {
   /* Terminen i faser                                                  */
   /* ================================================================ */
 
-  /* Faserna är fyra korta stycken – kortet får dubbel spaltbredd så att
-     raderna inte blir tre ord långa på stor skärm. */
   function faskort() {
-    var html = '<div class="kort dubbel">';
+    var html = '<div class="kort">';
     html += '<h2>Terminen i stort</h2>';
     S.terminsfaser.forEach(function (f) {
       html += '<div class="fas' + (f.tat ? ' tat' : '') + '">';

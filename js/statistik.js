@@ -60,9 +60,8 @@ window.SYSB23.statistik = (function () {
     }
     html += '</div>';
 
-    /* Nivåtrappan förklarad. Listan är lång – den får dubbel spaltbredd
-       så att ämnesnamn och mätare får plats på samma rad. */
-    html += '<div class="kort dubbel">';
+    /* Nivåtrappan förklarad */
+    html += '<div class="kort">';
     html += '<h2>Nivåer per ämne</h2>';
     html += '<p class="muted liten">Varje ämne har fem nivåer. För att nå den högsta måste du ' +
             'kunna ämnet vid flera olika tillfällen och ha sett de flesta av frågorna — ' +
@@ -99,23 +98,27 @@ window.SYSB23.statistik = (function () {
     });
     html += '</div>';
 
+    /* Härifrån och ner byggs sidospalten: det man ska göra något åt,
+       plus datahanteringen. Huvudspalten är läget och nivåerna ovan. */
+    var sido = '';
+
     /* Svaga ämnen */
     var svaga = S.store.svagaAmnen(delkurs);
     if (svaga.length) {
-      html += '<div class="kort">';
-      html += '<h2>Lägg tiden här</h2>';
-      html += '<ul>';
+      sido += '<div class="kort">';
+      sido += '<h2>Lägg tiden här</h2>';
+      sido += '<ul>';
       svaga.slice(0, 6).forEach(function (x) {
         var kap = hittaKapitel(x.amne.id);
-        html += '<li style="margin-bottom:.5rem"><strong>' + U.esc(x.amne.namn) + '</strong> — ' +
-                'nivå ' + x.niva.n + ' av 5, ' + x.stat.procent + ' % rätt på ' +
+        sido += '<li style="margin-bottom:.5rem"><strong>' + U.esc(x.amne.namn) + '</strong> — ' +
+                'nivå ' + x.niva.n + ' av 5, <strong>' + x.stat.procent + ' % rätt</strong> på ' +
                 x.stat.forsok + ' svar.';
         var krav = S.store.nastaNivaKrav(x.amne.id);
-        if (krav) html += ' <span class="muted">' + U.esc(krav) + '</span>';
-        if (kap) html += ' Läs kapitel ' + kap.nr + ', ' + U.esc(kap.titel) + '.';
-        html += '</li>';
+        if (krav) sido += ' <span class="muted">' + U.esc(krav) + '</span>';
+        if (kap) sido += ' Läs kapitel ' + kap.nr + ', ' + U.esc(kap.titel) + '.';
+        sido += '</li>';
       });
-      html += '</ul></div>';
+      sido += '</ul></div>';
     }
 
     /* Historik */
@@ -139,21 +142,22 @@ window.SYSB23.statistik = (function () {
     html += '</div>';
 
     /* Data */
-    html += '<div class="kort">';
-    html += '<h2>Din statistik</h2>';
-    html += '<p class="muted liten">Allt sparas i din webbläsare på den här datorn. Ingenting ' +
-            'skickas någon annanstans. Rensar du webbläsarens data försvinner statistiken, ' +
-            'så spara en kopia om du vill vara säker.</p>';
-    html += '<div class="knapprad">';
-    html += '<button class="sekundar" id="exportera">Spara kopia</button>';
-    html += '<button class="sekundar" id="importeraknapp">Läs in kopia</button>';
-    html += '<button class="fara" id="rensa">Rensa allt</button>';
-    html += '</div>';
-    html += '<input type="file" id="importfil" accept="application/json" style="display:none">';
-    html += '</div>';
+    sido += '<div class="kort">';
+    sido += '<h2>Din statistik</h2>';
+    sido += '<p class="muted liten">Allt sparas <strong>i din webbläsare på den här datorn</strong>. ' +
+            'Ingenting skickas någon annanstans. Rensar du webbläsarens data försvinner ' +
+            'statistiken, så spara en kopia om du vill vara säker.</p>';
+    sido += '<div class="knapprad">';
+    sido += '<button class="sekundar" id="exportera">Spara kopia</button>';
+    sido += '<button class="sekundar" id="importeraknapp">Läs in kopia</button>';
+    sido += '<button class="fara" id="rensa">Rensa allt</button>';
+    sido += '</div>';
+    sido += '<input type="file" id="importfil" accept="application/json" style="display:none">';
+    sido += '</div>';
 
     var vy = U.el('vy-statistik');
-    vy.innerHTML = '<div class="rutnat">' + html + '</div>';
+    vy.innerHTML = '<div class="sida"><div class="huvud">' + html +
+                   '</div><aside class="sido">' + sido + '</aside></div>';
     koppla(vy);
   }
 
