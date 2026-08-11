@@ -62,6 +62,13 @@
   --rod-500:  #D6402C;
   --rod-600:  #AE2E1E;
 
+  /* --- Egna poster ---
+     Medvetet en dämpad blågrå och inte en åttonde signalfärg. De sju
+     delkursfärgerna bär redan betydelse; ett åttonde skrikigt hue hade
+     krävt inlärning. Det som säger "det här är mitt" är i stället den
+     streckade kanten och pennan – form läser sig själv, färg måste läras. */
+  --egen: #57557E;
+
   /* --- Delkursaccenter --- */
   --strategi:  #DE8600;
   --databaser: #2B29E0;
@@ -102,6 +109,9 @@ body {
    ungefär 80 tecken tappar ögat raden på väg tillbaka. */
 #vy-ova, #vy-prov, #vy-essa { max-width: 880px; margin: 0 auto; }
 #vy-las { max-width: 940px; margin: 0 auto; }
+/* Med anteckningsrutan framme får vyn hela bredden, så att kapiteltexten
+   behåller sin läsbara radlängd i stället för att halveras. */
+#vy-las.bred-las { max-width: 100%; }
 
 /* -------------------------------------------------------------------------
    Sidlayouten: en huvudspalt och en smalare sidospalt, samma upplägg som
@@ -483,8 +493,10 @@ button:disabled:active { transform: none; }
   font-size: 1.09rem;
   line-height: 1.78;
   color: #232252;
-  max-width: 68ch;
 }
+/* Radlängden kapas på styckena, inte på kortet. Kapas kortet blir dess
+   högerkant kortare än de andra kortens och spalten ser trasig ut. */
+.lastext > * { max-width: 68ch; }
 .lastext h3 {
   font-family: var(--serif);
   font-size: 1.16rem; font-weight: 700; color: var(--blaa-700);
@@ -922,6 +934,135 @@ button:disabled:active { transform: none; }
   background: var(--blaa-50); border-color: var(--blaa-100); border-left-color: var(--blaa-500);
 }
 
+/* ==================== Egna och ändrade poster ==================== */
+/* Streckad kant = du har lagt in eller ändrat det här. Samma märkning
+   i månadsrutnätet, i dagskortet, i listan och på hemvyn. */
+.hnd.egen, .hnd.andrad { border-left-style: dashed; border-left-width: 4px; }
+.hnd.egen::before, .hnd.andrad::before {
+  content: '✎'; position: absolute; top: 1px; right: 3px;
+  font-size: .58rem; opacity: .6; line-height: 1;
+}
+.hnd.egen.obl::before, .hnd.andrad.obl::before { right: 11px; }
+
+.dagspass.egen, .dagspass.andrad, .pass.egen, .pass.andrad {
+  border-left-style: dashed; border-left-width: 4px;
+}
+.pass-etikett.min { background: var(--egen); }
+
+.minibtn {
+  background: var(--creme-50); border: 1.5px solid var(--creme-300);
+  color: var(--blaa-600); border-radius: 999px;
+  padding: .24rem .7rem; font-size: .76rem; font-weight: 700;
+  white-space: nowrap; flex: 0 0 auto;
+}
+.minibtn:hover { border-color: var(--blaa-500); background: var(--blaa-50); }
+h2 > .minibtn { margin-left: auto; }
+
+.chip-egen { border-style: dashed; }
+
+.dagskort-topp {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: .8rem; margin-bottom: .7rem;
+}
+.dagskort-topp .dagskort-rubrik { margin-bottom: 0; }
+.dagspass-notis {
+  font-size: .84rem; color: var(--ink-mid); margin-top: .3rem;
+  padding-left: .6rem; border-left: 2px solid var(--creme-300);
+}
+.dagspass-notis p { margin: 0; }
+
+/* ========================= Överlägg (dialog) ========================= */
+body.laast { overflow: hidden; }
+.overlagg {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(18, 18, 79, .55);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 5vh 1rem 2rem; overflow-y: auto;
+}
+.overlagg-ruta {
+  background: var(--creme-50); border: 1.5px solid var(--creme-300);
+  border-radius: var(--r-l); box-shadow: var(--skugga-l);
+  padding: 1.4rem 1.5rem; width: 100%; max-width: 540px;
+}
+.overlagg-topp {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: .8rem;
+}
+.overlagg-topp h2 { margin-bottom: .3rem; }
+.ikonknapp {
+  background: none; border: none; color: var(--ink-soft);
+  font-size: 1.1rem; padding: .1rem .4rem; line-height: 1; border-radius: var(--r-s);
+}
+.ikonknapp:hover { background: var(--creme-200); color: var(--ink); }
+
+.faltrad { display: grid; gap: .7rem; margin-top: .9rem; }
+.faltrad.tva { grid-template-columns: 1fr 1fr; }
+.faltrad.tre { grid-template-columns: 1.4fr 1fr 1fr; }
+.falt { display: block; min-width: 0; }
+.falt-etikett {
+  display: block; font-size: .76rem; font-weight: 700;
+  color: var(--ink-mid); margin-bottom: .22rem;
+}
+.falt input, .falt select, .falt textarea {
+  width: 100%; font-family: inherit; font-size: .92rem; color: var(--ink);
+  background: #fff; border: 2px solid var(--creme-300); border-radius: var(--r-s);
+  padding: .5rem .6rem;
+}
+.falt textarea { resize: vertical; line-height: 1.5; }
+.falt input:focus, .falt select:focus, .falt textarea:focus {
+  outline: 3px solid var(--blaa-100); outline-offset: 0; border-color: var(--blaa-500);
+}
+.pf-fel {
+  margin: .9rem 0 0; padding: .55rem .8rem; font-size: .86rem; font-weight: 600;
+  background: var(--rod-50); color: var(--rod-600);
+  border-left: 4px solid var(--rod-500); border-radius: 3px var(--r-s) var(--r-s) 3px;
+}
+.overlagg-knappar {
+  display: flex; gap: .55rem; flex-wrap: wrap; margin-top: 1.3rem;
+  padding-top: 1.1rem; border-top: 1px solid var(--creme-300);
+}
+.overlagg-knappar .fara { margin-left: auto; }
+
+/* ========================== Anteckningar ========================== */
+.kaptopp { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.antknapp { position: relative; flex: 0 0 auto; white-space: nowrap; }
+.antprick {
+  display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--ockra-500); margin-left: .4rem; vertical-align: 1px;
+}
+
+.anteckningskort { position: sticky; top: 7.2rem; }
+.antfalt {
+  width: 100%; min-height: 20rem; resize: vertical;
+  font-family: inherit; font-size: .92rem; line-height: 1.65; color: var(--ink);
+  background: #fff; border: 2px solid var(--creme-300); border-radius: var(--r-s);
+  padding: .7rem .8rem;
+}
+.antfalt:focus { outline: 3px solid var(--blaa-100); border-color: var(--blaa-500); }
+.antrad {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: .6rem; flex-wrap: wrap; margin-top: .5rem;
+}
+.antmallar { display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; margin-top: .8rem; }
+
+.anteckningsingang { background: var(--ockra-50); border-color: var(--ockra-100); }
+.anteckningsingang h2::before { background: var(--ockra-500); }
+
+.anteckningspost .ap-topp {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: .8rem;
+}
+.anteckningspost h2 { margin-bottom: .1rem; }
+.ap-text { padding: 0; margin-top: .6rem; }
+.ap-text blockquote {
+  border-left: 3px solid var(--creme-400); margin: .6rem 0;
+  padding: .1rem 0 .1rem .8rem; color: var(--ink-soft); font-style: italic;
+}
+
+@media print {
+  .topbar, .delkursband, footer, .knapprad, .minibtn, .lankbtn { display: none !important; }
+  .kort { border: none; box-shadow: none; padding: 0; margin-bottom: 1.5rem; }
+  body { background: #fff; }
+}
+
 /* ============================== Sök ============================== */
 .sokruta {
   width: 100%; padding: .75rem .95rem; font-size: .96rem; font-family: inherit;
@@ -995,6 +1136,16 @@ code {
   .dagspass-tid { flex-basis: 100%; }
   .teckenforklaring { display: none; }
   .dkb-extra { display: none; }
+
+  .faltrad.tva, .faltrad.tre { grid-template-columns: 1fr 1fr; }
+  .faltrad.tre .falt:first-child { grid-column: 1 / -1; }
+  .overlagg { padding: 2vh .7rem 1rem; }
+  .overlagg-ruta { padding: 1.1rem 1.1rem 1.3rem; }
+  .overlagg-knappar .fara { margin-left: 0; }
+  .anteckningskort { position: static; }
+  .antfalt { min-height: 14rem; }
+  .kaptopp { flex-wrap: wrap; }
+  .antknapp { width: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {

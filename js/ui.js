@@ -272,6 +272,54 @@ window.SYSB23.ui = (function () {
     return alla[0].replace('.', ':');
   }
 
+  /* ---------------------- Pass och egna ändringar ----------------------
+
+     Kalenderfilen har inga id:n, så vi räknar fram ett ur passets
+     ursprungliga innehåll. Det gör id:t stabilt även efter att du flyttat
+     passet – och det tål att kalendern kompletteras med fler pass, till
+     skillnad från ett löpnummer. */
+  function passId(p) {
+    var text = p.datum + '|' + p.tid + '|' + p.rubrik + '|' + p.delkurs;
+    var h = 5381;
+    for (var i = 0; i < text.length; i++) h = ((h * 33) ^ text.charCodeAt(i)) >>> 0;
+    return 'k' + h.toString(36);
+  }
+
+  /* Kursens pass med dina ändringar pålagda, plus dina egna poster.
+     Alla vyer går genom den här listan – aldrig direkt på S.pass – så att
+     en ändring slår igenom överallt på en gång. */
+  function allaPass() {
+    var S = window.SYSB23;
+    var ut = [];
+
+    S.pass.forEach(function (p) {
+      var id = passId(p);
+      var a = S.store.passAndring(id);
+      if (a && a.dold) return;
+
+      if (!a) {
+        ut.push(Object.assign({}, p, { passId: id }));
+        return;
+      }
+      /* Bara fält som faktiskt ändrats skrivs över */
+      var kopia = Object.assign({}, p, { passId: id, andrad: true });
+      ['datum', 'tid', 'rubrik', 'sal', 'typ', 'notis'].forEach(function (f) {
+        if (a[f] !== undefined && a[f] !== null && a[f] !== '') kopia[f] = a[f];
+      });
+      ut.push(kopia);
+    });
+
+    S.store.egnaPass().forEach(function (p) {
+      ut.push(Object.assign({}, p, { passId: p.id, egen: true }));
+    });
+
+    ut.sort(function (a, b) {
+      if (a.datum !== b.datum) return a.datum < b.datum ? -1 : 1;
+      return starttid(a.tid) < starttid(b.tid) ? -1 : 1;
+    });
+    return ut;
+  }
+
   /* Läsbar textfärg mot en godtycklig bakgrund.
      Delkursfärgerna spänner från mörkblått till ljus ockra – vit text
      fungerar på de mörka men ger bara 2,8:1 mot ockran, långt under
@@ -364,6 +412,7 @@ window.SYSB23.ui = (function () {
     manadsrutnat: manadsrutnat, isoDatum: isoDatum, manadsNamn: manadsNamn,
     passTyp: passTyp, passTypLista: passTypLista, starttid: starttid,
     typBadge: typBadge, kontrastfarg: kontrastfarg,
+    passId: passId, allaPass: allaPass,
     blanda: blanda
   };
 })();

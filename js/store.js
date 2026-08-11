@@ -18,6 +18,9 @@ window.SYSB23.store = (function () {
     historik: [],             // [{ datum, lage, rubrik, antal, ratt, procent, poang, maxPoang }]
     studiedagar: [],          // ['ÅÅÅÅ-MM-DD', …] för streak
     svarPerDag: {},           // 'ÅÅÅÅ-MM-DD' -> antal besvarade frågor
+    anteckningar: {},         // kapitelId -> { text, andrad }
+    egnaPass: [],             // [{ id, datum, tid, rubrik, typ, sal, delkurs, notis }]
+    passAndringar: {},        // passId -> { datum, tid, rubrik, sal, notis, dold }
     datum: {}                 // egna anteckningar per etapp (kvar från v1)
   };
 
@@ -396,6 +399,86 @@ window.SYSB23.store = (function () {
         befasta: befasta,
         totalt: amnen.length
       };
+    },
+
+    /* ---------------------- Anteckningar ----------------------
+       En anteckning per kapitel. Tom text tar bort posten helt, så att
+       "kapitel med anteckningar" alltid betyder kapitel med innehåll. */
+    anteckning: function (kapitelId) {
+      var a = data.anteckningar[kapitelId];
+      return a ? a.text : '';
+    },
+
+    sparaAnteckning: function (kapitelId, text) {
+      if (!text || !text.trim()) delete data.anteckningar[kapitelId];
+      else data.anteckningar[kapitelId] = { text: text, andrad: new Date().toISOString() };
+      spara();
+    },
+
+    anteckningAndrad: function (kapitelId) {
+      var a = data.anteckningar[kapitelId];
+      return a ? a.andrad : null;
+    },
+
+    /* Alla anteckningar i kapitelordning, med kapitlet inlagt */
+    allaAnteckningar: function (delkursId) {
+      var S = window.SYSB23;
+      var ut = [];
+      Object.keys(S.kompendium).forEach(function (dk) {
+        if (delkursId && dk !== delkursId) return;
+        S.kompendium[dk].kapitel.forEach(function (k) {
+          var a = data.anteckningar[k.id];
+          if (a && a.text.trim()) {
+            ut.push({ kapitel: k, delkurs: dk, text: a.text, andrad: a.andrad });
+          }
+        });
+      });
+      return ut;
+    },
+
+    /* ---------------------- Egna pass i schemat ----------------------
+       Två sorters ändring hålls isär. Egna pass är helt egna poster som
+       går att ta bort. Ändringar på kursens pass sparas som ett lager
+       ovanpå kalenderfilen, så att originalet alltid går att få tillbaka
+       och en uppdatering av kalendern inte skriver över det du ändrat. */
+    egnaPass: function () { return data.egnaPass.slice(); },
+
+    laggTillPass: function (p) {
+      p.id = 'egen-' + Date.now().toString(36) + '-' +
+             Math.floor(Math.random() * 1000).toString(36);
+      data.egnaPass.push(p);
+      spara();
+      return p.id;
+    },
+
+    andraEgetPass: function (id, p) {
+      data.egnaPass = data.egnaPass.map(function (x) {
+        if (x.id !== id) return x;
+        p.id = id;
+        return p;
+      });
+      spara();
+    },
+
+    taBortEgetPass: function (id) {
+      data.egnaPass = data.egnaPass.filter(function (x) { return x.id !== id; });
+      spara();
+    },
+
+    passAndring: function (passId) { return data.passAndringar[passId] || null; },
+
+    sattPassAndring: function (passId, andring) {
+      data.passAndringar[passId] = andring;
+      spara();
+    },
+
+    aterstallPass: function (passId) {
+      delete data.passAndringar[passId];
+      spara();
+    },
+
+    antalAndrade: function () {
+      return Object.keys(data.passAndringar).length + data.egnaPass.length;
     },
 
     /* ---------------------- Underhåll ---------------------- */

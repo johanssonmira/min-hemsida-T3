@@ -32,6 +32,7 @@ window.SYSB23.schema = (function () {
   }
 
   function rendera() {
+    passCache = null;
     satterStartmanad();
 
     /* Kalendern får hela bredden för sig själv – den ska aldrig samsas om
@@ -92,13 +93,26 @@ window.SYSB23.schema = (function () {
   /* Kalendern                                                         */
   /* ================================================================ */
 
+  /* Kursens pass med dina ändringar och egna poster inräknade.
+     Cachas per rendering så att listan byggs en gång, inte per dagsruta. */
+  var passCache = null;
+  function pass() {
+    if (!passCache) passCache = U.allaPass();
+    return passCache;
+  }
+
   function kalenderkort() {
+    var egna = S.store.egnaPass().length;
+
     var html = '<div class="kort">';
 
-    html += '<h2>Kalender</h2>';
+    html += '<h2>Kalender';
+    html += '<button class="minibtn" data-nypass="1">+ Egen händelse</button>';
+    html += '</h2>';
     html += '<p class="muted liten">Färgen visar vilken delkurs passet hör till. ' +
             'I varje ruta står starttiden och vad det är för sorts pass. ' +
-            'Klicka på en dag för salar och detaljer.</p>';
+            '<strong>Klicka på en dag</strong> för salar, detaljer och för att ' +
+            'ändra eller lägga till något.</p>';
 
     /* Växel mellan månadsvy och lista */
     html += '<div class="chiprad">';
@@ -113,13 +127,17 @@ window.SYSB23.schema = (function () {
     html += '<button class="chip' + (filterDelkurs === 'alla' ? ' vald' : '') +
             '" data-filterdk="alla">Alla delkurser</button>';
     S.kalenderDelkurser.forEach(function (d) {
-      var n = S.pass.filter(function (p) { return p.delkurs === d.id; }).length;
+      var n = pass().filter(function (p) { return p.delkurs === d.id; }).length;
       if (!n) return;
       html += '<button class="chip' + (filterDelkurs === d.id ? ' vald' : '') +
               '" data-filterdk="' + U.esc(d.id) + '">' +
               '<i class="fargprick" style="background:' + d.farg + '"></i>' +
               U.esc(d.kort) + ' <span class="antal">' + n + '</span></button>';
     });
+    if (egna) {
+      html += '<button class="chip chip-egen' + (filterDelkurs === 'egna' ? ' vald' : '') +
+              '" data-filterdk="egna">✎ Mina egna <span class="antal">' + egna + '</span></button>';
+    }
     html += '</div>';
 
     html += visning === 'kalender' ? manadsvy() : listvy();
@@ -134,12 +152,20 @@ window.SYSB23.schema = (function () {
     var klasser = ['hnd'];
     if (p.typ === 'tenta') klasser.push('h-tenta');
     if (p.obligatorisk) klasser.push('obl');
+    /* Egna och ändrade poster får streckad kant i stället för en åttonde
+       färg. Färgskalan är redan full av delkurser – hade "mitt" blivit en
+       färg till hade den behövt läras in. En streckad kant läser sig själv. */
+    if (p.egen) klasser.push('egen');
+    if (p.andrad) klasser.push('andrad');
 
-    var farg = U.delkursFarg(p.delkurs);
+    var farg = p.delkurs ? U.delkursFarg(p.delkurs) : 'var(--egen)';
     var h = '<span class="' + klasser.join(' ') + '" style="--dkf:' + farg +
             (p.typ === 'tenta' ? ';color:' + U.kontrastfarg(farg) : '') + '"';
-    h += ' title="' + U.esc(p.tid + ' · ' + typ.namn + ' · ' +
-                            U.delkursNamn(p.delkurs) + ' · ' + p.sal) + '">';
+    h += ' title="' + U.esc(p.tid + ' · ' + typ.namn +
+                            (p.delkurs ? ' · ' + U.delkursNamn(p.delkurs) : '') +
+                            (p.sal ? ' · ' + p.sal : '') +
+                            (p.egen ? ' · din egen händelse' : '') +
+                            (p.andrad ? ' · ändrad av dig' : '')) + '">';
     /* Gruppomgångar ("13:00/15:00") delas upp så att den andra tiden kan
        fällas bort på mobil, där rutan bara rymmer fem tecken. */
     var tider = (U.starttid(p.tid) || p.tid).split('/');
@@ -150,9 +176,15 @@ window.SYSB23.schema = (function () {
     return h + '</span>';
   }
 
+  function passarFilter(p) {
+    if (filterDelkurs === 'alla') return true;
+    if (filterDelkurs === 'egna') return !!p.egen;
+    return p.delkurs === filterDelkurs;
+  }
+
   function passForDatum(iso) {
-    return S.pass.filter(function (p) {
-      if (filterDelkurs !== 'alla' && p.delkurs !== filterDelkurs) return false;
+    return pass().filter(function (p) {
+      if (!passarFilter(p)) return false;
       if (p.datum === iso) return true;
       /* Flerdagarspass, t.ex. redovisning 9–12 nov */
       if (p.spannTill) return iso > p.datum && iso <= p.spannTill;
@@ -226,10 +258,10 @@ window.SYSB23.schema = (function () {
     html += '<div id="dagsdetalj">' + dagsdetalj() + '</div>';
 
     /* Månadssammanfattning */
-    var iManaden = S.pass.filter(function (p) {
+    var iManaden = pass().filter(function (p) {
       var d = U.parse(p.datum);
       return d && d.getFullYear() === manadAr && d.getMonth() === manadNr &&
-             (filterDelkurs === 'alla' || p.delkurs === filterDelkurs);
+             passarFilter(p);
     });
     var tentorIManaden = iManaden.filter(function (p) { return p.typ === 'tenta'; });
 
@@ -248,9 +280,12 @@ window.SYSB23.schema = (function () {
      förklarar sig själv i stället för att kräva en färgkod. */
   function teckenforklaring() {
     var förekommer = {};
-    S.pass.forEach(function (p) {
-      if (filterDelkurs !== 'alla' && p.delkurs !== filterDelkurs) return;
+    var harEgna = false, harAndrade = false;
+    pass().forEach(function (p) {
+      if (!passarFilter(p)) return;
       förekommer[p.typ || 'ovrigt'] = true;
+      if (p.egen) harEgna = true;
+      if (p.andrad) harAndrade = true;
     });
 
     var typer = U.passTypLista().filter(function (t) { return förekommer[t.id]; });
@@ -263,6 +298,8 @@ window.SYSB23.schema = (function () {
               '<span>' + U.esc(t.namn) + '</span></span>';
     });
     html += '<span class="hnd tf-prov obl"><span>Obligatorisk</span></span>';
+    if (harEgna) html += '<span class="hnd tf-prov egen"><span>Din egen</span></span>';
+    if (harAndrade) html += '<span class="hnd tf-prov andrad"><span>Ändrad av dig</span></span>';
     html += '</div>';
     return html;
   }
@@ -270,33 +307,47 @@ window.SYSB23.schema = (function () {
   function dagsdetalj() {
     if (!valdDag) {
       return '<p class="muted liten" style="margin:.9rem 0 0">' +
-             'Ingen dag vald. Klicka på en ruta i kalendern så visas tider, ' +
-             'salar och vilken delkurs passen tillhör här.</p>';
+             'Ingen dag vald. <strong>Klicka på en ruta i kalendern</strong> så visas tider, ' +
+             'salar och delkurs här — och du kan ändra eller lägga till något.</p>';
     }
 
-    var pass = passForDatum(valdDag).slice().sort(function (a, b) {
+    var dagens = passForDatum(valdDag).slice().sort(function (a, b) {
       return U.starttid(a.tid) < U.starttid(b.tid) ? -1 : 1;
     });
 
     var html = '<div class="dagskort">';
+    html += '<div class="dagskort-topp">';
     html += '<div class="dagskort-rubrik">' + U.esc(U.langtDatum(valdDag)) +
             ' <span class="muted liten">· vecka ' + U.veckonummer(valdDag) + '</span></div>';
+    html += '<button class="minibtn" data-nypass="' + U.esc(valdDag) + '">+ Lägg till här</button>';
+    html += '</div>';
 
-    if (!pass.length) {
+    if (!dagens.length) {
       html += '<p class="muted liten" style="margin-bottom:0">Inget inbokat den här dagen. ' +
               'Bra tillfälle att repetera.</p>';
       return html + '</div>';
     }
 
-    pass.forEach(function (p) {
-      html += '<div class="dagspass" style="--dkf:' + U.delkursFarg(p.delkurs) + '">';
+    dagens.forEach(function (p) {
+      var farg = p.delkurs ? U.delkursFarg(p.delkurs) : 'var(--egen)';
+      html += '<div class="dagspass' + (p.egen ? ' egen' : '') + (p.andrad ? ' andrad' : '') +
+              '" style="--dkf:' + farg + '">';
       html += '<div class="dagspass-tid">' + U.esc(p.tid) + '</div>';
       html += '<div class="dagspass-kropp">';
       html += '<div class="dagspass-rubrik">' + U.typBadge(p) + U.esc(p.rubrik) +
-              (p.obligatorisk ? '<span class="pass-etikett obl">Obligatorisk</span>' : '') + '</div>';
-      html += '<div class="dagspass-meta">' + U.esc(U.delkursNamn(p.delkurs)) +
-              ' · ' + U.esc(p.sal) + '</div>';
-      html += '</div></div>';
+              (p.obligatorisk ? '<span class="pass-etikett obl">Obligatorisk</span>' : '') +
+              (p.egen ? '<span class="pass-etikett min">✎ Din egen</span>' : '') +
+              (p.andrad ? '<span class="pass-etikett min">✎ Ändrad</span>' : '') + '</div>';
+
+      var meta = [];
+      if (p.delkurs) meta.push(U.delkursNamn(p.delkurs));
+      if (p.sal) meta.push(p.sal);
+      if (meta.length) html += '<div class="dagspass-meta">' + U.esc(meta.join(' · ')) + '</div>';
+      if (p.notis) html += '<div class="dagspass-notis">' + U.inline(p.notis) + '</div>';
+
+      html += '</div>';
+      html += '<button class="minibtn" data-andrapass="' + U.esc(p.passId) + '">Ändra</button>';
+      html += '</div>';
     });
 
     return html + '</div>';
@@ -304,36 +355,42 @@ window.SYSB23.schema = (function () {
 
   function listvy() {
     var idag = U.idag();
-    var pass = S.pass.filter(function (p) {
-      if (filterDelkurs !== 'alla' && p.delkurs !== filterDelkurs) return false;
+    var kommande = pass().filter(function (p) {
+      if (!passarFilter(p)) return false;
       return U.parse(p.datum) >= idag;
     });
 
-    var html = '<p class="muted liten">' + pass.length + ' pass kvar av terminen.</p>';
+    var html = '<p class="muted liten">' + kommande.length + ' pass kvar av terminen.</p>';
 
-    if (!pass.length) {
+    if (!kommande.length) {
       return html + '<p class="muted">Inga kommande pass.</p>';
     }
 
     var vecka = null;
-    pass.forEach(function (p) {
+    kommande.forEach(function (p) {
       var v = U.veckonummer(p.datum);
       if (v !== vecka) {
         vecka = v;
         html += '<div class="veckorubrik">Vecka ' + v + '</div>';
       }
+      var farg = p.delkurs ? U.delkursFarg(p.delkurs) : 'var(--egen)';
       html += '<div class="pass' + (p.typ === 'tenta' ? ' ar-tenta' : '') +
-              '" style="--dkf:' + U.delkursFarg(p.delkurs) + '">';
+              (p.egen ? ' egen' : '') + (p.andrad ? ' andrad' : '') +
+              '" style="--dkf:' + farg + '">';
       html += '<span class="pass-dag">' + U.esc(U.kortDatum(p.datum)) +
               (p.spannTill ? '–' + U.parse(p.spannTill).getDate() : '') + '</span>';
       html += '<span class="pass-tid">' + U.esc(p.tid) + '</span>';
       html += '<span class="pass-kropp">';
       html += '<span class="pass-rubrik">' + U.typBadge(p) + U.esc(p.rubrik) +
-              (p.obligatorisk ? '<span class="pass-etikett obl">Obligatorisk</span>' : '') + '</span>';
-      html += '<span class="pass-meta"><i class="fargprick" style="background:' +
-              U.delkursFarg(p.delkurs) + '"></i>' +
-              U.esc(U.delkursKort(p.delkurs)) + ' · ' + U.esc(p.sal) + '</span>';
-      html += '</span></div>';
+              (p.obligatorisk ? '<span class="pass-etikett obl">Obligatorisk</span>' : '') +
+              (p.egen ? '<span class="pass-etikett min">✎ Din egen</span>' : '') +
+              (p.andrad ? '<span class="pass-etikett min">✎ Ändrad</span>' : '') + '</span>';
+      html += '<span class="pass-meta"><i class="fargprick" style="background:' + farg + '"></i>' +
+              U.esc(p.delkurs ? U.delkursKort(p.delkurs) : 'Egen') +
+              (p.sal ? ' · ' + U.esc(p.sal) : '') + '</span>';
+      html += '</span>';
+      html += '<button class="minibtn" data-andrapass="' + U.esc(p.passId) + '">Ändra</button>';
+      html += '</div>';
     });
 
     return html;
@@ -437,6 +494,17 @@ window.SYSB23.schema = (function () {
 
   /* ================================================================ */
 
+  /* Efter en ändring visas den dag posten faktiskt hamnade på — även om
+     man flyttade den till en annan månad. Annars ser det ut som att
+     ändringen försvann. */
+  function hoppaTill(datum) {
+    if (datum) {
+      var d = U.parse(datum);
+      if (d) { manadAr = d.getFullYear(); manadNr = d.getMonth(); valdDag = datum; }
+    }
+    rendera();
+  }
+
   function koppla(vy) {
     Array.prototype.forEach.call(vy.querySelectorAll('[data-visning]'), function (b) {
       b.addEventListener('click', function () { visning = b.dataset.visning; rendera(); });
@@ -453,6 +521,25 @@ window.SYSB23.schema = (function () {
         if (manadNr > 11) { manadNr = 0; manadAr += 1; }
         valdDag = null;
         rendera();
+      });
+    });
+
+    /* Ny egen händelse. Har man en dag vald fylls den i som datum. */
+    Array.prototype.forEach.call(vy.querySelectorAll('[data-nypass]'), function (b) {
+      b.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var datum = b.dataset.nypass !== '1' ? b.dataset.nypass
+                  : (valdDag || U.isoDatum(new Date(manadAr, manadNr, 1)));
+        S.passform.nyPa(datum, hoppaTill);
+      });
+    });
+
+    /* Ändra ett befintligt pass, kursens eller ditt eget */
+    Array.prototype.forEach.call(vy.querySelectorAll('[data-andrapass]'), function (b) {
+      b.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var p = pass().filter(function (x) { return x.passId === b.dataset.andrapass; })[0];
+        if (p) S.passform.oppna(p, hoppaTill);
       });
     });
 

@@ -282,7 +282,7 @@ window.SYSB23.hem = (function () {
 
   function veckanskort() {
     var idag = U.idag();
-    var pass = S.pass.filter(function (p) {
+    var pass = U.allaPass().filter(function (p) {
       var d = U.parse(p.datum);
       if (!d) return false;
       var diff = Math.round((d - idag) / 86400000);
@@ -308,14 +308,18 @@ window.SYSB23.hem = (function () {
   }
 
   function passrad(p) {
+    var farg = p.delkurs ? U.delkursFarg(p.delkurs) : 'var(--egen)';
     var h = '<div class="pass' + (p.typ === 'tenta' ? ' ar-tenta' : '') +
-            '" style="--dkf:' + U.delkursFarg(p.delkurs) + '">';
+            (p.egen ? ' egen' : '') + (p.andrad ? ' andrad' : '') +
+            '" style="--dkf:' + farg + '">';
     h += '<span class="pass-dag">' + U.esc(U.kortDatum(p.datum)) + '</span>';
     h += '<span class="pass-tid">' + U.esc(p.tid) + '</span>';
     h += '<span class="pass-kropp"><span class="pass-rubrik">' +
          U.typBadge(p) + U.esc(p.rubrik) +
-         (p.obligatorisk ? '<span class="pass-etikett obl">Obl.</span>' : '') + '</span>';
-    h += '<span class="pass-meta">' + U.esc(U.delkursKort(p.delkurs)) + ' · ' + U.esc(p.sal) + '</span>';
+         (p.obligatorisk ? '<span class="pass-etikett obl">Obl.</span>' : '') +
+         (p.egen ? '<span class="pass-etikett min">✎ Din</span>' : '') + '</span>';
+    h += '<span class="pass-meta">' + U.esc(p.delkurs ? U.delkursKort(p.delkurs) : 'Egen') +
+         (p.sal ? ' · ' + U.esc(p.sal) : '') + '</span>';
     return h + '</span></div>';
   }
 
