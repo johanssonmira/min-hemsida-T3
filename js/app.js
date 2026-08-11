@@ -151,6 +151,7 @@
       b.addEventListener('click', function () { visaVy(b.dataset.vy); });
     });
     U.el('btn-hem').addEventListener('click', function () { visaVy('hem'); });
+    U.el('btn-tema').addEventListener('click', function () { S.tema.oppna(); });
 
     document.addEventListener('keydown', function (e) {
       if (aktuellVy === 'ova' || aktuellVy === 'prov') S.ova.tangent(e);
@@ -220,6 +221,7 @@
       return;
     }
 
+    S.tema.start();
     kontrolleraData();
     fyllDelkursval();
     koppla();

@@ -57,6 +57,7 @@
   --gron-50:  #DFF3E7;
   --gron-500: #0E7A52;
   --gron-600: #0A5E3F;
+  --gron-700: #10553B;
 
   --rod-50:   #FCE3DE;
   --rod-500:  #D6402C;
@@ -84,6 +85,156 @@
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
   --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+/* =========================================================================
+   TEMAN
+   -------------------------------------------------------------------------
+   Ett tema byter bara ut variablerna ovan. Ingen regel längre ner i filen
+   känner till vilket tema som är aktivt, och ingen text, siffra eller
+   funktion ändras – bara ytorna.
+
+   Rollerna är desamma i alla fyra:
+     creme-*  ytor och kantlinjer      blaa-*  handling och navigering
+     ockra-*  uppmärksamhet, tentor    rosa-*  lugna sektioner
+     gron/rod rätt och fel
+
+   Rätt och fel behåller grönt och rött i samtliga teman. Det är den enda
+   färgparet som betyder något i sig, och den betydelsen får inte flyttas.
+   I det gröna temat, där hueen annars vore upptagen, bär ✓ och ✕ i facit
+   samma besked utan att man behöver se färgen alls.
+   ========================================================================= */
+
+/* ---------- Skog: salviagrönt och puderrosa ---------- */
+[data-tema="skog"] {
+  --creme-50:  #F8FCF6;
+  --creme-100: #E9F3E4;
+  --creme-200: #D9EAD1;
+  --creme-300: #C0DCB4;
+  --creme-400: #9DC48D;
+
+  --ink:      #14301F;
+  --ink-mid:  #3A5643;
+  --ink-soft: #4F6857;
+
+  --blaa-50:  #DCF0E2;
+  --blaa-100: #B6E0C2;
+  --blaa-500: #1B7A45;
+  --blaa-600: #146036;
+  --blaa-700: #0F4B2A;
+  --blaa-900: #0B2E1C;
+
+  --ockra-50:  #FCE5EC;
+  --ockra-100: #F8C9D8;
+  --ockra-500: #E0577F;
+  --ockra-600: #9E2547;
+  --ockra-700: #85203C;
+
+  --rosa-100: #FBE8EF;
+  --rosa-200: #F6CFDC;
+  --rosa-400: #E495B0;
+
+  --gron-50:  #D8F5E3;
+  --gron-500: #067F4A;
+  --gron-600: #05603A;
+  --gron-700: #044D2E;
+
+  --rod-50:   #FCE0DB;
+  --rod-500:  #D23E27;
+  --rod-600:  #A82D19;
+
+  --egen: #4A6153;
+  --skugga-s: 0 1px 2px rgba(20,48,31,.07);
+  --skugga-m: 0 2px 4px rgba(20,48,31,.07), 0 8px 20px rgba(20,48,31,.07);
+  --skugga-l: 0 6px 16px rgba(20,48,31,.13), 0 16px 40px rgba(20,48,31,.10);
+}
+
+/* ---------- Konditori: prinsesstårtans rosa, blått och gult ---------- */
+[data-tema="konditori"] {
+  --creme-50:  #FFF9FB;
+  --creme-100: #FCEAF0;
+  --creme-200: #F9D9E4;
+  --creme-300: #F2C0D2;
+  --creme-400: #E39BB5;
+
+  --ink:      #2A1220;
+  --ink-mid:  #5A3247;
+  --ink-soft: #70435A;
+
+  --blaa-50:  #E3EFFA;
+  --blaa-100: #BFDCF4;
+  --blaa-500: #1A6DC0;
+  --blaa-600: #145699;
+  --blaa-700: #0F4377;
+  --blaa-900: #0B2B4D;
+
+  --ockra-50:  #FDEFD9;
+  --ockra-100: #F9DEB6;
+  --ockra-500: #DA8A1C;
+  --ockra-600: #8A5200;
+  --ockra-700: #6E4100;
+
+  --rosa-100: #FBE0EC;
+  --rosa-200: #F6C3D9;
+  --rosa-400: #E68CB2;
+
+  --gron-50:  #DDF3E6;
+  --gron-500: #0C7A50;
+  --gron-600: #095E3D;
+  --gron-700: #074B31;
+
+  --rod-50:   #FCE1DC;
+  --rod-500:  #D33F2A;
+  --rod-600:  #AB2D1B;
+
+  --egen: #6A4A5C;
+  --skugga-s: 0 1px 2px rgba(42,18,32,.07);
+  --skugga-m: 0 2px 4px rgba(42,18,32,.07), 0 8px 20px rgba(42,18,32,.07);
+  --skugga-l: 0 6px 16px rgba(42,18,32,.13), 0 16px 40px rgba(42,18,32,.10);
+}
+
+/* ---------- Neon: magenta och solgult på vitt ---------- */
+[data-tema="neon"] {
+  --creme-50:  #FFFFFF;
+  --creme-100: #FFF0F5;
+  --creme-200: #FFE0EC;
+  --creme-300: #FFC7DC;
+  --creme-400: #F79CBE;
+
+  --ink:      #1B0A22;
+  --ink-mid:  #4A2354;
+  --ink-soft: #613668;
+
+  --blaa-50:  #FFE3F4;
+  --blaa-100: #FFC2E8;
+  --blaa-500: #C4118C;
+  --blaa-600: #A00E73;
+  --blaa-700: #7D0B59;
+  --blaa-900: #2A0A33;
+
+  --ockra-50:  #FFF4CC;
+  --ockra-100: #FFE894;
+  --ockra-500: #F5C518;
+  --ockra-600: #8A6100;
+  --ockra-700: #6B4B00;
+
+  --rosa-100: #FFE7F3;
+  --rosa-200: #FFC9E4;
+  --rosa-400: #FF8FC6;
+
+  --gron-50:  #D9F7E5;
+  --gron-500: #00875A;
+  --gron-600: #00693F;
+  --gron-700: #005232;
+
+  --rod-50:   #FFE0DA;
+  --rod-500:  #E23A20;
+  --rod-600:  #B32912;
+
+  --egen: #6B4B75;
+  --skugga-s: 0 1px 2px rgba(27,10,34,.07);
+  --skugga-m: 0 2px 4px rgba(27,10,34,.07), 0 8px 20px rgba(27,10,34,.08);
+  --skugga-l: 0 6px 16px rgba(27,10,34,.14), 0 16px 40px rgba(27,10,34,.11);
 }
 
 * { box-sizing: border-box; }
@@ -158,6 +309,52 @@ body {
 }
 .logo span { font-weight: 400; opacity: .68; font-style: italic; }
 
+/* ---- Temaknappen ---- */
+.temaknapp {
+  flex: 0 0 auto; margin-left: auto; display: flex; align-items: center; gap: .5rem;
+  background: rgba(255,255,255,.09); color: #fff;
+  border: 1px solid rgba(255,255,255,.2); border-radius: 999px;
+  padding: .3rem .8rem .3rem .55rem; font-size: .82rem; font-weight: 600;
+}
+.temaknapp:hover { background: rgba(255,255,255,.18); }
+.tema-prickar { display: flex; }
+/* Prickarna överlappar som färgprover i en solfjäder */
+.tema-prickar i {
+  width: 11px; height: 11px; border-radius: 50%;
+  border: 1.5px solid var(--blaa-900); margin-right: -4px;
+}
+.tema-prickar i:nth-child(1) { background: var(--creme-200); }
+.tema-prickar i:nth-child(2) { background: var(--blaa-500); }
+.tema-prickar i:nth-child(3) { background: var(--ockra-500); margin-right: 0; }
+
+/* Delkursväljaren tar över marginalen när temaknappen finns före den */
+.temaknapp + .delkursvaljare { margin-left: 0; }
+
+/* ---- Temaväljaren i dialogen ---- */
+.temalista { display: grid; gap: .55rem; margin: .9rem 0 .2rem; }
+.temakort {
+  display: flex; align-items: center; gap: .85rem; text-align: left;
+  padding: .75rem .85rem; border-radius: var(--r-m);
+  background: var(--creme-50); border: 2px solid var(--creme-300);
+  font-family: inherit; color: var(--ink); font-weight: 500;
+}
+.temakort:hover { border-color: var(--blaa-500); }
+.temakort.vald { border-color: var(--blaa-500); background: var(--blaa-50); }
+.tk-prickar { display: flex; flex: 0 0 auto; }
+.tk-prickar i {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 2px solid var(--creme-50); margin-right: -9px;
+}
+.tk-prickar i:last-child { margin-right: 0; }
+.tk-text { min-width: 0; }
+.tk-titel { display: block; font-weight: 700; font-size: .96rem; }
+.tk-besk { display: block; font-size: .82rem; color: var(--ink-soft); }
+.tk-vald {
+  font-size: .64rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em;
+  background: var(--blaa-500); color: #fff; padding: .1rem .42rem;
+  border-radius: 4px; vertical-align: 2px;
+}
+
 /* ---- Delkursväljaren ---- */
 /* min-width:0 hela vägen ner, annars vägrar select krympa under sin
    innehållsbredd och hela sidan får vågrät rullning på smala skärmar. */
@@ -226,6 +423,9 @@ body {
   .navrad { order: 3; flex-basis: 100%; }
   .delkursvaljare { padding-left: .6rem; }
   .dv-etikett { display: none; }
+  /* På mobil räcker färgprickarna – ordet "Tema" tar plats från delkursen */
+  .tema-text { display: none; }
+  .temaknapp { padding: .3rem .5rem; }
 }
 
 main { padding-top: 1.4rem; padding-bottom: 2.5rem; }
@@ -664,9 +864,18 @@ button:disabled:active { transform: none; }
   background: var(--creme-100); border-radius: 0 6px 6px 0;
   color: var(--ink-mid);
 }
-.altforklaring.ar-ratt { border-left-color: var(--gron-500); background: var(--gron-50); color: #10553B; }
+.altforklaring.ar-ratt { border-left-color: var(--gron-500); background: var(--gron-50); color: var(--gron-700); }
 .altforklaring.ar-fel  { border-left-color: var(--rod-500); }
 .altforklaring strong { display: block; margin-bottom: .24rem; color: var(--ink); }
+
+/* Rätt och fel märks med tecken, inte bara med färg. Det håller även i
+   ett grönt eller rosa tema, där hueen inte längre är ledig att betyda
+   något – och för den som inte skiljer rött från grönt. */
+.altforklaring strong::before {
+  display: inline-block; width: 1.15em; font-weight: 900;
+}
+.altforklaring.ar-ratt strong::before { content: '✓ '; color: var(--gron-600); }
+.altforklaring.ar-fel  strong::before { content: '✕ '; color: var(--rod-600); }
 .dittsvar { font-style: italic; color: var(--blaa-600); font-weight: 700; }
 
 /* Nivåuppgång efter ett rätt svar */

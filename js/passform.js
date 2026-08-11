@@ -31,10 +31,17 @@ window.SYSB23.passform = (function () {
   }
 
   function stang() {
-    U.el('overlagg').classList.add('dold');
-    U.el('overlagg').innerHTML = '';
+    var ov = U.el('overlagg');
+    ov.classList.add('dold');
+    ov.innerHTML = '';
     document.body.classList.remove('laast');
+    ov.removeEventListener('click', utanfor);
+    document.removeEventListener('keydown', esc);
     aktivt = null;
+  }
+
+  function utanfor(e) {
+    if (e.target === U.el('overlagg')) stang();
   }
 
   /* ------------------------------------------------------------------ */
@@ -144,9 +151,7 @@ window.SYSB23.passform = (function () {
   function koppla() {
     var ov = U.el('overlagg');
 
-    ov.addEventListener('click', function (e) {
-      if (e.target === ov) stang();          // klick utanför rutan stänger
-    });
+    ov.addEventListener('click', utanfor);   // klick utanför rutan stänger
     document.addEventListener('keydown', esc);
 
     U.el('pf-stang').addEventListener('click', stang);
@@ -239,8 +244,7 @@ window.SYSB23.passform = (function () {
   }
 
   function klar(datum) {
-    var fn = narKlar;
-    document.removeEventListener('keydown', esc);
+    var fn = narKlar;        // stang() nollar aktivt, så återanropet plockas ut först
     stang();
     if (fn) fn(datum);
   }
