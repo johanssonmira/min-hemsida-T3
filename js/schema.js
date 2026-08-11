@@ -172,7 +172,14 @@ window.SYSB23.schema = (function () {
     h += '<b>' + U.esc(tider[0]) +
          (tider.length > 1 ? '<i class="hnd-extratid">/' + U.esc(tider.slice(1).join('/')) + '</i>' : '') +
          '</b>';
-    h += '<span>' + U.esc(typ.kort) + '</span>';
+
+    /* Delkursen står först och i sin egen färg. Färgen ensam räckte inte —
+       sju nyanser är fler än man håller i huvudet, särskilt de tre blå. */
+    h += '<span>';
+    if (p.delkurs) h += '<i class="hnd-dk">' + U.esc(U.delkursKort(p.delkurs)) + '</i>';
+    else if (p.egen) h += '<i class="hnd-dk">Egen</i>';
+    h += '<i class="hnd-typ">' + U.esc(typ.kort) + '</i>';
+    h += '</span>';
     return h + '</span>';
   }
 
@@ -342,6 +349,7 @@ window.SYSB23.schema = (function () {
       var meta = [];
       if (p.delkurs) meta.push(U.delkursNamn(p.delkurs));
       if (p.sal) meta.push(p.sal);
+      if (p.larare) meta.push(p.larare);
       if (meta.length) html += '<div class="dagspass-meta">' + U.esc(meta.join(' · ')) + '</div>';
       if (p.notis) html += '<div class="dagspass-notis">' + U.inline(p.notis) + '</div>';
 

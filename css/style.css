@@ -99,7 +99,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-.wrap { max-width: 1400px; margin: 0 auto; padding-left: 1.75rem; padding-right: 1.75rem; }
+.wrap { max-width: 1720px; margin: 0 auto; padding-left: 1.75rem; padding-right: 1.75rem; }
 .dold { display: none !important; }
 .muted { color: var(--ink-soft); }
 .liten { font-size: .875rem; }
@@ -130,6 +130,14 @@ body {
   .sida { grid-template-columns: minmax(0, 1fr) 21rem; column-gap: 1.25rem; }
   .sida > .bred { grid-column: 1 / -1; }
 }
+@media (min-width: 1500px) {
+  .sida { grid-template-columns: minmax(0, 1fr) 23rem; column-gap: 1.5rem; }
+}
+
+/* Bred skärm ska ge bredare kort men aldrig längre rader. Löptexten kapas
+   här i stället för att hela sidan kapas — då kan kalender, mätare och
+   listor breda ut sig medan brödtexten står kvar på läsbar radlängd. */
+.kort p, .kort ul, .kort ol, .kort .notis { max-width: 82ch; }
 
 /* =========================== Topbar =========================== */
 /* Accentlinjen under topbaren tar aktiv delkurs färg. Det är den enda
@@ -810,8 +818,17 @@ button:disabled:active { transform: none; }
 .hnd { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 .35rem; }
 .hnd b { font-weight: 800; font-size: .68rem; letter-spacing: .01em; }
 .hnd b i { font-style: normal; }
-.hnd span { color: var(--ink-mid); font-weight: 600;
+.hnd span { color: var(--ink-mid); font-weight: 600; min-width: 0;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* Delkursen först, passtypen efter i dämpad ton. Namnet står i bläck och
+   inte i delkursfärgen: färgad text mot en tonad bakgrund av samma färg
+   ger 2,6:1, långt under WCAG AA. Hueen bärs av kantlinjen och tonplattan,
+   namnet av bokstäverna. Färgen ensam räckte ändå inte som identifikation
+   — sju nyanser är fler än man håller i huvudet, särskilt de tre blå. */
+.hnd-dk { font-style: normal; font-weight: 800; color: var(--ink); }
+.hnd-dk + .hnd-typ::before { content: ' · '; opacity: .5; font-weight: 400; }
+.hnd-typ { font-style: normal; font-weight: 500; opacity: .85; }
+.hnd.h-tenta .hnd-dk { color: inherit; }
 
 /* Tenta är det enda som fyller hela brickan – den ska sticka ut på avstånd. */
 /* Textfärgen sätts inline av U.kontrastfarg() – ockra tål inte vit text. */
@@ -1131,6 +1148,9 @@ code {
   .hnd .hnd-extratid { display: none; }
   .hnd.h-tenta { padding-left: .18rem; }
   .hnd.h-tenta span { display: block; font-size: .5rem; letter-spacing: 0; }
+  /* På tentabrickan får delkursen plats, men inte passtypen – står det
+     TENTA i rutan behöver det inte också stå Tenta. */
+  .hnd.h-tenta .hnd-typ, .hnd.h-tenta .hnd-dk + .hnd-typ::before { display: none; }
   .manadsnamn { font-size: 1.02rem; }
   .dagspass { flex-wrap: wrap; gap: .1rem .6rem; }
   .dagspass-tid { flex-basis: 100%; }
