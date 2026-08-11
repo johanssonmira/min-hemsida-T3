@@ -1,0 +1,32 @@
+{
+  "name": "SYSB23 Plugg",
+  "short_name": "SYSB23",
+  "description": "Plugga till SYSB23 – kompendium, frågor med förklaringar, nivåer per ämne och hela terminens schema. Fungerar utan internet.",
+  "lang": "sv-SE",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#FCF0EA",
+  "theme_color": "#12124F",
+  "categories": ["education", "productivity"],
+  "icons": [
+    { "src": "ikoner/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "ikoner/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "ikoner/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Öva frågor",
+      "short_name": "Öva",
+      "url": "./?vy=ova",
+      "description": "Gå direkt till övningsfrågorna"
+    },
+    {
+      "name": "Schemat",
+      "short_name": "Schema",
+      "url": "./?vy=schema",
+      "description": "Gå direkt till kalendern"
+    }
+  ]
+}

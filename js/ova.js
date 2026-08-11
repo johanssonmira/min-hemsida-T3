@@ -54,6 +54,7 @@ window.SYSB23.ova = (function () {
   }
 
   function avbryt() {
+    lamnaFokus();
     pass = null;
     S.app.rendera();
   }
@@ -155,7 +156,7 @@ window.SYSB23.ova = (function () {
   function filterpanel(delkurs) {
     var amnen = S.amnen.filter(function (a) { return a.delkurs === delkurs; });
 
-    var html = '<div class="kort">';
+    var html = '<div class="kort doljifokus">';
     html += '<h2>Öva</h2>';
     html += '<p class="muted liten">En fråga i taget, med facit direkt. Frågor du svarat fel på ' +
             'kommer tillbaka oftare. Inga minuspoäng här.</p>';
@@ -320,7 +321,7 @@ window.SYSB23.ova = (function () {
     if (!arProv && !pass.repetition) html += filterpanel(S.store.delkurs());
 
     if (pass.repetition) {
-      html += '<div class="kort"><h2>Repetition</h2>' +
+      html += '<div class="kort doljifokus"><h2>Repetition</h2>' +
               '<p class="muted liten" style="margin-bottom:0">Frågor du svarat fel på tidigare. ' +
               'De ligger kvar tills du svarat rätt på dem två gånger.</p></div>';
     }
@@ -341,6 +342,8 @@ window.SYSB23.ova = (function () {
       html += '<span class="markor poang">' + U.esc(p) + '</span>';
     }
     html += '<span style="flex:1"></span>';
+    html += '<button class="lankbtn" id="fokus" title="Dölj allt utom frågan (F)">' +
+            (arFokus() ? '◱ Lämna fokus' : '◱ Fokus') + '</button>';
     html += '<button class="lankbtn" id="avbryt">Avbryt</button>';
     html += '</div>';
 
@@ -386,6 +389,7 @@ window.SYSB23.ova = (function () {
         avbryt();
       }
     });
+    q('#fokus').addEventListener('click', vaxlaFokus);
 
     pass.besvarad = false;
     pass.valtIndex = null;
@@ -516,7 +520,7 @@ window.SYSB23.ova = (function () {
 
     if (nivaResultat && nivaResultat.efter > nivaResultat.fore) {
       var niva = S.store.amnesNiva(f.amne);
-      return '<div class="nivaupp">' + U.nivaMatare(niva.n) +
+      return '<div class="nivaupp">' + U.nivaMatare(niva.n, niva.n) +
              '<span>Nivå ' + niva.n + ' av 5 i ' + U.esc(U.amneNamn(f.amne)) +
              ' — ' + U.esc(niva.namn) + '. ' + U.esc(niva.beskrivning) + '.</span></div>';
     }
@@ -626,6 +630,7 @@ window.SYSB23.ova = (function () {
   /* ================================================================ */
 
   function visaResultat(vyId) {
+    lamnaFokus();          /* passet är slut – fokusläget ska inte hänga kvar */
     var antal = pass.svar.length;
     var ratt = rakna('ratt'), delvis = rakna('delvis'),
         fel = rakna('fel'), hoppat = rakna('hoppat');
@@ -784,10 +789,44 @@ window.SYSB23.ova = (function () {
   /* Tangentbord                                                       */
   /* ================================================================ */
 
+  /* ---------------------------------------------------------------- */
+  /* Fokusläge                                                         */
+  /*                                                                   */
+  /* Meny, delkursband och filterpanel försvinner så att bara frågan   */
+  /* står kvar. Färre saker att välja mellan gör att man faktiskt      */
+  /* försöker minnas i stället för att sneglar på nästa knapp.         */
+  /* ---------------------------------------------------------------- */
+
+  function arFokus() { return document.body.classList.contains('fokus'); }
+
+  function vaxlaFokus() {
+    var pa = !arFokus();
+    document.body.classList.toggle('fokus', pa);
+    if (pa && !U.el('fokusut')) {
+      var b = document.createElement('button');
+      b.id = 'fokusut';
+      b.className = 'fokusut';
+      b.innerHTML = '← Lämna fokus <span class="mini">Esc</span>';
+      b.addEventListener('click', vaxlaFokus);
+      document.body.appendChild(b);
+    } else if (!pa) {
+      var ut = U.el('fokusut');
+      if (ut) ut.remove();
+    }
+    /* Knappens text i frågehuvudet ska följa med */
+    var k = pass && q('#fokus');
+    if (k) k.textContent = pa ? '◱ Lämna fokus' : '◱ Fokus';
+  }
+
+  function lamnaFokus() { if (arFokus()) vaxlaFokus(); }
+
   function tangent(e) {
     if (!pass) return;
     var aktiv = document.activeElement;
     if (aktiv && (aktiv.tagName === 'TEXTAREA' || aktiv.tagName === 'INPUT')) return;
+
+    if (e.key === 'Escape' && arFokus()) { e.preventDefault(); vaxlaFokus(); return; }
+    if (e.key === 'f' || e.key === 'F') { e.preventDefault(); vaxlaFokus(); return; }
 
     var f = pass.fragor[pass.index];
     if (!f) return;
@@ -818,6 +857,7 @@ window.SYSB23.ova = (function () {
     ovaAmne: ovaAmne,
     startaRepetition: startaRepetition,
     tangent: tangent,
-    aterstall: function () { pass = null; }
+    aterstall: function () { lamnaFokus(); pass = null; },
+    lamnaFokus: lamnaFokus
   };
 })();

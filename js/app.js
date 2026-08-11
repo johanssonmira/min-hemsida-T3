@@ -227,7 +227,53 @@
     kontrolleraData();
     fyllDelkursval();
     koppla();
-    visaVy('hem');
+    registreraOffline();
+
+    /* Genvägarna i manifest.json pekar hit med ?vy=… */
+    var onskad = (location.search.match(/[?&]vy=([a-z]+)/) || [])[1];
+    visaVy(onskad || 'hem');
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Offline                                                           */
+  /*                                                                   */
+  /* Service workern kräver https eller localhost. Öppnar man filen     */
+  /* direkt från hårddisken (file://) hoppas den tyst över – appen      */
+  /* fungerar ändå, den blir bara inte installerbar.                   */
+  /* ---------------------------------------------------------------- */
+
+  function registreraOffline() {
+    if (!('serviceWorker' in navigator)) return;
+    if (location.protocol === 'file:') return;
+
+    navigator.serviceWorker.register('sw.js').then(function (reg) {
+      reg.addEventListener('updatefound', function () {
+        var ny = reg.installing;
+        if (!ny) return;
+        ny.addEventListener('statechange', function () {
+          /* controller finns bara om en tidigare version redan kört –
+             annars är det här bara förstagångsinstallationen. */
+          if (ny.state === 'installed' && navigator.serviceWorker.controller) {
+            visaUppdatering();
+          }
+        });
+      });
+    }).catch(function (e) {
+      console.warn('Offlineläget kunde inte startas.', e);
+    });
+  }
+
+  function visaUppdatering() {
+    if (U.el('uppdatering')) return;
+    var d = document.createElement('div');
+    d.id = 'uppdatering';
+    d.className = 'skal';
+    d.innerHTML = '<span>En nyare version finns.</span>' +
+                  '<button class="primar" id="uppdatera-nu">Ladda om</button>' +
+                  '<button class="ikonknapp" id="uppdatera-senare" aria-label="Stäng">✕</button>';
+    document.body.appendChild(d);
+    U.el('uppdatera-nu').addEventListener('click', function () { location.reload(); });
+    U.el('uppdatera-senare').addEventListener('click', function () { d.remove(); });
   }
 
   S.app = {

@@ -377,9 +377,13 @@ window.SYSB23.ui = (function () {
 
   /* Femstegsmätare. Färgen följer semantiken: rött svagt, ockra på väg,
      grönt starkt. Samma skala används i alla vyer. */
-  function nivaMatare(n) {
+  /* nyss = det steg som just fylldes, 1–5. Det enda strecket animeras, så
+     att ögat dras till förändringen och inte till mätaren i sin helhet. */
+  function nivaMatare(n, nyss) {
     var h = '<span class="niva n' + n + '" title="Nivå ' + n + ' av 5">';
-    for (var i = 0; i < 5; i++) h += '<i></i>';
+    for (var i = 0; i < 5; i++) {
+      h += '<i' + (nyss && i === nyss - 1 ? ' class="nyss"' : '') + '></i>';
+    }
     return h + '</span>';
   }
 

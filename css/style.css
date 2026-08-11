@@ -55,6 +55,7 @@
 
   /* --- Semantik --- */
   --gron-50:  #DFF3E7;
+  --gron-100: #BCE8CF;
   --gron-500: #0E7A52;
   --gron-600: #0A5E3F;
   --gron-700: #10553B;
@@ -135,6 +136,7 @@
   --rosa-400: #E495B0;
 
   --gron-50:  #D8F5E3;
+  --gron-100: #B4EDCB;
   --gron-500: #067F4A;
   --gron-600: #05603A;
   --gron-700: #044D2E;
@@ -179,6 +181,7 @@
   --rosa-400: #E68CB2;
 
   --gron-50:  #DDF3E6;
+  --gron-100: #B9E9CE;
   --gron-500: #0C7A50;
   --gron-600: #095E3D;
   --gron-700: #074B31;
@@ -223,6 +226,7 @@
   --rosa-400: #FF8FC6;
 
   --gron-50:  #D9F7E5;
+  --gron-100: #B2F0CE;
   --gron-500: #00875A;
   --gron-600: #00693F;
   --gron-700: #005232;
@@ -1431,6 +1435,85 @@ code {
   .kaptopp { flex-wrap: wrap; }
   .antknapp { width: 100%; }
 }
+
+/* =========================== Fokusläge ===========================
+   Meny, delkursband och filterpanel försvinner så att bara frågan står
+   kvar. Färre saker att välja mellan gör att man faktiskt försöker minnas
+   i stället för att snegla på nästa knapp. */
+body.fokus .topbar,
+body.fokus footer,
+body.fokus .doljifokus { display: none; }
+body.fokus main { padding-top: 3.6rem; }
+body.fokus #vy-ova, body.fokus #vy-prov { max-width: 760px; }
+
+.fokusut {
+  position: fixed; top: .9rem; left: 50%; transform: translateX(-50%);
+  z-index: 60; display: flex; align-items: center; gap: .5rem;
+  background: var(--creme-50); color: var(--ink-mid);
+  border: 2px solid var(--creme-300); border-radius: 999px;
+  padding: .38rem 1rem; font-size: .82rem; font-weight: 600;
+  box-shadow: var(--skugga-m);
+}
+.fokusut:hover { border-color: var(--blaa-500); color: var(--blaa-600); }
+.fokusut .mini {
+  background: var(--creme-200); border-radius: 4px; padding: .05rem .35rem;
+  font-weight: 700; font-size: .68rem;
+}
+
+/* ====================== Uppdateringsskalet ====================== */
+.skal {
+  position: fixed; left: 50%; bottom: 1.2rem; transform: translateX(-50%);
+  z-index: 70; display: flex; align-items: center; gap: .7rem;
+  background: var(--blaa-900); color: #fff;
+  border-radius: 999px; padding: .5rem .6rem .5rem 1.15rem;
+  box-shadow: var(--skugga-l); font-size: .88rem;
+  max-width: calc(100vw - 2rem);
+  animation: skalIn .32s cubic-bezier(.2,.7,.3,1) both;
+}
+.skal .primar { padding: .35rem .85rem; font-size: .82rem; }
+.skal .ikonknapp { color: #fff; }
+@keyframes skalIn { from { opacity: 0; transform: translate(-50%, 14px); } }
+
+/* ==================== Mikroåterkoppling ====================
+   Korta och få. Poängen är att ögat ska hitta det som just ändrades,
+   inte att sidan ska röra på sig. Allt stängs av under
+   prefers-reduced-motion längst ner i filen. */
+
+/* Framstegsmätare fyller sig från vänster i stället för att bara stå där */
+@keyframes fyllUt { from { transform: scaleX(0); } }
+.progress > div {
+  transform-origin: left center;
+  animation: fyllUt .55s cubic-bezier(.2,.7,.3,1) both;
+}
+
+/* Facit och nivåuppgång stiger in underifrån */
+@keyframes stigIn { from { opacity: 0; transform: translateY(7px); } }
+.facitbox, .nivaupp { animation: stigIn .3s cubic-bezier(.2,.7,.3,1) both; }
+.nivaupp { animation-delay: .06s; }
+
+/* Det steg som just fylldes puttar till – bara det, inte hela mätaren */
+@keyframes stegPop {
+  0%   { transform: scaleY(.25); opacity: .3; }
+  55%  { transform: scaleY(1.3); opacity: 1; }
+  100% { transform: scaleY(1); }
+}
+.niva i.nyss { animation: stegPop .5s .18s cubic-bezier(.2,.7,.3,1) both; }
+
+/* Dagsmålet bockas av */
+@keyframes bockaIn { from { transform: scale(.3) rotate(-12deg); opacity: 0; } }
+.dagsmal.klart .dm-text strong::before {
+  content: '✓ '; color: var(--gron-600); font-weight: 900;
+  display: inline-block;
+  animation: bockaIn .42s cubic-bezier(.2,1.5,.4,1) both;
+}
+
+/* Det rätta alternativet blinkar till en gång när facit visas */
+@keyframes rattBlink {
+  0%   { background: var(--gron-50); }
+  35%  { background: var(--gron-100, #BCE8CF); }
+  100% { background: var(--gron-50); }
+}
+.altforklaring.ar-ratt { animation: rattBlink .8s .12s ease-out both; }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; scroll-behavior: auto; }
