@@ -50,28 +50,70 @@ window.SYSB23.tema = (function () {
     }
   ];
 
-  function lista() { return TEMAN; }
+  /* "Följ delkursen" är inte ett tema utan ett läge: sidan tar färg efter
+     den delkurs man pluggar. Då går frågan "vilken kurs är jag inne på?"
+     inte att missa – svaret är hela skärmen, inte en prick i hörnet. */
+  var FOLJ = {
+    id: 'delkurs',
+    namn: 'Följ delkursen',
+    beskrivning: 'Hela sidan tar färg efter delkursen du pluggar. Byter färg när du byter kurs.',
+    prickar: ['#EDF0FE', '#2B29E0', '#DE8600'],
+    topp: '#12124F'
+  };
+
+  function lista() { return TEMAN.concat([FOLJ]); }
 
   function aktivt() {
     var id = S.store.tema();
+    if (id === FOLJ.id) return FOLJ;
     return TEMAN.filter(function (t) { return t.id === id; })[0] || TEMAN[0];
   }
 
   /* Sätts på <html> så att även bakgrunden bakom sidan följer med */
   function anvand(id) {
-    var t = TEMAN.filter(function (x) { return x.id === id; })[0] || TEMAN[0];
+    var rot = document.documentElement;
+    rot.removeAttribute('data-tema');
+    rot.removeAttribute('data-delkurstema');
 
-    if (t.id === 'creme') document.documentElement.removeAttribute('data-tema');
-    else document.documentElement.setAttribute('data-tema', t.id);
+    var toppfarg;
+
+    if (id === FOLJ.id) {
+      var dk = S.store.delkurs();
+      rot.setAttribute('data-delkurstema', dk);
+      /* Topbarens färg läses ur den palett som just aktiverats, i stället
+         för att skrivas ned en gång till här och hinna hamna i otakt. */
+      toppfarg = getComputedStyle(rot).getPropertyValue('--blaa-900').trim() || FOLJ.topp;
+    } else {
+      var t = TEMAN.filter(function (x) { return x.id === id; })[0] || TEMAN[0];
+      if (t.id !== 'creme') rot.setAttribute('data-tema', t.id);
+      toppfarg = t.topp;
+    }
 
     /* Adressfältet på mobil färgas efter topbaren */
     var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', t.topp);
+    if (meta) meta.setAttribute('content', toppfarg);
   }
 
   function valj(id) {
     S.store.sattTema(id);
     anvand(id);
+  }
+
+  /* Anropas när delkursen byts. Gör ingenting om temat är fast. */
+  function uppdateraForDelkurs() {
+    if (S.store.tema() === FOLJ.id) anvand(FOLJ.id);
+  }
+
+  /* Läser en variabel ur den palett vald delkurs skulle ge, utan att
+     faktiskt byta tema. Används till prickarna i väljaren. */
+  function foljFarg(variabel) {
+    var prov = document.createElement('div');
+    prov.setAttribute('data-delkurstema', S.store.delkurs());
+    prov.style.display = 'none';
+    document.body.appendChild(prov);
+    var farg = getComputedStyle(prov).getPropertyValue(variabel).trim();
+    document.body.removeChild(prov);
+    return farg || '#CCCCCC';
   }
 
   /* Läses in innan första renderingen, så sidan aldrig blinkar creme
@@ -109,22 +151,33 @@ window.SYSB23.tema = (function () {
     h += '<button class="ikonknapp" id="tm-stang" aria-label="Stäng">✕</button>';
     h += '</div>';
     h += '<p class="muted liten">Bara färgerna ändras. Alla frågor, siffror och ' +
-         'kalenderpass är exakt desamma i alla fyra — och rätt är alltid grönt, ' +
+         'kalenderpass är exakt desamma i alla lägen — och rätt är alltid grönt, ' +
          'fel alltid rött.</p>';
 
     h += '<div class="temalista">';
-    TEMAN.forEach(function (t) {
+    lista().forEach(function (t) {
+      /* Följ-läget visar den delkurs man faktiskt står i, inte en generisk
+         förhandsvisning – annars gissar man vad valet betyder. */
+      var prickar = t.prickar;
+      var besk = t.beskrivning;
+      if (t.id === FOLJ.id) {
+        prickar = [foljFarg('--creme-100'), foljFarg('--blaa-500'),
+                   window.SYSB23.ui.delkursFarg(S.store.delkurs())];
+        besk += ' Just nu: ' + window.SYSB23.ui.delkursNamn(S.store.delkurs()) + '.';
+      }
+
       h += '<button class="temakort' + (t.id === nuvarande ? ' vald' : '') +
+           (t.id === FOLJ.id ? ' temakort-folj' : '') +
            '" data-tema="' + t.id + '">';
       h += '<span class="tk-prickar">';
-      t.prickar.forEach(function (f) {
+      prickar.forEach(function (f) {
         h += '<i style="background:' + f + '"></i>';
       });
       h += '</span>';
       h += '<span class="tk-text">';
       h += '<span class="tk-titel">' + t.namn +
            (t.id === nuvarande ? ' <span class="tk-vald">Vald</span>' : '') + '</span>';
-      h += '<span class="tk-besk">' + t.beskrivning + '</span>';
+      h += '<span class="tk-besk">' + besk + '</span>';
       h += '</span>';
       h += '</button>';
     });
@@ -161,5 +214,8 @@ window.SYSB23.tema = (function () {
     document.removeEventListener('keydown', esc);
   }
 
-  return { lista: lista, aktivt: aktivt, valj: valj, start: start, oppna: oppna };
+  return {
+    lista: lista, aktivt: aktivt, valj: valj, start: start, oppna: oppna,
+    uppdateraForDelkurs: uppdateraForDelkurs
+  };
 })();

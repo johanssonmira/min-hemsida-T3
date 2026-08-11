@@ -237,6 +237,61 @@
   --skugga-l: 0 6px 16px rgba(27,10,34,.14), 0 16px 40px rgba(27,10,34,.11);
 }
 
+/* =========================================================================
+   TEMA SOM FÖLJER DELKURSEN
+   -------------------------------------------------------------------------
+   Väljer man "Följ delkursen" tar hela sidan färg efter den delkurs man
+   pluggar. Då går frågan "vilken kurs är jag inne på?" inte att missa –
+   svaret är hela skärmen, inte en prick i hörnet.
+
+   Bara ytor, bläck och handlingsfärg byts. Ockra, rosa, grönt och rött
+   ligger kvar från grundtemat, så att uppmärksamhet, rätt och fel betyder
+   samma sak oavsett vilken delkurs man står i.
+   ========================================================================= */
+
+[data-delkurstema="strategi"] {
+  --creme-50:#FFFAF4; --creme-100:#FDF2E4; --creme-200:#F9E5CB; --creme-300:#F0D2AA; --creme-400:#DCB27B;
+  --ink:#33230A; --ink-mid:#5C4322; --ink-soft:#6B5230;
+  --blaa-50:#FCEBD6; --blaa-100:#F7D6AC; --blaa-500:#A85400; --blaa-600:#8A4500; --blaa-700:#6E3700; --blaa-900:#3A1E00;
+  --egen:#6B5230;
+}
+[data-delkurstema="databaser"] {
+  --creme-50:#FAFBFF; --creme-100:#EDF0FE; --creme-200:#DDE3FC; --creme-300:#C6D0F8; --creme-400:#A3B3F0;
+  --ink:#10143C; --ink-mid:#333A6B; --ink-soft:#434A78;
+  --blaa-50:#E9E9FD; --blaa-100:#CFCEFA; --blaa-500:#2B29E0; --blaa-600:#201FBE; --blaa-700:#1A1996; --blaa-900:#12124F;
+  --egen:#434A78;
+}
+[data-delkurstema="processer"] {
+  --creme-50:#FCFAFF; --creme-100:#F3EDFD; --creme-200:#E7DCFB; --creme-300:#D5C3F6; --creme-400:#B79BEC;
+  --ink:#23103F; --ink-mid:#452B66; --ink-soft:#533872;
+  --blaa-50:#EFE6FD; --blaa-100:#DCC9FA; --blaa-500:#6D28D9; --blaa-600:#5B21B6; --blaa-700:#4C1D95; --blaa-900:#2A1259;
+  --egen:#533872;
+}
+[data-delkurstema="arkitektur"] {
+  --creme-50:#F7FCFD; --creme-100:#E5F3F7; --creme-200:#D2EBF1; --creme-300:#B2DBE5; --creme-400:#86C3D2;
+  --ink:#0C2A31; --ink-mid:#2B4E57; --ink-soft:#3A5C65;
+  --blaa-50:#DDF0F5; --blaa-100:#B8E1EB; --blaa-500:#0E7490; --blaa-600:#0B5C73; --blaa-700:#084857; --blaa-900:#062E3A;
+  --egen:#3A5C65;
+}
+[data-delkurstema="sakerhet"] {
+  --creme-50:#FFFAFC; --creme-100:#FCE9F0; --creme-200:#F9D7E3; --creme-300:#F3BBCE; --creme-400:#E68EAE;
+  --ink:#33091C; --ink-mid:#5C2B41; --ink-soft:#6B394E;
+  --blaa-50:#FBE4EE; --blaa-100:#F7C7DC; --blaa-500:#BE185D; --blaa-600:#9D174D; --blaa-700:#7D123D; --blaa-900:#470A24;
+  --egen:#6B394E;
+}
+[data-delkurstema="ansvarsfull"] {
+  --creme-50:#F8FCF6; --creme-100:#E9F3E4; --creme-200:#D9EAD1; --creme-300:#C0DCB4; --creme-400:#9DC48D;
+  --ink:#14301F; --ink-mid:#3A5643; --ink-soft:#4B6453;
+  --blaa-50:#DCF0E4; --blaa-100:#B6E0C6; --blaa-500:#0E7A52; --blaa-600:#0A5E3F; --blaa-700:#084B32; --blaa-900:#062E1F;
+  --egen:#4B6453;
+}
+[data-delkurstema="isprojekt"] {
+  --creme-50:#FFFBF6; --creme-100:#F8EEE1; --creme-200:#F1DFC9; --creme-300:#E4CAA9; --creme-400:#CFAD82;
+  --ink:#2E1E0B; --ink-mid:#55401F; --ink-soft:#634E2D;
+  --blaa-50:#F6E7D0; --blaa-100:#EDD1A8; --blaa-500:#8A5200; --blaa-600:#6E4100; --blaa-700:#563300; --blaa-900:#2E1C00;
+  --egen:#634E2D;
+}
+
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 

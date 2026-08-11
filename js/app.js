@@ -41,6 +41,7 @@
 
   function bytDelkurs(id) {
     S.store.sattDelkurs(id);
+    S.tema.uppdateraForDelkurs();
     S.ova.aterstall();
     S.las.stang();
     var sel = U.el('sel-delkurs');
@@ -106,6 +107,7 @@
     if (!a) return;
     if (a.delkurs !== S.store.delkurs()) {
       S.store.sattDelkurs(a.delkurs);
+      S.tema.uppdateraForDelkurs();
       var sel = U.el('sel-delkurs');
       if (sel) sel.value = a.delkurs;
     }
