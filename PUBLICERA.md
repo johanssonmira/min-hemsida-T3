@@ -1,22 +1,16 @@
 # Så lägger du upp sidan på nätet
 
-Repot heter **min-hemsida-T3** och ligger redan på ditt GitHub-konto:
-<https://github.com/johanssonmira1/min-hemsida-T3>
+Repot heter **min-hemsida-T3** och ligger på ditt GitHub-konto:
+<https://github.com/johanssonmira/min-hemsida-T3>
 
-Den nya versionen är incheckad lokalt men **inte uppskickad än**. Det som
-återstår är ett kommando plus en inställning. Räkna med fem minuter.
+Appen ligger uppe och sidan är i drift. Så här gör du när du ändrat något.
+
 
 ---
 
-## Steg 1 – Skicka upp den nya versionen
+## Steg 1 – Skicka upp en ändring
 
 Öppna en terminal i mappen `sysb23-plugg` och kör:
-
-```bash
-git push
-```
-
-Det är allt. Nästa gång du ändrat något är det samma tre kommandon:
 
 ```bash
 git add -A
@@ -24,15 +18,18 @@ git commit -m "Beskriv kort vad du ändrat"
 git push
 ```
 
+Sidan uppdaterar sig själv inom en till två minuter. Ser den gammal ut:
+ladda om hårt med `Ctrl + Shift + R`.
+
 Om Git frågar efter inloggning: se **Om inloggningen krånglar** längst ner.
 
 ---
 
-## Steg 2 – Slå på GitHub Pages
+## Steg 2 – Pages
 
-Det här behöver du bara göra en gång.
+Redan påslaget. Det här behöver du bara om något slutar fungera:
 
-1. Gå till <https://github.com/johanssonmira1/min-hemsida-T3>
+1. Gå till <https://github.com/johanssonmira/min-hemsida-T3>
 2. Klicka **Settings** högst upp
 3. Välj **Pages** i menyn till vänster
 4. Under **Source**, välj **Deploy from a branch**
@@ -41,7 +38,7 @@ Det här behöver du bara göra en gång.
 
 Vänta en till två minuter. Sidan hamnar på:
 
-**https://johanssonmira1.github.io/min-hemsida-T3/**
+**https://johanssonmira.github.io/min-hemsida-T3/**
 
 Står det redan så under Pages är det påslaget sedan tidigare — då räcker
 steg 1, och sidan uppdaterar sig själv inom någon minut efter varje push.
@@ -100,7 +97,7 @@ lösenord behöver du en *personal access token*:
 6. Kopiera strängen direkt — den visas bara en gång
 
 När Git frågar:
-- **Username:** `johanssonmira1`
+- **Username:** `johanssonmira`
 - **Password:** klistra in token-strängen
 
 ---
