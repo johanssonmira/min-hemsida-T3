@@ -124,25 +124,11 @@ window.SYSB23.tema = (function () {
   /* Väljaren                                                            */
   /* ------------------------------------------------------------------ */
 
-  /* oppna() kopplar de lyssnare som ska finnas så länge dialogen är uppe.
-     rita() ritar bara om innehållet. Skillnaden spelar roll: byter man tema
-     ritas listan om, och låg overlay-lyssnaren i rita() skulle den läggas
-     på en gång till för varje klick. */
   function oppna() {
-    var ov = window.SYSB23.ui.el('overlagg');
-    rita();
-    ov.classList.remove('dold');
-    document.body.classList.add('laast');
-    ov.addEventListener('click', utanfor);
-    document.addEventListener('keydown', esc);
+    window.SYSB23.ui.overlagg.oppna(rita);
   }
 
-  function utanfor(e) {
-    if (e.target === window.SYSB23.ui.el('overlagg')) stang();
-  }
-
-  function rita() {
-    var ov = window.SYSB23.ui.el('overlagg');
+  function rita(behallare) {
     var nuvarande = aktivt().id;
 
     var h = '<div class="overlagg-ruta">';
@@ -186,14 +172,14 @@ window.SYSB23.tema = (function () {
     h += '<div class="overlagg-knappar"><button class="primar" id="tm-klar">Klar</button></div>';
     h += '</div>';
 
-    ov.innerHTML = h;
+    behallare.innerHTML = h;
 
     /* Temat byts direkt vid klick. Att se förändringen på riktigt är hela
        beslutet – en liten förhandsruta hade varit sämre än sidan själv. */
-    Array.prototype.forEach.call(ov.querySelectorAll('[data-tema]'), function (b) {
+    Array.prototype.forEach.call(behallare.querySelectorAll('[data-tema]'), function (b) {
       b.addEventListener('click', function () {
         valj(b.dataset.tema);
-        rita();
+        window.SYSB23.ui.overlagg.rita();
       });
     });
 
@@ -201,18 +187,7 @@ window.SYSB23.tema = (function () {
     window.SYSB23.ui.el('tm-klar').addEventListener('click', stang);
   }
 
-  function esc(e) {
-    if (e.key === 'Escape') stang();
-  }
-
-  function stang() {
-    var ov = window.SYSB23.ui.el('overlagg');
-    ov.classList.add('dold');
-    ov.innerHTML = '';
-    document.body.classList.remove('laast');
-    ov.removeEventListener('click', utanfor);
-    document.removeEventListener('keydown', esc);
-  }
+  function stang() { window.SYSB23.ui.overlagg.stang(); }
 
   return {
     lista: lista, aktivt: aktivt, valj: valj, start: start, oppna: oppna,

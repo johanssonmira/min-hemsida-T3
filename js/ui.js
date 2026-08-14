@@ -272,6 +272,63 @@ window.SYSB23.ui = (function () {
     return alla[0].replace('.', ':');
   }
 
+  /* ------------------------- Överlägget -------------------------------
+
+     En enda hanterare för alla dialoger. Tidigare kopplade varje modul
+     sina egna lyssnare på #overlagg och glömde ta bort någon av dem, så
+     de staplades på sig vid varje öppning. Här finns öppna, rita om och
+     stäng på ett ställe, och stäng städar alltid efter sig.
+
+     rita(behallare) får rutan och kopplar sina egna knappar. Anropa
+     overlagg.rita() igen för att bygga om innehållet utan att stänga. */
+  var overlagg = (function () {
+    var ritare = null;
+    var vidStangning = null;
+
+    function ruta() { return el('overlagg'); }
+
+    function oppna(ritaFn, narStangd) {
+      /* Öppnas en dialog ovanpå en annan ska den förra städas först */
+      if (!ruta().classList.contains('dold')) stang();
+
+      ritare = ritaFn;
+      vidStangning = narStangd || null;
+
+      rita();
+      ruta().classList.remove('dold');
+      document.body.classList.add('laast');
+      ruta().addEventListener('click', utanfor);
+      document.addEventListener('keydown', tangent);
+
+      var forsta = ruta().querySelector('input, select, textarea, button');
+      if (forsta) forsta.focus();
+    }
+
+    function rita() {
+      if (!ritare) return;
+      ruta().innerHTML = '';
+      ritare(ruta());
+    }
+
+    function stang() {
+      var fn = vidStangning;
+      ritare = null;
+      vidStangning = null;
+      ruta().classList.add('dold');
+      ruta().innerHTML = '';
+      document.body.classList.remove('laast');
+      ruta().removeEventListener('click', utanfor);
+      document.removeEventListener('keydown', tangent);
+      if (fn) fn();
+    }
+
+    function utanfor(e) { if (e.target === ruta()) stang(); }
+    function tangent(e) { if (e.key === 'Escape') stang(); }
+    function arOppen() { return !ruta().classList.contains('dold'); }
+
+    return { oppna: oppna, rita: rita, stang: stang, arOppen: arOppen };
+  })();
+
   /* ---------------------- Pass och egna ändringar ----------------------
 
      Kalenderfilen har inga id:n, så vi räknar fram ett ur passets
@@ -417,6 +474,7 @@ window.SYSB23.ui = (function () {
     passTyp: passTyp, passTypLista: passTypLista, starttid: starttid,
     typBadge: typBadge, kontrastfarg: kontrastfarg,
     passId: passId, allaPass: allaPass,
+    overlagg: overlagg,
     blanda: blanda
   };
 })();

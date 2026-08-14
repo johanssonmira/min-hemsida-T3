@@ -17,36 +17,34 @@ window.SYSB23.passform = (function () {
   var U = S.ui;
 
   var narKlar = null;        // anropas när något sparats
+  var narStangd = null;      // anropas när rutan stängts, oavsett hur
   var aktivt = null;         // passet som redigeras, eller null för nytt
 
-  function oppna(pass, klar) {
+  /* klar   – körs efter att något sparats, tagits bort eller återställts
+     stangd – körs när rutan stängts på vilket sätt som helst. Öppnades
+              formuläret från en dagruta används den för att gå tillbaka
+              dit, så man inte trillar ut till kalendern när man ångrar sig. */
+  function oppna(pass, klar, stangd) {
     narKlar = klar;
+    narStangd = stangd || null;
     aktivt = pass || null;
-    rita();
-    var ov = U.el('overlagg');
-    ov.classList.remove('dold');
-    document.body.classList.add('laast');
-    var forsta = ov.querySelector('input, select, textarea');
-    if (forsta) forsta.focus();
+
+    U.overlagg.oppna(rita, function () {
+      var fn = narStangd;
+      aktivt = null;
+      narStangd = null;
+      if (fn) fn();
+    });
+
+    var f = U.el('pf-rubrik');
+    if (f) f.focus();
   }
 
-  function stang() {
-    var ov = U.el('overlagg');
-    ov.classList.add('dold');
-    ov.innerHTML = '';
-    document.body.classList.remove('laast');
-    ov.removeEventListener('click', utanfor);
-    document.removeEventListener('keydown', esc);
-    aktivt = null;
-  }
-
-  function utanfor(e) {
-    if (e.target === U.el('overlagg')) stang();
-  }
+  function stang() { U.overlagg.stang(); }
 
   /* ------------------------------------------------------------------ */
 
-  function rita() {
+  function rita(behallare) {
     var p = aktivt || {};
     var egen = !!p.egen;
     var nytt = !aktivt;
@@ -117,8 +115,7 @@ window.SYSB23.passform = (function () {
 
     h += '</div>';
 
-    var ov = U.el('overlagg');
-    ov.innerHTML = h;
+    behallare.innerHTML = h;
     koppla();
   }
 
@@ -149,11 +146,7 @@ window.SYSB23.passform = (function () {
   /* ------------------------------------------------------------------ */
 
   function koppla() {
-    var ov = U.el('overlagg');
-
-    ov.addEventListener('click', utanfor);   // klick utanför rutan stänger
-    document.addEventListener('keydown', esc);
-
+    /* Klick utanför rutan och Escape sköts av U.overlagg */
     U.el('pf-stang').addEventListener('click', stang);
     U.el('pf-avbryt').addEventListener('click', stang);
     U.el('pf-spara').addEventListener('click', spara);
@@ -180,10 +173,6 @@ window.SYSB23.passform = (function () {
       var b = U.el(id);
       if (b) b.addEventListener('click', fn);
     }
-  }
-
-  function esc(e) {
-    if (e.key === 'Escape' && !U.el('overlagg').classList.contains('dold')) stang();
   }
 
   function spara() {
@@ -243,15 +232,19 @@ window.SYSB23.passform = (function () {
     f.classList.remove('dold');
   }
 
+  /* narKlar körs före stang(). Ordningen spelar roll: den som öppnade
+     formuläret får veta vilket datum posten hamnade på innan rutan stängs,
+     så att den kan visa rätt dag när den tar över igen. */
   function klar(datum) {
-    var fn = narKlar;        // stang() nollar aktivt, så återanropet plockas ut först
-    stang();
+    var fn = narKlar;
+    narKlar = null;
     if (fn) fn(datum);
+    stang();
   }
 
   /* Öppnar tom form med ett datum förifyllt */
-  function nyPa(datum) {
-    oppna(null, arguments[1]);
+  function nyPa(datum, klar, stangd) {
+    oppna(null, klar, stangd);
     if (datum) U.el('pf-datum').value = datum;
   }
 

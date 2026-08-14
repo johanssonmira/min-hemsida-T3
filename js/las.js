@@ -144,7 +144,7 @@ window.SYSB23.las = (function () {
     });
     html += '</div></div>';
 
-    vy.classList.remove('bred-las');
+    stangAnteckningar();          /* rutan hör till ett kapitel, inte till listan */
     vy.innerHTML = html;
 
     Array.prototype.forEach.call(vy.querySelectorAll('[data-oppna]'), function (e) {
@@ -359,34 +359,18 @@ window.SYSB23.las = (function () {
     html += '</div>';
 
     var vy = U.el('vy-las');
-
-    /* Med anteckningsrutan öppen delas vyn: texten till vänster, rutan
-       till höger där den följer med i scrollen. Utan den ligger texten
-       kvar centrerad — man ska inte betala för en funktion man inte använder. */
-    if (visaAnteckningar) {
-      /* Vyn får full bredd när rutan är framme, annars skulle texten
-         krympa till hälften bara för att man vill anteckna. */
-      vy.classList.add('bred-las');
-      vy.innerHTML = '<div class="sida las-med-anteckningar">' +
-                     '<div class="huvud">' + html + '</div>' +
-                     '<aside class="sido">' + anteckningsruta(kap) + '</aside></div>';
-    } else {
-      vy.classList.remove('bred-las');
-      vy.innerHTML = html;
-    }
+    vy.innerHTML = html;
 
     U.el('tillbaka').addEventListener('click', stang);
 
     U.el('anteckningsknapp').addEventListener('click', function () {
-      visaAnteckningar = !visaAnteckningar;
-      renderaKapitel();
-      if (visaAnteckningar) {
-        var ta = U.el('antfalt');
-        if (ta) ta.focus();
-      }
+      if (visaAnteckningar) stangAnteckningar();
+      else oppnaAnteckningar(kap);
     });
 
-    if (visaAnteckningar) kopplaAnteckningar(kap);
+    /* Rutan lever utanför vyn, så den överlever att kapitlet ritas om.
+       Är den redan uppe ska den byta till det kapitel man nu läser. */
+    if (visaAnteckningar) oppnaAnteckningar(kap);
 
     U.el('markera').addEventListener('click', function () {
       S.store.markeraLast(kap.id, !S.store.arLast(kap.id));
@@ -416,12 +400,52 @@ window.SYSB23.las = (function () {
   /* tappa var man var.                                                */
   /* ---------------------------------------------------------------- */
 
+  /* Rutan ligger i body och inte i vyn. Den ska stå kvar medan man
+     scrollar, byter kapitel och läser vidare — hade den legat i vyn hade
+     den försvunnit varje gång kapitlet ritades om. */
+  function oppnaAnteckningar(kap) {
+    visaAnteckningar = true;
+    document.body.classList.add('ant-oppen');
+
+    var panel = U.el('antpanel');
+    if (!panel) {
+      panel = document.createElement('aside');
+      panel.id = 'antpanel';
+      panel.className = 'antpanel';
+      document.body.appendChild(panel);
+    }
+    panel.innerHTML = anteckningsruta(kap);
+    kopplaAnteckningar(kap);
+
+    var knapp = U.el('anteckningsknapp');
+    if (knapp) {
+      knapp.className = 'primar antknapp';
+      knapp.innerHTML = '✎ Dölj anteckningar';
+    }
+  }
+
+  function stangAnteckningar() {
+    visaAnteckningar = false;
+    document.body.classList.remove('ant-oppen');
+    var panel = U.el('antpanel');
+    if (panel) panel.remove();
+    if (sparaTimer) { clearTimeout(sparaTimer); sparaTimer = null; }
+
+    var knapp = U.el('anteckningsknapp');
+    if (knapp) knapp.className = 'sekundar antknapp';
+    /* Rita om kapitlet så pricken "du har anteckningar här" kommer tillbaka */
+    if (oppetKapitel && !visaSamling) renderaKapitel();
+  }
+
   function anteckningsruta(kap) {
     var text = S.store.anteckning(kap.id);
     var andrad = S.store.anteckningAndrad(kap.id);
 
-    var h = '<div class="kort anteckningskort">';
-    h += '<h2 class="utan-markor">✎ Dina anteckningar</h2>';
+    var h = '<div class="antpanel-topp">';
+    h += '<h2 class="utan-markor">✎ Anteckningar</h2>';
+    h += '<button class="ikonknapp" id="antstang" aria-label="Stäng anteckningar">✕</button>';
+    h += '</div>';
+    h += '<p class="antkapitel">Kapitel ' + kap.nr + ': ' + U.esc(kap.titel) + '</p>';
     h += '<p class="muted mini">Skriv med <strong>egna ord</strong> — det är själva poängen. ' +
          'Sparas automatiskt.</p>';
 
@@ -445,12 +469,14 @@ window.SYSB23.las = (function () {
 
     h += '<div class="knapprad"><button class="sekundar" id="antsamling">' +
          'Alla mina anteckningar →</button></div>';
-    return h + '</div>';
+    return h;
   }
 
   function kopplaAnteckningar(kap) {
     var falt = U.el('antfalt');
     var status = U.el('antstatus');
+
+    U.el('antstang').addEventListener('click', stangAnteckningar);
 
     /* Sparas en halv sekund efter sista tangenttrycket. Att spara vid varje
        tecken skriver till localStorage hundratals gånger i onödan. */
@@ -493,6 +519,7 @@ window.SYSB23.las = (function () {
     });
 
     U.el('antsamling').addEventListener('click', function () {
+      stangAnteckningar();
       visaSamling = true;
       rendera();
       window.scrollTo(0, 0);
@@ -549,7 +576,7 @@ window.SYSB23.las = (function () {
     });
 
     var vy = U.el('vy-las');
-    vy.classList.remove('bred-las');
+    stangAnteckningar();
     vy.innerHTML = html;
 
     U.el('tillbaka').addEventListener('click', function () {
@@ -600,5 +627,8 @@ window.SYSB23.las = (function () {
     return rader.join('\n');
   }
 
-  return { rendera: rendera, oppna: oppna, stang: stang };
+  return {
+    rendera: rendera, oppna: oppna, stang: stang,
+    doljAnteckningar: stangAnteckningar
+  };
 })();

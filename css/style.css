@@ -319,9 +319,6 @@ body {
    ungefär 80 tecken tappar ögat raden på väg tillbaka. */
 #vy-ova, #vy-prov, #vy-essa { max-width: 880px; margin: 0 auto; }
 #vy-las { max-width: 940px; margin: 0 auto; }
-/* Med anteckningsrutan framme får vyn hela bredden, så att kapiteltexten
-   behåller sin läsbara radlängd i stället för att halveras. */
-#vy-las.bred-las { max-width: 100%; }
 
 /* -------------------------------------------------------------------------
    Sidlayouten: en huvudspalt och en smalare sidospalt, samma upplägg som
@@ -1048,13 +1045,12 @@ button:disabled:active { transform: none; }
   display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start;
   gap: 3px; padding: .28rem .28rem .34rem; min-height: 5.4rem; text-align: left;
   background: var(--creme-50); border: 1.5px solid var(--creme-200);
-  border-radius: var(--r-s); cursor: default;
+  border-radius: var(--r-s); cursor: pointer;
   font-family: inherit; color: var(--ink);
   transition: border-color .12s, background .12s, box-shadow .12s;
 }
 .kal-dag.helg { background: var(--creme-100); }
-.kal-dag.harpass { cursor: pointer; }
-.kal-dag.harpass:hover { border-color: var(--blaa-500); box-shadow: var(--skugga-s); }
+.kal-dag:hover { border-color: var(--blaa-500); box-shadow: var(--skugga-s); }
 .kal-dag.utanfor { opacity: .38; }
 .kal-nr {
   font-size: .82rem; font-weight: 700; line-height: 1.35; padding-left: .1rem;
@@ -1126,17 +1122,6 @@ button:disabled:active { transform: none; }
 .tf-prov { --dkf: var(--ink-soft); min-width: 5.6rem; }
 .tf-prov.h-tenta { color: #fff; }
 
-.dagskort {
-  margin-top: 1rem; padding: 1rem 1.1rem;
-  background: var(--creme-100); border: 1.5px solid var(--creme-300);
-  border-radius: var(--r-m);
-}
-/* Bara första bokstaven versal – "måndag 21 september", inte "Måndag 21 September" */
-.dagskort-rubrik {
-  font-family: var(--serif); font-weight: 700; font-size: 1.08rem;
-  margin-bottom: .7rem;
-}
-.dagskort-rubrik::first-letter { text-transform: uppercase; }
 .dagspass {
   display: flex; gap: .8rem; align-items: flex-start;
   border-left: 4px solid var(--dkf, var(--creme-400));
@@ -1221,7 +1206,7 @@ button:disabled:active { transform: none; }
 
 /* ==================== Egna och ändrade poster ==================== */
 /* Streckad kant = du har lagt in eller ändrat det här. Samma märkning
-   i månadsrutnätet, i dagskortet, i listan och på hemvyn. */
+   i månadsrutnätet, i dagrutan, i listan och på hemvyn. */
 .hnd.egen, .hnd.andrad { border-left-style: dashed; border-left-width: 4px; }
 .hnd.egen::before, .hnd.andrad::before {
   content: '✎'; position: absolute; top: 1px; right: 3px;
@@ -1245,11 +1230,6 @@ h2 > .minibtn { margin-left: auto; }
 
 .chip-egen { border-style: dashed; }
 
-.dagskort-topp {
-  display: flex; align-items: flex-start; justify-content: space-between;
-  gap: .8rem; margin-bottom: .7rem;
-}
-.dagskort-topp .dagskort-rubrik { margin-bottom: 0; }
 .dagspass-notis {
   font-size: .84rem; color: var(--ink-mid); margin-top: .3rem;
   padding-left: .6rem; border-left: 2px solid var(--creme-300);
@@ -1315,9 +1295,36 @@ body.laast { overflow: hidden; }
   background: var(--ockra-500); margin-left: .4rem; vertical-align: 1px;
 }
 
-.anteckningskort { position: sticky; top: 7.2rem; }
+/* Anteckningsrutan svävar vid sidan av texten i stället för att dela vyn.
+   Den står kvar medan man scrollar och byter kapitel, och main får en
+   marginal så att texten aldrig hamnar under rutan. */
+.antpanel {
+  position: fixed; top: 0; right: 0; bottom: 0; width: 24rem; z-index: 55;
+  display: flex; flex-direction: column; overflow-y: auto;
+  background: var(--creme-50);
+  border-left: 2px solid var(--creme-300);
+  box-shadow: -8px 0 28px rgba(0,0,0,.10);
+  padding: 1.1rem 1.2rem 1.4rem;
+  animation: antIn .26s cubic-bezier(.2,.7,.3,1) both;
+}
+@keyframes antIn { from { transform: translateX(100%); } }
+
+body.ant-oppen main,
+body.ant-oppen footer,
+body.ant-oppen .topbar > .wrap { padding-right: 25.5rem; }
+
+.antpanel-topp {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: .6rem; margin-bottom: .1rem;
+}
+.antpanel-topp h2 { margin: 0; font-size: 1.05rem; }
+.antkapitel {
+  font-size: .84rem; font-weight: 700; color: var(--blaa-600);
+  margin: .1rem 0 .3rem;
+}
+
 .antfalt {
-  width: 100%; min-height: 20rem; resize: vertical;
+  width: 100%; flex: 1 1 auto; min-height: 16rem; resize: vertical;
   font-family: inherit; font-size: .92rem; line-height: 1.65; color: var(--ink);
   background: #fff; border: 2px solid var(--creme-300); border-radius: var(--r-s);
   padding: .7rem .8rem;
@@ -1328,6 +1335,12 @@ body.laast { overflow: hidden; }
   gap: .6rem; flex-wrap: wrap; margin-top: .5rem;
 }
 .antmallar { display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; margin-top: .8rem; }
+
+/* ---- Dagrutan i schemat ---- */
+.dagruta-rubrik { font-size: 1.15rem; }
+.dagruta-rubrik::first-letter { text-transform: uppercase; }
+.dagruta-lista { margin: .3rem 0 .2rem; max-height: 52vh; overflow-y: auto; }
+.dagruta .dagspass { background: var(--creme-100); }
 
 .anteckningsingang { background: var(--ockra-50); border-color: var(--ockra-100); }
 .anteckningsingang h2::before { background: var(--ockra-500); }
@@ -1401,8 +1414,8 @@ code {
   .tangenttips { display: none; }
   .niva i { width: 7.5px; height: 13px; }
 
-  /* Rutnätet krymper till tid + färgstapel. Passtypen står i dagskortet
-     under kalendern istället – texten får inte bli oläsbart liten. */
+  /* Rutnätet krymper till tid + färgstapel. Passtypen står i dagrutan
+     som öppnas vid klick – texten får inte bli oläsbart liten. */
   .kalender { gap: 2px; grid-template-columns: 1.5rem repeat(7, minmax(0, 1fr)); }
   .kal-dag { padding: .2rem .12rem .24rem; border-width: 1px; border-radius: 6px;
              min-height: 3.7rem; gap: 2px; }
@@ -1430,8 +1443,22 @@ code {
   .overlagg { padding: 2vh .7rem 1rem; }
   .overlagg-ruta { padding: 1.1rem 1.1rem 1.3rem; }
   .overlagg-knappar .fara { margin-left: 0; }
-  .anteckningskort { position: static; }
-  .antfalt { min-height: 14rem; }
+  /* På mobil finns ingen plats vid sidan – rutan blir ett ark underifrån
+     som täcker halva skärmen, så man ser texten ovanför medan man skriver. */
+  .antpanel {
+    top: auto; left: 0; right: 0; width: auto; height: 62vh;
+    border-left: none; border-top: 2px solid var(--creme-300);
+    border-radius: var(--r-l) var(--r-l) 0 0;
+    box-shadow: 0 -8px 28px rgba(0,0,0,.16);
+    animation-name: antInMobil;
+  }
+  @keyframes antInMobil { from { transform: translateY(100%); } }
+  body.ant-oppen main,
+  body.ant-oppen footer,
+  body.ant-oppen .topbar > .wrap { padding-right: .85rem; }
+  body.ant-oppen main { padding-bottom: 64vh; }
+
+  .antfalt { min-height: 9rem; }
   .kaptopp { flex-wrap: wrap; }
   .antknapp { width: 100%; }
 }

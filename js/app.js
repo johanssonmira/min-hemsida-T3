@@ -20,6 +20,11 @@
 
   function visaVy(namn) {
     if (!vyer[namn]) namn = 'hem';
+
+    /* Anteckningsrutan svävar över sidan och hör till läsvyn. Den ska inte
+       ligga kvar och skymma kalendern när man byter vy. */
+    if (aktuellVy === 'las' && namn !== 'las') S.las.doljAnteckningar();
+
     aktuellVy = namn;
     uppdateraDelkursband();
 

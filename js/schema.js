@@ -111,8 +111,8 @@ window.SYSB23.schema = (function () {
     html += '</h2>';
     html += '<p class="muted liten">Färgen visar vilken delkurs passet hör till. ' +
             'I varje ruta står starttiden och vad det är för sorts pass. ' +
-            '<strong>Klicka på en dag</strong> för salar, detaljer och för att ' +
-            'ändra eller lägga till något.</p>';
+            '<strong>Klicka på vilken dag som helst</strong> — då öppnas den med salar ' +
+            'och detaljer, och du kan lägga in något eget.</p>';
 
     /* Växel mellan månadsvy och lista */
     html += '<div class="chiprad">';
@@ -238,8 +238,12 @@ window.SYSB23.schema = (function () {
         if (iso === valdDag) klasser.push('vald');
         if (pass.length) klasser.push('harpass');
 
+        /* Alla dagar går att klicka på, även tomma – det är just de tomma
+           man vill lägga något eget på. */
         html += '<button class="' + klasser.join(' ') + '" data-dag="' + iso + '"' +
-                (pass.length ? '' : ' tabindex="-1"') + '>';
+                ' title="' + U.esc(U.langtDatum(iso)) +
+                (pass.length ? ' – ' + pass.length + ' pass' : ' – inget inbokat') +
+                '. Klicka för att se och lägga till.">';
         html += '<span class="kal-nr">' + d.getDate() + '</span>';
 
         /* Tentor först – de ska aldrig hamna bakom ett "+2 till" */
@@ -261,9 +265,6 @@ window.SYSB23.schema = (function () {
     /* Teckenförklaring för passtyper – bara de som faktiskt förekommer */
     html += teckenforklaring();
 
-    /* Vald dag i detalj */
-    html += '<div id="dagsdetalj">' + dagsdetalj() + '</div>';
-
     /* Månadssammanfattning */
     var iManaden = pass().filter(function (p) {
       var d = U.parse(p.datum);
@@ -278,7 +279,7 @@ window.SYSB23.schema = (function () {
             (tentorIManaden.length
               ? ', varav ' + tentorIManaden.length +
                 (tentorIManaden.length === 1 ? ' tenta' : ' tentor') : '') +
-            '. Klicka på en dag för att se vad som händer.</p>';
+            '. Klicka på en dag för att öppna den.</p>';
 
     return html;
   }
@@ -311,54 +312,110 @@ window.SYSB23.schema = (function () {
     return html;
   }
 
-  function dagsdetalj() {
-    if (!valdDag) {
-      return '<p class="muted liten" style="margin:.9rem 0 0">' +
-             'Ingen dag vald. <strong>Klicka på en ruta i kalendern</strong> så visas tider, ' +
-             'salar och delkurs här — och du kan ändra eller lägga till något.</p>';
-    }
+  /* ================================================================ */
+  /* Dagrutan – öppnas som dialog när man klickar på ett datum         */
+  /*                                                                   */
+  /* Allt som rör en dag samlas här: vad som händer och möjligheten    */
+  /* att lägga till något eget. Att klicka på datumet är den naturliga */
+  /* gesten för "jag vill göra något med den här dagen", så den ska    */
+  /* leda hela vägen och inte bara markera rutan.                      */
+  /* ================================================================ */
 
-    var dagens = passForDatum(valdDag).slice().sort(function (a, b) {
+  function oppnaDag(iso) {
+    valdDag = iso;
+    U.overlagg.oppna(function (behallare) {
+      behallare.innerHTML = dagRutaHtml(iso);
+      kopplaDagRuta(behallare, iso);
+    }, function () {
+      valdDag = null;
+      rendera();
+    });
+  }
+
+  function dagRutaHtml(iso) {
+    var dagens = passForDatum(iso).slice().sort(function (a, b) {
       return U.starttid(a.tid) < U.starttid(b.tid) ? -1 : 1;
     });
 
-    var html = '<div class="dagskort">';
-    html += '<div class="dagskort-topp">';
-    html += '<div class="dagskort-rubrik">' + U.esc(U.langtDatum(valdDag)) +
-            ' <span class="muted liten">· vecka ' + U.veckonummer(valdDag) + '</span></div>';
-    html += '<button class="minibtn" data-nypass="' + U.esc(valdDag) + '">+ Lägg till här</button>';
-    html += '</div>';
+    var h = '<div class="overlagg-ruta dagruta">';
+
+    h += '<div class="overlagg-topp">';
+    h += '<h2 id="overlagg-rubrik" class="utan-markor dagruta-rubrik">' +
+         U.esc(U.langtDatum(iso)) +
+         '<span class="muted liten"> · vecka ' + U.veckonummer(iso) + '</span></h2>';
+    h += '<button class="ikonknapp" id="dr-stang" aria-label="Stäng">✕</button>';
+    h += '</div>';
 
     if (!dagens.length) {
-      html += '<p class="muted liten" style="margin-bottom:0">Inget inbokat den här dagen. ' +
-              'Bra tillfälle att repetera.</p>';
-      return html + '</div>';
+      h += '<p class="muted">Inget inbokat den här dagen. Bra tillfälle att repetera — ' +
+           'eller lägg in något eget.</p>';
+    } else {
+      h += '<div class="dagruta-lista">';
+      dagens.forEach(function (p) {
+        var farg = p.delkurs ? U.delkursFarg(p.delkurs) : 'var(--egen)';
+        h += '<div class="dagspass' + (p.egen ? ' egen' : '') + (p.andrad ? ' andrad' : '') +
+             '" style="--dkf:' + farg + '">';
+        h += '<div class="dagspass-tid">' + U.esc(p.tid) + '</div>';
+        h += '<div class="dagspass-kropp">';
+        h += '<div class="dagspass-rubrik">' + U.typBadge(p) + U.esc(p.rubrik) +
+             (p.obligatorisk ? '<span class="pass-etikett obl">Obligatorisk</span>' : '') +
+             (p.egen ? '<span class="pass-etikett min">✎ Din egen</span>' : '') +
+             (p.andrad ? '<span class="pass-etikett min">✎ Ändrad</span>' : '') + '</div>';
+
+        var meta = [];
+        if (p.delkurs) meta.push(U.delkursNamn(p.delkurs));
+        if (p.sal) meta.push(p.sal);
+        if (p.larare) meta.push(p.larare);
+        if (meta.length) h += '<div class="dagspass-meta">' + U.esc(meta.join(' · ')) + '</div>';
+        if (p.notis) h += '<div class="dagspass-notis">' + U.inline(p.notis) + '</div>';
+
+        h += '</div>';
+        h += '<button class="minibtn" data-andrapass="' + U.esc(p.passId) + '">Ändra</button>';
+        h += '</div>';
+      });
+      h += '</div>';
     }
 
-    dagens.forEach(function (p) {
-      var farg = p.delkurs ? U.delkursFarg(p.delkurs) : 'var(--egen)';
-      html += '<div class="dagspass' + (p.egen ? ' egen' : '') + (p.andrad ? ' andrad' : '') +
-              '" style="--dkf:' + farg + '">';
-      html += '<div class="dagspass-tid">' + U.esc(p.tid) + '</div>';
-      html += '<div class="dagspass-kropp">';
-      html += '<div class="dagspass-rubrik">' + U.typBadge(p) + U.esc(p.rubrik) +
-              (p.obligatorisk ? '<span class="pass-etikett obl">Obligatorisk</span>' : '') +
-              (p.egen ? '<span class="pass-etikett min">✎ Din egen</span>' : '') +
-              (p.andrad ? '<span class="pass-etikett min">✎ Ändrad</span>' : '') + '</div>';
+    h += '<div class="overlagg-knappar">';
+    h += '<button class="primar" data-nypass="' + U.esc(iso) + '">+ Lägg till egen händelse</button>';
+    h += '<button class="sekundar" id="dr-klar">Stäng</button>';
+    h += '</div>';
 
-      var meta = [];
-      if (p.delkurs) meta.push(U.delkursNamn(p.delkurs));
-      if (p.sal) meta.push(p.sal);
-      if (p.larare) meta.push(p.larare);
-      if (meta.length) html += '<div class="dagspass-meta">' + U.esc(meta.join(' · ')) + '</div>';
-      if (p.notis) html += '<div class="dagspass-notis">' + U.inline(p.notis) + '</div>';
+    return h + '</div>';
+  }
 
-      html += '</div>';
-      html += '<button class="minibtn" data-andrapass="' + U.esc(p.passId) + '">Ändra</button>';
-      html += '</div>';
+  function kopplaDagRuta(behallare, iso) {
+    U.el('dr-stang').addEventListener('click', function () { U.overlagg.stang(); });
+    U.el('dr-klar').addEventListener('click', function () { U.overlagg.stang(); });
+
+    /* Formuläret tar över samma överlägg. Oavsett om man sparar eller
+       ångrar sig kommer man tillbaka hit, så man ser resultatet i sitt
+       sammanhang i stället för att trilla ut till kalendern.
+
+       Flyttar man posten till ett annat datum följer dagrutan med dit –
+       annars öppnas den dag man kom ifrån och posten ser ut att ha
+       försvunnit. */
+    var visaDag = iso;
+
+    function narSparat(datum) {
+      if (datum) visaDag = datum;
+      passCache = null;
+      hoppaTill(datum);
+    }
+    function narStangd() { passCache = null; oppnaDag(visaDag); }
+
+    Array.prototype.forEach.call(behallare.querySelectorAll('[data-nypass]'), function (b) {
+      b.addEventListener('click', function () {
+        S.passform.nyPa(iso, narSparat, narStangd);
+      });
     });
 
-    return html + '</div>';
+    Array.prototype.forEach.call(behallare.querySelectorAll('[data-andrapass]'), function (b) {
+      b.addEventListener('click', function () {
+        var p = pass().filter(function (x) { return x.passId === b.dataset.andrapass; })[0];
+        if (p) S.passform.oppna(p, narSparat, narStangd);
+      });
+    });
   }
 
   function listvy() {
@@ -532,22 +589,25 @@ window.SYSB23.schema = (function () {
       });
     });
 
-    /* Ny egen händelse. Har man en dag vald fylls den i som datum. */
+    /* Knappen i kortets huvud. Föreslår idag om man tittar på den månaden,
+       annars den första i månaden — och landar i dagrutan när man är klar. */
     Array.prototype.forEach.call(vy.querySelectorAll('[data-nypass]'), function (b) {
       b.addEventListener('click', function (e) {
         e.stopPropagation();
-        var datum = b.dataset.nypass !== '1' ? b.dataset.nypass
-                  : (valdDag || U.isoDatum(new Date(manadAr, manadNr, 1)));
-        S.passform.nyPa(datum, hoppaTill);
+        var idagD = U.idag();
+        var datum = (idagD.getMonth() === manadNr && idagD.getFullYear() === manadAr)
+                  ? U.isoDatum(idagD)
+                  : U.isoDatum(new Date(manadAr, manadNr, 1));
+        S.passform.nyPa(datum, null, function () { passCache = null; oppnaDag(datum); });
       });
     });
 
-    /* Ändra ett befintligt pass, kursens eller ditt eget */
+    /* Ändra ett pass direkt ur listvyn */
     Array.prototype.forEach.call(vy.querySelectorAll('[data-andrapass]'), function (b) {
       b.addEventListener('click', function (e) {
         e.stopPropagation();
         var p = pass().filter(function (x) { return x.passId === b.dataset.andrapass; })[0];
-        if (p) S.passform.oppna(p, hoppaTill);
+        if (p) S.passform.oppna(p, null, function () { passCache = null; rendera(); });
       });
     });
 
@@ -562,10 +622,7 @@ window.SYSB23.schema = (function () {
     });
 
     Array.prototype.forEach.call(vy.querySelectorAll('[data-dag]'), function (b) {
-      b.addEventListener('click', function () {
-        valdDag = valdDag === b.dataset.dag ? null : b.dataset.dag;
-        rendera();
-      });
+      b.addEventListener('click', function () { oppnaDag(b.dataset.dag); });
     });
 
     var to = U.el('toggleomtentor');
