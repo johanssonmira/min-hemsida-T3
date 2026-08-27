@@ -10,7 +10,7 @@
    filer städas bort i activate.
    ========================================================================= */
 
-var VERSION = 'sysb23-v2';
+var VERSION = 'sysb23-v3';
 
 var FILER = [
   './',

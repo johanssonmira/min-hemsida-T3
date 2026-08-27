@@ -71,6 +71,10 @@
      streckade kanten och pennan – form läser sig själv, färg måste läras. */
   --egen: #57557E;
 
+  /* Ytan i skrivfält och rullgardiner. Egen variabel för att mörkt tema
+     ska kunna göra den mörk utan att alla kort blir det. */
+  --falt-yta: #FFFFFF;
+
   /* --- Delkursaccenter --- */
   --strategi:  #DE8600;
   --databaser: #2B29E0;
@@ -296,6 +300,119 @@
   --egen:#634E2D;
 }
 
+
+/* ---------- Ljust: nedtonat gråvitt, minsta möjliga färg ---------- */
+[data-tema="ljust"] {
+  --creme-50:  #FFFFFF;
+  --creme-100: #F4F5F7;
+  --creme-200: #E9EBEF;
+  --creme-300: #D8DCE3;
+  --creme-400: #B4BAC5;
+
+  --ink:      #14161C;
+  --ink-mid:  #3F4550;
+  --ink-soft: #5A616D;
+
+  --blaa-50:  #E7EEFB;
+  --blaa-100: #C7D8F5;
+  --blaa-500: #1B5FBF;
+  --blaa-600: #164C99;
+  --blaa-700: #123B77;
+  --blaa-900: #101319;
+
+  --ockra-50:  #FCF0D9;
+  --ockra-100: #F7E1B4;
+  --ockra-500: #D9911A;
+  --ockra-600: #8A5800;
+  --ockra-700: #6E4500;
+
+  --rosa-100: #F7E7EF;
+  --rosa-200: #EDCBDD;
+  --rosa-400: #D48DB4;
+
+  --gron-50:  #DFF2E8;
+  --gron-100: #BCE5D0;
+  --gron-500: #12784F;
+  --gron-600: #0D5C3C;
+  --gron-700: #0A4A30;
+
+  --rod-50:   #FBE3DF;
+  --rod-500:  #CE3D2A;
+  --rod-600:  #A62C1C;
+
+  --egen: #5A616D;
+  --falt-yta: #FFFFFF;
+  --skugga-s: 0 1px 2px rgba(20,22,28,.06);
+  --skugga-m: 0 2px 4px rgba(20,22,28,.06), 0 8px 20px rgba(20,22,28,.06);
+  --skugga-l: 0 6px 16px rgba(20,22,28,.12), 0 16px 40px rgba(20,22,28,.10);
+}
+
+/* ---------- Mörkt: dämpad blågrå natt, ingen ren svärta ----------
+   Rent svart mot vit text ger ett efterbildsflimmer vid långa
+   lässtunder. Basen är därför en mörk blågrå, och korten ligger
+   ljusare än sidan i stället för tvärtom – samma djupordning som i de
+   ljusa temana, bara spegelvänd. */
+[data-tema="morkt"] {
+  --creme-50:  #1E2430;   /* kort */
+  --creme-100: #151A23;   /* sidbakgrund */
+  --creme-200: #28303E;   /* dämpade band */
+  --creme-300: #38424F;   /* kantlinjer */
+  --creme-400: #4E5A6B;   /* starkare kantlinjer */
+
+  --ink:      #EEF1F6;
+  --ink-mid:  #C2CAD6;
+  --ink-soft: #9BA5B4;
+
+  --blaa-50:  #1B2A44;
+  --blaa-100: #263B5E;
+  --blaa-500: #6E9BF0;
+  --blaa-600: #8FB2F5;
+  --blaa-700: #B0CAF9;
+  --blaa-900: #0E1219;
+
+  --ockra-50:  #33280F;
+  --ockra-100: #4A3915;
+  --ockra-500: #E8A33A;
+  --ockra-600: #F0BE70;
+  --ockra-700: #8A5F14;
+
+  --rosa-100: #33202C;
+  --rosa-200: #4A2D3F;
+  --rosa-400: #D98CB4;
+
+  --gron-50:  #12301F;
+  --gron-100: #1B4530;
+  --gron-500: #4FBE8A;
+  --gron-600: #6FCFA1;
+  --gron-700: #8FDCB7;
+
+  --rod-50:   #3A1C17;
+  --rod-500:  #F0705A;
+  --rod-600:  #F79180;
+
+  --egen: #97A3B4;
+  --falt-yta: #10141B;
+  --skugga-s: 0 1px 2px rgba(0,0,0,.34);
+  --skugga-m: 0 2px 4px rgba(0,0,0,.34), 0 8px 20px rgba(0,0,0,.30);
+  --skugga-l: 0 6px 16px rgba(0,0,0,.46), 0 16px 40px rgba(0,0,0,.38);
+}
+
+/* I mörkt tema är topbaren mörkare än sidan, inte tvärtom. Vit text på
+   färgad knapp blir för ljus mot mörk botten – där används bläck. */
+[data-tema="morkt"] .primar,
+[data-tema="morkt"] .sekundar:hover,
+[data-tema="morkt"] .fara:hover,
+[data-tema="morkt"] .ne-5,
+[data-tema="morkt"] .t-typ,
+[data-tema="morkt"] .tk-vald,
+[data-tema="morkt"] .betyg.godkand,
+[data-tema="morkt"] .kapitel.last .kap-nr,
+[data-tema="morkt"] .alt.ar-ratt .alt-nr,
+[data-tema="morkt"] .facitikon.ratt,
+[data-tema="morkt"] .kal-dag.idag .kal-nr { color: #10141B; }
+
+/* Tentabrickan får sin textfärg av U.kontrastfarg() och behöver inget här. */
+
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 
@@ -438,7 +555,7 @@ body {
   min-width: 0; max-width: 100%; text-overflow: ellipsis;
 }
 .delkursval:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
-.delkursval option { color: var(--ink); background: #fff; font-weight: 500; }
+.delkursval option { color: var(--ink); background: var(--falt-yta); font-weight: 500; }
 
 /* ---- Kontextbandet: vilken delkurs som är aktiv, alltid synligt ---- */
 .delkursband { background: var(--blaa-900); border-top: 1px solid rgba(255,255,255,.1); }
@@ -1269,7 +1386,7 @@ body.laast { overflow: hidden; }
 }
 .falt input, .falt select, .falt textarea {
   width: 100%; font-family: inherit; font-size: .92rem; color: var(--ink);
-  background: #fff; border: 2px solid var(--creme-300); border-radius: var(--r-s);
+  background: var(--falt-yta); border: 2px solid var(--creme-300); border-radius: var(--r-s);
   padding: .5rem .6rem;
 }
 .falt textarea { resize: vertical; line-height: 1.5; }
@@ -1326,7 +1443,7 @@ body.ant-oppen .topbar > .wrap { padding-right: 25.5rem; }
 .antfalt {
   width: 100%; flex: 1 1 auto; min-height: 16rem; resize: vertical;
   font-family: inherit; font-size: .92rem; line-height: 1.65; color: var(--ink);
-  background: #fff; border: 2px solid var(--creme-300); border-radius: var(--r-s);
+  background: var(--falt-yta); border: 2px solid var(--creme-300); border-radius: var(--r-s);
   padding: .7rem .8rem;
 }
 .antfalt:focus { outline: 3px solid var(--blaa-100); border-color: var(--blaa-500); }
@@ -1545,3 +1662,24 @@ body.fokus #vy-ova, body.fokus #vy-prov { max-width: 760px; }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; scroll-behavior: auto; }
 }
+
+/* ========================= Länkar till tentor ========================= */
+.lanklista { display: grid; gap: .4rem; margin: .2rem 0 .8rem; }
+.lankrad {
+  display: flex; align-items: center; gap: .5rem;
+  border: 1.5px solid var(--creme-300); border-radius: var(--r-s);
+  background: var(--creme-100); padding: .1rem;
+}
+.lankrad > a {
+  flex: 1; min-width: 0; display: block; padding: .5rem .65rem;
+  text-decoration: none; color: inherit; border-radius: 6px;
+}
+.lankrad > a:hover { background: var(--blaa-50); }
+.lank-titel { display: block; font-weight: 700; font-size: .9rem; color: var(--blaa-600); }
+.lank-besk {
+  display: block; font-size: .8rem; color: var(--ink-soft); margin-top: .1rem;
+}
+/* Egna länkar visar adressen i stället för en beskrivning – den blir lätt
+   lång, så den kapas i stället för att bryta radlängden i kortet. */
+.lank-url { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lankrad > .minibtn { flex: 0 0 auto; margin-right: .3rem; }

@@ -19,10 +19,10 @@ window.SYSB23.fragor.push(
   svarighet: 1,
   fraga: 'Vad är ett RDBMS?',
   alternativ: [
-    'Ett program för att rita ER-diagram',
-    'Ett system som hanterar lagring, hämtning och skydd av data organiserad i relationer (tabeller)',
-    'En virtuell maskin som hostar ett operativsystem',
-    'Ett filformat för att spara kalkylblad'
+    'Ett ritprogram där man skissar ER-diagram och genererar dokumentation av modellen',
+    'Ett system som lagrar, hämtar och skyddar data organiserad i tabeller',
+    'En virtuell maskin som kör ett operativsystem och lagrar filerna åt applikationen',
+    'Ett filformat för kalkylblad som flera användare kan öppna och redigera samtidigt'
   ],
   ratt: 1,
   forklaringar: [
@@ -42,10 +42,10 @@ window.SYSB23.fragor.push(
   svarighet: 1,
   fraga: 'I vilken ordning genomförs databasdesignprocessen enligt kursmaterialet?',
   alternativ: [
-    'Fysisk design → logisk design → konceptuell design',
+    'Fysisk design först, därefter logisk design och sist den konceptuella modellen',
     'Konceptuell design (ER) → logisk design (relationer + normalisering) → fysisk design (DDL)',
-    'Normalisering → ER-modellering → DDL',
-    'DDL → ER-modellering → normalisering'
+    'Normalisering först, därefter ER-modellering och till sist DDL-satserna',
+    'DDL-satserna först, därefter ER-modellering och normalisering i efterhand'
   ],
   ratt: 1,
   forklaringar: [
@@ -67,8 +67,8 @@ window.SYSB23.fragor.push(
   alternativ: [
     'För att det bara kan användas för att deklarera tabeller, inte för att hämta data',
     'För att användaren anger *vad* för data som önskas, inte *hur* den ska hämtas',
-    'För att alla satser måste avslutas med semikolon',
-    'För att nyckelord måste skrivas med versaler'
+    'För att varje sats måste avslutas med semikolon för att kunna köras',
+    'För att nyckelord måste skrivas med versaler för att databasen ska tolka dem'
   ],
   ratt: 1,
   forklaringar: [
@@ -159,10 +159,10 @@ window.SYSB23.fragor.push(
   fraga: 'Varför returnerar frågan nedan noll rader trots att Chloe saknar adress?',
   kod: "SELECT StudentNo, StudentName\nFROM Student\nWHERE StudentAddress = NULL;",
   alternativ: [
-    'Därför att NULL måste skrivas med gemener',
+    'Därför att NULL måste skrivas med gemener för att tolkas som ett värde',
     'Därför att jämförelse med NULL aldrig evalueras till sant – man måste använda IS NULL',
-    'Därför att WHERE-satsen saknar semikolon',
-    'Därför att StudentAddress är en VARCHAR och inte kan jämföras'
+    'Därför att WHERE-satsen saknar avslutande semikolon och därför aldrig körs',
+    'Därför att StudentAddress är en VARCHAR, och textkolumner kan inte jämföras alls'
   ],
   ratt: 1,
   forklaringar: [
@@ -205,10 +205,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad är skillnaden mellan BETWEEN 5 AND 10 och > 5 AND < 10?',
   alternativ: [
-    'Ingen skillnad, de är helt likvärdiga',
+    'Ingen skillnad alls – de båda skrivsätten ger exakt samma urval av rader',
     'BETWEEN är inklusivt och tar med både 5 och 10, medan > / < utesluter gränsvärdena',
-    'BETWEEN fungerar bara på datum',
-    'BETWEEN kräver att kolumnen är indexerad'
+    'BETWEEN fungerar bara på datumkolumner, medan > och < fungerar på tal',
+    'BETWEEN kräver att kolumnen är indexerad, medan > och < fungerar utan index'
   ],
   ratt: 1,
   forklaringar: [
@@ -230,8 +230,8 @@ window.SYSB23.fragor.push(
   alternativ: [
     'Tar bort dubbletter enbart baserat på den första kolumnen',
     'Tar bort rader där kombinationen av samtliga listade kolumner är identisk',
-    'Tar bort alla rader som innehåller NULL',
-    'Tillämpas separat på varje kolumn för sig'
+    'Tar bort alla rader där någon av de listade kolumnerna innehåller NULL',
+    'Tillämpas separat på varje kolumn och rensar dubbletter i var och en av dem'
   ],
   ratt: 1,
   forklaringar: [
@@ -300,8 +300,8 @@ window.SYSB23.fragor.push(
   alternativ: [
     'Det ger ett syntaxfel – ORDER BY måste använda originalkolumnnamnet',
     'Det fungerar; ORDER BY kan referera både till aliaset och till originalnamnet',
-    'Det fungerar bara om aliaset skrivs inom hakparenteser',
-    'Sorteringen ignoreras tyst'
+    'Det fungerar bara om aliaset skrivs inom hakparenteser i ORDER BY-satsen',
+    'Sorteringen ignoreras tyst och raderna kommer i tabellens lagringsordning'
   ],
   ratt: 1,
   forklaringar: [
@@ -407,10 +407,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad är skillnaden mellan COUNT(*) och COUNT(StudentAddress)?',
   alternativ: [
-    'Ingen – båda räknar antalet rader',
-    'COUNT(*) räknar alla rader; COUNT(StudentAddress) räknar bara rader där kolumnen inte är NULL',
-    'COUNT(*) är snabbare men ger samma resultat',
-    'COUNT(StudentAddress) räknar antalet unika adresser'
+    'Ingen skillnad – båda räknar antalet rader i resultatet på exakt samma sätt',
+    'COUNT(*) räknar alla rader, COUNT(kolumn) bara rader som inte är NULL',
+    'COUNT(*) är snabbare att köra, men båda varianterna ger alltid samma resultat',
+    'COUNT(StudentAddress) räknar antalet unika adresser i stället för antalet rader'
   ],
   ratt: 1,
   forklaringar: [
@@ -430,10 +430,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vilken är den centrala skillnaden mellan WHERE och HAVING?',
   alternativ: [
-    'WHERE används i SELECT, HAVING i UPDATE',
+    'WHERE hör hemma i SELECT-satser, medan HAVING bara får användas i UPDATE',
     'WHERE filtrerar rader före gruppering, HAVING filtrerar grupper efter aggregering',
-    'HAVING är en föråldrad synonym för WHERE',
-    'WHERE kan innehålla aggregatfunktioner, det kan inte HAVING'
+    'HAVING är en föråldrad synonym för WHERE och betyder exakt samma sak',
+    'WHERE kan innehålla aggregatfunktioner, medan HAVING bara klarar enkla villkor'
   ],
   ratt: 1,
   forklaringar: [
@@ -454,10 +454,10 @@ window.SYSB23.fragor.push(
   fraga: 'Varför ger frågan nedan felmeddelandet "Column \'HasStudied.Grade\' is invalid in the select list…"?',
   kod: "SELECT\n    StudentID,\n    Grade\nFROM\n    HasStudied\nGROUP BY\n    StudentID;",
   alternativ: [
-    'Därför att Grade är av typen INTEGER',
-    'Därför att varje kolumn i SELECT måste finnas i GROUP BY eller vara inkapslad i en aggregatfunktion',
-    'Därför att GROUP BY måste komma före FROM',
-    'Därför att tabellen saknar primärnyckel'
+    'Därför att Grade är av typen INTEGER, och heltalskolumner går inte att gruppera på',
+    'Varje kolumn i SELECT måste finnas i GROUP BY eller vara aggregerad',
+    'Därför att GROUP BY måste stå före FROM-satsen för att frågan ska kunna tolkas',
+    'Därför att tabellen saknar primärnyckel, och gruppering kräver alltid en sådan'
   ],
   ratt: 1,
   forklaringar: [
@@ -478,10 +478,10 @@ window.SYSB23.fragor.push(
   fraga: 'Betrakta HasStudied med betygen (1,6) (1,7) (1,8) (1,6) (2,7) (2,9) (2,7) (3,6) angivna som (StudentID, Grade). Vad returnerar frågan?',
   kod: "SELECT\n    StudentID AS ID,\n    COUNT(*) AS Count,\n    MAX(Grade) AS Highest\nFROM\n    HasStudied\nGROUP BY\n    StudentID\nHAVING\n    MAX(Grade) > 6;",
   alternativ: [
-    'ID 1 med Count 2, samt ID 2 med Count 3',
+    'ID 1 med Count 2 och Highest 8, samt ID 2 med Count 3 och Highest 9',
     'ID 1 med Count 4 och Highest 8, samt ID 2 med Count 3 och Highest 9',
-    'Alla tre studenterna',
-    'Endast ID 2'
+    'Alla tre studenterna, var och en med sitt eget Count och Highest',
+    'Endast ID 2, eftersom bara den studenten uppfyller villkoret i HAVING'
   ],
   ratt: 1,
   forklaringar: [
@@ -501,10 +501,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'AVG(Grade) returnerar 6 trots att det faktiska medelvärdet är 6,75. Varför?',
   alternativ: [
-    'AVG avrundar alltid nedåt till närmaste heltal',
+    'AVG avrundar alltid nedåt till närmaste heltal oavsett kolumnens datatyp',
     'Grade är av typen INTEGER, och heltalsaritmetik ger ett heltalsresultat',
-    'AVG ignorerar det högsta värdet',
-    'Det är en bugg i SQL Server'
+    'AVG ignorerar det högsta värdet i kolumnen när medelvärdet beräknas',
+    'Det är en känd bugg i SQL Server som slår till vid udda antal rader'
   ],
   ratt: 1,
   forklaringar: [

@@ -20,8 +20,8 @@ window.SYSB23.fragor.push(
   alternativ: [
     'Bokföring och upprättande av årsredovisning enligt gällande lagstiftning',
     'Avsiktlig påverkan på en verksamhet och dess befattningshavare mot vissa ekonomiska mål',
-    'Beräkning av ett företags marknadsvärde',
-    'Fördelning av vinst mellan ägarna'
+    'Beräkning av ett företags marknadsvärde och hur det utvecklas över tid',
+    'Fördelning av företagets vinst mellan ägarna efter räkenskapsårets slut'
   ],
   ratt: 1,
   forklaringar: [
@@ -41,10 +41,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Kursboken delar in styrmedel i tre kategorier. Vilka?',
   alternativ: [
-    'Kortsiktiga, medellånga och långsiktiga styrmedel',
+    'Kortsiktiga, medellånga och långsiktiga styrmedel efter planeringshorisont',
     'Formella styrmedel, organisationsstruktur och mindre formaliserad styrning',
-    'Finansiella, icke-finansiella och hybrida styrmedel',
-    'Interna, externa och blandade styrmedel'
+    'Finansiella, icke-finansiella och hybrida styrmedel efter måttens karaktär',
+    'Interna, externa och blandade styrmedel efter vem de riktar sig till'
   ],
   ratt: 1,
   forklaringar: [
@@ -64,10 +64,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad är det övergripande syftet med ekonomistyrningen?',
   alternativ: [
-    'Att minimera skatten',
-    'Att hjälpa till i arbetet med att uppnå företagets strategiska målsättningar – ekonomistyrningen är ett medel för strategiimplementering',
-    'Att uppfylla bokföringslagens krav',
-    'Att maximera antalet mätetal i verksamheten'
+    'Att minimera företagets skatt genom att styra hur resultatet redovisas',
+    'Att bidra till att företagets strategiska mål uppnås i praktiken',
+    'Att uppfylla bokföringslagens krav på hur verksamheten ska redovisas',
+    'Att maximera antalet mätetal så att verksamheten kan följas i detalj'
   ],
   ratt: 1,
   forklaringar: [
@@ -87,10 +87,10 @@ window.SYSB23.fragor.push(
   svarighet: 3,
   fraga: 'Vad kännetecknar strategisk ekonomistyrning jämfört med traditionell ekonomistyrning?',
   alternativ: [
-    'Den fokuserar uteslutande på interna förhållanden',
-    'Den kompletterar det interna fokuset med ett externt fokus på konkurrenter och kunder, och anpassas explicit till företagets strategiska inriktning',
-    'Den avskaffar behovet av produktkalkylering',
-    'Den ersätter alla finansiella mått med icke-finansiella'
+    'Den fokuserar uteslutande på interna förhållanden och bortser från marknaden',
+    'Den lägger ett externt fokus på konkurrenter och kunder till det interna',
+    'Den avskaffar behovet av produktkalkylering och budgetering helt och hållet',
+    'Den ersätter samtliga finansiella mått med icke-finansiella mätetal'
   ],
   ratt: 1,
   forklaringar: [
@@ -135,10 +135,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Hur skiljer sig en vision från en affärsidé?',
   alternativ: [
-    'Visionen är en kortsiktig plan, medan affärsidén är långsiktig',
+    'Visionen är en kortsiktig plan för det närmaste året, medan affärsidén är långsiktig',
     'Visionen är avsedd att kommuniceras utåt medan affärsidén är till för det interna strategiarbetet',
     'Visionen beskriver hur företaget ska tjäna pengar, medan affärsidén beskriver framtidsdrömmar',
-    'Visionen beskriver företagets framtida riktning, medan affärsidén fokuserar på vad företaget gör och hur det genererar intäkter'
+    'Visionen beskriver framtida riktning, affärsidén vad företaget gör och tjänar på'
   ],
   ratt: 3,
   forklaringar: [
@@ -158,10 +158,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vilket av följande ingår typiskt i ett företags STRATEGI (inte i affärsidén eller visionen)?',
   alternativ: [
-    'En bild av det önskade framtida tillståndet',
-    'Klargörande av vilka konkurrensfördelar företaget avser att utveckla och utnyttja samt hur hot från konkurrenter ska mötas',
-    'Företagets utdelningspolicy',
-    'Antalet anställda per avdelning'
+    'En bild av det önskade framtida tillståndet som verksamheten strävar mot',
+    'Vilka konkurrensfördelar som ska utvecklas och hur hot ska mötas',
+    'Företagets utdelningspolicy och hur vinsten ska fördelas till ägarna',
+    'Antalet anställda per avdelning och hur bemanningen ska fördelas'
   ],
   ratt: 1,
   forklaringar: [
@@ -206,10 +206,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad kännetecknar Herbert Simons satisfieringsmodell?',
   alternativ: [
-    'Företag maximerar försäljningen istället för vinsten',
-    'Företag strävar efter en tillfredsställande vinst i förhållande till en anspråksnivå, eftersom begränsad rationalitet gör maximering omöjlig',
-    'Företagsledningen maximerar sin egen nytta',
-    'Företaget maximerar nuvärdet av framtida kassaflöden'
+    'Företag maximerar försäljningsvolymen i stället för vinsten på kort sikt',
+    'Företag söker en tillfredsställande vinst, eftersom maximering inte är möjlig',
+    'Företagsledningen maximerar sin egen nytta i stället för ägarnas avkastning',
+    'Företaget maximerar nuvärdet av samtliga framtida kassaflöden i verksamheten'
   ],
   ratt: 1,
   forklaringar: [
@@ -229,10 +229,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad är utgångspunkten i intressentmodellen?',
   alternativ: [
-    'Att företaget ska maximera aktieägarnas förmögenhet',
-    'Att företaget strävar efter en jämvikt med sin omgivning, där bidrag från och belöningar till intressenterna balanseras',
-    'Att företaget är ett slutet system utan kopplingar till omgivningen',
-    'Att företagsledningen alltid agerar i ägarnas intresse'
+    'Att företaget uteslutande ska maximera aktieägarnas förmögenhet över tid',
+    'Att företaget söker jämvikt där bidrag och belöningar balanseras',
+    'Att företaget är ett slutet system som fattar beslut utan hänsyn till omgivningen',
+    'Att företagsledningen alltid agerar i ägarnas intresse framför andra parters'
   ],
   ratt: 1,
   forklaringar: [
@@ -275,10 +275,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad menas med symboliska mål?',
   alternativ: [
-    'Mål som uttrycks i grafisk form',
-    'Mål som syftar till att skapa en viss bild av företaget eller uttrycker strävanden som i praktiken inte gäller',
-    'Mål som endast gäller symboliska belopp',
-    'Mål som fastställs av branschorganisationer'
+    'Mål som uttrycks i grafisk form i stället för i siffror och text',
+    'Mål som skapar en viss bild av företaget utan att gälla i praktiken',
+    'Mål som endast gäller symboliska belopp utan verklig ekonomisk betydelse',
+    'Mål som fastställs av branschorganisationer och gäller alla företag i branschen'
   ],
   ratt: 1,
   forklaringar: [
@@ -325,7 +325,7 @@ window.SYSB23.fragor.push(
   svarighet: 1,
   fraga: 'Vilket av följande är ett kännetecken för hög INRE effektivitet?',
   alternativ: [
-    'Hög kundnöjdhet',
+    'Hög kundnöjdhet och nöjda kunder som återkommer',
     'Hög produktivitet och kostnadseffektivitet',
     'Ett väl utbyggt distributionsnätverk',
     'Ett välkänt och omtyckt varumärke'
@@ -371,8 +371,8 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad är skillnaden mellan effektivitet och produktivitet?',
   alternativ: [
-    'Ingen skillnad – begreppen är synonymer',
-    'Effektivitet mäter utflöde i förhållande till inflöde uttryckt i värde, i relation till ett mål; produktivitet mäter samma förhållande men uttryckt i fysiska kvantiteter',
+    'Ingen skillnad alls – de två begreppen används synonymt i kursboken',
+    'Effektivitet mäter utflöde mot inflöde i värde och mot ett mål, produktivitet i kvantiteter',
     'Effektivitet gäller endast tillverkande företag, produktivitet endast tjänsteföretag',
     'Effektivitet är alltid ett finansiellt mått, produktivitet alltid ett icke-finansiellt'
   ],
@@ -394,10 +394,10 @@ window.SYSB23.fragor.push(
   svarighet: 3,
   fraga: 'Varför sägs lönsamhet vara ett bättre uttryck än resultat för hur bra ett företag går?',
   alternativ: [
-    'Lönsamhet är alltid ett större tal än resultatet',
-    'Resultatet är ett absolut tal, medan lönsamhet är ett kvotmått som sätter resultatet i relation till det kapital som används för att skapa det',
-    'Resultatet kan manipuleras men det kan inte lönsamheten',
-    'Lönsamhet regleras av lag, vilket resultatet inte gör'
+    'Lönsamhet är alltid ett större tal än resultatet och ser därför bättre ut',
+    'Resultatet är ett absolut tal, lönsamheten sätter det i relation till kapitalet',
+    'Resultatet går att manipulera i redovisningen, vilket lönsamheten inte gör',
+    'Lönsamheten regleras i lag medan resultatet får beräknas fritt av företaget'
   ],
   ratt: 1,
   forklaringar: [
@@ -418,9 +418,9 @@ window.SYSB23.fragor.push(
   fraga: 'Ett företag fakturerar en order den 10 februari, fakturan förfaller den 10 mars och pengarna finns på företagets konto den 12 mars. När uppkommer INKOMSTEN?',
   alternativ: [
     'Den 10 februari, det vill säga det datum fakturan är daterad',
-    'Den 10 mars, när fakturan förfaller',
-    'Den 12 mars, när pengarna finns på kontot',
-    'Löpande under produktionen'
+    'Den 10 mars, alltså det datum då fakturan förfaller till betalning',
+    'Den 12 mars, alltså den dag betalningen finns på företagets konto',
+    'Löpande under produktionen, i takt med att arbetet färdigställs'
   ],
   ratt: 0,
   forklaringar: [
@@ -473,10 +473,10 @@ window.SYSB23.fragor.push(
   svarighet: 1,
   fraga: 'Vad karaktäriserar en funktionsorganisation?',
   alternativ: [
-    'Organisationen är strukturerad efter olika funktioner, såsom marknadsföring, produktion och ekonomi',
+    'Organisationen är indelad efter funktioner som marknad, produktion och ekonomi',
     'Organisationen är strukturerad för att prioritera projekt och temporära funktionella arbetsgrupper',
-    'Organisationen är indelad i avdelningar baserade på produkter eller tjänster',
-    'Organisationen är indelad i avdelningar utifrån geografiska funktioner'
+    'Organisationen är indelad i avdelningar utifrån produkter eller tjänster den säljer',
+    'Organisationen är indelad i avdelningar utifrån geografiska marknader och regioner'
   ],
   ratt: 0,
   forklaringar: [
@@ -496,7 +496,7 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Varför har stora företag ofta tydliga inslag av divisionsorganisation?',
   alternativ: [
-    'Det underlättar när man vill lansera helt nya produktområden eller ge sig in på nya geografiska marknader',
+    'Det underlättar lansering av nya produktområden och nya marknader',
     'En divisionsorganisation är lättare för ledningen att styra så att alla arbetar i samma riktning',
     'Divisionsorganisation underlättar när man arbetar med många olika projekt samtidigt inom samma bransch'
   ],
@@ -517,10 +517,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad kännetecknar det HORISONTELLA perspektivet på ekonomistyrning?',
   alternativ: [
-    'Företaget ses som en hierarki där överordnade enheter styr underordnade',
-    'Företaget ses som en värdekedja av processer och aktiviteter som syftar till att skapa kundvärde',
-    'Företaget ses som en svart låda med in- och utflöden',
-    'Företaget ses som en samling självständiga juridiska personer'
+    'Företaget ses som en hierarki där överordnade enheter styr och följer upp underordnade',
+    'Företaget ses som en värdekedja av processer som skapar kundvärde',
+    'Företaget ses som en svart låda där bara in- och utflöden är intressanta att mäta',
+    'Företaget ses som en samling självständiga juridiska personer med egna resultat'
   ],
   ratt: 1,
   forklaringar: [
@@ -540,10 +540,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vilka är de fyra huvudslagen av ekonomiskt ansvar?',
   alternativ: [
-    'Strategiskt, taktiskt, operativt och administrativt ansvar',
+    'Strategiskt, taktiskt, operativt och administrativt ansvar efter beslutsnivå',
     'Lönsamhetsansvar, resultatansvar, intäkts- eller bidragsansvar samt kostnadsansvar',
-    'Ägaransvar, styrelseansvar, ledningsansvar och medarbetaransvar',
-    'Kortsiktigt, medellångt, långsiktigt och evigt ansvar'
+    'Ägaransvar, styrelseansvar, ledningsansvar och medarbetaransvar i den ordningen',
+    'Kortsiktigt, medellångt, långsiktigt och evigt ansvar utifrån tidshorisont'
   ],
   ratt: 1,
   forklaringar: [
@@ -563,10 +563,10 @@ window.SYSB23.fragor.push(
   svarighet: 3,
   fraga: 'Vilken risk finns med att ensidigt inrikta ekonomistyrningen på resultatansvar?',
   alternativ: [
-    'Att enheterna slutar sälja',
+    'Att enheterna slutar sälja och i stället fokuserar på att hålla nere kostnaderna',
     'Att kapitalbindningen ökar, vilket ger negativa effekter på företagets räntabilitet',
-    'Att kostnaderna blir omöjliga att mäta',
-    'Att enheterna får för lite befogenheter'
+    'Att kostnaderna blir omöjliga att mäta och fördela mellan enheterna',
+    'Att enheterna får för lite befogenheter för att kunna påverka sitt resultat'
   ],
   ratt: 1,
   forklaringar: [
@@ -586,10 +586,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad är en "fripassagerare" i samband med belöningssystem?',
   alternativ: [
-    'En anställd som slutar direkt efter att ha fått sin bonus',
-    'En anställd som bidrar lite eller inget till gruppens arbete men ändå får del av den grupprelaterade belöningen',
-    'En konsult som arbetar utan ersättning',
-    'En chef som inte omfattas av belöningssystemet'
+    'En anställd som säger upp sig direkt efter att bonusen har betalats ut',
+    'En anställd som bidrar lite men ändå får del av gruppens belöning',
+    'En inhyrd konsult som deltar i gruppens arbete utan att få någon ersättning',
+    'En chef som står utanför belöningssystemet men leder gruppen som omfattas'
   ],
   ratt: 1,
   forklaringar: [
@@ -611,10 +611,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad är skillnaden mellan enkelkretslärande och dubbelkretslärande?',
   alternativ: [
-    'Enkelkretslärande sker individuellt, dubbelkretslärande i grupp',
-    'Enkelkretslärande löser problemet utan att gå till botten med orsaken; dubbelkretslärande ifrågasätter även själva orsaken till det inträffade',
-    'Enkelkretslärande är snabbare men dyrare',
-    'Enkelkretslärande gäller teknik, dubbelkretslärande gäller människor'
+    'Enkelkretslärande sker individuellt medan dubbelkretslärande sker gemensamt i grupp',
+    'Enkelkretslärande löser problemet, dubbelkretslärande ifrågasätter även orsaken',
+    'Enkelkretslärande går snabbare att genomföra men blir dyrare i längden',
+    'Enkelkretslärande gäller tekniska system medan dubbelkretslärande gäller människor'
   ],
   ratt: 1,
   forklaringar: [
@@ -634,10 +634,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad innebär medarbetarskap (empowerment)?',
   alternativ: [
-    'Att alla anställda äger aktier i företaget',
-    'Att anställda har befogenheter och inflytande över bland annat arbetsplatsens utformning, arbetets utförande, investeringar och tillsättning av chefer',
-    'Att företaget saknar chefer',
-    'Att anställda får arbeta hemifrån'
+    'Att samtliga anställda äger aktier i företaget och därmed får del av vinsten',
+    'Att anställda har inflytande över arbetsplats, investeringar och chefstillsättning',
+    'Att företaget helt saknar chefer och styrs gemensamt av de anställda',
+    'Att anställda själva får välja att arbeta hemifrån när de vill'
   ],
   ratt: 1,
   forklaringar: [
@@ -658,9 +658,9 @@ window.SYSB23.fragor.push(
   fraga: 'Vilken förklaring till "gapet mellan teori och praktik" inom ekonomistyrning har enligt kursboken STÖRST stöd?',
   alternativ: [
     'Att det finns en tidseftersläpning mellan teoriutveckling och implementering',
-    'Att praktiker har för lite kunskap om teorin',
+    'Att praktikerna har för lite kunskap om den teori som forskningen tagit fram',
     'Att teorin inte i tillräcklig utsträckning beaktar kostnads- och nyttokriteriet',
-    'Att företagen är ovilliga till förändring'
+    'Att företagen i grunden är ovilliga till förändring av sina arbetssätt'
   ],
   ratt: 2,
   forklaringar: [

@@ -64,9 +64,9 @@ window.SYSB23.fragor.push(
   fraga: 'Vad returnerar frågan nedan? Car innehåller tre bilar varav C3 (Tesla) saknar ägare, och Student innehåller tre studenter varav S3 (Rachel) saknar bil.',
   kod: "SELECT\n    Student.StudentNo,\n    Student.StudentName AS Name,\n    Car.CarNo,\n    Car.Brand\nFROM\n    Car\nLEFT OUTER JOIN\n    Student\n    ON Car.StudentID = Student.StudentID;",
   alternativ: [
-    'Två rader – bara bilarna som har en ägare',
+    'Två rader – bara de bilar som faktiskt har en ägare kommer med',
     'Tre rader – alla bilar, där Tesla får NULL i studentkolumnerna',
-    'Fyra rader – alla bilar och alla studenter',
+    'Fyra rader – alla bilar plus alla studenter som saknar bil',
     'Tre rader – alla studenter, där Rachel får NULL i bilkolumnerna'
   ],
   ratt: 1,
@@ -88,10 +88,10 @@ window.SYSB23.fragor.push(
   fraga: 'Varför ger frågan nedan ett felaktigt svar på affärsfrågan "Vilka studenter bor på samma adress som varandra?"',
   kod: "SELECT\n    Student1.StudentNo,\n    Student1.StudentName,\n    Student1.StudentAddress\nFROM\n    Student AS Student1,\n    Student AS Student2\nWHERE\n    Student1.StudentAddress = Student2.StudentAddress;",
   alternativ: [
-    'Aliasen Student1 och Student2 är inte tillåtna på samma tabell',
+    'Aliasen Student1 och Student2 är inte tillåtna eftersom det är samma tabell',
     'Varje student matchar sig själv, så alla studenter kommer med – även de som bor ensamma',
-    'WHERE-satsen borde ha använt LIKE istället för =',
-    'Man måste använda INNER JOIN, kommaseparerade tabeller är otillåtet'
+    'WHERE-satsen borde ha använt LIKE i stället för = vid jämförelse av adresser',
+    'Man måste använda INNER JOIN, eftersom kommaseparerade tabeller är otillåtna'
   ],
   ratt: 1,
   forklaringar: [
@@ -135,10 +135,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Varför förekommer kolumnen UnitID två gånger i resultatet av SELECT * FROM Patient JOIN Unit ON Patient.UnitID = Unit.UnitID?',
   alternativ: [
-    'Det är en bugg i SQL Server',
-    'SELECT * hämtar samtliga kolumner från båda tabellerna, och båda har en kolumn som heter UnitID',
-    'JOIN duplicerar alltid join-kolumnen som en kontroll',
-    'Därför att UnitID är en främmande nyckel'
+    'Det är en känd bugg i SQL Server som visar join-kolumnen dubbelt i resultatet',
+    'SELECT * hämtar alla kolumner från båda tabellerna, som båda har UnitID',
+    'JOIN duplicerar alltid join-kolumnen som en kontroll av att villkoret stämmer',
+    'Därför att UnitID är en främmande nyckel och sådana visas alltid två gånger'
   ],
   ratt: 1,
   forklaringar: [
@@ -238,10 +238,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad kännetecknar en KORRELERAD subquery jämfört med en vanlig subquery?',
   alternativ: [
-    'Den är alltid snabbare eftersom den kan cachas',
+    'Den är alltid snabbare eftersom resultatet kan cachas mellan raderna',
     'Den refererar till en kolumn i den yttre frågan och körs en gång per kandidatrad',
-    'Den får bara returnera ett enda värde',
-    'Den måste stå i SELECT-satsen, inte i WHERE'
+    'Den får bara returnera ett enda värde, aldrig en hel kolumn med rader',
+    'Den måste stå i SELECT-satsen och får aldrig förekomma i WHERE-satsen'
   ],
   ratt: 1,
   forklaringar: [
@@ -264,7 +264,7 @@ window.SYSB23.fragor.push(
   alternativ: [
     'Därför att man inte får använda samma tabell i både yttre och inre frågan',
     'Därför att = kräver ett enda värde, men subqueryn returnerar flera rader',
-    'Därför att LIKE inte får användas i subqueries',
+    'Därför att LIKE inte får användas tillsammans med en subquery i WHERE',
     'Därför att SELECT * inte är tillåtet tillsammans med subqueries'
   ],
   ratt: 1,
@@ -285,10 +285,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Varför avråder kursmaterialet från subqueries när en JOIN kan användas istället?',
   alternativ: [
-    'Subqueries ger alltid fel resultat',
+    'Subqueries ger alltid fel resultat när de kombineras med aggregatfunktioner',
     'Subqueries kan nästlas obegränsat och gör frågor svåra och tidsödande att läsa och förstå',
-    'Subqueries stöds inte av SQL Server',
-    'Subqueries kräver att man har administratörsbehörighet'
+    'Subqueries stöds inte av SQL Server utan bara av andra databashanterare',
+    'Subqueries kräver administratörsbehörighet i databasen för att få köras'
   ],
   ratt: 1,
   forklaringar: [
@@ -356,9 +356,9 @@ window.SYSB23.fragor.push(
   fraga: 'Vilka två fel bryter mot union-kompatibiliteten?',
   alternativ: [
     'Olika antal kolumner respektive inkompatibla datatyper i motsvarande kolumner',
-    'Olika tabellnamn respektive olika primärnycklar',
-    'Olika antal rader respektive olika kolumnordning',
-    'Saknad ORDER BY respektive saknad WHERE-sats'
+    'Olika tabellnamn i de två frågorna respektive olika primärnycklar i tabellerna',
+    'Olika antal rader i de två resultaten respektive olika ordning på kolumnerna',
+    'Saknad ORDER BY i den första frågan respektive saknad WHERE-sats i den andra'
   ],
   ratt: 0,
   forklaringar: [
@@ -378,10 +378,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vilka är syftena med en VIEW enligt kursmaterialet?',
   alternativ: [
-    'Att snabba upp INSERT-operationer',
-    'Att förenkla komplexa frågor, dölja underliggande objekt samt begränsa åtkomst till kolumner och rader',
-    'Att skapa en fysisk kopia av tabellen',
-    'Att automatiskt normalisera ett schema'
+    'Att snabba upp INSERT-operationer genom att skriva till en förberäknad tabell',
+    'Att förenkla frågor, dölja objekt och begränsa åtkomst till data',
+    'Att skapa en fysisk kopia av tabellen som uppdateras vid varje förändring',
+    'Att automatiskt normalisera ett schema till tredje normalformen vid körning'
   ],
   ratt: 1,
   forklaringar: [

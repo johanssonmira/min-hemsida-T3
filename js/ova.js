@@ -310,11 +310,42 @@ window.SYSB23.ova = (function () {
   }
 
   /* ================================================================ */
+  /* Alternativens ordning                                             */
+  /*                                                                   */
+  /* I frågebanken låg 99 av 119 rätta svar på plats två. Det går att  */
+  /* lära sig utan att kunna någonting, och då mäter övningen fel sak. */
+  /* Ordningen blandas därför vid visning i stället för i datafilerna, */
+  /* så att skevheten inte kan smyga sig tillbaka när nya frågor       */
+  /* skrivs. Blandningen görs en gång per fråga och pass, så att facit */
+  /* visar samma ordning som man svarade i.                            */
+  /* ================================================================ */
+
+  function aktuellFraga() {
+    var f = pass.fragor[pass.index];
+    if (!f || f.typ !== 'flerval' || !f.alternativ) return f;
+
+    pass.ordningar = pass.ordningar || {};
+    if (!pass.ordningar[pass.index]) {
+      pass.ordningar[pass.index] = U.blanda(f.alternativ.map(function (_, i) { return i; }));
+    }
+    var ordning = pass.ordningar[pass.index];
+
+    var vy = {};
+    Object.keys(f).forEach(function (k) { vy[k] = f[k]; });
+    vy.alternativ = ordning.map(function (i) { return f.alternativ[i]; });
+    if (f.forklaringar) {
+      vy.forklaringar = ordning.map(function (i) { return f.forklaringar[i]; });
+    }
+    vy.ratt = ordning.indexOf(f.ratt);
+    return vy;
+  }
+
+  /* ================================================================ */
   /* Frågevisning (gemensam)                                           */
   /* ================================================================ */
 
   function visaFraga(vyId) {
-    var f = pass.fragor[pass.index];
+    var f = aktuellFraga();
     var arProv = pass.lage === 'prov';
     var html = '';
 
@@ -418,7 +449,7 @@ window.SYSB23.ova = (function () {
 
   function svara() {
     if (pass.besvarad) return;
-    var f = pass.fragor[pass.index];
+    var f = aktuellFraga();
     if (f.typ === 'flerval') svaraFlerval(f);
     else svaraFritext(f);
   }

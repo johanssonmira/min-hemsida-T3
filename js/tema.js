@@ -28,6 +28,20 @@ window.SYSB23.tema = (function () {
       topp: '#12124F'
     },
     {
+      id: 'ljust',
+      namn: 'Ljust',
+      beskrivning: 'Nedtonat gråvitt med minsta möjliga färg. Renast av alla.',
+      prickar: ['#F4F5F7', '#1B5FBF', '#D9911A'],
+      topp: '#101319'
+    },
+    {
+      id: 'morkt',
+      namn: 'Mörkt',
+      beskrivning: 'Dämpad blågrå natt. Skonsammast för ögonen på kvällen.',
+      prickar: ['#151A23', '#6E9BF0', '#E8A33A'],
+      topp: '#0E1219'
+    },
+    {
       id: 'skog',
       namn: 'Skog',
       beskrivning: 'Salviagrönt med puderrosa. Dämpat och svalt.',

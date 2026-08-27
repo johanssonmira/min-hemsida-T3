@@ -17,10 +17,10 @@ window.SYSB23.fragor.push(
   svarighet: 1,
   fraga: 'Vad är en entitetstyp i ER-modellering?',
   alternativ: [
-    'En kolumn i en databastabell',
-    'En mängd saker med samma egenskaper som av användaren eller organisationen identifieras som havande en oberoende existens',
-    'Ett samband mellan två tabeller',
-    'Ett villkor som begränsar vilka värden ett attribut får anta'
+    'En enskild kolumn i en databastabell, alltså en egenskap hos en tabellrad',
+    'En mängd saker med samma egenskaper som har en oberoende existens',
+    'Ett samband mellan två tabeller, alltså kopplingen dem emellan i modellen',
+    'Ett villkor som begränsar vilka värden ett attribut får anta i modellen'
   ],
   ratt: 1,
   forklaringar: [
@@ -43,7 +43,7 @@ window.SYSB23.fragor.push(
     'Med en romb runt relationens namn',
     'Med dubbla linjer mellan entiteten och relationen',
     'Med en understruken multiplicitet',
-    'Med en fylld pilspets'
+    'Med en fylld pilspets riktad mot entiteten'
   ],
   ratt: 1,
   forklaringar: [
@@ -63,10 +63,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Varför ska man skriva M:N och inte M:M för ett många-till-många-samband?',
   alternativ: [
-    'Det är bara en stilfråga utan betydelse',
-    'M:M skulle innebära att båda sidorna har exakt samma multiplicitet, vilket är en annan (och felaktig) utsaga',
-    'M:N krävs av SQL Server',
-    'M:M är reserverat för unära relationer'
+    'Det är bara en stilfråga utan betydelse, båda skrivsätten läses likadant',
+    'M:M säger att båda sidorna har samma multiplicitet, vilket är fel',
+    'M:N är den notation som SQL Server kräver för att kunna generera tabellerna',
+    'M:M är reserverat för unära relationer, alltså samband inom samma entitet'
   ],
   ratt: 1,
   forklaringar: [
@@ -86,10 +86,10 @@ window.SYSB23.fragor.push(
   svarighet: 3,
   fraga: 'Ett universitet har unikt namn. En kurs har kurskod, namn och poäng, men kurskoden är unik endast inom det universitet som ger kursen. Hur modelleras kursen?',
   alternativ: [
-    'Som en vanlig entitet med CourseCode som identifierande attribut',
-    'Som en svag entitet med CourseCode som partiell identifierare, kopplad till University via en svag (identifierande) relation',
-    'Som ett multivärt attribut på University',
-    'Som en härledd entitet'
+    'Som en vanlig entitet där CourseCode ensam räcker som identifierande attribut',
+    'Som en svag entitet med CourseCode som partiell identifierare',
+    'Som ett multivärt attribut på University, där varje värde är en kurs',
+    'Som en härledd entitet vars innehåll räknas fram ur University vid behov'
   ],
   ratt: 1,
   forklaringar: [
@@ -111,8 +111,8 @@ window.SYSB23.fragor.push(
   alternativ: [
     'Ett attribut som beskriver entiteten, placerat närmast relationen i diagrammet',
     'Data som uppstår som ett resultat av själva sambandet, typiskt vid M:N-relationer',
-    'Ett attribut som är primärnyckel i båda entiteterna',
-    'Ett attribut som alltid måste vara NULL'
+    'Ett attribut som fungerar som primärnyckel i båda de kopplade entiteterna',
+    'Ett attribut som alltid måste vara NULL tills relationen har skapats'
   ],
   ratt: 1,
   forklaringar: [
@@ -132,10 +132,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vilka modelleringselement saknas i Crow’s foot-notation (Visual Paradigm) jämfört med Chen-notation?',
   alternativ: [
-    'Entiteter och relationer',
+    'Entiteter och relationer, alltså modellens två grundläggande byggstenar',
     'Multivärda attribut, härledda attribut och sammansatta attribut',
-    'Primärnycklar och främmande nycklar',
-    'Multiplicitet och obligatoriskt deltagande'
+    'Primärnycklar och främmande nycklar, alltså kopplingarna mellan tabellerna',
+    'Multiplicitet och obligatoriskt deltagande på ömse sidor om sambandet'
   ],
   ratt: 1,
   forklaringar: [
@@ -155,9 +155,9 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vilket av följande går INTE att uttrycka i en ER-modell?',
   alternativ: [
-    'Att en student måste läsa minst en kurs',
+    'Att en student måste läsa minst en kurs för att få finnas i modellen',
     'Att en students e-postadress måste sluta på @student.lu.se',
-    'Att en student kan ha flera adresser',
+    'Att en student kan ha flera adresser registrerade samtidigt',
     'Att en kurs erbjuds av exakt ett universitet'
   ],
   ratt: 1,
@@ -249,10 +249,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad är skillnaden mellan en kandidatnyckel och en primärnyckel?',
   alternativ: [
-    'Ingen skillnad, det är synonymer',
-    'En kandidatnyckel kan unikt identifiera en tupel; primärnyckeln är den kandidatnyckel databasarkitekten valt',
-    'Kandidatnyckeln är alltid sammansatt, primärnyckeln alltid enkel',
-    'Primärnyckeln får innehålla NULL, kandidatnyckeln får inte det'
+    'Ingen skillnad alls – de två begreppen är synonymer för samma sak',
+    'Flera kandidatnycklar kan identifiera en tupel, primärnyckeln är den valda',
+    'Kandidatnyckeln är alltid sammansatt medan primärnyckeln alltid består av en kolumn',
+    'Primärnyckeln får innehålla NULL medan en kandidatnyckel aldrig får göra det'
   ],
   ratt: 1,
   forklaringar: [
@@ -272,10 +272,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Hur transformeras ett 1:M-samband till ett relationsschema?',
   alternativ: [
-    'Skapa en ny relation för sambandet med båda primärnycklarna',
+    'Skapa en ny relation för själva sambandet som innehåller båda primärnycklarna',
     'Lägg primärnyckeln från ett-sidan som främmande nyckel i relationen på många-sidan',
     'Lägg primärnyckeln från många-sidan som främmande nyckel i relationen på ett-sidan',
-    'Slå ihop entiteterna till en enda relation'
+    'Slå ihop de båda entiteterna till en enda relation med alla attributen'
   ],
   ratt: 1,
   forklaringar: [
@@ -295,10 +295,10 @@ window.SYSB23.fragor.push(
   svarighet: 3,
   fraga: 'Ett 1:1-samband där båda sidorna har obligatoriskt deltagande och inget annat samband finns mellan entiteterna. Vilka transformationsalternativ finns?',
   alternativ: [
-    'Endast att slå ihop de två entiteterna till en relation',
-    'Antingen slå ihop dem till en relation, eller använda främmande nyckel-metoden där arkitekten väljer riktning',
-    'Endast att skapa en separat kopplingsrelation',
-    'Det går inte att transformera ett sådant samband'
+    'Endast att slå ihop de två entiteterna till en gemensam relation',
+    'Antingen slå ihop dem, eller använda främmande nyckel i vald riktning',
+    'Endast att skapa en separat kopplingsrelation mellan de två entiteterna',
+    'Det går inte att transformera ett sådant samband till ett relationsschema'
   ],
   ratt: 1,
   forklaringar: [
@@ -318,10 +318,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Varför införs INTE surrogatnycklar redan i den logiska databasdesignen?',
   alternativ: [
-    'De stöds inte av relationsmodellen',
-    'Den logiska modellen ska bevara ER-modellens semantik och naturliga identifierare; surrogatnycklar är en fysisk optimering',
-    'De skulle bryta mot 3NF',
-    'De kan bara skapas efter att data har lagts in'
+    'De stöds inte av relationsmodellen och saknar därför motsvarighet i schemat',
+    'Den logiska modellen ska bevara naturliga identifierare, surrogat är fysiskt',
+    'De skulle bryta mot tredje normalformen och göra schemat ogiltigt',
+    'De kan bara skapas i efterhand, när data redan har lagts in i tabellen'
   ],
   ratt: 1,
   forklaringar: [
@@ -485,10 +485,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad innebär att en dekomposition har egenskapen lossless join?',
   alternativ: [
-    'Att inga rader går förlorade vid en DELETE',
+    'Att inga rader går förlorade när man raderar ur en av relationerna',
     'Att en naturlig join av de mindre relationerna återskapar den ursprungliga relationen',
-    'Att alla funktionella beroenden bevaras',
-    'Att alla resulterande relationer är i 3NF'
+    'Att samtliga funktionella beroenden bevaras i de nya relationerna',
+    'Att samtliga resulterande relationer hamnar i tredje normalformen'
   ],
   ratt: 1,
   forklaringar: [
@@ -511,7 +511,7 @@ window.SYSB23.fragor.push(
     'När båda de ingående attributen finns i samma relation',
     'När attributen finns någonstans i schemat, oavsett relation',
     'När beroendet gäller mellan primärnycklar',
-    'När relationen är i 3NF'
+    'När relationen som beroendet gäller har normaliserats till 3NF'
   ],
   ratt: 0,
   forklaringar: [
@@ -635,10 +635,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad gör IDENTITY(1,1) i en kolumndefinition?',
   alternativ: [
-    'Sätter kolumnen till primärnyckel',
+    'Sätter kolumnen till primärnyckel med start på 1 och steg om 1',
     'Gör att databasen automatiskt genererar värden, med startvärde 1 och ökning med 1',
-    'Kräver att värdet är unikt men inte automatiskt genererat',
-    'Anger att kolumnen är en främmande nyckel'
+    'Kräver att värdet är unikt, men värdet måste fortfarande anges manuellt',
+    'Anger att kolumnen är en främmande nyckel mot en annan tabells primärnyckel'
   ],
   ratt: 1,
   forklaringar: [
@@ -681,10 +681,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vid användning av surrogatnyckel som primärnyckel – hur bevaras entitetsintegriteten för den naturliga nyckeln?',
   alternativ: [
-    'Den bevaras automatiskt av surrogatnyckeln',
+    'Den bevaras automatiskt eftersom surrogatnyckeln redan garanterar unikhet',
     'Genom att sätta både UNIQUE och NOT NULL på den naturliga nyckelns kolumn(er)',
-    'Genom en CHECK-constraint',
-    'Genom att lägga till ett index'
+    'Genom en CHECK-constraint som kontrollerar den naturliga nyckelns värden',
+    'Genom att lägga ett vanligt index på den naturliga nyckelns kolumner'
   ],
   ratt: 1,
   forklaringar: [
@@ -704,10 +704,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad innebär referensintegritet (referential integrity)?',
   alternativ: [
-    'Att alla tabeller måste ha en primärnyckel',
-    'Att en främmande nyckels värde måste matcha ett kandidatnyckelvärde i föräldrarelationen, eller vara NULL',
-    'Att alla kolumner måste ha NOT NULL',
-    'Att inga dubbletter får förekomma i någon kolumn'
+    'Att varje tabell i databasen måste ha en primärnyckel definierad',
+    'Att en främmande nyckel måste matcha ett kandidatnyckelvärde eller vara NULL',
+    'Att samtliga kolumner i en relation måste vara satta till NOT NULL',
+    'Att inga dubblettvärden får förekomma i någon av tabellens kolumner'
   ],
   ratt: 1,
   forklaringar: [
@@ -752,8 +752,8 @@ window.SYSB23.fragor.push(
   alternativ: [
     'Förhindrar att föräldraraden raderas så länge barnrader finns',
     'Raderar automatiskt de refererande barnraderna när föräldraraden raderas',
-    'Sätter barnradernas främmande nyckel till NULL',
-    'Skapar en säkerhetskopia innan raderingen'
+    'Sätter barnradernas främmande nyckel till NULL när föräldraraden raderas',
+    'Skapar en säkerhetskopia av barnraderna innan föräldraraden raderas'
   ],
   ratt: 1,
   forklaringar: [
@@ -775,7 +775,7 @@ window.SYSB23.fragor.push(
   alternativ: [
     'Med en CHECK-constraint på primärnyckeln',
     'Med NOT NULL på den främmande nyckelns kolumn',
-    'Med ON DELETE CASCADE',
+    'Med ON DELETE CASCADE på den främmande nyckeln',
     'Med en UNIQUE-constraint på den främmande nyckeln'
   ],
   ratt: 1,

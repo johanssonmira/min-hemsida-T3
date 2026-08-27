@@ -17,10 +17,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad är DAO-mönstrets huvudsakliga syfte i kursens exempelapplikation?',
   alternativ: [
-    'Att göra SQL-frågorna snabbare',
-    'Att kapsla in all databasåtkomst i ett eget lager, så att controllerlagret slipper känna till SQL och JDBC',
-    'Att ersätta behovet av en databas',
-    'Att automatiskt generera användargränssnittet'
+    'Att göra SQL-frågorna snabbare genom att återanvända anslutningar',
+    'Att kapsla in all databasåtkomst i ett eget lager, skilt från controllern',
+    'Att ersätta behovet av en databas genom att lagra data i objekt',
+    'Att automatiskt generera användargränssnittet utifrån tabellernas kolumner'
   ],
   ratt: 1,
   forklaringar: [
@@ -40,10 +40,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad är den viktigaste fördelen med try-with-resources i JDBC-kod?',
   alternativ: [
-    'Koden körs snabbare',
+    'Koden körs snabbare eftersom anslutningen återanvänds mellan anropen',
     'Connection, PreparedStatement och ResultSet stängs automatiskt, även om ett undantag kastas',
-    'SQL-frågan valideras vid kompilering',
-    'Databasanslutningen blir krypterad'
+    'SQL-frågan valideras redan vid kompilering i stället för vid körning',
+    'Databasanslutningen blir automatiskt krypterad mot avlyssning'
   ],
   ratt: 1,
   forklaringar: [
@@ -86,10 +86,10 @@ window.SYSB23.fragor.push(
   svarighet: 3,
   fraga: 'Vad kännetecknar "total separation of concerns" i exempelapplikationens arkitektur?',
   alternativ: [
-    'All kod ligger i en enda klass för att minimera antalet filer',
-    'Presentationslagret, affärslogiken och dataåtkomstlagret är åtskilda, och varje lager känner bara till nästa',
-    'Varje SQL-fråga har en egen klass',
-    'Databasen och applikationen körs på samma dator'
+    'All kod samlas i en enda klass, vilket minimerar antalet filer i projektet',
+    'Presentation, affärslogik och dataåtkomst är åtskilda lager',
+    'Varje enskild SQL-fråga läggs i en egen klass för sig',
+    'Databasen och applikationen körs på samma dator för att minska svarstiden'
   ],
   ratt: 1,
   forklaringar: [
@@ -140,10 +140,10 @@ window.SYSB23.fragor.push(
   fraga: 'Vad är det grundläggande felet i koden nedan?',
   kod: 'String query = "INSERT INTO Employee (EmpNo, EmpName, EmpSalary) VALUES ("\n    + "\'" + employee.getEmployeeNumber() + "\', "\n    + "\'" + employee.getName() + "\', "\n    + employee.getSalary() + ")";\nPreparedStatement statement = connection.prepareStatement(query);\nstatement.executeUpdate();',
   alternativ: [
-    'PreparedStatement används inte alls',
+    'PreparedStatement används inte alls, utan ett vanligt Statement-objekt',
     'Användarindata konkateneras direkt in i SQL-strängen istället för att skickas som parametrar',
-    'Frågan saknar semikolon på slutet',
-    'executeUpdate() ska vara executeQuery()'
+    'Frågan saknar avslutande semikolon och kan därför inte köras',
+    'executeUpdate() är fel metod här och borde ha varit executeQuery()'
   ],
   ratt: 1,
   forklaringar: [
@@ -163,10 +163,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vilken roll spelar de dubbla bindestrecken (--) i en SQL-injektionssträng?',
   alternativ: [
-    'De avslutar den injicerade satsen',
+    'De avslutar den injicerade satsen så att databasen kan tolka den',
     'De kommenterar bort resten av den ursprungliga frågan så att inget syntaxfel uppstår',
-    'De escapear enkelfnuttar',
-    'De byter databas'
+    'De escapear enkelfnuttarna så att strängen inte bryts i förtid',
+    'De byter aktiv databas till den angriparen vill komma åt'
   ],
   ratt: 1,
   forklaringar: [
@@ -186,10 +186,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad menas med en attack mot beroenden (supply chain-attack) i föreläsningens exempel?',
   alternativ: [
-    'Att angriparen fysiskt tar sig in i datacentret',
-    'Att en tredjepartsbibliotek som applikationen använder komprometteras och får skadlig kod injicerad',
-    'Att databasservern överbelastas med förfrågningar',
-    'Att användaren luras att lämna ut sitt lösenord'
+    'Att angriparen fysiskt tar sig in i datacentret och kopplar in sig',
+    'Att ett tredjepartsbibliotek komprometteras och får skadlig kod injicerad',
+    'Att databasservern överbelastas med förfrågningar tills den slutar svara',
+    'Att användaren luras att lämna ut sitt lösenord via ett falskt formulär'
   ],
   ratt: 1,
   forklaringar: [
@@ -209,10 +209,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'I SQL-uppgiftens Task 2 ska varje grupp ge en annan grupp läsåtkomst. Vilken behörighetsnivå ska kontot ha?',
   alternativ: [
-    'Administratörsrättigheter, så att den andra gruppen kan felsöka',
-    'Ett SQL Server-inloggningskonto med rollen public och enbart läsrättigheter – inte RDP-åtkomst till operativsystemet',
-    'Ett Windows-konto med fjärrskrivbordsåtkomst',
-    'Samma konto som gruppen själv använder'
+    'Administratörsrättigheter på servern, så att den andra gruppen kan felsöka själv',
+    'Ett SQL Server-konto med rollen public och enbart läsrättigheter',
+    'Ett Windows-konto med fjärrskrivbordsåtkomst till servern och databasen',
+    'Samma konto som gruppen själv använder, med oförändrade rättigheter'
   ],
   ratt: 1,
   forklaringar: [
@@ -287,10 +287,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad är skillnaden mellan sys-vyerna och INFORMATION_SCHEMA?',
   alternativ: [
-    'Ingen skillnad, de är synonymer',
-    'sys-vyerna används främst för metadata på instansnivå, INFORMATION_SCHEMA för metadata på databasnivå',
-    'sys innehåller data, INFORMATION_SCHEMA innehåller metadata',
-    'INFORMATION_SCHEMA finns bara i master-databasen'
+    'Ingen skillnad – sys och INFORMATION_SCHEMA är två namn på samma sak',
+    'sys ger metadata på instansnivå, INFORMATION_SCHEMA på databasnivå',
+    'sys innehåller verksamhetsdata medan INFORMATION_SCHEMA innehåller metadata',
+    'INFORMATION_SCHEMA finns bara i master-databasen och inte i övriga databaser'
   ],
   ratt: 1,
   forklaringar: [
@@ -311,10 +311,10 @@ window.SYSB23.fragor.push(
   fraga: 'Vad returnerar ResultSetMetaData.getColumnName() för frågan nedan?',
   kod: "SELECT\n    EmpNo AS No,\n    EmpName AS Name,\n    'Test' AS TestColumn\nFROM Employee;",
   alternativ: [
-    'EmpNo, EmpName och TestColumn',
+    'EmpNo, EmpName och TestColumn, alltså de underliggande kolumnnamnen',
     'No, Name och TestColumn – alltså aliasen, inte de underliggande kolumnnamnen',
     'Endast EmpNo och EmpName, eftersom TestColumn inte finns i tabellen',
-    'Tabellens samtliga kolumnnamn'
+    'Tabellens samtliga kolumnnamn, oavsett vad SELECT-satsen anger'
   ],
   ratt: 1,
   forklaringar: [

@@ -18,8 +18,8 @@ window.SYSB23.fragor.push(
   fraga: 'Hur skiljer sig Balanced Scorecard från en mer traditionell styrningsmodell som primärt fokuserar på finansiella mått? Välj det svar som stämmer bäst.',
   alternativ: [
     'Det utgör en bättre grund för att skydda företagets värdefulla och sällsynta resurser från att kopieras av konkurrenter',
-    'Det ersätter alla finansiella mått med kvalitativa bedömningar',
-    'Det integrerar både finansiella och icke-finansiella mått för att ge en bredare bild av företagets prestation',
+    'Det ersätter samtliga finansiella mått med kvalitativa bedömningar av verksamheten',
+    'Det integrerar finansiella och icke-finansiella mått till en bredare bild',
     'Det skapar bättre förutsättningar för att skydda miljön och förbättra socialt ansvarstagande'
   ],
   ratt: 2,
@@ -63,9 +63,9 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vilka är Balanced Scorecards fyra perspektiv?',
   alternativ: [
-    'People, planet, profit och purpose',
+    'People, planet, profit och purpose, alltså hållbarhetens fyra ben',
     'Finansiellt, kund, interna processer samt innovation och lärande',
-    'Strategi, struktur, system och kultur',
+    'Strategi, struktur, system och kultur, alltså organisationens fyra hörnstenar',
     'Leverantörer, kunder, konkurrenter och substitut'
   ],
   ratt: 1,
@@ -86,10 +86,10 @@ window.SYSB23.fragor.push(
   svarighet: 3,
   fraga: 'Varför krävde FMC att divisionerna skulle använda UTFALLSMÅTT (output measures) snarare än PROCESSMÅTT?',
   alternativ: [
-    'Processmått är omöjliga att beräkna',
-    'Fokus på tid, kvalitet och kostnad uppmuntrar chefer att söka snäva processförbättringar istället för genombrott i utfallet',
-    'Utfallsmått är billigare att samla in',
-    'Processmått är förbjudna enligt redovisningsstandarder'
+    'Processmått är i praktiken omöjliga att beräkna på divisionsnivå',
+    'Processmått driver snäva förbättringar i stället för genombrott i utfallet',
+    'Utfallsmått är betydligt billigare att samla in än processmått',
+    'Processmått är förbjudna enligt gällande redovisningsstandarder'
   ],
   ratt: 1,
   forklaringar: [
@@ -109,10 +109,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Varför lämpar sig Balanced Scorecard dåligt för extern rapportering enligt Kaplan och Norton?',
   alternativ: [
-    'Det strider mot god redovisningssed',
-    'Styrkort är utformade per affärsenhet och kan inte aggregeras; dessutom kan de avslöja känslig strategisk information för konkurrenter',
-    'Investerare förstår inte icke-finansiella mått',
-    'Måtten ändras för sällan för att vara intressanta'
+    'Det strider mot god redovisningssed att publicera icke-finansiella mått',
+    'Styrkort kan inte aggregeras och kan avslöja strategin för konkurrenter',
+    'Investerare saknar förutsättningar att tolka icke-finansiella mått',
+    'Måtten ändras alldeles för sällan för att vara intressanta för marknaden'
   ],
   ratt: 1,
   forklaringar: [
@@ -156,10 +156,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vilket är enligt Ittner och Larcker det första och mest grundläggande misstaget företag gör med icke-finansiella mått?',
   alternativ: [
-    'De mäter för sällan',
-    'De kopplar inte måtten till strategin och utvecklar ingen orsaksmodell mellan icke-finansiella drivkrafter och finansiellt utfall',
-    'De använder för få konsulter',
-    'De publicerar måtten externt'
+    'De mäter alldeles för sällan för att kunna följa upp utvecklingen',
+    'De kopplar inte måtten till strategin och saknar en orsaksmodell',
+    'De tar in för få externa konsulter i arbetet med att välja mått',
+    'De publicerar måtten externt i stället för att använda dem internt'
   ],
   ratt: 1,
   forklaringar: [
@@ -179,10 +179,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad kallade mellanchefer i Ittner och Larckers studie ironiskt Balanced Scorecard, och varför?',
   alternativ: [
-    '"Den heliga graalen", eftersom det löste alla problem',
-    '"Four bucket"- eller "smorgasbord"-metoden, eftersom ledningen krävde att de skulle hitta på något för varje perspektiv oavsett affärsenhetens strategi',
-    '"Den tysta revolutionen", eftersom förändringen skedde omärkligt',
-    '"Den finansiella spegeln", eftersom allt ändå mätte samma sak'
+    '"Den heliga graalen", eftersom modellen ansågs lösa alla styrningsproblem',
+    '"Four bucket"-metoden, eftersom något måste hittas på för varje perspektiv',
+    '"Den tysta revolutionen", eftersom förändringen skedde nästan omärkligt i organisationen',
+    '"Den finansiella spegeln", eftersom samtliga perspektiv ändå mätte samma sak'
   ],
   ratt: 1,
   forklaringar: [
@@ -202,10 +202,10 @@ window.SYSB23.fragor.push(
   svarighet: 3,
   fraga: 'Ett telekomföretag satte målet 100 % kundnöjdhet. Vad visade Ittner och Larckers analys?',
   alternativ: [
-    'Att målet nåddes men till för hög kostnad i tid',
-    'Att kunder som var 100 % nöjda inte spenderade mer än de som var 80 % nöjda – de sista procenten krävde stora investeringar utan avkastning',
-    'Att kundnöjdhet inte alls samvarierade med intäkter',
-    'Att målet borde ha varit 120 %'
+    'Att målet visserligen nåddes, men till en orimligt hög kostnad i nedlagd tid',
+    'Att helt nöjda kunder inte spenderade mer än de som var 80 procent nöjda',
+    'Att kundnöjdheten inte alls samvarierade med intäkterna i någon av grupperna',
+    'Att målet borde ha satts ännu högre för att driva fram förbättringar'
   ],
   ratt: 1,
   forklaringar: [
@@ -225,10 +225,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad är skillnaden mellan validitet och reliabilitet hos ett prestationsmått?',
   alternativ: [
-    'Validitet gäller hur ofta man mäter, reliabilitet hur många som mäts',
-    'Validitet är i vilken utsträckning måttet fångar det som avses; reliabilitet är i vilken grad mättekniken visar faktiska förändringar utan att introducera egna fel',
-    'Validitet gäller finansiella mått, reliabilitet icke-finansiella',
-    'Begreppen är synonymer'
+    'Validitet handlar om hur ofta man mäter, reliabilitet om hur många som ingår',
+    'Validitet är om måttet fångar rätt sak, reliabilitet om tekniken mäter rätt',
+    'Validitet gäller finansiella mått medan reliabilitet bara gäller icke-finansiella',
+    'Begreppen är synonymer och används omväxlande om samma egenskap'
   ],
   ratt: 1,
   forklaringar: [
@@ -284,7 +284,7 @@ window.SYSB23.fragor.push(
     'Lagar och regleringar som påverkar branschen',
     'Leverantörers förhandlingskraft',
     'Konkurrens mellan existerande företag inom branschen',
-    'Substitutprodukters hot'
+    'Hot från substitutprodukter som kan ersätta branschens erbjudande'
   ],
   ratt: 0,
   forklaringar: [
@@ -350,10 +350,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Enligt resursbaserad teori (RBV) – när utgör ett företags resurser en grund för uthålliga konkurrensfördelar?',
   alternativ: [
-    'När de är billiga och lätta att skaffa',
+    'När de är billiga att köpa in och lätta att skaffa för alla i branschen',
     'När de är värdefulla, sällsynta och kostsamma eller omöjliga att imitera',
-    'När de är standardiserade i branschen',
-    'När de kan köpas av vilken leverantör som helst'
+    'När de är standardiserade och används på samma sätt av alla i branschen',
+    'När de går att köpa av vilken leverantör som helst till marknadspris'
   ],
   ratt: 1,
   forklaringar: [
@@ -373,10 +373,10 @@ window.SYSB23.fragor.push(
   svarighet: 3,
   fraga: 'Vad menar Herrmann med att Porters generiska strategier utgjorde den första "dominant design" inom strategisk ledning?',
   alternativ: [
-    'Att Porter var den första som skrev om strategi',
-    'Att Porters ramverk blev den allmänt accepterade standarden som avslutade en period av experimenterande och inledde en era av inkrementell förändring',
-    'Att Porters modell är den enda korrekta',
-    'Att Porter designade den första strategiska planeringsmallen'
+    'Att Porter var den första forskaren som över huvud taget skrev om strategi',
+    'Att ramverket blev standarden som avslutade experimenterandet i ämnet',
+    'Att Porters modell är den enda korrekta beskrivningen av konkurrens',
+    'Att Porter tog fram den första strategiska planeringsmallen för företag'
   ],
   ratt: 1,
   forklaringar: [
@@ -427,10 +427,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vilka är de fyra nyckelområdena som behöver anpassas enligt Strategic Alignment Model (Henderson och Venkatraman, 1993)?',
   alternativ: [
-    'Personal, Affärsverksamhet, IT-strategi, Leveranskedja',
+    'Personal, affärsverksamhet, IT-strategi och leveranskedja i samverkan',
     'Affärsstrategi, IT-strategi, Organisationsinfrastruktur, IT-infrastruktur',
     'Produktutveckling, IT-strategi, Affärsstrategi, Riskhantering',
-    'IT-strategi, IT-infrastruktur, Marknadsföring, Ekonomi'
+    'IT-strategi, IT-infrastruktur, marknadsföring och ekonomi i samverkan'
   ],
   ratt: 1,
   forklaringar: [
@@ -450,10 +450,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad anses ofta vara lösningen på den så kallade produktivitetsparadoxen?',
   alternativ: [
-    'Omorganisering av arbetsflöden och processer inom organisationer för att bättre utnyttja ny teknologi',
-    'Bromsa den teknologiska utvecklingen för att förhindra nya flaskhalsar',
+    'Omorganisering av arbetsflöden så att den nya tekniken kan utnyttjas',
+    'Att bromsa den teknologiska utvecklingen så att inga nya flaskhalsar uppstår',
     'Investera mer i ytterligare teknologiska lösningar utan förändring i arbetsprocesser',
-    'Att undvika teknologiska investeringar för att behålla status quo'
+    'Att helt undvika nya teknikinvesteringar och i stället behålla nuvarande system'
   ],
   ratt: 0,
   forklaringar: [
@@ -473,10 +473,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Enligt Barney och Reeves – varför leder investeringar i generativ AI sällan till uthålliga konkurrensfördelar?',
   alternativ: [
-    'Därför att tekniken är för dyr för de flesta företag',
-    'Därför att teknikens natur gör nya insikter och datamönster nästan omedelbart tillgängliga för alla som använder samma verktyg',
-    'Därför att AI ger felaktiga resultat',
-    'Därför att lagstiftningen förbjuder kommersiell användning'
+    'Därför att tekniken är alldeles för dyr för de flesta företag att införa',
+    'Därför att insikterna blir omedelbart tillgängliga för alla med samma verktyg',
+    'Därför att AI systematiskt ger felaktiga resultat som inte går att lita på',
+    'Därför att lagstiftningen förbjuder kommersiell användning av tekniken'
   ],
   ratt: 1,
   forklaringar: [
@@ -496,10 +496,10 @@ window.SYSB23.fragor.push(
   svarighet: 3,
   fraga: 'Vilket problem ser Barney och Reeves med att förlita sig på proprietära datamängder som källa till uthållig konkurrensfördel?',
   alternativ: [
-    'Att sådana data alltid är av dålig kvalitet',
-    'Att konkurrenter kan ha funktionellt likvärdiga data, att större datamängder inte nödvändigtvis ger bättre resultat, och att AI kan härleda eller imitera strategin utan tillgång till grunddatan',
-    'Att data alltid måste delas enligt GDPR',
-    'Att datamängder inte kan analyseras av AI'
+    'Att sådana data alltid håller för låg kvalitet för att duga som beslutsunderlag',
+    'Att konkurrenter kan ha likvärdiga data, och att AI kan härleda strategin ändå',
+    'Att GDPR tvingar företag att dela sina egna datamängder med konkurrenterna',
+    'Att stora datamängder inte går att analysera med AI utan manuell förbehandling'
   ],
   ratt: 1,
   forklaringar: [
@@ -574,7 +574,7 @@ window.SYSB23.fragor.push(
   alternativ: [
     'Införa en policy för lika löner mellan könen',
     'Utvärdera styrelsens prestation och sammansättning',
-    'Ge anställda vidareutbildning',
+    'Ge de anställda vidareutbildning och kompetensutveckling',
     'Öka energieffektiviteten och minska koldioxidutsläpp'
   ],
   ratt: 3,
@@ -595,10 +595,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Hur definierades hållbar utveckling i Brundtlandrapporten (Our Common Future, 1987)?',
   alternativ: [
-    'Utveckling som maximerar den ekonomiska tillväxten på lång sikt',
-    'Utveckling som tillgodoser dagens behov utan att äventyra kommande generationers möjligheter att tillgodose sina behov',
-    'Utveckling som helt eliminerar all miljöpåverkan',
-    'Utveckling som styrs av marknadens efterfrågan på gröna produkter'
+    'Utveckling som maximerar den ekonomiska tillväxten sett över lång sikt',
+    'Utveckling som tillgodoser dagens behov utan att äventyra kommande generationers',
+    'Utveckling som helt eliminerar verksamhetens miljöpåverkan i alla led',
+    'Utveckling som styrs av marknadens efterfrågan på gröna produkter och tjänster'
   ],
   ratt: 1,
   forklaringar: [
@@ -618,10 +618,10 @@ window.SYSB23.fragor.push(
   svarighet: 3,
   fraga: 'Vad fann Porter och van der Linde (1995) om miljöregleringars effekt på företags lönsamhet?',
   alternativ: [
-    'Att regleringar konsekvent minskade lönsamheten',
-    'Att regleringar överväldigande bidrog positivt till vinsterna, eftersom analysen av utsläppen blottlade slöseri och ledde till mer effektiva processer',
-    'Att regleringar inte hade någon mätbar effekt',
-    'Att endast stora företag gynnades'
+    'Att miljöregleringar konsekvent minskade företagens lönsamhet över tid',
+    'Att regleringarna oftast höjde vinsten, eftersom utsläppsanalysen blottlade slöseri',
+    'Att miljöregleringar inte hade någon mätbar effekt på lönsamheten alls',
+    'Att endast stora företag med egna miljöavdelningar gynnades av reglerna'
   ],
   ratt: 1,
   forklaringar: [
@@ -641,10 +641,10 @@ window.SYSB23.fragor.push(
   svarighet: 2,
   fraga: 'Vad menas med "push"- respektive "pull"-mekanismer för hållbarhet enligt Rogers och Hudson?',
   alternativ: [
-    'Push = kundernas efterfrågan, pull = leverantörernas krav',
-    'Pull = ledare som ser hållbarhet som nästa steg i organisationsutveckling, push = marknadskrafter och regulatoriska påtryckningar',
-    'Push = interna kostnadsbesparingar, pull = externa investerare',
-    'Push = frivilliga initiativ, pull = lagstiftning'
+    'Push är kundernas efterfrågan medan pull är leverantörernas krav i kedjan',
+    'Pull är ledare som driver på inifrån, push är marknad och lagstiftning',
+    'Push är interna kostnadsbesparingar medan pull är kraven från externa investerare',
+    'Push är företagens frivilliga initiativ medan pull är lagstiftningens krav'
   ],
   ratt: 1,
   forklaringar: [
@@ -664,9 +664,9 @@ window.SYSB23.fragor.push(
   svarighet: 3,
   fraga: 'Vad går Karnanis kritik mot CSR ut på, och hur bemöter Rogers och Hudson den?',
   alternativ: [
-    'Karnani menar att CSR är för dyrt; författarna svarar att kostnaderna är låga',
-    'Karnani menar att CSR är irrelevant när vinst och allmänintresse sammanfaller och verkningslöst när de står i konflikt; författarna svarar att han felaktigt underordnar socialt och ekologiskt ansvar under finansiell redovisning',
-    'Karnani menar att CSR bör lagstiftas; författarna anser att frivillighet räcker',
+    'Karnani menar att CSR är för dyrt för företagen; författarna svarar att kostnaderna är låga',
+    'Karnani menar att CSR är irrelevant vid samsyn och verkningslöst vid konflikt',
+    'Karnani menar att CSR bör lagstiftas; författarna anser att frivilliga initiativ räcker',
     'Karnani menar att CSR bara passar stora företag; författarna framhåller småföretagens roll'
   ],
   ratt: 1,

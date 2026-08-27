@@ -41,7 +41,7 @@ window.SYSB23.schema = (function () {
     var html = '<div class="sida">';
     html += '<div class="bred">' + nedrakningskort() + kalenderkort() + '</div>';
     html += '<div class="huvud">' + faskort() + praktisktkort() + '</div>';
-    html += '<aside class="sido">' + tentakort() + '</aside>';
+    html += '<aside class="sido">' + tentakort() + extentakort() + '</aside>';
     html += '</div>';
 
     var vy = U.el('vy-schema');
@@ -526,6 +526,101 @@ window.SYSB23.schema = (function () {
   }
 
   /* ================================================================ */
+  /* Gamla tentor                                                      */
+  /*                                                                   */
+  /* Tentorna ligger bakom inloggning och går inte att länka till      */
+  /* generellt. Kortet pekar därför ut var de brukar finnas, och låter */
+  /* dig spara dina egna länkar när du väl letat upp dem en gång.      */
+  /* ================================================================ */
+
+  function extentakort() {
+    var egna = S.store.tentalankar();
+
+    var h = '<div class="kort">';
+    h += '<h2>Gamla tentor';
+    h += '<button class="minibtn" id="ny-tentalank">+ Spara länk</button>';
+    h += '</h2>';
+
+    h += '<p class="muted liten">Att räkna gamla tentor ligger närmast den riktiga ' +
+         'situationen av allt du kan göra. Här är vägarna dit — och plats för dina ' +
+         'egna länkar när du hittat dem.</p>';
+
+    h += '<div class="lanklista">';
+    h += lankrad('https://canvas.education.lu.se/', 'Canvas',
+                 'Kursrummet. Gamla tentor och facit brukar ligga under Filer eller Sidor.', null);
+    h += lankrad('https://www.lu.se/lubas/i-uoh-lu-SYSB23', 'Kursplanen för SYSB23',
+                 'Examinationsformer och lärandemål — vad de faktiskt får fråga om.', null);
+    h += lankrad('https://www.ehl.lu.se/utbildning/student', 'Studentsidorna på EHL',
+                 'Anmälan i Ladok, skrivsalar och regler för salstentamen.', null);
+
+    egna.forEach(function (l) { h += lankrad(l.url, l.titel, '', l.id); });
+    h += '</div>';
+
+    if (!egna.length) {
+      h += '<p class="muted mini" style="margin-bottom:0">Hittar du en tenta i Canvas: ' +
+           'kopiera adressen och spara den här, så slipper du leta igen.</p>';
+    }
+
+    return h + '</div>';
+  }
+
+  function lankrad(url, titel, beskrivning, egetId) {
+    var h = '<div class="lankrad">';
+    h += '<a href="' + U.esc(url) + '" target="_blank" rel="noopener noreferrer">';
+    h += '<span class="lank-titel">' + U.esc(titel) + ' \u2197</span>';
+    h += '<span class="lank-besk' + (beskrivning ? '' : ' lank-url') + '">' +
+         U.esc(beskrivning || url) + '</span>';
+    h += '</a>';
+    if (egetId) {
+      h += '<button class="minibtn" data-tabortlank="' + U.esc(egetId) +
+           '" aria-label="Ta bort länken">\u2715</button>';
+    }
+    return h + '</div>';
+  }
+
+  function oppnaLankform() {
+    U.overlagg.oppna(function (b) {
+      var h = '<div class="overlagg-ruta">';
+      h += '<div class="overlagg-topp">';
+      h += '<h2 id="overlagg-rubrik" class="utan-markor">Spara en länk</h2>';
+      h += '<button class="ikonknapp" id="lf-stang" aria-label="Stäng">\u2715</button></div>';
+      h += '<p class="muted liten">Länken sparas bara hos dig, i den här webbläsaren.</p>';
+      h += '<div class="faltrad"><label class="falt">' +
+           '<span class="falt-etikett">Vad är det?</span>' +
+           '<input type="text" id="lf-titel" maxlength="90" ' +
+           'placeholder="Tenta HT 2025 med facit"></label></div>';
+      h += '<div class="faltrad"><label class="falt">' +
+           '<span class="falt-etikett">Adress</span>' +
+           '<input type="url" id="lf-url" placeholder="https://…"></label></div>';
+      h += '<p class="pf-fel dold" id="lf-fel"></p>';
+      h += '<div class="overlagg-knappar">' +
+           '<button class="primar" id="lf-spara">Spara</button>' +
+           '<button class="sekundar" id="lf-avbryt">Avbryt</button></div>';
+      b.innerHTML = h + '</div>';
+
+      U.el('lf-stang').addEventListener('click', function () { U.overlagg.stang(); });
+      U.el('lf-avbryt').addEventListener('click', function () { U.overlagg.stang(); });
+      U.el('lf-spara').addEventListener('click', function () {
+        var titel = U.el('lf-titel').value.trim();
+        var url = U.el('lf-url').value.trim();
+        var fel = U.el('lf-fel');
+        if (!titel) {
+          fel.textContent = 'Skriv vad länken leder till.';
+          fel.classList.remove('dold');
+          return;
+        }
+        if (!S.store.laggTillLank(titel, url)) {
+          fel.textContent = 'Adressen måste börja med http:// eller https://.';
+          fel.classList.remove('dold');
+          return;
+        }
+        U.overlagg.stang();
+        rendera();
+      });
+    });
+  }
+
+  /* ================================================================ */
   /* Terminen i faser                                                  */
   /* ================================================================ */
 
@@ -623,6 +718,16 @@ window.SYSB23.schema = (function () {
 
     Array.prototype.forEach.call(vy.querySelectorAll('[data-dag]'), function (b) {
       b.addEventListener('click', function () { oppnaDag(b.dataset.dag); });
+    });
+
+    var nl = U.el('ny-tentalank');
+    if (nl) nl.addEventListener('click', oppnaLankform);
+
+    Array.prototype.forEach.call(vy.querySelectorAll('[data-tabortlank]'), function (b) {
+      b.addEventListener('click', function () {
+        S.store.taBortLank(b.dataset.tabortlank);
+        rendera();
+      });
     });
 
     var to = U.el('toggleomtentor');

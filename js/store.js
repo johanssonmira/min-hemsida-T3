@@ -22,6 +22,7 @@ window.SYSB23.store = (function () {
     anteckningar: {},         // kapitelId -> { text, andrad }
     egnaPass: [],             // [{ id, datum, tid, rubrik, typ, sal, delkurs, notis }]
     passAndringar: {},        // passId -> { datum, tid, rubrik, sal, notis, dold }
+    tentalankar: [],          // [{ id, titel, url }] egna länkar till gamla tentor
     datum: {}                 // egna anteckningar per etapp (kvar från v1)
   };
 
@@ -484,6 +485,32 @@ window.SYSB23.store = (function () {
 
     antalAndrade: function () {
       return Object.keys(data.passAndringar).length + data.egnaPass.length;
+    },
+
+    /* ---------------------- Egna länkar till gamla tentor ----------------------
+       Tentorna ligger bakom inloggning på Canvas och går inte att länka till
+       generellt. Därför får man spara sina egna länkar här, så att de finns
+       samlade när man väl letat upp dem en gång. */
+    tentalankar: function () { return data.tentalankar.slice(); },
+
+    laggTillLank: function (titel, url) {
+      /* Bara http och https. En javascript:-länk i egen data vore ofarlig här,
+         men blir farlig i samma sekund någon delar sin exportfil. */
+      var l = String(url).trim().toLowerCase();
+      if (l.indexOf('http://') !== 0 && l.indexOf('https://') !== 0) return null;
+      var post = {
+        id: 'lank-' + Date.now().toString(36),
+        titel: String(titel).slice(0, 90),
+        url: String(url).slice(0, 500)
+      };
+      data.tentalankar.push(post);
+      spara();
+      return post.id;
+    },
+
+    taBortLank: function (id) {
+      data.tentalankar = data.tentalankar.filter(function (x) { return x.id !== id; });
+      spara();
     },
 
     /* ---------------------- Underhåll ---------------------- */
