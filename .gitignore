@@ -15,3 +15,9 @@ desktop.ini
 
 # Node
 node_modules/
+
+# Poddpromptar bygger på kursmaterialet – publiceras inte.
+poddpromptar/
+
+# Dagboken är ett eget projekt och hör inte till pluggappen.
+dagbok/

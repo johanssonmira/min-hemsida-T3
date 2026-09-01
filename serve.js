@@ -17,6 +17,7 @@ const TYPER = {
   '.json': 'application/json; charset=utf-8',
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
+  '.wasm': 'application/wasm',
   '.sql': 'text/plain; charset=utf-8'
 };
 
@@ -24,11 +25,16 @@ http.createServer((req, res) => {
   let rel = decodeURIComponent(req.url.split('?')[0]);
   if (rel === '/') rel = '/index.html';
 
-  const filePath = path.join(ROOT, rel);
+  let filePath = path.join(ROOT, rel);
   if (!filePath.startsWith(ROOT)) {
     res.writeHead(403).end('Forbidden');
     return;
   }
+
+  // Mappar (t.ex. /dagbok/) serveras med sin index.html
+  try {
+    if (fs.statSync(filePath).isDirectory()) filePath = path.join(filePath, 'index.html');
+  } catch (e) { /* filen finns inte – hanteras av readFile nedan */ }
 
   fs.readFile(filePath, (err, data) => {
     if (err) {

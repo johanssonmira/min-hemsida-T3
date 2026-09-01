@@ -11,6 +11,7 @@
   var vyer = {
     hem:       function () { S.hem.rendera(); },
     las:       function () { S.las.rendera(); },
+    sql:       function () { S.sqlverkstad.rendera(); },
     ova:       function () { S.ova.renderaOva(); },
     prov:      function () { S.ova.renderaProv(); },
     essa:      function () { S.essa.rendera(); },
@@ -27,6 +28,7 @@
 
     aktuellVy = namn;
     uppdateraDelkursband();
+    uppdateraSqlflik();
 
     Object.keys(vyer).forEach(function (v) {
       U.el('vy-' + v).classList.toggle('dold', v !== namn);
@@ -39,8 +41,19 @@
     window.scrollTo(0, 0);
   }
 
+  /* SQL-verkstaden finns bara för Databaser. Fliken göms för övriga
+     delkurser i stället för att visa en tom vy. */
+  function uppdateraSqlflik() {
+    var b = document.querySelector('.navbtn-sql');
+    if (!b) return;
+    var visa = S.store.delkurs() === 'databaser';
+    b.classList.toggle('dold', !visa);
+    if (!visa && aktuellVy === 'sql') visaVy('hem');
+  }
+
   function rendera() {
     uppdateraDelkursband();
+    uppdateraSqlflik();
     vyer[aktuellVy]();
   }
 

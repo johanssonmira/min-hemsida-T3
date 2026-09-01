@@ -23,6 +23,7 @@ window.SYSB23.store = (function () {
     egnaPass: [],             // [{ id, datum, tid, rubrik, typ, sal, delkurs, notis }]
     passAndringar: {},        // passId -> { datum, tid, rubrik, sal, notis, dold }
     tentalankar: [],          // [{ id, titel, url }] egna länkar till gamla tentor
+    sqlLosta: {},             // ovningsId -> ISO-datum, lösta SQL-övningar
     datum: {}                 // egna anteckningar per etapp (kvar från v1)
   };
 
@@ -512,6 +513,20 @@ window.SYSB23.store = (function () {
       data.tentalankar = data.tentalankar.filter(function (x) { return x.id !== id; });
       spara();
     },
+
+    /* ---------------------- SQL-verkstaden ----------------------
+       En övning räknas som löst när svaret gav samma resultatmängd som
+       referenslösningen. Datumet sparas så att man ser när man klarade
+       den, inte bara att man gjorde det. */
+    sqlLost: function (id) { return !!data.sqlLosta[id]; },
+
+    markeraSqlLost: function (id) {
+      if (!data.sqlLosta[id]) { data.sqlLosta[id] = new Date().toISOString(); spara(); }
+    },
+
+    antalSqlLosta: function () { return Object.keys(data.sqlLosta).length; },
+
+    nollstallSql: function () { data.sqlLosta = {}; spara(); },
 
     /* ---------------------- Underhåll ---------------------- */
     exportera: function () { return JSON.stringify(data, null, 2); },

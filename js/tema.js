@@ -35,13 +35,6 @@ window.SYSB23.tema = (function () {
       topp: '#101319'
     },
     {
-      id: 'morkt',
-      namn: 'Mörkt',
-      beskrivning: 'Dämpad blågrå natt. Skonsammast för ögonen på kvällen.',
-      prickar: ['#151A23', '#6E9BF0', '#E8A33A'],
-      topp: '#0E1219'
-    },
-    {
       id: 'skog',
       namn: 'Skog',
       beskrivning: 'Salviagrönt med puderrosa. Dämpat och svalt.',
