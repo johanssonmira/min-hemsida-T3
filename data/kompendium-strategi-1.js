@@ -298,7 +298,7 @@ window.SYSB23.kompendium.strategi.kapitel.push(
   nr: 3,
   titel: 'Vad är egentligen företagets mål?',
   ingress: 'Fem konkurrerande modeller – från den neoklassiska svarta lådan till intressentmodellen – och vad företag faktiskt säger att de vill.',
-  lastid: 11,
+  lastid: 14,
   amnen: ['str-mal'],
   avsnitt: [
     {
@@ -374,7 +374,40 @@ window.SYSB23.kompendium.strategi.kapitel.push(
         '*möjligt* att vinstmaximera.'
     },
     {
-      rubrik: '4. Intressentmodellen',
+      rubrik: 'Mellanspel: varför finns företag över huvud taget?',
+      text:
+        'Föreläsningen ställer en fråga kursboken hoppar över: varför finns företag? Varför inte bara '  +
+        'individer som handlar med varandra på en marknad?\n\n' +
+        '**Transaktionskostnadsteorin** svarar att marknaden inte är gratis att använda. Att hitta en '  +
+        'motpart, förhandla, skriva kontrakt och kontrollera att det efterlevs kostar. När de '  +
+        '**transaktionskostnaderna** blir tillräckligt höga är det billigare för ett företag att utföra '  +
+        'aktiviteten själv. Det är den klassiska **make or buy**-frågan: tillverka i egen regi eller '  +
+        'köpa på marknaden?\n\n' +
+        'Men företag är inte gratis heller. När de växer uppstår **interna** transaktionskostnader — '  +
+        'samordning, administration, internpolitik. Gränsen mellan företag och marknad hamnar där de två '  +
+        'kostnaderna möts.\n\n' +
+        'Det förklarar också **managementrevolutionen**: företagsledares initiativ, inte marknadens '  +
+        'osynliga hand, ledde till allt större företag. När ägande skildes från styrning tog ledningen '  +
+        'kontroll över strategin, och växande företag ersatte marknaden med **vertikal integration** och '  +
+        'administrativa mekanismer.'
+    },
+    {
+      rubrik: 'Behavioural theories: företaget som koalition',
+      text:
+        'Ett steg till bort från den rationella modellen. **Behavioural theories of the firm** ser '  +
+        'företaget som en **koalition av intressenter med olika behov och motiv**.\n\n' +
+        'Tre konsekvenser:\n\n' +
+        '- Beslutsprocesserna blir komplexa, eftersom många intressen ska tillgodoses\n' +
+        '- Perfekt information om marknaden är orealistisk — allt beslutsfattande bygger på '  +
+        '**imperfekt information**\n' +
+        '- Företagets agerande blir ett resultat av **intern politik, konflikter och kompromisser** '  +
+        'mellan ägare, ledning och anställda\n\n' +
+        'Just därför behövs tydliga visioner, strategier och styrsystem: de är verktygen för att skapa '  +
+        'samsyn i en organisation som annars drar åt olika håll. Det är hela motiveringen för att '  +
+        'ekonomistyrning finns som ämne — och kopplingen tillbaka till kapitel 1 och 2.'
+    },
+    {
+      rubrik: '4. Intressentmodellen (Eric Rhenman)',
       text:
         'De föregående modellerna betraktar företag som **slutna system** utan kopplingar till omgivningen. Kritiken ' +
         'mot det ledde till det **öppna systemsynsättet**, som intressentmodellen bygger på.\n\n' +
@@ -459,6 +492,8 @@ window.SYSB23.kompendium.strategi.kapitel.push(
     'Intressentmodellen: öppet system, jämvikt, bidrag ⇄ belöningar, seriekoppling, plussummespel',
     'Kassaflödesmodeller: nuvärde av framtida nettokassaflöden, aktieägarperspektiv, kalkylränta',
     'Symboliska mål: legitimitetssökande eller avledande',
+    'Transaktionskostnadsteori: marknadens kostnader avgör make or buy; interna kostnader sätter gränsen',
+    'Behavioural theories: företaget som koalition, imperfekt information, intern politik',
     'Kursbokens ståndpunkt: långsiktig lönsamhet som huvudmål, ej enda mål'
   ],
   tentakoppling:

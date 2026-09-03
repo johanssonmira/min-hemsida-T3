@@ -260,6 +260,28 @@ window.SYSB23.amnen = [
       'strategisk ledning som evolution av dominanta designer.'
   },
   {
+    id: 'str-enterprise',
+    delkurs: 'strategi',
+    namn: 'Enterprise IT och vägen till strategisk alignment',
+    kapitel: 'Föreläsning 1',
+    kalla: '01_SYSB23_BWHT2026.pdf',
+    beskrivning:
+      'Den historiska linjen från tidiga räknemaskiner till dagens AI: ' +
+      'produktivitetsparadoxen, IT-kaoset på 80- och 90-talet, ' +
+      '90-talets managementmetoder, Clinger-Cohen Act och kumulativ komplexitet.'
+  },
+  {
+    id: 'str-data',
+    delkurs: 'strategi',
+    namn: 'Datastrategi och AI-anpassad verksamhet',
+    kapitel: 'Föreläsning 1',
+    kalla: '01_SYSB23_BWHT2026.pdf',
+    beskrivning:
+      'AI-fabriken, data defense mot data offense, single source of truth ' +
+      'mot multiple versions of the truth, samt hur reglering avgör hur ' +
+      'offensiv en datastrategi kan vara.'
+  },
+  {
     id: 'str-it',
     delkurs: 'strategi',
     namn: 'IT, AI och strategisk alignment',
