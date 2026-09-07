@@ -1,13 +1,20 @@
 /* =========================================================================
    sqlverkstad.js – en riktig databas i webbläsaren.
 
-   SQLite är kompilerat till WebAssembly (sql.js, MIT) och ligger i
-   vendor/. Motorn laddas först när man öppnar vyn, så resten av appen
-   startar lika snabbt som förut.
+   SQLite är kompilerat till WebAssembly (sql.js, MIT) och ligger i vendor/.
+   Motorn laddas först när man öppnar vyn, så resten av appen startar lika
+   snabbt som förut.
 
-   Databasen byggs om från grunden före VARJE körning. Det gör två saker:
-   ingenting man skriver kan förstöra något, och en övning som ändrar data
-   påverkar inte nästa.
+   Två saker skiljer verkstaden från en vanlig SQL-lekstuga:
+
+   1. Du skriver T-SQL, precis som i kursen. js/tsql.js översätter TOP,
+      ISNULL, LEN, IDENTITY och + som strängkonkatenering innan frågan når
+      motorn. Det du övar på är alltså det du ska skriva på tentan, inte
+      det SQLite råkar vilja ha.
+
+   2. Databasen byggs om från grunden före VARJE körning. Det gör två
+      saker: ingenting du skriver kan förstöra något, och en övning som
+      ändrar data påverkar inte nästa.
 
    Rättningen jämför resultatmängder, inte text. Alla vägar till rätt svar
    duger därför — en join och en underfråga som ger samma rader räknas båda
@@ -28,9 +35,11 @@ window.SYSB23.sqlverkstad = (function () {
   var aktivId = null;         // vald övning
   var visadLedtrad = false;
   var visatFacit = false;
-  var senasteSvar = null;     // { typ, text, kolumner, rader, antal }
-  var fritext = 'SELECT * FROM Employee;';
-  var oppnaNivaer = {};       // nivå -> true om introtexten är utfälld
+  var togHjalp = false;       // ledtråd eller facit framme på DENNA övning
+  var senasteSvar = null;
+  var frittDb = 'sjukhus';
+  var fritext = 'SELECT TOP 3 EmpName, EmpSalary\nFROM Employee\nORDER BY EmpSalary DESC;';
+  var oppnaNivaer = {};       // nivå -> true om lektionen är utfälld
 
   /* ---------------------------------------------------------------- */
   /* Motorn                                                            */
@@ -48,6 +57,7 @@ window.SYSB23.sqlverkstad = (function () {
         .then(function (modul) {
           SQL = modul;
           laddar = false;
+          S.tsql.larDigTextkolumner(S.sqlTextkolumner);
           narKlar();
         })
         .catch(function (e) {
@@ -64,23 +74,55 @@ window.SYSB23.sqlverkstad = (function () {
     document.head.appendChild(skript);
   }
 
+  function databas(id) {
+    return S.sqlDatabaser.filter(function (d) { return d.id === id; })[0] || S.sqlDatabaser[0];
+  }
+
   /* En ny databas varje gång. Billigt — hela datamängden är några kilobyte. */
-  function nyDatabas() {
+  function nyDatabas(id) {
+    var def = databas(id);
     var db = new SQL.Database();
-    S.sqlSchema.forEach(function (s) { db.run(s); });
-    S.sqlData.forEach(function (s) { db.run(s); });
+    db.run('PRAGMA foreign_keys = ON;');
+    db.run(S.tsql.oversatt(def.ddl));
+    db.run(S.tsql.oversatt(def.data));
     return db;
   }
 
   /* Kör SQL och returnera { kolumner, rader } för sista SELECT-satsen,
      eller { andrade: n } för satser som bara ändrar data. */
   function kor(db, sql) {
-    var res = db.exec(sql);
+    var res = db.exec(S.tsql.oversatt(sql));
     if (res.length) {
       var sista = res[res.length - 1];
       return { kolumner: sista.columns, rader: sista.values };
     }
+
+    /* Tomt från sql.js betyder ETT AV TVÅ: en fråga som gav noll rader,
+       eller en sats som inte var en fråga. Blandar man ihop dem rättas
+       varje övning vars rätta svar är ett tomt resultat som fel — och
+       det är flera av dem, inklusive en av tentauppgifterna. */
+    if (S.tsql.arFragesats(sql)) {
+      return { kolumner: kolumnnamn(db, S.tsql.oversatt(sql)), rader: [] };
+    }
+
     return { kolumner: null, rader: null, andrade: db.getRowsModified() };
+  }
+
+  /* Kolumnnamnen för en fråga som gav noll rader. Utan dem vore ett tomt
+     resultat med fel antal kolumner omöjligt att skilja från ett rätt —
+     "inga rader, tre kolumner" och "inga rader, en kolumn" är olika svar. */
+  function kolumnnamn(db, oversattSql) {
+    try {
+      var satser = S.tsql.delaSatser(S.tsql.tokenisera(oversattSql));
+      var sista = satser[satser.length - 1]
+        .map(function (t) { return t.v; }).join('');
+      var sats = db.prepare(sista);
+      var namn = sats.getColumnNames();
+      sats.free();
+      return namn || [];
+    } catch (e) {
+      return [];
+    }
   }
 
   /* ---------------------------------------------------------------- */
@@ -95,6 +137,10 @@ window.SYSB23.sqlverkstad = (function () {
     if (a.rader.length !== b.rader.length) return false;
     if (a.rader.length && a.rader[0].length !== b.rader[0].length) return false;
 
+    /* Två tomma resultat har inga rader att jämföra bredden på. Då är
+       antalet kolumner det enda som skiljer dem åt. */
+    if (!a.rader.length && (a.kolumner || []).length !== (b.kolumner || []).length) return false;
+
     var ra = a.rader.map(radText);
     var rb = b.rader.map(radText);
     if (!kravOrdning) { ra.sort(); rb.sort(); }
@@ -105,7 +151,7 @@ window.SYSB23.sqlverkstad = (function () {
   /* Tal och sifferström jämförs lika: 6 och "6" är samma svar. */
   function radText(rad) {
     return rad.map(function (v) {
-      if (v === null || v === undefined) return '\u0000NULL';   /* sentinel — kan aldrig krocka med texten "NULL" */
+      if (v === null || v === undefined) return '\u0000NULL';   /* sentinel — krockar aldrig med texten "NULL" */
       if (typeof v === 'number') return String(v);
       var n = Number(v);
       return (v !== '' && !isNaN(n)) ? String(n) : String(v);
@@ -113,21 +159,26 @@ window.SYSB23.sqlverkstad = (function () {
   }
 
   function rattaSvar(ovning, svar) {
-    var db = nyDatabas();
     var mitt, facit;
 
+    var db = nyDatabas(ovning.db);
     try {
-      kor(db, svar);
-      mitt = ovning.kontroll ? kor(db, ovning.kontroll) : senaste(db, svar);
+      var eget = kor(db, svar);
+      mitt = ovning.kontroll ? kor(db, ovning.kontroll) : eget;
     } catch (e) {
       db.close();
       return { typ: 'fel', text: e.message };
     }
     db.close();
 
-    var db2 = nyDatabas();
-    kor(db2, ovning.losning);
-    facit = ovning.kontroll ? kor(db2, ovning.kontroll) : kor(db2, ovning.losning);
+    var db2 = nyDatabas(ovning.db);
+    try {
+      var ref = kor(db2, ovning.losning);
+      facit = ovning.kontroll ? kor(db2, ovning.kontroll) : ref;
+    } catch (e) {
+      db2.close();
+      return { typ: 'fel', text: 'Facitlösningen gick inte att köra: ' + e.message };
+    }
     db2.close();
 
     var ratt = likaResultat(mitt, facit, !!ovning.ordning);
@@ -138,9 +189,6 @@ window.SYSB23.sqlverkstad = (function () {
       andrade: mitt.andrade
     };
   }
-
-  /* För övningar utan kontrollfråga: resultatet av satsen man körde. */
-  function senaste(db, sql) { return kor(db, sql); }
 
   /* ---------------------------------------------------------------- */
   /* Rendering                                                         */
@@ -178,23 +226,30 @@ window.SYSB23.sqlverkstad = (function () {
   function huvudkort() {
     var h = '<div class="kort">';
     h += '<h2>SQL-verkstad</h2>';
-    h += '<p class="muted liten">En riktig SQLite-databas som körs i din webbläsare. ' +
-         'Skriv frågan, kör den, och få svaret <strong>rättat mot resultatet</strong> — ' +
-         'inte mot hur du skrev den. Databasen byggs om före varje körning, ' +
-         'så ingenting du gör kan förstöra den.</p>';
+    h += '<p class="muted liten">En riktig SQLite-databas i din webbläsare, som ' +
+         'förstår <strong>SQL Server-dialekten</strong>. <code>TOP</code>, ' +
+         '<code>ISNULL</code>, <code>LEN</code> och <code>+</code> som ' +
+         'sammanfogning fungerar precis som i kursen. Svaret rättas mot ' +
+         '<strong>resultatet</strong>, inte mot hur du skrev frågan, och databasen ' +
+         'byggs om före varje körning så ingenting du gör kan förstöra den.</p>';
 
     var losta = S.store.antalSqlLosta();
+    var utanHjalp = S.store.antalSqlUtanHjalp();
     var totalt = S.sqlOvningar.length;
-    h += '<div style="display:flex;align-items:center;gap:.85rem;margin:.9rem 0">';
-    h += '<div class="progress' + (losta === totalt ? ' gron' : '') + '" style="flex:1">' +
+
+    h += '<div class="sqlframsteg">';
+    h += '<div class="progress' + (losta === totalt ? ' gron' : '') + '">' +
          '<div style="width:' + Math.round(losta / totalt * 100) + '%"></div></div>';
-    h += '<span class="liten muted" style="white-space:nowrap">' + losta + ' av ' + totalt +
-         ' lösta</span></div>';
+    h += '<span class="liten muted">' + losta + ' av ' + totalt + ' lösta' +
+         (losta ? ' · ' + utanHjalp + ' utan hjälp' : '') + '</span>';
+    h += '</div>';
 
     h += '<div class="chiprad">';
-    h += '<button class="chip' + (lage === 'ovningar' ? ' vald' : '') + '" data-sqllage="ovningar">Övningar</button>';
-    h += '<button class="chip' + (lage === 'fritt' ? ' vald' : '') + '" data-sqllage="fritt">Fritt läge</button>';
-    h += '<button class="chip" id="sql-tabeller">Visa tabeller</button>';
+    h += '<button class="chip' + (lage === 'ovningar' ? ' vald' : '') +
+         '" data-sqllage="ovningar">Övningar</button>';
+    h += '<button class="chip' + (lage === 'fritt' ? ' vald' : '') +
+         '" data-sqllage="fritt">Fritt läge</button>';
+    h += '<button class="chip" id="sql-tabeller">Visa databasen</button>';
     h += '</div>';
     h += '</div>';
 
@@ -209,17 +264,28 @@ window.SYSB23.sqlverkstad = (function () {
              'Välj en övning i listan till höger för att börja.</p></div>';
     }
 
-    var niva = S.sqlNivaer.filter(function (n) { return n.n === o.niva; })[0];
-    var last = S.store.sqlLost(o.id);
+    var niva = S.sqlNivaer.filter(function (n) { return n.niva === o.niva; })[0];
+    var post = S.store.sqlPost(o.id);
+    var def = databas(o.db);
 
     var h = '<div class="kort">';
     h += '<div class="sqlhuvud">';
     h += '<span class="markor aktuell">Nivå ' + o.niva + ' · ' + U.esc(niva.namn) + '</span>';
-    if (last) h += '<span class="nivaetikett ne-5">✓ Löst</span>';
+    h += '<span class="sqldbmarke" title="Övningen körs mot den här databasen">' +
+         U.esc(def.namn) + '</span>';
+    if (post) {
+      h += '<span class="nivaetikett ' + (post.hjalp ? 'ne-3' : 'ne-5') + '">' +
+           (post.hjalp ? '✓ Löst med hjälp' : '✓ Löst') + '</span>';
+    }
     h += '<span style="flex:1"></span>';
     h += '<button class="lankbtn" data-sqlsteg="-1">← Föregående</button>';
     h += '<button class="lankbtn" data-sqlsteg="1">Nästa →</button>';
     h += '</div>';
+
+    if (o.tenta) {
+      h += '<div class="notis tenta"><strong>Från en riktig tenta.</strong> ' +
+           U.esc(o.tenta) + '</div>';
+    }
 
     h += '<p class="sqlfraga">' + U.esc(o.fraga) + '</p>';
 
@@ -244,7 +310,7 @@ window.SYSB23.sqlverkstad = (function () {
     if (visatFacit) {
       h += '<h3>Referenslösning</h3>';
       h += '<pre class="kodruta">' + U.esc(o.losning) + '</pre>';
-      h += '<div class="notis"><strong>Varför.</strong> ' + U.esc(o.forklaring) + '</div>';
+      h += '<div class="notis">' + U.block(o.forklaring) + '</div>';
     }
 
     h += '</div>';
@@ -294,7 +360,9 @@ window.SYSB23.sqlverkstad = (function () {
              (andrade === 1 ? ' rad' : ' rader') + ' och returnerade ingen resultatmängd.</p>';
     }
     if (!rader.length) {
-      return '<p class="muted liten">Frågan kördes men gav noll rader.</p>';
+      return '<p class="muted liten">Frågan kördes men gav noll rader. ' +
+             'Ett tomt resultat är ibland det rätta svaret — kontrollera villkoret ' +
+             'i WHERE innan du antar att något gått fel.</p>';
     }
 
     var h = '<div class="tabellwrap"><table class="sqltabell"><thead><tr>';
@@ -317,8 +385,16 @@ window.SYSB23.sqlverkstad = (function () {
   function frittkort() {
     var h = '<div class="kort">';
     h += '<h3 style="margin-top:0">Fritt läge</h3>';
-    h += '<p class="muted liten">Skriv vad du vill mot databasen. Den byggs om före varje ' +
+    h += '<p class="muted liten">Skriv vad du vill. Databasen byggs om före varje ' +
          'körning, så du kan testa DROP TABLE utan att något går sönder på riktigt.</p>';
+
+    h += '<div class="chiprad">';
+    S.sqlDatabaser.forEach(function (d) {
+      h += '<button class="chip' + (frittDb === d.id ? ' vald' : '') +
+           '" data-frittdb="' + U.esc(d.id) + '">' + U.esc(d.namn) + '</button>';
+    });
+    h += '</div>';
+
     h += '<textarea id="sqlfalt" class="sqlfalt" spellcheck="false">' +
          U.esc(fritext) + '</textarea>';
     h += '<p class="muted mini sqltips">Ctrl/Cmd + Enter kör frågan.</p>';
@@ -345,30 +421,37 @@ window.SYSB23.sqlverkstad = (function () {
     var h = '<div class="kort">';
     h += '<h2>Övningar</h2>';
     h += '<p class="muted mini">Nio nivåer, ' + S.sqlOvningar.length +
-         ' uppgifter. De bygger på varandra — ta dem i ordning första gången.</p>';
+         ' uppgifter. De bygger på varandra — ta dem i ordning första gången. ' +
+         'Klicka på nivåns rubrik för att läsa lektionen.</p>';
 
     S.sqlNivaer.forEach(function (n) {
-      var iNiva = S.sqlOvningar.filter(function (o) { return o.niva === n.n; });
+      var iNiva = S.sqlOvningar.filter(function (o) { return o.niva === n.niva; });
       var lostaHar = iNiva.filter(function (o) { return S.store.sqlLost(o.id); }).length;
 
       h += '<div class="sqlniva">';
-      h += '<button class="sqlniva-rubrik" data-sqlniva="' + n.n + '">';
-      h += '<span class="sqlniva-nr">' + n.n + '</span>';
+      h += '<button class="sqlniva-rubrik" data-sqlniva="' + n.niva + '"' +
+           ' aria-expanded="' + (oppnaNivaer[n.niva] ? 'true' : 'false') + '">';
+      h += '<span class="sqlniva-nr">' + n.niva + '</span>';
       h += '<span class="sqlniva-text"><span class="sqlniva-namn">' + U.esc(n.namn) + '</span>';
       h += '<span class="sqlniva-antal">' + lostaHar + ' av ' + iNiva.length + '</span></span>';
+      h += '<span class="sqlniva-pil">' + (oppnaNivaer[n.niva] ? '▾' : '▸') + '</span>';
       h += '</button>';
 
-      if (oppnaNivaer[n.n]) {
-        h += '<p class="sqlniva-intro">' + U.esc(n.intro) + '</p>';
+      if (oppnaNivaer[n.niva]) {
+        h += '<div class="sqllektion lastext">' + U.block(n.lektion) + '</div>';
+      } else {
+        h += '<p class="sqlniva-intro">' + U.esc(n.kort) + '</p>';
       }
 
       h += '<div class="sqluppgifter">';
       iNiva.forEach(function (o, i) {
-        var last = S.store.sqlLost(o.id);
+        var post = S.store.sqlPost(o.id);
         h += '<button class="sqluppgift' + (o.id === aktivId ? ' vald' : '') +
-             (last ? ' last' : '') + '" data-sqlovning="' + U.esc(o.id) + '">';
-        h += '<span class="sqlu-nr">' + (last ? '✓' : n.n + '.' + (i + 1)) + '</span>';
-        h += '<span class="sqlu-text">' + U.esc(o.fraga) + '</span>';
+             (post ? (post.hjalp ? ' last-hjalp' : ' last') : '') +
+             '" data-sqlovning="' + U.esc(o.id) + '">';
+        h += '<span class="sqlu-nr">' + (post ? '✓' : n.niva + '.' + (i + 1)) + '</span>';
+        h += '<span class="sqlu-text">' + U.esc(o.fraga) +
+             (o.tenta ? ' <span class="sqlu-tenta">tenta</span>' : '') + '</span>';
         h += '</button>';
       });
       h += '</div></div>';
@@ -392,6 +475,7 @@ window.SYSB23.sqlverkstad = (function () {
     aktivId = id;
     visadLedtrad = false;
     visatFacit = false;
+    togHjalp = false;
     senasteSvar = null;
     rendera();
     var f = U.el('sqlfalt');
@@ -399,7 +483,8 @@ window.SYSB23.sqlverkstad = (function () {
   }
 
   function stega(riktning) {
-    var i = S.sqlOvningar.findIndex(function (o) { return o.id === aktivId; });
+    var i = -1;
+    S.sqlOvningar.forEach(function (o, k) { if (o.id === aktivId) i = k; });
     var ny = i + riktning;
     if (ny < 0 || ny >= S.sqlOvningar.length) return;
     valjOvning(S.sqlOvningar[ny].id);
@@ -413,7 +498,7 @@ window.SYSB23.sqlverkstad = (function () {
 
     if (lage === 'fritt') {
       fritext = falt.value;
-      var db = nyDatabas();
+      var db = nyDatabas(frittDb);
       try { senasteSvar = kor(db, text); senasteSvar.typ = 'ok'; }
       catch (e) { senasteSvar = { typ: 'fel', text: e.message }; }
       db.close();
@@ -427,7 +512,7 @@ window.SYSB23.sqlverkstad = (function () {
     senasteSvar = rattaSvar(o, text);
 
     if (senasteSvar.typ === 'ratt') {
-      S.store.markeraSqlLost(o.id);
+      S.store.markeraSqlLost(o.id, togHjalp);
       visatFacit = true;      /* rätt svar visar förklaringen direkt */
     }
     rendera();
@@ -437,6 +522,14 @@ window.SYSB23.sqlverkstad = (function () {
     Array.prototype.forEach.call(vy.querySelectorAll('[data-sqllage]'), function (b) {
       b.addEventListener('click', function () {
         lage = b.dataset.sqllage;
+        senasteSvar = null;
+        rendera();
+      });
+    });
+
+    Array.prototype.forEach.call(vy.querySelectorAll('[data-frittdb]'), function (b) {
+      b.addEventListener('click', function () {
+        frittDb = b.dataset.frittdb;
         senasteSvar = null;
         rendera();
       });
@@ -467,8 +560,8 @@ window.SYSB23.sqlverkstad = (function () {
       senasteSvar = null;
       rendera();
     });
-    knapp('sql-ledtrad', function () { visadLedtrad = true; rendera(); });
-    knapp('sql-facit', function () { visatFacit = true; rendera(); });
+    knapp('sql-ledtrad', function () { visadLedtrad = true; togHjalp = true; rendera(); });
+    knapp('sql-facit', function () { visatFacit = true; togHjalp = true; rendera(); });
     knapp('sql-tabeller', visaTabeller);
 
     var falt = U.el('sqlfalt');
@@ -490,28 +583,57 @@ window.SYSB23.sqlverkstad = (function () {
   }
 
   /* ---------------------------------------------------------------- */
-  /* Tabellöversikten                                                  */
+  /* Databasrutan                                                      */
   /* ---------------------------------------------------------------- */
 
+  /* Vilken databas rutan ska visa: den aktiva övningens, annars den man
+     valt i fritt läge. */
+  function visadDatabas() {
+    if (lage === 'fritt') return frittDb;
+    var o = aktivOvning();
+    return o ? o.db : 'sjukhus';
+  }
+
   function visaTabeller() {
-    var db = nyDatabas();
-    var innehall = S.sqlTabeller.map(function (t) {
-      var r = db.exec('SELECT * FROM ' + t.namn + ';');
-      return { namn: t.namn, text: t.text, res: r.length ? r[0] : null };
-    });
-    db.close();
+    var valdId = visadDatabas();
 
     U.overlagg.oppna(function (b) {
+      var def = databas(valdId);
+      var db = nyDatabas(valdId);
+      var innehall = def.tabeller.map(function (t) {
+        var r = db.exec('SELECT * FROM ' + t.namn + ';');
+        return { namn: t.namn, text: t.text, res: r.length ? r[0] : null };
+      });
+      db.close();
+
       var h = '<div class="overlagg-ruta bred-ruta">';
       h += '<div class="overlagg-topp">';
-      h += '<h2 id="overlagg-rubrik" class="utan-markor">Databasen</h2>';
+      h += '<h2 id="overlagg-rubrik" class="utan-markor">' + U.esc(def.namn) + '</h2>';
       h += '<button class="ikonknapp" id="tb-stang" aria-label="Stäng">✕</button></div>';
-      h += '<p class="muted liten">Tio tabeller. Datan är konstruerad så att fällorna ' +
-           'faktiskt går att träffa: en patient utan adress, en bil utan ägare, ' +
-           'en sjukdom ingen lider av och en enhet utan patienter.</p>';
 
+      h += '<div class="chiprad">';
+      S.sqlDatabaser.forEach(function (d) {
+        h += '<button class="chip' + (valdId === d.id ? ' vald' : '') +
+             '" data-visadb="' + U.esc(d.id) + '">' + U.esc(d.namn) + '</button>';
+      });
+      h += '</div>';
+
+      h += '<div class="lastext" style="font-size:1rem">' + U.block(def.beskrivning) + '</div>';
+
+      /* Schemakartan ritas ur samma metadata som tabellerna nedan */
+      h += '<div class="lastext">' +
+           S.diagram.rita(valdId === 'sjukhus' ? 'db-sjukhus' : 'db-tenta') +
+           '</div>';
+
+      h += '<h3>Kursens DDL</h3>';
+      h += '<p class="muted liten">Det här är T-SQL, ordagrant som i kursmaterialet. ' +
+           'Verkstaden översätter den till SQLite åt dig.</p>';
+      h += '<pre class="kodruta">' + U.esc(def.ddl) + '</pre>';
+
+      h += '<h3>Innehållet</h3>';
       innehall.forEach(function (t) {
-        h += '<h3>' + U.esc(t.namn) + ' <span class="muted liten">' + U.esc(t.text) + '</span></h3>';
+        h += '<h4 class="tabellrubrik">' + U.esc(t.namn) +
+             ' <span class="muted liten">' + U.esc(t.text) + '</span></h4>';
         if (t.res) {
           h += '<div class="tabellwrap"><table class="sqltabell"><thead><tr>';
           t.res.columns.forEach(function (k) { h += '<th>' + U.esc(k) + '</th>'; });
@@ -529,8 +651,16 @@ window.SYSB23.sqlverkstad = (function () {
 
       h += '<div class="overlagg-knappar"><button class="primar" id="tb-klar">Stäng</button></div>';
       b.innerHTML = h + '</div>';
+
       U.el('tb-stang').addEventListener('click', function () { U.overlagg.stang(); });
       U.el('tb-klar').addEventListener('click', function () { U.overlagg.stang(); });
+
+      Array.prototype.forEach.call(b.querySelectorAll('[data-visadb]'), function (knapp) {
+        knapp.addEventListener('click', function () {
+          valdId = knapp.dataset.visadb;
+          U.overlagg.rita();
+        });
+      });
     });
   }
 

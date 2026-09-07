@@ -35,6 +35,16 @@ window.SYSB23.ui = (function () {
 
       if (rad.trim() === '') { i++; continue; }
 
+      // Diagram: en ensam rad med [[diagram:namn]] byts mot en SVG-figur
+      var dia = /^\[\[diagram:([a-z0-9-]+)\]\]$/.exec(rad.trim());
+      if (dia) {
+        html += window.SYSB23.diagram
+          ? window.SYSB23.diagram.rita(dia[1])
+          : '';
+        i++;
+        continue;
+      }
+
       // Kodblock med ```
       if (rad.trim().indexOf('```') === 0) {
         i++;

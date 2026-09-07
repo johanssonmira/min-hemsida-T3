@@ -118,7 +118,8 @@ window.SYSB23.kompendium.databaser.kapitel.push(
         '(utnyttjar din dators prestanda), eller allt installerat på den virtuella maskinen (inget att ' +
         'installera lokalt, men begränsad prestanda).\n\n' +
         'Delkursens flöde: kursintro → labbuppgifter → SQL-uppgiften → plugga till tentan → presentera ' +
-        'SQL-uppgiften → **skriftlig tenta** → projektuppgiften → presentera den.'
+        'SQL-uppgiften → **skriftlig tenta** → projektuppgiften → presentera den.' +
+        '\n\nDatabasen du övar mot i SQL-verkstaden är kursens egen hospital-ddl.sql:\n\n[[diagram:db-sjukhus]]'
     }
   ],
   nyckelbegrepp: [
@@ -177,6 +178,7 @@ window.SYSB23.kompendium.databaser.kapitel.push(
         'Grundformen består av klausuler:\n\n' +
         '```\nSELECT\n    StudentNo,\n    StudentName\nFROM\n    Student;\n```\n\n' +
         '`SELECT` innehåller kolumnnamn och uttryck. `FROM` innehåller tabellnamn.\n\n' +
+        'Exemplen i det här kapitlet använder tentans tabeller:\n\n[[diagram:db-tenta]]\n\n' +
         '**`AS` byter namn på kolumnen enbart i resultatmängden.** Det är ett temporärt alias — det ' +
         'underliggande kolumnnamnet i databasen är oförändrat. AS tillhör DML, inte DDL.\n\n' +
         'Två användningar: läsbarare rubriker (`StudentPhoneNo AS Phone`), och att namnge resultatet av ' +
@@ -470,7 +472,8 @@ window.SYSB23.kompendium.databaser.kapitel.push(
         '```\nSELECT Employee.EmpName\nFROM Employee\nLEFT OUTER JOIN Car\n' +
         '    ON Employee.EmployeeID = Car.EmployeeID\nWHERE Car.CarID IS NULL;\n```\n\n' +
         'Testa alltid mot en kolumn som aldrig kan vara NULL i den bevarade tabellen — helst ' +
-        'primärnyckeln.'
+        'primärnyckeln.' +
+        '\n\n[[diagram:joins]]'
     },
     {
       rubrik: 'Tetajoin',
@@ -642,7 +645,8 @@ window.SYSB23.kompendium.databaser.kapitel.push(
         'to numeric."*\n\n' +
         'Kolumnrubrikerna hämtas från den **första** SELECT-satsen; alias i den andra är kosmetiska.\n\n' +
         '> Farlig fälla: byter du plats på två kolumner av samma typ får du **inget felmeddelande** — ' +
-        'bara fel data. Kontrollera alltid att kolumnerna matchar semantiskt, inte bara typmässigt.'
+        'bara fel data. Kontrollera alltid att kolumnerna matchar semantiskt, inte bara typmässigt.' +
+        '\n\n[[diagram:mangdoperationer]]'
     },
     {
       rubrik: 'När ska man undvika subqueries?',

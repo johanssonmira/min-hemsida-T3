@@ -41,7 +41,8 @@ window.SYSB23.kompendium.databaser.kapitel.push(
         'behöver lagra data om adresser för deras egen skull. Behöver vi det — kanske vill vi lagra ' +
         'gatunamn och gatunummer separat, oberoende av vem som bor där — måste Address bli en egen ' +
         'entitet med ett samband till Student.\n\n' +
-        'Testet: **behöver verksamheten lagra data om saken för dess egen skull?**'
+        'Testet: **behöver verksamheten lagra data om saken för dess egen skull?**' +
+        '\n\n[[diagram:chen-grund]]'
     },
     {
       rubrik: 'Attributtyper',
@@ -59,7 +60,8 @@ window.SYSB23.kompendium.databaser.kapitel.push(
         'understrukna\n' +
         '- Både StudentNo och namnkombinationen unika ⇒ alla tre understrukna\n' +
         '- Även adressen unik ⇒ även Address understruken\n\n' +
-        'Varje understruken uppsättning motsvarar en **kandidatnyckel** i nästa steg.'
+        'Varje understruken uppsättning motsvarar en **kandidatnyckel** i nästa steg.' +
+        '\n\n[[diagram:attribut]]'
     },
     {
       rubrik: 'Samband: multiplicitet och deltagande',
@@ -82,7 +84,8 @@ window.SYSB23.kompendium.databaser.kapitel.push(
         'HasStudied (avslutade).\n\n' +
         '**Unära (rekursiva) samband** går från en entitet till sig själv, till exempel att en student ' +
         'mentorerar andra studenter. Rollnamn (mentors, is_mentored) klargör riktningen. Knep: rita ut ' +
-        'det som binärt med två kopior av entiteten, så blir det uppenbart.'
+        'det som binärt med två kopior av entiteten, så blir det uppenbart.' +
+        '\n\n[[diagram:kardinalitet]]\n\n[[diagram:deltagande]]'
     },
     {
       rubrik: 'Svaga entiteter',
@@ -102,7 +105,8 @@ window.SYSB23.kompendium.databaser.kapitel.push(
         'identifieringen kräver ägarens nyckel, är entiteten svag.\n\n' +
         'Kedjan kan vara längre. Med University → Department → Course kan två institutioner vid samma ' +
         'universitet ha kurser med samma kod, eftersom kursen är unik inom institutionen och ' +
-        'institutionen unik inom universitetet.'
+        'institutionen unik inom universitetet.' +
+        '\n\n[[diagram:svag-entitet]]'
     },
     {
       rubrik: 'Chen kontra Crow\'s foot',
@@ -124,7 +128,8 @@ window.SYSB23.kompendium.databaser.kapitel.push(
         'saknar element som identifierande attribut, svaga entiteter och relationsattribut ' +
         '(associationsklass är inte samma sak i ER-paradigmet).\n\n' +
         'UML-multipliciteter: `0..1` noll eller ett, `1` eller `1..1` exakt ett, `0..*` eller `*` noll ' +
-        'eller många, `1..5` minst ett och högst fem.'
+        'eller många, `1..5` minst ett och högst fem.' +
+        '\n\n[[diagram:chen-crow]]\n\n[[diagram:crow-andpunkter]]'
     },
     {
       rubrik: 'Vad notationen inte klarar',
@@ -279,7 +284,8 @@ window.SYSB23.kompendium.databaser.kapitel.push(
         '`Delivery(supplierName, productName, customerName)`\n\n' +
         'Att istället använda tre binära samband fungerar **inte**: med "Amazon levererar stol", "IKEA ' +
         'levererar stol" och "Erdogan beställer stol" går det inte att svara på vilken leverantör som ' +
-        'levererade stolen till Erdogan. Informationen om trepartskombinationen går förlorad.'
+        'levererade stolen till Erdogan. Informationen om trepartskombinationen går förlorad.' +
+        '\n\n[[diagram:reifiering]]'
     },
     {
       rubrik: 'Multivärt attribut eller egen entitet?',

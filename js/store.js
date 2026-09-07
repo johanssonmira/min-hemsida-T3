@@ -516,15 +516,46 @@ window.SYSB23.store = (function () {
 
     /* ---------------------- SQL-verkstaden ----------------------
        En övning räknas som löst när svaret gav samma resultatmängd som
-       referenslösningen. Datumet sparas så att man ser när man klarade
-       den, inte bara att man gjorde det. */
+       referenslösningen. Vi sparar också OM ledtråden eller facit var
+       framme, för det är skillnad på att kunna något och att ha blivit
+       påmind om det. Repetitionen använder den skillnaden.
+
+       Äldre sparfiler har ett ISO-datum direkt som värde i stället för ett
+       objekt. Läsfunktionerna hanterar båda formerna, så ingen förlorar
+       sina lösta övningar när appen uppdateras. */
+    sqlPost: function (id) {
+      var p = data.sqlLosta[id];
+      if (!p) return null;
+      if (typeof p === 'string') return { datum: p, hjalp: false };
+      return p;
+    },
+
     sqlLost: function (id) { return !!data.sqlLosta[id]; },
 
-    markeraSqlLost: function (id) {
-      if (!data.sqlLosta[id]) { data.sqlLosta[id] = new Date().toISOString(); spara(); }
+    sqlLostMedHjalp: function (id) {
+      var p = this.sqlPost(id);
+      return !!p && !!p.hjalp;
+    },
+
+    markeraSqlLost: function (id, hjalp) {
+      var fanns = this.sqlPost(id);
+      /* Har man en gång klarat den utan hjälp får ett senare försök med
+         ledtråd inte ta ifrån en det. */
+      if (fanns && !fanns.hjalp) return;
+      data.sqlLosta[id] = { datum: new Date().toISOString(), hjalp: !!hjalp };
+      spara();
     },
 
     antalSqlLosta: function () { return Object.keys(data.sqlLosta).length; },
+
+    antalSqlUtanHjalp: function () {
+      var self = this;
+      return Object.keys(data.sqlLosta).filter(function (id) {
+        return !self.sqlLostMedHjalp(id);
+      }).length;
+    },
+
+    glomSqlOvning: function (id) { delete data.sqlLosta[id]; spara(); },
 
     nollstallSql: function () { data.sqlLosta = {}; spara(); },
 

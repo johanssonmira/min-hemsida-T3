@@ -627,8 +627,12 @@ button:disabled:active { transform: none; }
 .dagar .text { opacity: .82; font-size: .95rem; }
 .nedrakning .fakta { font-size: .9rem; opacity: .94; }
 .nedrakning .fakta div { margin-bottom: .12rem; }
+/* Ytan mörkar banderollen i stället för att ljusa upp den. En vit slöja
+   drog ner kontrasten mot den vita texten till 3,97:1 i konditori och
+   4,01:1 i skog — under AA. En svart slöja går åt andra hållet och
+   fungerar därför i alla teman, inte bara i de mörkaste. */
 .nedrakning .knapprad button {
-  background: rgba(255,255,255,.15); color: #fff; border-color: rgba(255,255,255,.4);
+  background: rgba(0,0,0,.18); color: #fff; border-color: rgba(255,255,255,.55);
 }
 .nedrakning .knapprad button:hover { background: #fff; color: var(--blaa-600); }
 /* Liggande variant, används där kortet spänner över hela bredden.
@@ -835,6 +839,44 @@ button:disabled:active { transform: none; }
 .lastext code {
   background: var(--creme-200); padding: .12rem .4rem; border-radius: 4px;
   font-family: var(--mono); font-size: .85em; color: var(--blaa-700);
+}
+
+/* --- Diagram ------------------------------------------------------------
+   Figurerna är bredare än textspalten med flit: ett ER-diagram som kläms
+   in på 68ch blir oläsligt. De bryter därför ut ur .lastext > * max-width
+   och får hela kortets bredd. Smalnar skärmen av under figurens egen bredd
+   får den rulla i sidled i sin egen ruta i stället för att dra med sig
+   hela sidan. */
+.lastext figure.figur {
+  max-width: none;
+  margin: 1.9rem 0;
+  padding: 1.1rem .6rem .3rem;
+  background: var(--creme-50);
+  border: 1.5px solid var(--creme-300);
+  border-radius: var(--r-m);
+  overflow-x: auto;
+}
+.lastext figure.figur svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  font-family: var(--sans);
+  min-width: 460px;   /* under detta blir texten i figuren för liten att läsa */
+}
+.lastext figure.figur figcaption {
+  max-width: 62ch;
+  margin: .95rem auto .55rem;
+  padding: 0 .5rem;
+  font-family: var(--sans);
+  font-size: .88rem;
+  line-height: 1.6;
+  color: var(--ink-mid);
+  text-align: left;
+}
+.lastext figure.figur figcaption strong { color: var(--blaa-700); }
+.lastext figure.figur figcaption code {
+  font-size: .82em;
 }
 
 .faktaruta {
@@ -1690,7 +1732,19 @@ body.fokus #vy-ova, body.fokus #vy-prov { max-width: 760px; }
   background: var(--blaa-50); border-left-color: var(--blaa-500);
   color: var(--ink); font-weight: 600;
 }
+/* Löst själv är grönt. Löst med ledtråd eller facit framme är ockra —
+   samma färg som "delvis" betyder överallt annars i appen. Skillnaden
+   syns direkt i listan, så man vet vad som behöver repeteras. */
 .sqluppgift.last .sqlu-nr { background: var(--gron-500); color: #fff; }
+.sqluppgift.last-hjalp .sqlu-nr { background: var(--ockra-700); color: #fff; }
+
+.sqlu-tenta {
+  display: inline-block; vertical-align: baseline;
+  background: var(--ockra-100); color: var(--ockra-600);
+  font-size: .62rem; font-weight: 800; letter-spacing: .04em;
+  text-transform: uppercase; padding: .05rem .3rem; border-radius: 3px;
+  margin-left: .25rem;
+}
 .sqlu-nr {
   flex: 0 0 auto; min-width: 1.9rem; text-align: center;
   font-size: .68rem; font-weight: 800; padding: .1rem .25rem;
@@ -1700,6 +1754,51 @@ body.fokus #vy-ova, body.fokus #vy-prov { max-width: 760px; }
   flex: 1; min-width: 0;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.sqlniva-pil {
+  flex: 0 0 auto; color: var(--ink-soft); font-size: .8rem;
+}
+
+/* Lektionen som fälls ut under nivåns rubrik. Smalare radlängd än
+   kompendiet eftersom den ligger i sidospalten. */
+.sqllektion {
+  margin: .1rem 0 .7rem 2.2rem;
+  padding: .85rem 1rem;
+  background: var(--creme-100);
+  border-radius: var(--r-s);
+  border-left: 3px solid var(--blaa-500);
+  font-size: .88rem;
+  line-height: 1.62;
+}
+.sqllektion > * { max-width: none; }
+.sqllektion h3 { font-size: .95rem; margin-top: 1.1rem; }
+.sqllektion .kodruta { font-size: .78rem; }
+.sqllektion blockquote { font-size: .85rem; margin: .9rem 0; }
+
+/* Framstegsraden överst i verkstaden */
+.sqlframsteg {
+  display: flex; align-items: center; gap: .85rem; margin: .9rem 0;
+}
+.sqlframsteg .progress { flex: 1; }
+.sqlframsteg span { white-space: nowrap; }
+
+/* Vilken av de två databaserna övningen gäller */
+.sqldbmarke {
+  background: var(--creme-200); color: var(--ink-mid);
+  font-size: .7rem; font-weight: 700; padding: .15rem .45rem;
+  border-radius: 5px; white-space: nowrap;
+}
+
+/* Uppgifter tagna ordagrant ur en tenta */
+.notis.tenta {
+  background: var(--rosa-100); border-color: var(--rosa-200);
+  border-left-color: var(--rosa-400);
+}
+
+.tabellrubrik {
+  margin: 1.4rem 0 .4rem; font-size: .95rem; font-weight: 700;
+  color: var(--blaa-700);
 }
 
 /* Tabellöversikten behöver mer bredd än en vanlig dialog */
