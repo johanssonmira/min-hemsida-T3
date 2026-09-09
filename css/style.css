@@ -686,7 +686,9 @@ button:disabled:active { transform: none; }
   font-size: 1rem; font-weight: 700; color: #fff;
 }
 .plan-las  { background: var(--ockra-700); }
-.plan-rep  { background: var(--rod-500); }
+/* 600 och inte 500: ikonen bär vit text, och femhundran hamnar under AA
+   i neon-temat. Samma skäl som att läs-ikonen använder ockra-700. */
+.plan-rep  { background: var(--rod-600); }
 .plan-ova  { background: var(--blaa-500); }
 .plan-prov { background: var(--gron-500); }
 .plan-klar { background: var(--creme-400); }
@@ -1754,6 +1756,221 @@ body.fokus #vy-ova, body.fokus #vy-prov { max-width: 760px; }
   flex: 1; min-width: 0;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* ==================== Modellera ==================== */
+
+.pastaenden { list-style: none; padding: 0; margin: 1rem 0; counter-reset: p; }
+.pastaende {
+  counter-increment: p;
+  border: 1.5px solid var(--creme-300); border-radius: var(--r-s);
+  margin-bottom: .4rem; padding: .6rem .8rem;
+  background: var(--falt-yta);
+  font-size: .93rem; line-height: 1.5;
+}
+.pastaende label { display: flex; gap: .6rem; align-items: flex-start; cursor: pointer; }
+.pastaende label::before {
+  content: counter(p) '.';
+  flex: 0 0 auto; min-width: 1.4rem;
+  font-weight: 800; color: var(--ink-soft); font-size: .85rem;
+}
+.pastaende input { margin-top: .2rem; accent-color: var(--blaa-500); }
+.pastaende.markerad { border-color: var(--blaa-500); background: var(--blaa-50); }
+
+/* Efter rättning: grönt = rätt markerat, rött = fel markerat,
+   ockra = sant men missat. Tre utfall, tre färger — samma betydelser
+   som överallt annars i appen. */
+.pastaende.ratt   { border-color: var(--gron-500); background: var(--gron-50); }
+.pastaende.fel    { border-color: var(--rod-500);  background: var(--rod-50); }
+.pastaende.missad { border-color: var(--ockra-500); background: var(--ockra-50); }
+.pastaende-skal {
+  margin: .45rem 0 0 2rem;
+  font-size: .85rem; line-height: 1.55; color: var(--ink-mid);
+}
+
+.relationsruta {
+  background: var(--creme-100); border-radius: var(--r-m);
+  border: 1.5px solid var(--creme-300);
+  padding: 1rem 1.2rem; margin: 1rem 0;
+}
+.relationsnamn {
+  font-family: var(--mono); font-size: 1.15rem; font-weight: 700;
+  color: var(--blaa-700); margin-bottom: .6rem;
+}
+.fdlista { list-style: none; padding: 0; margin: 0; display: grid; gap: .25rem; }
+.fdlista li { font-family: var(--mono); font-size: .98rem; }
+.fdlista .pil { color: var(--ockra-600); font-weight: 700; padding: 0 .2rem; }
+
+.nivaval { display: grid; gap: .4rem; margin-bottom: 1.2rem; }
+
+.schemarader { display: grid; gap: .4rem; margin-bottom: 1rem; }
+.schemarad {
+  display: flex; gap: .7rem; align-items: flex-start;
+  padding: .6rem .8rem; border-radius: var(--r-s);
+  border: 1.5px solid var(--creme-300); background: var(--falt-yta);
+  font-size: .9rem; line-height: 1.5;
+}
+.schemarad.ratt { border-color: var(--gron-500); background: var(--gron-50); }
+.schemarad.fel  { border-color: var(--rod-500);  background: var(--rod-50); }
+.schemaikon { flex: 0 0 auto; font-weight: 800; }
+.schemarad.ratt .schemaikon { color: var(--gron-600); }
+.schemarad.fel .schemaikon  { color: var(--rod-600); }
+.schemarad code { font-size: .88em; background: none; padding: 0; }
+
+.kodruta.exempel { font-size: .82rem; opacity: .8; margin: .4rem 0 .7rem; }
+
+.uppgiftsgrupp {
+  font-size: .78rem; text-transform: uppercase; letter-spacing: .05em;
+  color: var(--ink-soft); margin: 1rem 0 .3rem; border: none; padding: 0;
+}
+
+/* ==================== Provet som tentaformulär ====================
+   Ett smalt ark i mitten i stället för appens vanliga två spalter.
+   Formen är avsiktlig: ett prov ska kännas som ett papper man arbetar
+   sig igenom uppifrån och ned, inte som en instrumentpanel. */
+.provark {
+  max-width: 54rem;
+  margin: 0 auto;
+  padding-bottom: 5rem;   /* plats för klisterremsan */
+}
+
+.provhuvud { border-left: 5px solid var(--aktiv, var(--blaa-500)); }
+
+.provdel {
+  font-family: var(--serif);
+  font-size: 1.12rem; font-weight: 700; color: var(--blaa-700);
+  margin: 2.2rem 0 .3rem;
+  padding-bottom: .4rem;
+  border-bottom: 2px solid var(--creme-300);
+}
+.provdeltext { margin: 0 0 1rem; }
+
+.provfraga { display: flex; gap: 1rem; align-items: flex-start; }
+.provnr {
+  flex: 0 0 auto;
+  width: 2rem; height: 2rem; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--creme-200); color: var(--ink-mid);
+  font-weight: 800; font-size: .88rem;
+}
+.provinnehall { flex: 1; min-width: 0; }
+.provtext { font-size: 1rem; line-height: 1.6; margin: .15rem 0 .9rem; font-weight: 600; }
+
+.provalternativ { display: grid; gap: .4rem; }
+
+.provalt {
+  display: flex; align-items: flex-start; gap: .65rem;
+  padding: .6rem .8rem;
+  border: 1.5px solid var(--creme-300);
+  border-radius: var(--r-s);
+  background: var(--falt-yta);
+  cursor: pointer;
+  font-size: .93rem; line-height: 1.5;
+}
+.provalt:hover { border-color: var(--blaa-500); }
+.provalt input { margin-top: .25rem; flex: 0 0 auto; accent-color: var(--blaa-500); }
+.provalt.vald {
+  border-color: var(--blaa-500);
+  background: var(--blaa-50);
+  box-shadow: inset 0 0 0 1px var(--blaa-500);
+}
+.provbokstav {
+  flex: 0 0 auto; min-width: 1.3rem;
+  font-weight: 800; color: var(--ink-soft); font-size: .85rem;
+}
+.provalt.vald .provbokstav { color: var(--blaa-700); }
+
+/* Att avstå är ett eget val, inte frånvaro av val. Den streckade kanten
+   säger att raden hör till frågan men inte är ett svarsalternativ. */
+.provblank { border-style: dashed; }
+.provblank.vald { background: var(--creme-200); box-shadow: inset 0 0 0 1px var(--ink-soft); }
+
+.provessa {
+  width: 100%; min-height: 11rem; resize: vertical;
+  padding: .8rem .9rem;
+  border: 1.5px solid var(--creme-300); border-radius: var(--r-s);
+  background: var(--falt-yta); color: var(--ink);
+  font-family: var(--serif); font-size: 1rem; line-height: 1.65;
+}
+.provessa:focus { outline: 2px solid var(--blaa-500); outline-offset: 1px; }
+
+/* Klisterremsan längst ned: hur många frågor som är besvarade, och
+   inlämningsknappen. Man ska aldrig behöva scrolla för att se var man står. */
+.provremsa {
+  position: sticky; bottom: 0; z-index: 30;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  max-width: 54rem; margin: 0 auto;
+  padding: .7rem 1rem;
+  background: var(--creme-50);
+  border: 1.5px solid var(--creme-300);
+  border-radius: var(--r-m) var(--r-m) 0 0;
+  box-shadow: 0 -4px 16px rgba(0,0,0,.09);
+  font-size: .9rem;
+}
+
+/* --- Rättningen --- */
+.provresultat {
+  display: flex; align-items: center; gap: 1.2rem;
+  border-left: 6px solid var(--gron-500);
+}
+.provresultat.underkant { border-left-color: var(--rod-500); }
+.provbetyg {
+  flex: 0 0 auto;
+  width: 3.6rem; height: 3.6rem; border-radius: var(--r-m);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 1.9rem; font-weight: 700;
+  background: var(--gron-50); color: var(--gron-700);
+}
+.provresultat.underkant .provbetyg { background: var(--rod-50); color: var(--rod-600); }
+
+.provfraga.rattad { border-left: 5px solid var(--creme-400); }
+.provfraga.rattad.ratt  { border-left-color: var(--gron-500); }
+.provfraga.rattad.fel   { border-left-color: var(--rod-500); }
+.provfraga.rattad.blank { border-left-color: var(--ockra-500); }
+
+.provalt.statisk { cursor: default; }
+.provalt.statisk:hover { border-color: var(--creme-300); }
+.provalt.facit   { border-color: var(--gron-500); background: var(--gron-50); }
+.provalt.mittfel { border-color: var(--rod-500); background: var(--rod-50); }
+.provmarke {
+  flex: 0 0 auto; margin-left: auto; align-self: center;
+  font-size: .75rem; font-weight: 800; white-space: nowrap; color: var(--ink-mid);
+}
+.provalt.facit .provmarke   { color: var(--gron-600); }
+.provalt.mittfel .provmarke { color: var(--rod-600); }
+.provforklaring {
+  display: block; margin-top: .3rem;
+  font-size: .84rem; line-height: 1.5; color: var(--ink-mid);
+}
+
+.egetsvar {
+  background: var(--creme-100); border-radius: var(--r-s);
+  padding: .8rem .95rem; font-family: var(--serif); line-height: 1.65;
+}
+.modellsvar { margin-top: 1rem; }
+.modellsvar summary {
+  cursor: pointer; font-weight: 700; color: var(--blaa-700); font-size: .9rem;
+}
+
+@media (max-width: 640px) {
+  .provfraga { gap: .7rem; }
+  .provnr { width: 1.7rem; height: 1.7rem; font-size: .78rem; }
+  .provmarke { display: none; }
+}
+
+/* Rubrikraden över ämnesvalet i Öva. Antalet valda och rensa-knappen
+   står bredvid rubriken i stället för under, så att raden inte växer. */
+.amnesrubrik {
+  display: flex; align-items: baseline; gap: .7rem; flex-wrap: wrap;
+  margin: 1.4rem 0 .5rem;
+}
+.amnesrubrik h3 { margin: 0; }
+.amnesrubrik .lankbtn { margin-left: auto; }
+
+/* Bocken ersätter nivåpricken på valda ämnen — den säger "vald", och
+   nivån är inte det man tittar efter när man plockar ihop en blandning. */
+.chip .bock {
+  font-weight: 800; font-size: .78em; margin-right: .3rem;
 }
 
 .sqlniva-pil {

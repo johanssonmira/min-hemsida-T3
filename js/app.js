@@ -12,8 +12,9 @@
     hem:       function () { S.hem.rendera(); },
     las:       function () { S.las.rendera(); },
     sql:       function () { S.sqlverkstad.rendera(); },
+    modellera: function () { S.modellera.rendera(); },
     ova:       function () { S.ova.renderaOva(); },
-    prov:      function () { S.ova.renderaProv(); },
+    prov:      function () { S.tentaprov.rendera(); },
     essa:      function () { S.essa.rendera(); },
     statistik: function () { S.statistik.rendera(); },
     schema:    function () { S.schema.rendera(); }
@@ -28,7 +29,7 @@
 
     aktuellVy = namn;
     uppdateraDelkursband();
-    uppdateraSqlflik();
+    uppdateraFlikar();
 
     Object.keys(vyer).forEach(function (v) {
       U.el('vy-' + v).classList.toggle('dold', v !== namn);
@@ -41,19 +42,39 @@
     window.scrollTo(0, 0);
   }
 
-  /* SQL-verkstaden finns bara för Databaser. Fliken göms för övriga
-     delkurser i stället för att visa en tom vy. */
-  function uppdateraSqlflik() {
-    var b = document.querySelector('.navbtn-sql');
-    if (!b) return;
-    var visa = S.store.delkurs() === 'databaser';
-    b.classList.toggle('dold', !visa);
-    if (!visa && aktuellVy === 'sql') visaVy('hem');
+  /* Varje delkurs visar bara de flikar den faktiskt har innehåll för.
+     SQL-verkstaden och Modellera hör till Databaser; Essä hör till
+     Strategi, där tentan har två essäfrågor à 20 poäng. Databastentan
+     har inga — dess skrivuppgifter är DDL och normalisering, och de
+     tränas i Modellera i stället.
+
+     Att gömma i stället för att visa tomma vyer är hela poängen: en meny
+     med åtta flikar där tre är meningslösa är svårare att navigera än en
+     med fem som alla leder någonstans. */
+  var VYER_PER_DELKURS = {
+    strategi:  ['hem', 'las', 'ova', 'prov', 'essa', 'statistik', 'schema'],
+    databaser: ['hem', 'las', 'sql', 'modellera', 'ova', 'prov', 'statistik', 'schema']
+  };
+
+  function synligaVyer() {
+    return VYER_PER_DELKURS[S.store.delkurs()] || VYER_PER_DELKURS.strategi;
+  }
+
+  function uppdateraFlikar() {
+    var synliga = synligaVyer();
+
+    Array.prototype.forEach.call(document.querySelectorAll('.navbtn'), function (b) {
+      b.classList.toggle('dold', synliga.indexOf(b.dataset.vy) === -1);
+    });
+
+    /* Står man i en vy som just försvann finns ingen väg tillbaka utom
+       hem — annars blir sidan tom utan förklaring. */
+    if (synliga.indexOf(aktuellVy) === -1) visaVy('hem');
   }
 
   function rendera() {
     uppdateraDelkursband();
-    uppdateraSqlflik();
+    uppdateraFlikar();
     vyer[aktuellVy]();
   }
 
@@ -173,8 +194,11 @@
     U.el('btn-hem').addEventListener('click', function () { visaVy('hem'); });
     U.el('btn-tema').addEventListener('click', function () { S.tema.oppna(); });
 
+    /* Siffertangenterna hör till Öva, där man svarar på en fråga i taget.
+       Provet är ett formulär med alla frågor på en gång — där skulle de
+       gissa åt vilken fråga man menade. */
     document.addEventListener('keydown', function (e) {
-      if (aktuellVy === 'ova' || aktuellVy === 'prov') S.ova.tangent(e);
+      if (aktuellVy === 'ova') S.ova.tangent(e);
     });
   }
 

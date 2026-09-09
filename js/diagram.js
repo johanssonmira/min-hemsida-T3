@@ -606,5 +606,119 @@ window.SYSB23.diagram = (function () {
 
   function alla() { return Object.keys(figurer); }
 
-  return { rita: rita, finns: finns, alla: alla };
+  /* ---------------------------------------------------------------- */
+  /* Chen-diagram ur data                                              */
+  /* ---------------------------------------------------------------- */
+
+  /* Övningarna i Modellera behöver egna diagram, och de ska inte ritas
+     för hand en och en. Ett diagram beskrivs i stället som data:
+
+       {
+         bredd, hojd,
+         entiteter:  [{ id, namn, x, y, svag }],
+         relationer: [{ id, namn, x, y, identifierande }],
+         attribut:   [{ av, namn, x, y, nyckel, delnyckel, flervard, harledd }],
+         linjer:     [{ fran, till, etikett, total }]
+       }
+
+     x och y är mittpunkter. Linjerna fäster automatiskt vid kanten på
+     respektive form, så man slipper räkna ut anslutningspunkter för hand. */
+
+  function chen(spec) {
+    var noder = {};
+    var s = '';
+
+    (spec.entiteter || []).forEach(function (e) {
+      var w = e.bredd || Math.max(bredd(e.namn) + 30, 92);
+      var h = e.hojd || 38;
+      noder[e.id] = { typ: 'ram', x: e.x, y: e.y, w: w, h: h };
+    });
+
+    (spec.relationer || []).forEach(function (r) {
+      var w = r.bredd || Math.max(bredd(r.namn, TS - 1) + 34, 74);
+      var h = r.hojd || 40;
+      noder[r.id] = { typ: 'romb', x: r.x, y: r.y, w: w, h: h };
+    });
+
+    /* Linjerna först, så formerna täcker deras ändar */
+    (spec.linjer || []).forEach(function (l) {
+      var a = noder[l.fran], b = noder[l.till];
+      if (!a || !b) return;
+      var p1 = kant(a, b.x, b.y);
+      var p2 = kant(b, a.x, a.y);
+      s += l.total ? dubbellinje(p1.x, p1.y, p2.x, p2.y)
+                   : linje(p1.x, p1.y, p2.x, p2.y);
+
+      if (l.etikett) {
+        /* Etiketten sätts en bit in på linjen från relationssidan, och
+           skjuts åt sidan så att den inte hamnar ovanpå linjen. */
+        var t = 0.36;
+        var ex = p2.x + (p1.x - p2.x) * t;
+        var ey = p2.y + (p1.y - p2.y) * t;
+        var vagrat = Math.abs(p1.x - p2.x) > Math.abs(p1.y - p2.y);
+        s += txt(ex + (vagrat ? 0 : 13), ey - (vagrat ? 11 : 0),
+                 l.etikett, { fet: true, farg: BLA });
+      }
+    });
+
+    /* Attributen och deras streck */
+    (spec.attribut || []).forEach(function (a) {
+      var mot = noder[a.av];
+      if (mot) {
+        var p = kant(mot, a.x, a.y);
+        s += linje(a.x, a.y, p.x, p.y, { farg: MID, tjock: 1.1 });
+      }
+    });
+
+    (spec.entiteter || []).forEach(function (e) {
+      var n = noder[e.id];
+      s += ram(n.x - n.w / 2, n.y - n.h / 2, n.w, n.h, e.namn,
+               { dubbel: e.svag, ts: e.ts || TS - 1 });
+    });
+
+    (spec.relationer || []).forEach(function (r) {
+      var n = noder[r.id];
+      s += romb(n.x, n.y, n.w, n.h, r.namn,
+                { dubbel: r.identifierande, ts: TS - 2 });
+    });
+
+    (spec.attribut || []).forEach(function (a) {
+      s += attribut(a.x, a.y, a.namn, {
+        nyckel: a.nyckel ? 'hel' : (a.delnyckel ? 'streckad' : null),
+        flervard: a.flervard,
+        harledd: a.harledd
+      });
+    });
+
+    return s;
+  }
+
+  /* Punkten på nodens kant i riktning mot (mx, my). */
+  function kant(nod, mx, my) {
+    var dx = mx - nod.x, dy = my - nod.y;
+    if (!dx && !dy) return { x: nod.x, y: nod.y };
+
+    if (nod.typ === 'romb') {
+      /* |x|/(w/2) + |y|/(h/2) = 1 */
+      var k = 1 / (Math.abs(dx) / (nod.w / 2) + Math.abs(dy) / (nod.h / 2));
+      return { x: nod.x + dx * k, y: nod.y + dy * k };
+    }
+
+    /* Rektangel: skala till närmaste kant */
+    var sx = (nod.w / 2) / (Math.abs(dx) || 1e-6);
+    var sy = (nod.h / 2) / (Math.abs(dy) || 1e-6);
+    var t = Math.min(sx, sy);
+    return { x: nod.x + dx * t, y: nod.y + dy * t };
+  }
+
+  /* Färdig figur ur en diagramspecifikation. */
+  function chenFigur(spec, beskrivning, bildtext) {
+    return figur('0 0 ' + (spec.bredd || 640) + ' ' + (spec.hojd || 260),
+                 beskrivning, bildtext, chen(spec), spec.maxbredd || 640);
+  }
+
+  return {
+    rita: rita, finns: finns, alla: alla,
+    chen: chen, chenFigur: chenFigur, figur: figur
+  };
 })();

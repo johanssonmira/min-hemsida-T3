@@ -1,6 +1,13 @@
 /* =========================================================================
-   ova.js – Öva-läget (en fråga i taget, direkt facit) och Prov-läget
-   (tentans poängsystem). Delar samma frågemotor.
+   ova.js – Öva-läget: en fråga i taget, med facit direkt.
+
+   Provet bodde tidigare här och delade frågemotor med Öva. Det flyttade
+   till js/tentaprov.js när det blev ett helt tentaformulär i stället för
+   en fråga i taget — de två har inte längre något gemensamt utom
+   frågebanken. Motorns arProv-grenar är kvarlevor och tas aldrig.
+
+   Ämnesfiltret tar en LISTA av ämnen, så att man kan blanda flera i samma
+   pass. Det är närmare tentan än att köra ett kapitel i taget.
    ========================================================================= */
 
 window.SYSB23 = window.SYSB23 || {};
@@ -9,8 +16,13 @@ window.SYSB23.ova = (function () {
   var S = window.SYSB23;
   var U = S.ui;
 
-  /* Filterläge för Öva */
-  var filter = { amne: 'alla', svarighet: 'alla' };
+  /* Filterläge för Öva.
+
+     amnen är en LISTA. Tom lista betyder allt. Att kunna blanda flera
+     ämnen i samma pass är poängen: på tentan kommer frågorna inte ett
+     kapitel i taget, och den som bara övat kapitelvis känner igen svaren
+     på sammanhanget i stället för på innehållet. */
+  var filter = { amnen: [], svarighet: 'alla' };
 
   /* Pågående pass */
   var pass = null;
@@ -37,17 +49,9 @@ window.SYSB23.ova = (function () {
     startaOva();
   }
 
-  function renderaProv() {
-    if (pass && pass.lage === 'prov') {
-      if (pass.klart) visaResultat('vy-prov');
-      else visaFraga('vy-prov');
-      return;
-    }
-    visaProvStart();
-  }
-
+  /* Ingång från kompendiet: öva just det här ämnet, ensamt. */
   function ovaAmne(amneId) {
-    filter.amne = amneId;
+    filter.amnen = [amneId];
     filter.svarighet = 'alla';
     pass = null;
     S.app.visaVy('ova');
@@ -63,10 +67,11 @@ window.SYSB23.ova = (function () {
   /* Urval av frågor                                                   */
   /* ================================================================ */
 
-  function tillgangliga(delkurs, amne, svarighet, typer) {
+  /* amnen: lista med ämnes-id. Tom lista betyder alla ämnen. */
+  function tillgangliga(delkurs, amnen, svarighet, typer) {
     return S.fragor.filter(function (f) {
       if (f.delkurs !== delkurs) return false;
-      if (amne && amne !== 'alla' && f.amne !== amne) return false;
+      if (amnen && amnen.length && amnen.indexOf(f.amne) === -1) return false;
       if (svarighet && svarighet !== 'alla' && String(f.svarighet) !== String(svarighet)) return false;
       if (typer && typer.indexOf(f.typ) === -1) return false;
       return true;
@@ -98,7 +103,7 @@ window.SYSB23.ova = (function () {
 
   function startaOva() {
     var delkurs = S.store.delkurs();
-    var urval = tillgangliga(delkurs, filter.amne, filter.svarighet, ['flerval', 'praktisk']);
+    var urval = tillgangliga(delkurs, filter.amnen, filter.svarighet, ['flerval', 'praktisk']);
 
     if (!urval.length) {
       pass = null;
@@ -137,7 +142,10 @@ window.SYSB23.ova = (function () {
 
   function rubrikFor(delkurs) {
     var delar = [U.delkursNamn(delkurs)];
-    if (filter.amne !== 'alla') delar.push(U.amneNamn(filter.amne));
+
+    if (filter.amnen.length === 1) delar.push(U.amneNamn(filter.amnen[0]));
+    else if (filter.amnen.length > 1) delar.push(filter.amnen.length + ' ämnen blandat');
+
     if (filter.svarighet !== 'alla') {
       delar.push({ '1': 'grund', '2': 'standard', '3': 'klurig' }[filter.svarighet]);
     }
@@ -161,36 +169,58 @@ window.SYSB23.ova = (function () {
     html += '<p class="muted liten">En fråga i taget, med facit direkt. Frågor du svarat fel på ' +
             'kommer tillbaka oftare. Inga minuspoäng här.</p>';
 
-    html += '<h3>Ämne</h3><div class="chiprad">';
-    var alla = tillgangliga(delkurs, 'alla', filter.svarighet, ['flerval', 'praktisk']).length;
-    html += chip('alla', 'Allt', alla, filter.amne === 'alla', 'amne');
+    var valda = filter.amnen.length;
+
+    html += '<div class="amnesrubrik">';
+    html += '<h3>Ämnen</h3>';
+    html += '<span class="muted mini">' +
+            (valda ? valda + ' valda · klicka för att lägga till eller ta bort'
+                   : 'Inget valt betyder allt. Klicka i flera för att blanda.') +
+            '</span>';
+    if (valda) html += '<button class="lankbtn" data-amnen="rensa">Rensa</button>';
+    html += '</div>';
+
+    html += '<div class="chiprad">';
+    var alla = tillgangliga(delkurs, [], filter.svarighet, ['flerval', 'praktisk']).length;
+    html += '<button class="chip' + (valda ? '' : ' vald') +
+            '" data-amnen="rensa">Allt <span class="antal">' + alla + '</span></button>';
+
     amnen.forEach(function (a) {
-      var n = tillgangliga(delkurs, a.id, filter.svarighet, ['flerval', 'praktisk']).length;
+      var n = tillgangliga(delkurs, [a.id], filter.svarighet, ['flerval', 'praktisk']).length;
       if (!n) return;
       var niva = S.store.amnesNiva(a.id);
-      html += '<button class="chip' + (filter.amne === a.id ? ' vald' : '') +
-              '" data-filter="amne" data-varde="' + U.esc(a.id) + '"' +
+      var i = filter.amnen.indexOf(a.id) > -1;
+      html += '<button class="chip' + (i ? ' vald' : '') +
+              '" data-amnen="vaxla" data-varde="' + U.esc(a.id) + '"' +
+              ' aria-pressed="' + (i ? 'true' : 'false') + '"' +
               ' title="' + U.esc(niva.namn + ' – ' + niva.beskrivning) + '">' +
-              U.nivaPrick(niva.n) +
+              (i ? '<span class="bock" aria-hidden="true">✓</span>' : U.nivaPrick(niva.n)) +
               U.esc(a.namn) + ' <span class="antal">' + n + '</span></button>';
     });
     html += '</div>';
 
-    /* Aktuellt ämnes nivå och vad som krävs för nästa steg */
-    if (filter.amne !== 'alla') {
-      var vald = S.store.amnesNiva(filter.amne);
-      var krav = S.store.nastaNivaKrav(filter.amne);
+    /* Nivåmätaren gäller ett ämne i taget och blir meningslös för en
+       blandning — då visar vi hur många frågor blandningen ger i stället. */
+    if (filter.amnen.length === 1) {
+      var vald = S.store.amnesNiva(filter.amnen[0]);
+      var krav = S.store.nastaNivaKrav(filter.amnen[0]);
       html += '<div class="notis info" style="display:flex;align-items:center;gap:.7rem;flex-wrap:wrap">';
       html += U.nivaMatare(vald.n);
       html += U.nivaEtikett(vald);
       html += '<span class="liten">' + U.esc(krav || vald.beskrivning + '. Ämnet sitter.') + '</span>';
       html += '</div>';
+    } else if (filter.amnen.length > 1) {
+      var n = tillgangliga(delkurs, filter.amnen, filter.svarighet, ['flerval', 'praktisk']).length;
+      html += '<div class="notis info liten">Blandat pass ur ' + filter.amnen.length +
+              ' ämnen: <strong>' + n + ' frågor</strong>. ' +
+              'Att inte veta vilket kapitel en fråga kommer från är närmare tentan ' +
+              'än att öva ett ämne i taget.</div>';
     }
 
     html += '<h3>Svårighetsgrad</h3><div class="chiprad">';
     html += chip('alla', 'Alla', null, filter.svarighet === 'alla', 'svarighet');
     [['1', 'Grund'], ['2', 'Standard'], ['3', 'Klurig']].forEach(function (s) {
-      var n = tillgangliga(delkurs, filter.amne, s[0], ['flerval', 'praktisk']).length;
+      var n = tillgangliga(delkurs, filter.amnen, s[0], ['flerval', 'praktisk']).length;
       html += chip(s[0], s[1], n, filter.svarighet === s[0], 'svarighet');
     });
     html += '</div>';
@@ -213,101 +243,26 @@ window.SYSB23.ova = (function () {
         startaOva();
       });
     });
+
+    Array.prototype.forEach.call(vy.querySelectorAll('[data-amnen]'), function (b) {
+      b.addEventListener('click', function () {
+        if (b.dataset.amnen === 'rensa') {
+          filter.amnen = [];
+        } else {
+          var id = b.dataset.varde;
+          var i = filter.amnen.indexOf(id);
+          if (i > -1) filter.amnen.splice(i, 1);
+          else filter.amnen.push(id);
+        }
+        pass = null;
+        startaOva();
+      });
+    });
   }
 
   /* ================================================================ */
   /* PROV                                                              */
   /* ================================================================ */
-
-  function provUppl(delkurs) {
-    if (delkurs === 'strategi') {
-      return {
-        flerval: 10, essa: 2, poangRatt: 6, poangFel: -1, poangEssa: 20, max: 100,
-        beskrivning: '10 flervalsfrågor à 6 p, där ett felaktigt svar ger −1 p och en obesvarad ' +
-          'fråga 0 p, plus 2 essäfrågor à 20 p utan minuspoäng. Max 100 p.',
-        kalla: 'Formatet är hämtat från de två HT24-tentorna.'
-      };
-    }
-    return {
-      flerval: 16, essa: 0, praktisk: 4, poangRatt: 5, poangFel: 0, poangEssa: 0, max: 100,
-      beskrivning: '20 frågor fördelade över tentans fyra områden: ER-modellering, transformation ' +
-        'till fysisk datamodell, normalformer och SQL. Varje fråga ger 5 p, inga minuspoäng.',
-      kalla: 'ANTAGANDE: exakt poängsättning för databastentan framgår inte av kursmaterialet, ' +
-        'som bara anger att "question format may vary". Betygsskalan U–A är dock densamma.'
-    };
-  }
-
-  function visaProvStart() {
-    var delkurs = S.store.delkurs();
-    var u = provUppl(delkurs);
-    var fv = tillgangliga(delkurs, 'alla', 'alla', ['flerval']).length;
-    var es = tillgangliga(delkurs, 'alla', 'alla', ['oppen']).length;
-    var pr = tillgangliga(delkurs, 'alla', 'alla', ['praktisk']).length;
-
-    var räcker = fv >= u.flerval && es >= (u.essa || 0) && pr >= (u.praktisk || 0);
-
-    var html = '<div class="kort">';
-    html += '<h2>Prov</h2>';
-    html += '<p>' + U.esc(u.beskrivning) + '</p>';
-    html += '<p class="muted liten">' + U.esc(u.kalla) + '</p>';
-
-    html += '<div class="notis"><strong>Betygsgränser:</strong> A 85–100 %, B 75–84 %, ' +
-            'C 65–74 %, D 55–64 %, E 50–54 %, U under 50 %.' +
-            (u.poangFel < 0
-              ? ' Eftersom fel svar kostar 1 p är det värt att hoppa över en fråga du inte alls kan — ' +
-                'men gissa om du kan utesluta minst ett alternativ.'
-              : '') +
-            '</div>';
-
-    if (!räcker) {
-      html += '<p class="muted">Det finns inte tillräckligt med frågor i banken för ett fullt prov ' +
-              'i ' + U.esc(U.delkursNamn(delkurs)) + ' än (' + fv + ' flervalsfrågor, ' + es +
-              ' essäfrågor, ' + pr + ' praktiska).</p>';
-    } else {
-      html += '<div class="knapprad"><button class="primar" id="startaprov">Starta provet</button></div>';
-    }
-    html += '</div>';
-
-    /* Tidigare provresultat */
-    var tidigare = S.store.historik().filter(function (h) { return h.lage === 'prov'; });
-    if (tidigare.length) {
-      html += '<div class="kort"><h2>Dina tidigare prov</h2>';
-      tidigare.slice(0, 8).forEach(function (h) {
-        html += '<div class="rad"><span>' + U.esc(U.tidssedan(h.datum)) + '<br>' +
-                '<span class="muted mini">' + U.esc(h.rubrik) + '</span></span>' +
-                '<strong>' + (h.poang !== null ? h.poang + '/' + h.maxPoang + ' p · ' : '') +
-                h.procent + ' %</strong></div>';
-      });
-      html += '</div>';
-    }
-
-    var vy = U.el('vy-prov');
-    vy.innerHTML = html;
-
-    var knapp = U.el('startaprov');
-    if (knapp) knapp.addEventListener('click', startaProv);
-  }
-
-  function startaProv() {
-    var delkurs = S.store.delkurs();
-    var u = provUppl(delkurs);
-
-    var fragor = U.blanda(tillgangliga(delkurs, 'alla', 'alla', ['flerval'])).slice(0, u.flerval);
-    if (u.praktisk) {
-      fragor = fragor.concat(U.blanda(tillgangliga(delkurs, 'alla', 'alla', ['praktisk'])).slice(0, u.praktisk));
-    }
-    if (u.essa) {
-      fragor = fragor.concat(U.blanda(tillgangliga(delkurs, 'alla', 'alla', ['oppen'])).slice(0, u.essa));
-    }
-
-    pass = {
-      lage: 'prov', vyId: 'vy-prov', uppl: u, fragor: fragor,
-      index: 0, svar: [], besvarad: false, valtIndex: null, klart: false,
-      rubrik: 'Prov – ' + U.delkursNamn(delkurs)
-    };
-    visaFraga('vy-prov');
-    window.scrollTo(0, 0);
-  }
 
   /* ================================================================ */
   /* Alternativens ordning                                             */
@@ -772,7 +727,7 @@ window.SYSB23.ova = (function () {
 
     vy.querySelector('#igen').addEventListener('click', function () {
       pass = null;
-      if (arProv) visaProvStart(); else startaOva();
+      startaOva();
       window.scrollTo(0, 0);
     });
     var repKnapp = vy.querySelector('#repetera');
@@ -884,7 +839,6 @@ window.SYSB23.ova = (function () {
 
   return {
     renderaOva: renderaOva,
-    renderaProv: renderaProv,
     ovaAmne: ovaAmne,
     startaRepetition: startaRepetition,
     tangent: tangent,

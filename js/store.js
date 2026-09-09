@@ -24,6 +24,7 @@ window.SYSB23.store = (function () {
     passAndringar: {},        // passId -> { datum, tid, rubrik, sal, notis, dold }
     tentalankar: [],          // [{ id, titel, url }] egna länkar till gamla tentor
     sqlLosta: {},             // ovningsId -> ISO-datum, lösta SQL-övningar
+    modellera: {},            // uppgiftsId -> { datum, poang, max, forsok }
     datum: {}                 // egna anteckningar per etapp (kvar från v1)
   };
 
@@ -150,6 +151,17 @@ window.SYSB23.store = (function () {
         maxPoang: pass.maxPoang === undefined ? null : pass.maxPoang
       });
       data.historik = data.historik.slice(0, 60);
+      spara();
+    },
+
+    /* Provets essädel rättas av en själv EFTER inlämning, och poängen kan
+       ändras flera gånger medan man går igenom checklistan. Då ska samma
+       post uppdateras — annars fylls historiken med ett halvdussin rader
+       från ett och samma prov. */
+    uppdateraSenastePass: function (falt) {
+      var senaste = data.historik[0];
+      if (!senaste) return;
+      Object.keys(falt).forEach(function (k) { senaste[k] = falt[k]; });
       spara();
     },
 
@@ -558,6 +570,39 @@ window.SYSB23.store = (function () {
     glomSqlOvning: function (id) { delete data.sqlLosta[id]; spara(); },
 
     nollstallSql: function () { data.sqlLosta = {}; spara(); },
+
+    /* ---------------------- Modellera ----------------------
+       Uppgifterna där rättas mot ett facit och kan bli delvis rätt —
+       uppgift 1 på tentan ger +5 per rätt påstående och −3 per fel, så
+       "löst" är inte binärt. Vi sparar bästa resultatet, inte det
+       senaste: att göra om en uppgift ska aldrig kunna sänka en. */
+    modelleraPost: function (id) { return (data.modellera || {})[id] || null; },
+
+    sparaModellera: function (id, poang, max) {
+      if (!data.modellera) data.modellera = {};
+      var fanns = data.modellera[id];
+      if (fanns && fanns.poang >= poang) { fanns.forsok = (fanns.forsok || 1) + 1; spara(); return; }
+      data.modellera[id] = {
+        datum: new Date().toISOString(),
+        poang: poang, max: max,
+        forsok: fanns ? (fanns.forsok || 1) + 1 : 1
+      };
+      spara();
+    },
+
+    modelleraSummering: function (idn) {
+      var m = data.modellera || {};
+      var klara = 0, poang = 0, max = 0;
+      idn.forEach(function (id) {
+        var p = m[id];
+        if (!p) return;
+        if (p.poang >= p.max) klara++;
+        poang += p.poang; max += p.max;
+      });
+      return { klara: klara, poang: poang, max: max };
+    },
+
+    nollstallModellera: function () { data.modellera = {}; spara(); },
 
     /* ---------------------- Underhåll ---------------------- */
     exportera: function () { return JSON.stringify(data, null, 2); },
