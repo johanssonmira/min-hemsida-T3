@@ -614,9 +614,12 @@ button:disabled:active { transform: none; }
 .nedrakning > * { position: relative; }
 .nedrakning h1 { color: #fff; margin-bottom: .85rem; }
 .nedrakning h2::before { display: none; }
+/* Ingen opacitet: med .78 hamnade etiketten på 3,8–4,4:1 på det färgade
+   kortet. Versaler, spärrning och liten storlek skiljer den redan från
+   rubriken. */
 .etikett {
   font-size: .68rem; letter-spacing: .15em; text-transform: uppercase;
-  opacity: .78; margin-bottom: .45rem; font-weight: 700;
+  margin-bottom: .45rem; font-weight: 700;
 }
 .dagar { display: flex; align-items: baseline; gap: .6rem; margin-bottom: .85rem; }
 .dagar .siffra {
@@ -930,8 +933,11 @@ button:disabled:active { transform: none; }
   background: var(--blaa-500); color: #fff; border-color: var(--blaa-500);
   font-weight: 700;
 }
-.chip .antal { opacity: .58; font-size: .76rem; }
-.chip.vald .antal { opacity: .85; }
+/* Antalet är sekundärt, men det ska gå att läsa. Opacitet drog det till
+   3,7–4,4:1 beroende på tema; en egen, dämpad färg håller AA överallt.
+   Hierarkin bärs av den mindre storleken. */
+.chip .antal { font-size: .76rem; color: var(--ink-soft); }
+.chip.vald .antal { color: inherit; }
 
 /* ============================= Quiz ============================= */
 .quizhuvud {
@@ -1151,7 +1157,16 @@ button:disabled:active { transform: none; }
 }
 .kal-dag.helg { background: var(--creme-100); }
 .kal-dag:hover { border-color: var(--blaa-500); box-shadow: var(--skugga-s); }
-.kal-dag.utanfor { opacity: .38; }
+/* Dagar från grannmånaderna. De tonades tidigare ner med opacity .38,
+   vilket gjorde både datum och passens klockslag oläsliga (2,2:1). Men
+   passen där är riktiga — en tenta den 31:a är lika viktig som den 1:a.
+   Därför markeras dagen av ytan i stället: ingen bakgrund, streckad kant,
+   och ett dämpat men läsbart datum. */
+.kal-dag.utanfor {
+  background: transparent;
+  border-style: dashed; border-color: var(--creme-300);
+}
+.kal-dag.utanfor .kal-nr { color: var(--ink-soft); font-weight: 600; }
 .kal-nr {
   font-size: .82rem; font-weight: 700; line-height: 1.35; padding-left: .1rem;
   color: var(--ink-mid);
