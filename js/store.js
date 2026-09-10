@@ -25,6 +25,7 @@ window.SYSB23.store = (function () {
     tentalankar: [],          // [{ id, titel, url }] egna länkar till gamla tentor
     sqlLosta: {},             // ovningsId -> ISO-datum, lösta SQL-övningar
     modellera: {},            // uppgiftsId -> { datum, poang, max, forsok }
+    extentor: {},             // tentaId -> { inlast, tenta } ur användarens egen PDF
     datum: {}                 // egna anteckningar per etapp (kvar från v1)
   };
 
@@ -603,6 +604,24 @@ window.SYSB23.store = (function () {
     },
 
     nollstallModellera: function () { data.modellera = {}; spara(); },
+
+    /* ---------------------- Inlästa tentor ----------------------
+       Tentans text kommer från användarens egen PDF och sparas bara här,
+       i webbläsaren. Den finns aldrig i appens kod eller på GitHub. Följer
+       med i säkerhetskopian, så att man kan flytta den till en annan enhet
+       utan att läsa in PDF:en igen. */
+    extenta: function (id) { return (data.extentor || {})[id] || null; },
+
+    sparaExtenta: function (id, tenta) {
+      if (!data.extentor) data.extentor = {};
+      data.extentor[id] = { inlast: new Date().toISOString(), tenta: tenta };
+      spara();
+    },
+
+    taBortExtenta: function (id) {
+      if (data.extentor) delete data.extentor[id];
+      spara();
+    },
 
     /* ---------------------- Underhåll ---------------------- */
     exportera: function () { return JSON.stringify(data, null, 2); },

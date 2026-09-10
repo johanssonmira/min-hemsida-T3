@@ -624,7 +624,9 @@ button:disabled:active { transform: none; }
   font-size: 3.6rem; font-weight: 700; line-height: .92; letter-spacing: -.04em;
   color: var(--ockra-100);
 }
-.dagar .text { opacity: .82; font-size: .95rem; }
+/* Ingen nedtoning. Med opacity .82 hamnade "dagar kvar" på 4,1:1 i skog,
+   konditori och neon. Hierarkin mot den stora siffran bär storleken ensam. */
+.dagar .text { font-size: .95rem; }
 .nedrakning .fakta { font-size: .9rem; opacity: .94; }
 .nedrakning .fakta div { margin-bottom: .12rem; }
 /* Ytan mörkar banderollen i stället för att ljusa upp den. En vit slöja
@@ -649,9 +651,12 @@ button:disabled:active { transform: none; }
 .nedrakning.banner .etikett { margin-bottom: .2rem; }
 .nedrakning.banner .knapprad { margin-top: 0; flex: 0 0 auto; }
 
+/* Mörk slöja, inte vit — samma skäl som knappen i banderollen: en vit
+   slöja ljusar upp kortet och drog den vita texten till 4,2:1 i skog och
+   konditori. En mörk höjer kontrasten i alla teman. */
 .radtips {
   margin-top: .95rem; padding: .7rem .9rem;
-  background: rgba(255,255,255,.12); border-radius: var(--r-s);
+  background: rgba(0,0,0,.16); border-radius: var(--r-s);
   border-left: 4px solid var(--ockra-500);
   font-size: .89rem;
 }
@@ -1835,6 +1840,27 @@ body.fokus #vy-ova, body.fokus #vy-prov { max-width: 760px; }
 }
 
 .provhuvud { border-left: 5px solid var(--aktiv, var(--blaa-500)); }
+
+/* Frågetexten kommer från tentans PDF i stycken */
+.provtext p { margin: 0 0 .55rem; }
+.provtext p:last-child { margin-bottom: 0; }
+.provpoangrad { margin: .7rem 0 0; text-align: right; }
+
+/* Startsidan: ett kort per tenta */
+.tentakort-rad {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap;
+}
+/* Filväljaren ser ut som en knapp. Själva input-fältet är dolt; hela
+   etiketten är klickbar. */
+.filknapp {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .55rem 1.1rem; border-radius: var(--r-s);
+  background: var(--blaa-500); color: #fff;
+  font-weight: 700; font-size: .92rem; cursor: pointer;
+}
+.filknapp:hover { background: var(--blaa-600); }
+.filknapp:focus-within { outline: 2px solid var(--blaa-700); outline-offset: 2px; }
 
 .provdel {
   font-family: var(--serif);

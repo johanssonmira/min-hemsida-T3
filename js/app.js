@@ -48,12 +48,17 @@
      har inga — dess skrivuppgifter är DDL och normalisering, och de
      tränas i Modellera i stället.
 
+     Prov innehåller bara riktiga gamla tentor, frågorna exakt som de
+     stod. För Databaser bygger de tentorna på ER-diagram som bilder, och
+     deras uppgifter tränas redan i Modellera och SQL-verkstaden — så där
+     finns ingen Prov-flik.
+
      Att gömma i stället för att visa tomma vyer är hela poängen: en meny
      med åtta flikar där tre är meningslösa är svårare att navigera än en
      med fem som alla leder någonstans. */
   var VYER_PER_DELKURS = {
     strategi:  ['hem', 'las', 'ova', 'prov', 'essa', 'statistik', 'schema'],
-    databaser: ['hem', 'las', 'sql', 'modellera', 'ova', 'prov', 'statistik', 'schema']
+    databaser: ['hem', 'las', 'sql', 'modellera', 'ova', 'statistik', 'schema']
   };
 
   function synligaVyer() {

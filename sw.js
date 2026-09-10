@@ -10,7 +10,7 @@
    filer städas bort i activate.
    ========================================================================= */
 
-var VERSION = 'sysb23-v7';
+var VERSION = 'sysb23-v8';
 
 var FILER = [
   './',
@@ -33,6 +33,7 @@ var FILER = [
   'data/sql-databas.js',
   'data/sql-ovningar.js',
   'data/modellera.js',
+  'data/extentor.js',
   'data/questions-db-sql.js',
   'data/questions-db-joins.js',
   'data/questions-db-design.js',
@@ -50,6 +51,7 @@ var FILER = [
   'js/hem.js',
   'js/las.js',
   'js/ova.js',
+  'js/extentaimport.js',
   'js/tentaprov.js',
   'js/essa.js',
   'js/statistik.js',
