@@ -55,8 +55,9 @@ window.SYSB23.essa = (function () {
 
     /* Frågan */
     html += '<div class="kort">';
-    if (f.kalla && /Tentamen|tenta/i.test(f.kalla)) {
-      html += '<p class="muted mini">Förekom som essäfråga på tentan HT24 (20 p).</p>';
+    var forekomst = tentaforekomst(f.id);
+    if (forekomst.length) {
+      html += '<p class="muted mini">Förekom som essäfråga på ' + U.esc(forekomst.join(' och ')) + '.</p>';
     }
     html += '<div class="fragetext">' + U.esc(f.fraga) + '</div>';
 
@@ -114,8 +115,8 @@ window.SYSB23.essa = (function () {
     html += '<div class="kort faktaruta">';
     html += '<h3>Så får du fler poäng på essäfrågorna</h3>';
     html += '<ul>';
-    html += '<li>En essäfråga ger 20 p — lika mycket som drygt tre flervalsfrågor. Lämna dem <strong>aldrig</strong> tomma, det finns inga minuspoäng här.</li>';
-    html += '<li>Stryk under vad frågan faktiskt frågar efter innan du börjar. Frågorna HT24 hade flera delar, och andra delen var minst hälften av poängen.</li>';
+    html += '<li>En essäfråga ger 15–20 p — ungefär lika mycket som tre flervalsfrågor. Lämna dem <strong>aldrig</strong> tomma, det finns inga minuspoäng här.</li>';
+    html += '<li>Stryk under vad frågan faktiskt frågar efter innan du börjar. Nästan alla essäfrågor HT24 och HT25 hade två delar, och den andra delen var minst hälften av poängen.</li>';
     html += '<li>Skriv ut namn och exempel: Rockwater, AMD, FMC, Sears, snabbmatskedjan, Amazon, Klarna.</li>';
     html += '<li>Koppla ihop två delar av kursen om du kan. Det visar att du förstått, inte bara memorerat.</li>';
     html += '<li>Avsluta med en slutsats som svarar på frågan rakt ut.</li>';
@@ -124,6 +125,20 @@ window.SYSB23.essa = (function () {
 
     vy.innerHTML = html;
     koppla(vy, f, fragor);
+  }
+
+  /* Vilka gamla tentor frågan kom på, t.ex. "HT25 ordinarie tentamen (fråga 1, 15 p)".
+     Hämtas ur facit i data/extentor.js, så att en ny tenta syns här direkt. */
+  function tentaforekomst(id) {
+    var ut = [];
+    (S.extentor || []).forEach(function (e) {
+      e.fragor.forEach(function (q, i) {
+        if (q.bank === id) {
+          ut.push(e.rubrik[0] + ' ' + e.titel.toLowerCase() + ' (fråga ' + (i + 1) + ', ' + e.poang.essa + ' p)');
+        }
+      });
+    });
+    return ut;
   }
 
   function bedomning(i, n) {

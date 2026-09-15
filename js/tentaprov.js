@@ -20,7 +20,9 @@ window.SYSB23.tentaprov = (function () {
   var S = window.SYSB23;
   var U = S.ui;
 
-  var POANG_RATT = 6, POANG_FEL = -1;
+  /* Rätt svar ger frågans egen poäng ("Totalpoäng" i PDF:en): 6 p på
+     HT24, 5 p på HT25. Fel svar kostar 1 p på båda. */
+  var POANG_FEL = -1;
 
   var prov = null;
   /* prov = { id, nyckel, tenta, svar:{nr:index}, essasvar:{nr:text},
@@ -32,7 +34,9 @@ window.SYSB23.tentaprov = (function () {
   /* ---------------------------------------------------------------- */
 
   function tentor() {
-    return (S.extentor || []).filter(function (e) { return e.delkurs === S.store.delkurs(); });
+    return (S.extentor || [])
+      .filter(function (e) { return e.delkurs === S.store.delkurs(); })
+      .sort(function (a, b) { return a.datum < b.datum ? 1 : -1; });   /* nyast först */
   }
 
   function rendera() {
@@ -65,8 +69,9 @@ window.SYSB23.tentaprov = (function () {
     h += '<div class="kort">';
     h += '<h2>Prov</h2>';
     h += '<p>De gamla tentorna, exakt som de såg ut: samma frågor, samma svarsalternativ, ' +
-         'samma ordning och samma poäng. <strong>Rätt svar 6 p, fel svar −1 p, obesvarad 0 p.</strong> ' +
-         'Essäfrågorna ger högst 20 p. Allt rättas när du lämnar in.</p>';
+         'samma ordning och samma poäng. <strong>Fel svar −1 p, obesvarad 0 p</strong>, och rätt svar ' +
+         'ger det frågan är värd på just den tentan. Essäfrågorna har inga minuspoäng. ' +
+         'Allt rättas när du lämnar in.</p>';
     h += '<div class="notis info liten"><strong>Så här fungerar det.</strong> Tentorna är ' +
          'universitetets material och får inte ligga på den här publika sidan. Därför läser du ' +
          'in PDF:en själv — den finns bland kursens filer. Den läses bara i din webbläsare, ' +
@@ -102,10 +107,12 @@ window.SYSB23.tentaprov = (function () {
     var h = '<div class="kort tentakort">';
     h += '<div class="tentakort-rad">';
     h += '<div><h3 style="margin:0">' + U.esc(e.titel) + '</h3>';
-    h += '<p class="muted liten" style="margin:.2rem 0 0">' + U.esc(U.langtDatum(e.datum)) +
-         ' · ' + e.fragor.filter(function (f) { return f.typ === 'flerval'; }).length +
-         ' flervalsfrågor och ' + e.fragor.filter(function (f) { return f.typ === 'essa'; }).length +
-         ' essäfrågor</p></div>';
+    h += '<p class="muted liten" style="margin:.2rem 0 0">' + U.esc(e.rubrik[0]) + ' · ' +
+         U.esc(U.langtDatum(e.datum)) + ' · ' +
+         e.fragor.filter(function (f) { return f.typ === 'flerval'; }).length +
+         ' flervalsfrågor à ' + e.poang.flerval + ' p och ' +
+         e.fragor.filter(function (f) { return f.typ === 'essa'; }).length +
+         ' essäfrågor à ' + e.poang.essa + ' p</p></div>';
 
     if (inlast) {
       h += '<button class="primar" data-starta="' + U.esc(e.id) + '">Starta provet</button>';
@@ -161,7 +168,7 @@ window.SYSB23.tentaprov = (function () {
       if (m.fel) { fel[id] = m.fel; visaStart(); return; }
       if (m.id !== id) {
         /* Rätt tenta men fel knapp — spara den ändå där den hör hemma */
-        fel[id] = 'Det där var den andra tentan. Den är nu inläst på sin plats.';
+        fel[id] = 'Det där var en annan av tentorna. Den är nu inläst på sin plats.';
       }
       S.store.sparaExtenta(m.id, m.tenta);
       visaStart();
@@ -206,11 +213,11 @@ window.SYSB23.tentaprov = (function () {
     var h = '<div class="provark">';
 
     h += '<div class="kort provhuvud">';
-    h += '<div class="muted mini">HT24 · SYSB23, Strategi och ekonomistyrning</div>';
+    h += '<div class="muted mini">' + U.esc(e.rubrik[0]) + ' · SYSB23, Strategi och ekonomistyrning</div>';
     h += '<h2 style="margin:.2rem 0 .6rem">' + U.esc(e.titel) + '</h2>';
     h += '<p class="liten" style="margin:0"><strong>Poängsättning.</strong> I flervalssektionen ' +
-         'ger rätt svar 6 poäng, fel svar −1 poäng och obesvarad fråga 0 poäng. ' +
-         'Essäfrågorna ger max 20 poäng, utan minuspoäng.</p>';
+         'ger rätt svar ' + e.poang.flerval + ' poäng, fel svar −1 poäng och obesvarad fråga 0 poäng. ' +
+         'Essäfrågorna ger max ' + e.poang.essa + ' poäng, utan minuspoäng.</p>';
     h += '<p class="muted mini" style="margin:.5rem 0 0">Klicka på ett markerat alternativ igen ' +
          'för att ta bort svaret.</p>';
     h += '</div>';
@@ -316,7 +323,7 @@ window.SYSB23.tentaprov = (function () {
     flervalsfragor().forEach(function (f) {
       var svar = prov.svar[f.nr];
       if (svar === undefined) { blanka++; return; }
-      if (svar === nyckelFor(f.nr).ratt) { ratt++; poang += POANG_RATT; }
+      if (svar === nyckelFor(f.nr).ratt) { ratt++; poang += f.poang; }
       else { felSvar++; poang += POANG_FEL; }
     });
 
@@ -441,7 +448,7 @@ window.SYSB23.tentaprov = (function () {
     });
 
     h += '<p class="muted liten" style="margin:.6rem 0 0">' +
-         (korrekt ? '+6 p' : (blank ? 'Obesvarad · 0 p' : 'Fel · −1 p')) + '</p>';
+         (korrekt ? '+' + f.poang + ' p' : (blank ? 'Obesvarad · 0 p' : 'Fel · −1 p')) + '</p>';
     h += '<div class="notis info liten" style="margin:.6rem 0 0">' + U.inline(k.forklaring) + '</div>';
     h += '</div></div>';
     return h;

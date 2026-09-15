@@ -44,7 +44,7 @@
 
   /* Varje delkurs visar bara de flikar den faktiskt har innehåll för.
      SQL-verkstaden och Modellera hör till Databaser; Essä hör till
-     Strategi, där tentan har två essäfrågor à 20 poäng. Databastentan
+     Strategi, där tentan har två eller tre essäfrågor à 15–20 poäng. Databastentan
      har inga — dess skrivuppgifter är DDL och normalisering, och de
      tränas i Modellera i stället.
 

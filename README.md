@@ -1,7 +1,7 @@
 # SYSB23 Plugg
 
 Ett lokalt pluggverktyg för kursen SYSB23. Innehållet bygger på det faktiska kursmaterialet
-i `sysb23-kursmaterial/` och på de två gamla tentorna från HT24.
+i `sysb23-kursmaterial/` och på de gamla tentorna från HT24 och HT25.
 
 Inga internetanrop, inga externa beroenden. All statistik sparas lokalt i din webbläsare.
 
@@ -71,8 +71,9 @@ utskrivna i appen där de påverkar något.
 - **Kalenderdata.** Avläst mot TimeEdit 1 augusti 2026. Kontrollera alltid aktuell vecka
   själv — salar och tider kan ändras. Delkurserna i november hade färre pass inlagda vid
   avläsningen än de sannolikt får.
-- **Provformat, Strategi.** 10 flervalsfrågor à 6 p (−1 p vid fel, 0 p obesvarad) plus
-  2 essäfrågor à 20 p. Detta är verifierat mot de två HT24-tentorna.
+- **Provformat, Strategi.** Varierar mellan åren. HT24: 10 flervalsfrågor à 6 p plus
+  2 essäfrågor à 20 p. HT25: 3 essäfrågor à 15 p plus 11 flervalsfrågor à 5 p. Fel svar
+  ger −1 p och obesvarad 0 p på båda. Verifierat mot de tre gamla tentorna.
 - **Provformat, Databaser.** ANTAGANDE: exakt poängsättning framgår inte av materialet,
   som bara anger att "question format may vary". Appen använder 20 frågor à 5 p utan
   minuspoäng, fördelade över tentans fyra angivna områden. Betygsskalan U–A är dock
@@ -82,7 +83,7 @@ utskrivna i appen där de påverkar något.
   "missade" = 0 p.
 - **Ämnesbedömning.** Ett ämne bedöms först efter minst tre svar. Färre än så visas som
   "påbörjat".
-- **Flera frågor är hämtade ordagrant** från de två gamla tentorna. Det står i så fall
+- **Flera frågor är hämtade ordagrant** från de två HT24-tentorna. Det står i så fall
   i förklaringen.
 
 ---

@@ -12,7 +12,8 @@
    feltolkad eller annan PDF upptäcks i stället för att rättas fel.
 
    Tolkningen bygger på hur Inspera skriver ut tentor:
-     - varje fråga slutar med raden "Totalpoäng: N"
+     - varje fråga slutar med raden "Totalpoäng: N", och N är frågans poäng
+       (6 och 20 p på HT24, 5 och 15 p på HT25)
      - flervalsfrågor har raden "Välj ett alternativ:" före alternativen
      - en radbrytning inom ett alternativ ger ~12 pt till nästa rad, en ny
        rad mellan två alternativ ≥ 28 pt. Gränsen läggs på 20.
@@ -151,9 +152,16 @@ window.SYSB23.extentaimport = (function () {
     return (/[A-Za-zÅÄÖåäö]-$/.test(forra) && /^[a-zåäö]/.test(nastaText)) ? '' : ' ';
   }
 
+  /* Tentans sidhuvud. HT24-utskrifterna börjar med utskriftstiden
+     ("2024-10-10 08:47 HT24 - SYSB23, …"), HT25 har bara rubriken
+     ("HT25 - SYSB23, … 2025-10-14") överst på varje sida. */
+  function arSidhuvud(t) {
+    return /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}/.test(t) || /^[HV]T\d{2} - SYSB23\b/.test(t);
+  }
+
   /* Sidhuvud, sidfot och webbadresser tillhör inte tentan. */
   function arBrus(t) {
-    return /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}/.test(t) ||
+    return arSidhuvud(t) ||
            /inspera\.com/.test(t) ||
            /^\d+\s*\/\s*\d+$/.test(t);
   }
@@ -171,7 +179,7 @@ window.SYSB23.extentaimport = (function () {
       tillRader(sida).forEach(function (r) {
         var t = text(r);
         if (!t) return;
-        if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}/.test(t) && !rubrik) rubrik = t;
+        if (arSidhuvud(t) && !rubrik) rubrik = t;
         if (arBrus(t)) return;
         r.sida = si;
         rader.push(r);
@@ -209,7 +217,9 @@ window.SYSB23.extentaimport = (function () {
     rader.forEach(function (r, i) {
       var t = text(r);
       if (/^Välj ett alternativ/.test(t)) iVal = i;
-      if (/^Skriv in ditt svar/.test(t)) iSkriv = i;
+      /* "Skriv in ditt svar här" eller "Skriv ditt svar här. Ändringar …" —
+         det som följer är svarsrutans verktygsrad, inte frågan. */
+      if (/^Skriv (in )?ditt svar/.test(t) && iSkriv === -1) iSkriv = i;
     });
 
     var slutFraga = iVal > -1 ? iVal : (iSkriv > -1 ? iSkriv : rader.length);

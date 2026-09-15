@@ -793,12 +793,11 @@ window.SYSB23.kompendium.strategi.kapitel.push(
     {
       rubrik: 'Tentans upplägg och poängsystem',
       text:
-        'Enligt de två HT24-tentorna:\n\n' +
-        '- **10 flervalsfrågor à 6 poäng** = 60 p\n' +
-        '- **2 essäfrågor à 20 poäng** = 40 p\n' +
-        '- **Max 100 poäng**\n\n' +
+        'Upplägget har skiftat mellan åren, men alltid gett max 100 poäng:\n\n' +
+        '- **HT24** (båda tentorna): 10 flervalsfrågor à 6 p = 60 p, och 2 essäfrågor à 20 p = 40 p\n' +
+        '- **HT25** (ordinarie): 3 essäfrågor à 15 p = 45 p först, och sedan 11 flervalsfrågor à 5 p = 55 p\n\n' +
         '**Poängsättningen i flervalsdelen är det viktigaste att förstå:**\n\n' +
-        '- Rätt svar: **+6 p**\n' +
+        '- Rätt svar: **+6 p** (HT24) eller **+5 p** (HT25)\n' +
         '- Fel svar: **−1 p**\n' +
         '- Obesvarad fråga: **0 p**\n\n' +
         'Essäfrågorna har inga minuspoäng.\n\n' +
@@ -812,7 +811,7 @@ window.SYSB23.kompendium.strategi.kapitel.push(
         '**Räkna på gissningen.** Med fyra alternativ och ingen som helst aning är förväntat utfall vid gissning ' +
         '0,25 × 6 + 0,75 × (−1) = **+0,75 p**. Ren gissning lönar sig alltså marginellt. Men kan du utesluta ett ' +
         'alternativ blir det 0,33 × 6 + 0,67 × (−1) = **+1,33 p**, och med två uteslutna 0,5 × 6 + 0,5 × (−1) = ' +
-        '**+2,5 p**.\n\n' +
+        '**+2,5 p**. Med 5 p för rätt svar (HT25) blir ren gissning +0,5 p – samma slutsats.\n\n' +
         'Slutsats: **gissa alltid om du kan utesluta minst ett alternativ.** Hoppa bara över frågor där du inte ' +
         'kan utesluta någonting alls – och det är sällsynt om du läst kompendiet.\n\n' +
         '**Känn igen mönstren i distraktorerna.** HT24-tentorna använde två återkommande grepp:\n\n' +
@@ -830,7 +829,7 @@ window.SYSB23.kompendium.strategi.kapitel.push(
     {
       rubrik: 'Taktik för essädelen',
       text:
-        '20 poäng per essäfråga motsvarar drygt tre flervalsfrågor. **Lämna dem aldrig obesvarade** – här finns ' +
+        '15–20 poäng per essäfråga motsvarar ungefär tre flervalsfrågor. **Lämna dem aldrig obesvarade** – här finns ' +
         'inga minuspoäng, så allt du skriver som är rimligt kan bara hjälpa.\n\n' +
         '**Struktur som fungerar:**\n\n' +
         '1. **Definiera begreppet.** Börja med att visa att du vet vad frågan handlar om. En eller två meningar.\n' +
@@ -853,7 +852,11 @@ window.SYSB23.kompendium.strategi.kapitel.push(
         '- Barney om AI: huvudargument samt hur hållbara fördelar ändå kan skapas\n' +
         '- Nya mått: vilka typer förändringarna ger upphov till, hur de påverkar arbetssätt, exempel på hur båda ' +
         'måltyperna hanteras\n\n' +
-        'Alla fyra finns som övningsfrågor i Essä-läget med checklista.'
+        '**Och de tre som kom HT25:**\n\n' +
+        '- Balanserat styrkort: de fyra perspektiven, vad de fokuserar på, och andra perspektiv som passar i dag\n' +
+        '- Rimlig vinst: vad som avgör vilken långsiktig avkastning ett nystartat företag ska sikta på\n' +
+        '- IT och AI: varför de sällan ger långsiktiga konkurrensfördelar, och vad som krävs för att de ska göra det\n\n' +
+        'Alla sju finns som övningsfrågor i Essä-läget med checklista.'
     },
     {
       rubrik: 'Sista veckans plan',

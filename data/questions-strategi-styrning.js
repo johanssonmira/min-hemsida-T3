@@ -146,6 +146,41 @@ window.SYSB23.fragor.push(
   ],
   kalla: 'Kaplan_Norton_1993.pdf'
 },
+{
+  id: 'str-bsc-07',
+  delkurs: 'strategi',
+  amne: 'str-bsc',
+  typ: 'oppen',
+  svarighet: 2,
+  fraga: 'Vilka är de fyra grundperspektiven i Kaplan och Nortons balanserade styrkort, och vad fokuserar vart och ett av dem på? Ge också exempel på andra perspektiv som kan vara relevanta för verksamheter i dag.',
+  modellsvar:
+    '**Bakgrunden.** Kaplan och Norton menar att traditionella finansiella mått rapporterar vad som hände förra perioden utan att säga hur prestationen kan förbättras nästa. Styrkortet behåller de finansiella måtten men kompletterar dem med icke-finansiella, så att ledningen ser både utfallet och det som driver framtida resultat. Rekommendationen är 15–20 mått fördelade på perspektiven.\n\n' +
+    '**De fyra grundperspektiven:**\n\n' +
+    '1. *Finansiellt perspektiv* – hur företaget ser ut för ägarna. Fokus på lönsamhet och kapitalets användning: avkastning på sysselsatt kapital, kassaflöde, projektlönsamhet, prognossäkerhet. Det är det eftersläpande perspektivet som visar om strategin faktiskt gett resultat.\n\n' +
+    '2. *Kundperspektiv* – hur kunderna uppfattar företaget. Fokus på det som skapar värde för kunden: kundnöjdhet, marknadsandel hos nyckelkunder, prisindex, leveranssäkerhet. Kopplar till yttre effektivitet – att göra rätt saker.\n\n' +
+    '3. *Interna processer* – vad företaget måste vara bra på internt för att kunderna ska bli nöjda. Kvalitet, ledtider, säkerhet och mått per fas i processen. Rockwater mätte t.ex. timmar med potentiella kunder i identifieringsfasen och ett säkerhetsindex.\n\n' +
+    '4. *Innovation och lärande* (lärande och tillväxt) – om företaget kan fortsätta att förbättras och skapa värde. Andel intäkter från nya tjänster, förbättringsindex, medarbetarattityder, antal förbättringsförslag, intäkt per anställd.\n\n' +
+    'Perspektiven hänger ihop i en **orsakskedja**: lärande och kompetens förbättrar processerna, som gör kunderna nöjdare, vilket till sist syns i det finansiella utfallet. Ittner och Larcker visar att företag som faktiskt bygger och validerar sådana kedjor presterar bättre.\n\n' +
+    '**Andra perspektiv som kan vara relevanta i dag.** Kaplan och Norton betonar att styrkortet inte är en mall – olika marknader och strategier kräver olika styrkort. Därför lägger många verksamheter till eller byter perspektiv:\n\n' +
+    '- *Hållbarhets- eller miljöperspektiv* – koldioxidutsläpp, energieffektivitet, andel återvunnet material. Motiveras av Triple Bottom Line och ESG: det som mäts blir gjort.\n' +
+    '- *Medarbetarperspektiv* – brutet ur lärandeperspektivet: personalomsättning, sjukfrånvaro, jämställdhet, kompetensutveckling. Kursbokens ÅF-exempel har just sådana medarbetarmål.\n' +
+    '- *Samhälls- eller socialt perspektiv* – arbetsmiljö i leverantörskedjan, lokalt engagemang, etik. Kopplar till S i ESG och till intressentmodellen, där opinionsgrupper ger legitimitet mot socialt ansvar.\n' +
+    '- *Digitaliserings- eller IT-perspektiv* – digital mognad, systemens tillgänglighet, faktisk nytta av IT-investeringar snarare än investeringsvolym (produktivitetsparadoxen).\n' +
+    '- *Leverantörs- eller partnerperspektiv* – när en stor del av värdet skapas i nätverket.\n' +
+    '- I offentlig verksamhet byts ofta det finansiella perspektivet mot ett *medborgar- eller uppdragsperspektiv*, eftersom lönsamhet inte är målet.\n\n' +
+    '**Slutsats.** De fyra perspektiven ger balans mellan kort och lång sikt, mellan finansiella och icke-finansiella mått och mellan externt och internt. Nya perspektiv är rimliga när de speglar strategin – men varje tillägg ökar risken för måttinflation, så det bör finnas en tydlig koppling till det finansiella utfallet eller till ett uttalat mål.',
+  nyckelpunkter: [
+    'Varför styrkortet finns: finansiella mått är historiska och räcker inte för styrning',
+    'Finansiellt perspektiv: lönsamhet, kassaflöde, avkastning – hur ägarna ser företaget',
+    'Kundperspektiv: kundnöjdhet, marknadsandel – hur kunderna ser företaget',
+    'Interna processer: kvalitet, ledtider, säkerhet – vad företaget måste vara bra på',
+    'Innovation och lärande: förbättring, nya tjänster, medarbetare – förmågan att utvecklas',
+    'Orsakskedja mellan perspektiven (lärande → processer → kunder → finansiellt)',
+    'Andra perspektiv med motivering: t.ex. hållbarhet/miljö (TBL, ESG), medarbetare, samhälle, digitalisering',
+    'Styrkortet är ingen mall – perspektiven ska spegla strategin, men undvik måttinflation'
+  ],
+  kalla: 'Kaplan_Norton_1993.pdf; Rogers_Hudson_2011.pdf; Tentamen 251014 fråga 1'
+},
 
 /* ======================= str-ickefinansiella ======================= */
 {
@@ -543,6 +578,42 @@ window.SYSB23.fragor.push(
     'Kräver dessutom agility – förmågan att faktiskt agera på insikterna'
   ],
   kalla: 'Barney_2024_HBR.pdf, Tentamen 241206 fråga 11'
+},
+{
+  id: 'str-it-06',
+  delkurs: 'strategi',
+  amne: 'str-it',
+  typ: 'oppen',
+  svarighet: 3,
+  fraga: 'Varför leder IT och AI för det mesta inte till långsiktiga konkurrensfördelar? Vad krävs för att de här teknologierna ändå ska kunna ge varaktiga fördelar? Motivera ditt resonemang.',
+  modellsvar:
+    '**Utgångspunkt: vad som ger en varaktig fördel.** Enligt resursbaserad teori (RBV) uppstår uthålliga konkurrensfördelar ur resurser som är *värdefulla*, *sällsynta* och *kostsamma eller omöjliga att imitera*. Frågan är alltså om IT och AI uppfyller de tre kraven. Oftast gör de det bara för det första.\n\n' +
+    '**Varför IT och AI sällan ger långsiktiga fördelar:**\n\n' +
+    '1. *De går att köpa.* Standardsystem, molntjänster och AI-modeller säljs till alla. Det som vem som helst kan köpa är varken sällsynt eller svårt att imitera. En fördel varar bara tills konkurrenterna har köpt samma sak.\n\n' +
+    '2. *Allmänna teknologier sprids till alla.* Barney och Reeves pekar på ångmaskinen, elmotorn och persondatorn: de förändrade ekonomin i grunden, men just därför blev alla tvungna att använda dem, och de slutade vara en fördel för någon. De raderade snarare ut etablerade företags fördelar.\n\n' +
+    '3. *Värde skapas men fångas inte.* AI sänker kostnader – Klarna lät en AI-assistent ta två tredjedelar av kundtjänstchattarna – men samma besparing finns för varje konkurrent som inför tekniken. Den konkurreras bort till kunderna.\n\n' +
+    '4. *Alla får samma svar.* Liknande algoritmer som tränats på liknande data ger konkurrenterna i stort sett samma idéer och analyser.\n\n' +
+    '5. *Efterföljaren lär sig av förstaflyttaren.* AI tränas på ständigt uppdaterad data, så dina tidiga tillämpningar och strategiska val hamnar i det underlag konkurrenterna senare använder.\n\n' +
+    '6. *Egen data och egna plattformar skyddar dåligt.* Konkurrenternas data är ofta funktionellt likvärdig, mer data ger inte nödvändigtvis bättre analys, AI kan härleda vilken data som ligger bakom ett beslut, och data läcker.\n\n' +
+    '7. *Teknik ensam ger inte ens produktivitet.* Produktivitetsparadoxen visar att IT som läggs ovanpå oförändrade arbetssätt inte ger den väntade effekten. Utan organisatorisk förändring blir investeringen en kostnad.\n\n' +
+    '**Vad som krävs för att de ändå ska ge varaktiga fördelar:**\n\n' +
+    '- *Kombinera tekniken med resurser som redan är svåra att imitera.* Barneys huvudpoäng: tillämpas AI på unika förmågor och resurser ger den insikter som konkurrenter utan de resurserna inte kan få. Amazon – leverantörsrelationer, sammankopplade system, lager, distribution och returhantering i en kultur som belönar effektivitet – kan dra nytta av AI som bara ett fåtal andra kan matcha.\n\n' +
+    '- *Strategic alignment.* Enligt Henderson och Venkatraman måste affärsstrategi, IT-strategi, organisationsinfrastruktur och IT-infrastruktur vara i linje. Fördelen ligger då inte i systemet utan i hur system, processer, kompetens och kultur passar ihop – och den helheten är svår att kopiera.\n\n' +
+    '- *Ändra processerna.* Arbetsflöden måste göras om så att tekniken faktiskt utnyttjas, annars uteblir effekten (produktivitetsparadoxen).\n\n' +
+    '- *Socialt komplexa resurser.* Kultur, rykte och samarbetsformer är resultatet av komplexa interaktioner och kan inte köpas. En lösning som är djupt inbäddad i dem blir svår att replikera, även om tekniken är allmänt tillgänglig.\n\n' +
+    '- *Lärande och snabbfothet.* Förmågan att snabbt agera på insikter och ständigt förnya sig är i sig sällsynt (dynamic capabilities). Den svårare vägen enligt Barney är att bygga hela affärsmodellen kring AI, så att varje process integrerar dess insikter – något inget företag ännu lyckats med.\n\n' +
+    '**Slutsats.** IT och AI är i dag nödvändiga för att vara med i konkurrensen, men i sig själva ger de sällan en varaktig fördel eftersom de kan köpas och imiteras. Fördelen uppstår när tekniken förstärker resurser och förmågor som är sällsynta och svåra att kopiera – och när organisationen förändras så att tekniken faktiskt används.',
+  nyckelpunkter: [
+    'RBV: varaktig fördel kräver värdefulla, sällsynta och svårimiterade resurser',
+    'IT och AI kan köpas av alla ⇒ varken sällsynta eller svårimiterade',
+    'Allmänna teknologier sprids och raderar fördelar (Barney: ångmaskin, elmotor, PC)',
+    'Värdeskapande ≠ värdefångst; alla får liknande resultat, efterföljaren lär av förstaflyttaren',
+    'Produktivitetsparadoxen: teknik utan processförändring ger ingen effekt',
+    'Krav 1: kombinera tekniken med redan unika resurser och förmågor (Amazon)',
+    'Krav 2: strategic alignment och ändrade processer – helheten är svår att kopiera',
+    'Krav 3: socialt komplexa resurser, lärande och snabbfothet (eventuellt affärsmodell byggd kring AI)'
+  ],
+  kalla: 'Barney_2024_HBR.pdf; Herrmann_2005.pdf; Tentamen 251014 fråga 3'
 },
 
 /* ========================== str-hallbarhet ========================== */

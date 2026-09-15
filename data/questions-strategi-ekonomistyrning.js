@@ -315,6 +315,41 @@ window.SYSB23.fragor.push(
   ],
   kalla: 'EkonomistyrningAJK_Kap13.pdf kap. 1'
 },
+{
+  id: 'str-mal-07',
+  delkurs: 'strategi',
+  amne: 'str-mal',
+  typ: 'oppen',
+  svarighet: 3,
+  fraga: 'Anta att du startar ett företag i en bransch du själv väljer. Vilka faktorer påverkar hur du resonerar om vilken vinst eller avkastning som är rimlig för företaget på lång sikt? Använd gärna teorier och begrepp från kursen.',
+  modellsvar:
+    '*Exempel: ett litet kafé- och bageriföretag. Svaret fungerar för vilken bransch som helst, men ett konkret exempel ger fler poäng än ett abstrakt resonemang.*\n\n' +
+    '**Vinst eller lönsamhet?** Resultatet i kronor säger lite. Det som går att jämföra är **lönsamheten** – resultatet i förhållande till kapitalet, t.ex. räntabilitet på eget kapital (resultat efter finansiella poster / eget kapital). Frågan blir alltså vilken avkastning på det insatta kapitalet som är rimlig.\n\n' +
+    '**1. Alternativkostnaden för kapitalet.** Pengarna jag sätter in kunde ha placerats någon annanstans. Den avkastning jag avstår är en alternativkostnad, och den sätter golvet: ger företaget på sikt mindre än en placering med liknande risk är det bättre att lägga ned. Samma tanke ligger bakom kalkylräntan i de kassaflödesbaserade modellerna.\n\n' +
+    '**2. Risk.** En riskfri krona är värd mer än en riskfylld. Ett nystartat företag i en osäker bransch måste därför ge högre avkastning än t.ex. en bankplacering för att vara värt det. Ju större osäkerheten om framtida kassaflöden, desto högre krav.\n\n' +
+    '**3. Branschen.** Porters Five Forces: lönsamhetspotentialen beror på krafternas samlade styrka. Hög rivalitet, låga inträdeshinder, många substitut och starka kunder eller leverantörer pressar avkastningen. Ett kafé i en storstad möter allt detta, så en rimlig nivå blir lägre där än i en bransch med höga inträdeshinder. Kapitalintensiteten spelar också in – mycket bundet kapital kräver mer resultat för samma lönsamhet.\n\n' +
+    '**4. Företagets egna resurser och strategi.** Enligt RBV kan värdefulla, sällsynta och svårimiterade resurser – ett starkt varumärke, unik kompetens, ett bra läge – ge högre avkastning än branschsnittet. Valet mellan kostnadsledarskap, differentiering och fokus påverkar vilka marginaler som är möjliga.\n\n' +
+    '**5. Vilken syn på företagets mål man har.**\n\n' +
+    '- *Vinstmaximering* (neoklassisk teori) säger att man ska sträva efter största möjliga vinst – men bygger på full information, vilket en nystartare aldrig har.\n' +
+    '- *Satisfieringsmodellen* (Simon) är mer realistisk: på grund av begränsad rationalitet siktar man på en tillfredsställande vinst i förhållande till en anspråksnivå, som beror på situationen och möjligheterna. Den ska räcka för att överleva och över tid vara minst lika hög som tidigare.\n' +
+    '- *Intressentmodellen* (Rhenman): ägaren vill ha avkastning, men kunder, anställda, långivare, leverantörer och samhälle vill också ha sina belöningar. En för hög vinst genom låga löner eller höga priser kan kosta personal, kunder och legitimitet. Rimlig vinst blir en balans.\n' +
+    '- *Företagsledarmodellerna* påminner om att den som driver företaget kan prioritera tillväxt (Baumol) eller egen nytta (Williamson), så länge ägarna får en tillfredsställande vinst.\n\n' +
+    '**6. Tidshorisonten.** Kursboken förespråkar lönsamhet **på lång sikt**. Under uppstarten är förlust eller låg avkastning normalt, eftersom investeringar i lokal, varumärke och kundbas ska betala sig senare. Att pressa fram hög vinst direkt – t.ex. genom att snåla på kvalitet eller personal – kan skada den långsiktiga lönsamheten. Lediga resurser gör företaget mindre effektivt på kort sikt men mer på lång sikt.\n\n' +
+    '**7. Andra mål som restriktioner.** Lönsamhet är huvudmålet men inte det enda. Företaget måste ha likviditet att betala räkningar, en soliditet som gör att banken lånar ut, och kanske hållbarhetsmål (Triple Bottom Line). De begränsar hur vinsten får skapas.\n\n' +
+    '**Slutsats.** En rimlig långsiktig avkastning ligger minst i nivå med alternativkostnaden justerad för risk, begränsas uppåt av branschens konkurrens och möjliggörs av företagets egna resurser. Vad som är "rimligt" är i slutänden en avvägning – tillräckligt för att ägaren ska stanna kvar och företaget överleva och utvecklas, men förenligt med kraven från övriga intressenter.',
+  nyckelpunkter: [
+    'Lönsamhet (resultat i förhållande till kapital, t.ex. räntabilitet) snarare än vinst i kronor',
+    'Alternativkostnaden för kapitalet sätter golvet (jfr kalkylränta)',
+    'Risken: osäkrare verksamhet kräver högre avkastning',
+    'Branschens attraktivitet (Five Forces) och kapitalintensitet begränsar vad som är möjligt',
+    'Egna resurser och strategi (RBV, generiska strategier) kan motivera högre avkastning',
+    'Målmodellerna: vinstmaximering vs satisfiering (anspråksnivå) vs intressentmodellen',
+    'Långsiktighet: uppstartsinvesteringar, kortsiktiga vinster kan skada lönsamheten på sikt',
+    'Andra mål som restriktioner: likviditet, soliditet, hållbarhet',
+    'Konkret exempel ur den valda branschen genom hela svaret'
+  ],
+  kalla: 'EkonomistyrningAJK_Kap13.pdf kap. 1–3; Herrmann_2005.pdf; Tentamen 251014 fråga 2'
+},
 
 /* ========================= str-effektivitet ========================= */
 {
