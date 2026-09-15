@@ -1,16 +1,14 @@
 /* =========================================================================
    sw.js – service worker. Gör appen körbar utan internet.
 
-   Strategin är cache-först med tyst uppdatering i bakgrunden. Allt i appen
-   är statiskt och litet, så det finns ingen anledning att vänta på nätet
-   innan något visas: filerna serveras direkt ur cachen medan en ny version
-   hämtas åt sidan. Nästa gång man startar appen är den ny.
+   Strategin är nätverket först och cachen som reserv när man är offline.
+   Se kommentaren vid fetch nedan för varför.
 
    Höj VERSION när något ändras. Då byggs cachen om från grunden och gamla
    filer städas bort i activate.
    ========================================================================= */
 
-var VERSION = 'sysb23-v9';
+var VERSION = 'sysb23-v10';
 
 var FILER = [
   './',
@@ -65,10 +63,12 @@ var FILER = [
 self.addEventListener('install', function (e) {
   e.waitUntil(
     caches.open(VERSION)
-      .then(function (c) { return c.addAll(FILER); })
-      /* Den nya versionen tar över direkt i stället för att vänta på att
-         alla flikar stängts. Appen har ingen server och inget delat
-         tillstånd, så det finns inget att bli osams om. */
+      /* cache: 'reload' går förbi webbläsarens HTTP-cache. GitHub Pages
+         skickar max-age=600, så utan det kunde en ny version av appen
+         installeras med tio minuter gamla filer — och sedan ligga kvar. */
+      .then(function (c) {
+        return c.addAll(FILER.map(function (f) { return new Request(f, { cache: 'reload' }); }));
+      })
       .then(function () { return self.skipWaiting(); })
   );
 });
@@ -85,28 +85,29 @@ self.addEventListener('activate', function (e) {
   );
 });
 
+/* Nätverket först, cachen bara när man är offline.
+
+   Tidigare var det tvärtom: cachen först och en tyst uppdatering i
+   bakgrunden. Det gjorde att en ny version syntes först vid andra eller
+   tredje besöket — och det är precis så det kändes som att ändringar
+   "inte fanns". Appen är liten, så att vänta på nätet kostar nästan
+   ingenting, och offline fungerar den fortfarande. */
 self.addEventListener('fetch', function (e) {
   var url = new URL(e.request.url);
-
-  /* Bara vår egen sida cachas. Allt annat lämnas åt nätet. */
   if (e.request.method !== 'GET' || url.origin !== self.location.origin) return;
 
   e.respondWith(
-    caches.match(e.request).then(function (traff) {
-      var frannatet = fetch(e.request).then(function (svar) {
-        if (svar && svar.status === 200 && svar.type === 'basic') {
-          var kopia = svar.clone();
-          caches.open(VERSION).then(function (c) { c.put(e.request, kopia); });
-        }
-        return svar;
-      }).catch(function () {
-        /* Offline och inget i cachen: för en sidnavigering är index.html
-           bättre än webbläsarens dinosaurie. */
+    fetch(e.request, { cache: 'no-cache' }).then(function (svar) {
+      if (svar && svar.status === 200 && svar.type === 'basic') {
+        var kopia = svar.clone();
+        caches.open(VERSION).then(function (c) { c.put(e.request, kopia); });
+      }
+      return svar;
+    }).catch(function () {
+      return caches.match(e.request).then(function (traff) {
+        if (traff) return traff;
         if (e.request.mode === 'navigate') return caches.match('index.html');
-        return traff;
       });
-
-      return traff || frannatet;
     })
   );
 });

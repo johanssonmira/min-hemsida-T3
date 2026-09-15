@@ -1856,6 +1856,17 @@ body.fokus #vy-ova, body.fokus #vy-prov { max-width: 760px; }
 
 .provhuvud { border-left: 5px solid var(--aktiv, var(--blaa-500)); }
 
+/* Essä: märkning av frågor som kom på en riktig tenta */
+.etikettrad { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; margin-bottom: .5rem; }
+.tentamarke {
+  background: var(--ockra-100); color: var(--ockra-600);
+  font-size: .7rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase;
+  padding: .15rem .5rem; border-radius: 4px;
+}
+.fragetext.tentaordagrant { border-left: 4px solid var(--ockra-500); padding-left: .9rem; }
+.fragetext.tentaordagrant p { margin: 0 0 .5rem; }
+.fragetext.tentaordagrant p:last-child { margin-bottom: 0; }
+
 /* Frågetexten kommer från tentans PDF i stycken */
 .provtext p { margin: 0 0 .55rem; }
 .provtext p:last-child { margin-bottom: 0; }

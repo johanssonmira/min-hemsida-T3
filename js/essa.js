@@ -16,9 +16,18 @@ window.SYSB23.essa = (function () {
 
   function rendera() {
     var delkurs = S.store.delkurs();
+    /* Frågorna som faktiskt kom på tentorna först, nyaste tentan överst.
+       Övriga essäfrågor ur banken kommer efter. */
     var fragor = S.fragor.filter(function (f) {
       return f.delkurs === delkurs && f.typ === 'oppen';
-    });
+    }).map(function (f, i) {
+      var p = tentaposter(f.id)[0];
+      return { f: f, i: i, nyckel: p ? p.tenta.datum + '-' + (100 - p.nr) : '' };
+    }).sort(function (a, b) {
+      if (!!a.nyckel !== !!b.nyckel) return a.nyckel ? -1 : 1;
+      if (a.nyckel !== b.nyckel) return a.nyckel < b.nyckel ? 1 : -1;
+      return a.i - b.i;
+    }).map(function (x) { return x.f; });
 
     var vy = U.el('vy-essa');
 
@@ -42,24 +51,45 @@ window.SYSB23.essa = (function () {
             'facit och kryssa i vad du fick med. Ingen rättar åt dig; poängen är att du själv ' +
             'försöker minnas innan du tittar.</p>';
 
-    html += '<div class="chiprad">';
-    fragor.forEach(function (x, i) {
+    function valjare(x, i) {
       var u = S.store.hamtaUtkast(x.id);
       var klar = u.text && u.text.trim().length > 40;
-      html += '<button class="chip' + (i === valdIndex ? ' vald' : '') +
-              '" data-valj="' + i + '">' +
-              (klar ? '✓ ' : '') + 'Essä ' + (i + 1) + '</button>';
-    });
+      var p = tentaposter(x.id)[0];
+      var namn = p ? p.tenta.rubrik[0] + (p.tenta.titel === 'Omtentamen' ? ' omtenta' : '') + ' · fråga ' + p.nr
+                   : 'Övning ' + (i + 1 - antalTenta);
+      return '<button class="chip' + (i === valdIndex ? ' vald' : '') +
+             '" data-valj="' + i + '">' + (klar ? '✓ ' : '') + U.esc(namn) + '</button>';
+    }
+    var antalTenta = fragor.filter(function (x) { return tentaposter(x.id).length; }).length;
+
+    html += '<h3>Från de gamla tentorna</h3><div class="chiprad">';
+    fragor.slice(0, antalTenta).forEach(function (x, i) { html += valjare(x, i); });
     html += '</div>';
+    if (fragor.length > antalTenta) {
+      html += '<h3>Fler essäfrågor att öva på</h3><div class="chiprad">';
+      fragor.slice(antalTenta).forEach(function (x, i) { html += valjare(x, i + antalTenta); });
+      html += '</div>';
+    }
     html += '</div>';
 
     /* Frågan */
     html += '<div class="kort">';
     var forekomst = tentaforekomst(f.id);
+    var exakt = exaktTentatext(f.id);
     if (forekomst.length) {
-      html += '<p class="muted mini">Förekom som essäfråga på ' + U.esc(forekomst.join(' och ')) + '.</p>';
+      html += '<div class="etikettrad"><span class="tentamarke">Tentafråga</span>' +
+              '<span class="muted mini">' + U.esc(forekomst.join(' och ')) + '</span></div>';
     }
-    html += '<div class="fragetext">' + U.esc(f.fraga) + '</div>';
+    if (exakt) {
+      html += '<div class="fragetext tentaordagrant">' + exakt.html + '</div>';
+      html += '<p class="muted mini">Ordagrant som på tentan, ur PDF:en du läst in i Prov.</p>';
+    } else if (forekomst.length) {
+      html += '<div class="fragetext">' + U.esc(f.fraga) + '</div>';
+      html += '<div class="notis info liten">Det här är frågan med egna ord. <strong>Läs in tentan i Prov</strong> ' +
+              'så står den här ordagrant som den stod på tentan.</div>';
+    } else {
+      html += '<div class="fragetext">' + U.esc(f.fraga) + '</div>';
+    }
 
     html += '<label class="liten muted" for="essatext">Ditt svar</label>';
     html += '<textarea id="essatext" class="svarsruta" rows="14" ' +
@@ -127,18 +157,45 @@ window.SYSB23.essa = (function () {
     koppla(vy, f, fragor);
   }
 
-  /* Vilka gamla tentor frågan kom på, t.ex. "HT25 ordinarie tentamen (fråga 1, 15 p)".
+  /* Var frågan förekom på de gamla tentorna: [{ tenta, nr, poang }].
      Hämtas ur facit i data/extentor.js, så att en ny tenta syns här direkt. */
-  function tentaforekomst(id) {
+  function tentaposter(id) {
     var ut = [];
     (S.extentor || []).forEach(function (e) {
       e.fragor.forEach(function (q, i) {
-        if (q.bank === id) {
-          ut.push(e.rubrik[0] + ' ' + e.titel.toLowerCase() + ' (fråga ' + (i + 1) + ', ' + e.poang.essa + ' p)');
-        }
+        if (q.bank === id) ut.push({ tenta: e, nr: i + 1, poang: e.poang.essa });
       });
     });
-    return ut;
+    return ut.sort(function (a, b) { return a.tenta.datum < b.tenta.datum ? 1 : -1; });
+  }
+
+  function tentaforekomst(id) {
+    return tentaposter(id).map(function (p) {
+      return p.tenta.rubrik[0] + ' ' + p.tenta.titel.toLowerCase() +
+             ' (fråga ' + p.nr + ', ' + p.poang + ' p)';
+    });
+  }
+
+  /* Tentans exakta formulering, om tentan är inläst i Prov. Texten kommer
+     ur användarens egen PDF och ligger bara i webbläsaren — den finns inte
+     i koden. Escapas alltid; betoningen i originalet blir fetstil. */
+  function exaktTentatext(id) {
+    var poster = tentaposter(id);
+    for (var i = 0; i < poster.length; i++) {
+      var inlast = S.store.extenta(poster[i].tenta.id);
+      var fraga = inlast && inlast.tenta.fragor[poster[i].nr - 1];
+      if (fraga && fraga.typ === 'essa') {
+        return {
+          post: poster[i],
+          html: fraga.fraga.map(function (stycke) {
+            return '<p>' + stycke.map(function (d) {
+              return d.f ? '<strong>' + U.esc(d.t) + '</strong>' : U.esc(d.t);
+            }).join('') + '</p>';
+          }).join('')
+        };
+      }
+    }
+    return null;
   }
 
   function bedomning(i, n) {
