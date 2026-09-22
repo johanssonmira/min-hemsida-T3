@@ -31,6 +31,21 @@ window.SYSB23.delkurser = [
     tentaInfo:
       'Tentaformat enligt HT24: 10 flervalsfrågor à 6 p (fel svar ger −1 p, obesvarad 0 p) ' +
       '+ 2 essäfrågor à 20 p = 100 p. Inga hjälpmedel.'
+  },
+  {
+    id: 'processer',
+    namn: 'Processorienterad verksamhetsutveckling',
+    beskrivning:
+      'Business Process Management (BPM): historia och drivkrafter, BPM-livscykeln, ' +
+      'Jestons 7FE-ramverk för att driva BPM-initiativ, samt BPMN — notationen för att ' +
+      'rita och läsa processdiagram.',
+    examination:
+      'Digital salstentamen 3,0 hp (individuell) + gruppuppgift i BPMN/DMN 3,0 hp. Betygsskala U–A.',
+    tentaInfo:
+      'Tentan har två delar: en BPM-del med flervalsfrågor (rätt svar 5 p, fel −1 p, ' +
+      'obesvarad 0 p) och ett fåtal essäfrågor (max 15 p, inga minuspoäng) om Jeston-kursboken, ' +
+      'samt en BPMN-del med flervalsfrågor där poängen anges per fråga (samma minuspoäng). ' +
+      'BPMN-delen kan innehålla diagram att läsa och räkna ut körningsförlopp för.'
   }
 ];
 
@@ -301,6 +316,134 @@ window.SYSB23.amnen = [
       'Triple Bottom Line (people, planet, profit), Brundtlandrapportens definition ' +
       'av hållbar utveckling, ESG, CSR-debatten, Porter & van der Linde samt ' +
       'push- och pull-mekanismer.'
+  },
+
+  /* ------------------- PROCESSORIENTERAD VERKSAMHETSUTVECKLING ------------------- */
+  {
+    id: 'proc-intro',
+    delkurs: 'processer',
+    namn: 'BPM: definition, historia och drivkrafter',
+    kapitel: 'Föreläsning 1',
+    kalla: '01_SYSB23_BPM_HT26.pdf',
+    beskrivning:
+      'Vad BPM är enligt Jeston, produktivitetsparadoxen, 1990-talets managementtrender, ' +
+      'Business Process Reengineering, Petri-nät, BPM:s uppkomst 1998–2003, SOX och ' +
+      'utvecklingen mot RPA och agentisk AI.'
+  },
+  {
+    id: 'proc-livscykel',
+    delkurs: 'processer',
+    namn: 'BPM-livscykeln och normativ litteratur',
+    kapitel: 'Föreläsning 1–2',
+    kalla: '01_SYSB23_BPM_HT26.pdf',
+    beskrivning:
+      'BPM-livscykelns sju steg, skillnaden mellan normativ managementlitteratur och ' +
+      'forskningslitteratur, samt Jestons avmystifiering av vanliga missuppfattningar om BPM.'
+  },
+  {
+    id: 'proc-7fe',
+    delkurs: 'processer',
+    namn: '7FE-ramverket: faser och artefakter',
+    kapitel: 'Föreläsning 2–4',
+    kalla: 'Jeston (2022)',
+    beskrivning:
+      'Förstå-fasen, Target Operating Model, process assets, Red Wine Test, quick wins ' +
+      'och de artefakter Jeston knyter till varje fas i BPM-arbetet.'
+  },
+  {
+    id: 'proc-implementering',
+    delkurs: 'processer',
+    namn: 'Att starta och driva BPM-arbete',
+    kapitel: 'Föreläsning 2–4',
+    kalla: 'Jeston (2022)',
+    beskrivning:
+      'Drivers och triggers, business-issue-led kontra strategy-led initiativ, ' +
+      'top-down och bottom-up, samt Jestons fyra implementeringsscenarier: business as ' +
+      'usual, under the radar, pilot project och in the driver’s seat.'
+  },
+  {
+    id: 'proc-forandring',
+    delkurs: 'processer',
+    namn: 'Leadership och people change management',
+    kapitel: 'Föreläsning 3–4',
+    kalla: 'Jeston (2022)',
+    beskrivning:
+      'BPM-husets grundpelare, varför cirka 60 % av BPM-arbetet handlar om människor, ' +
+      'appreciative inquiry som förändringsansats, samt ledarskapets och ' +
+      'projektstyrningens roll som stödjande komponenter.'
+  },
+  {
+    id: 'proc-optimering',
+    delkurs: 'processer',
+    namn: 'Processoptimering: från BPR till agentisk AI',
+    kapitel: 'Föreläsning 4',
+    kalla: 'Jeston (2022); Hammer (1990)',
+    beskrivning:
+      'Processoptimeringslösningar (redesign, outsourcing, shared services, RPA, ' +
+      'molntjänster), varför RPA sällan skalar, och hur agentisk AI-orkestrering ' +
+      'skiljer sig från både RPA och traditionell BPM.'
+  },
+  {
+    id: 'proc-akademisk',
+    delkurs: 'processer',
+    namn: 'BPM som forskningsfält: akademi, hållbarhet och AI',
+    kapitel: 'Reijers (2021); Houy et al. (2012); Rosemann et al. (2024)',
+    kalla: 'Reijers_2021.pdf; Houy_2012.pdf; Rosemann_2024.pdf',
+    beskrivning:
+      'BPM:s akademiska rötter i europeisk workflow-forskning, Reijers sju forskningsteman, ' +
+      'Green BPM och varför det inte fått genomslag, samt Rosemann et al:s tre ' +
+      'förskjutningar för BPM i AI-eran.'
+  },
+  {
+    id: 'bpmn-grund',
+    delkurs: 'processer',
+    namn: 'BPMN-grunder: pooler, roller och aktiviteter',
+    kapitel: 'BPMN Walkthrough',
+    kalla: 'BPMN Walkthrough (Silver 2017)',
+    beskrivning:
+      'Vad BPMN är till för, instansbegreppet, namnkonventioner, pooler och lanes, ' +
+      'black-box-pooler, samt skillnaden mellan user task, service task och script task.'
+  },
+  {
+    id: 'bpmn-gateways',
+    delkurs: 'processer',
+    namn: 'Gateways: förgrening och sammanslagning',
+    kapitel: 'BPMN Walkthrough',
+    kalla: 'BPMN Walkthrough (Silver 2017)',
+    beskrivning:
+      'Exclusive (XOR), parallel (AND), inclusive (OR) och event-based gateway, ' +
+      'split kontra join, samt varför OR-join används för att undvika deadlock.'
+  },
+  {
+    id: 'bpmn-events',
+    delkurs: 'processer',
+    namn: 'Events: starta, vänta och reagera',
+    kapitel: 'BPMN Walkthrough',
+    kalla: 'BPMN Walkthrough (Silver 2017)',
+    beskrivning:
+      'Start-, intermediate- och end-event, kastande kontra fångande händelser, ' +
+      'boundary events (interrupting/non-interrupting), event-baserad gateway och ' +
+      'event-subprocesser.'
+  },
+  {
+    id: 'bpmn-avancerat',
+    delkurs: 'processer',
+    namn: 'Subprocesser, återanvändning och dataflöden',
+    kapitel: 'BPMN Walkthrough',
+    kalla: 'BPMN Walkthrough (Silver 2017)',
+    beskrivning:
+      'Vanlig subprocess kontra event-subprocess, call activities för återanvändning, ' +
+      'meddelandeflöden mot sekvensflöden, samt data stores och associationer.'
+  },
+  {
+    id: 'bpmn-dmn',
+    delkurs: 'processer',
+    namn: 'Beslutsregler: business rule task och DMN',
+    kapitel: 'Föreläsning 1; BPMN Walkthrough',
+    kalla: 'DMN/DRD',
+    beskrivning:
+      'Hur en business rule task i BPMN länkar till en DMN-beslutstabell (DRD), och ' +
+      'varför BPMN och DMN tillsammans stödjer förklarbarhet i automatiserat beslutsfattande.'
   }
 ];
 

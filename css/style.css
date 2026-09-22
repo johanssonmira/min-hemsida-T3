@@ -987,6 +987,12 @@ button:disabled:active { transform: none; }
 .alt.ar-ratt .alt-nr { background: var(--gron-500); color: #fff; }
 .alt.ar-fel  .alt-nr { background: var(--rod-500);  color: #fff; }
 
+/* ✓/✕ i radens slut, samma tecken som facitikonen använder – så att rätt
+   och fel märks med form, inte bara med den gröna/röda hueen. */
+.alt-utfall { margin-left: auto; padding-left: .6rem; font-weight: 900; font-size: 1.05rem; }
+.alt.ar-ratt .alt-utfall { color: var(--gron-600); }
+.alt.ar-fel  .alt-utfall { color: var(--rod-600); }
+
 .tangenttips { font-size: .77rem; color: var(--ink-soft); margin-top: .8rem; }
 .tangenttips kbd {
   background: var(--creme-200); border: 1.5px solid var(--creme-400);
@@ -1020,25 +1026,17 @@ button:disabled:active { transform: none; }
 .facitikon.fel  { background: var(--rod-500); }
 .facitikon.neutral { background: var(--ink-soft); }
 
-.altforklaring {
-  font-size: .885rem; line-height: 1.62; margin: 0 0 .6rem;
-  padding: .6rem .9rem; border-left: 4px solid var(--creme-400);
-  background: var(--creme-100); border-radius: 0 6px 6px 0;
-  color: var(--ink-mid);
+/* Hopfälld lista med förklaringen till de återstående fel alternativen –
+   de som INTE redan visats i facitrutan (mitt val, rätt svar). Neutral,
+   utan färg: de är redan kända som "fel", listan säger bara varför. */
+.lankbtn.neutral:hover { color: var(--blaa-600); }
+.altlista { display: grid; gap: .5rem; margin: .75rem 0 1rem; }
+.altrad {
+  font-size: .885rem; line-height: 1.62;
+  padding: .6rem .9rem; border: 1.5px solid var(--creme-300);
+  border-radius: var(--r-s); background: var(--creme-50); color: var(--ink-mid);
 }
-.altforklaring.ar-ratt { border-left-color: var(--gron-500); background: var(--gron-50); color: var(--gron-700); }
-.altforklaring.ar-fel  { border-left-color: var(--rod-500); }
-.altforklaring strong { display: block; margin-bottom: .24rem; color: var(--ink); }
-
-/* Rätt och fel märks med tecken, inte bara med färg. Det håller även i
-   ett grönt eller rosa tema, där hueen inte längre är ledig att betyda
-   något – och för den som inte skiljer rött från grönt. */
-.altforklaring strong::before {
-  display: inline-block; width: 1.15em; font-weight: 900;
-}
-.altforklaring.ar-ratt strong::before { content: '✓ '; color: var(--gron-600); }
-.altforklaring.ar-fel  strong::before { content: '✕ '; color: var(--rod-600); }
-.dittsvar { font-style: italic; color: var(--blaa-600); font-weight: 700; }
+.altrad strong { display: block; margin-bottom: .22rem; color: var(--ink); }
 
 /* Nivåuppgång efter ett rätt svar */
 .nivaupp {
@@ -1296,6 +1294,15 @@ button:disabled:active { transform: none; }
 }
 .tentakort:last-child { border-bottom: none; }
 .tentakort.narmast { background: var(--ockra-50); border: 2px solid var(--ockra-100); }
+/* Passerade tentor tonades tidigare ner med opacity .42, vilket sänkte
+   --ink mot kortbakgrunden till som lägst 1,86:1 — långt under AA. Nu
+   dämpas de i stället med ink-soft (samma nivå som redan används i
+   tk-meta) plus en streckad kant, samma "yta i stället för opacity"-lösning
+   som .kal-dag.utanfor. */
+.tentakort.passerad { border: 1px dashed var(--creme-300); }
+.tentakort.passerad .tk-namn { color: var(--ink-soft); font-weight: 600; }
+.tentakort.passerad .fargprick { opacity: .55; }
+.tentakort.passerad .tk-dagar { color: var(--ink-soft); font-style: italic; }
 .tk-namn { display: block; font-weight: 700; font-size: .95rem; }
 .tk-meta { display: block; font-size: .82rem; color: var(--ink-soft); margin-top: .1rem; }
 .tk-dagar {
@@ -1655,7 +1662,7 @@ body.fokus #vy-ova, body.fokus #vy-prov { max-width: 760px; }
   35%  { background: var(--gron-100, #BCE8CF); }
   100% { background: var(--gron-50); }
 }
-.altforklaring.ar-ratt { animation: rattBlink .8s .12s ease-out both; }
+.alt.ar-ratt { animation: rattBlink .8s .12s ease-out both; }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; scroll-behavior: auto; }

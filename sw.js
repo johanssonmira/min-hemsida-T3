@@ -8,7 +8,7 @@
    filer städas bort i activate.
    ========================================================================= */
 
-var VERSION = 'sysb23-v10';
+var VERSION = 'sysb23-v11';
 
 var FILER = [
   './',
@@ -28,6 +28,8 @@ var FILER = [
   'data/kompendium-strategi-3.js',
   'data/kompendium-databaser-1.js',
   'data/kompendium-databaser-2.js',
+  'data/kompendium-process-1.js',
+  'data/kompendium-process-2.js',
   'data/sql-databas.js',
   'data/sql-ovningar.js',
   'data/modellera.js',
@@ -36,6 +38,8 @@ var FILER = [
   'data/questions-db-joins.js',
   'data/questions-db-design.js',
   'data/questions-db-app.js',
+  'data/questions-process-bpm.js',
+  'data/questions-process-bpmn.js',
   'data/questions-strategi-ekonomistyrning.js',
   'data/questions-strategi-styrning.js',
   'data/questions-strategi-forelasning1.js',

@@ -431,8 +431,18 @@ window.SYSB23.ova = (function () {
     Array.prototype.forEach.call(alt.children, function (c, i) {
       c.classList.add('last');
       c.classList.remove('vald');
-      if (i === f.ratt) c.classList.add('ar-ratt');
-      else if (i === pass.valtIndex) c.classList.add('ar-fel');
+      /* Färg ensam skiljer inte rätt från fel för den som inte ser hueen –
+         samma ✓/✕ som resten av appen används därför här också, som en
+         liten markör i radens slut i stället för en egen textrad. */
+      if (i === f.ratt) {
+        c.classList.add('ar-ratt');
+        c.insertAdjacentHTML('beforeend', '<span class="alt-utfall" aria-hidden="true">✓</span>');
+        c.setAttribute('aria-label', (i + 1) + '. ' + f.alternativ[i] + ' — rätt svar');
+      } else if (i === pass.valtIndex) {
+        c.classList.add('ar-fel');
+        c.insertAdjacentHTML('beforeend', '<span class="alt-utfall" aria-hidden="true">✕</span>');
+        c.setAttribute('aria-label', (i + 1) + '. ' + f.alternativ[i] + ' — ditt svar, fel');
+      }
     });
 
     var nivaResultat = null;
@@ -457,38 +467,71 @@ window.SYSB23.ova = (function () {
     return 0;
   }
 
+  /* Varje forklaringar[i] i frågedatan är redan en hel mening som börjar
+     "Rätt. …" eller "Fel. …" – rubriken här ska därför bara säga UTFALLET,
+     inte upprepa det texten redan säger. Facit visar i tur och ordning:
+     1. förklaringen till det alternativ man faktiskt valde (eller, om man
+        hoppade över frågan, facitsvaret)
+     2. vid fel svar: facitsvaret också, så man inte behöver leta i listan
+     3. en hopfälld lista med förklaringen till de ÖVRIGA fel alternativen –
+        de som redan syns ovan (mitt val, rätt svar) tas inte med igen. */
   function visaFacitFlerval(f, utfall, nivaResultat) {
     var html = '';
-    var rubrik = utfall === 'ratt' ? 'Rätt svar'
-               : (utfall === 'hoppat' ? 'Obesvarad' : 'Fel svar');
+    var rubrik = utfall === 'ratt' ? 'Rätt' : (utfall === 'hoppat' ? 'Obesvarad' : 'Fel');
     var klass = utfall === 'ratt' ? 'ratt' : (utfall === 'fel' ? 'fel' : '');
     var ikon = utfall === 'ratt' ? '✓' : (utfall === 'fel' ? '✕' : '–');
     var ikonKlass = utfall === 'ratt' ? 'ratt' : (utfall === 'fel' ? 'fel' : 'neutral');
+    var forklaringar = f.forklaringar || [];
 
     /* Nivåuppgång firas – synligt framsteg är det som håller motivationen uppe */
     html += nivaupp(f, nivaResultat, utfall);
 
     html += '<div class="facitbox ' + klass + '">';
     html += '<div class="facitrubrik"><span class="facitikon ' + ikonKlass + '">' + ikon + '</span>';
-    html += '<h3 style="margin:0">' + rubrik + ' — rätt alternativ är ' + (f.ratt + 1) + '</h3></div>';
+    html += '<h3 style="margin:0">' + rubrik + '</h3></div>';
+
+    if (utfall === 'fel' && forklaringar[pass.valtIndex]) {
+      html += '<p>' + U.inline(forklaringar[pass.valtIndex]) + '</p>';
+    }
+    if (utfall !== 'ratt') {
+      html += '<p><strong>Rätt svar:</strong> ' + U.esc(f.alternativ[f.ratt]) + '.</p>';
+    }
+    if (forklaringar[f.ratt]) html += '<p>' + U.inline(forklaringar[f.ratt]) + '</p>';
     if (f.forklaring) html += U.block(f.forklaring);
     html += '</div>';
 
-    html += '<h3>Varför varje alternativ är rätt eller fel</h3>';
+    /* Dolda: alla fel alternativ utom det man själv valde – det är redan
+       förklarat i rutan ovan. */
+    var dolda = [];
     f.alternativ.forEach(function (text, i) {
-      var arRatt = i === f.ratt;
-      html += '<div class="altforklaring ' + (arRatt ? 'ar-ratt' : 'ar-fel') + '">';
-      html += '<strong>' + (i + 1) + '. ' + U.esc(text) +
-              (i === pass.valtIndex ? ' <span class="dittsvar">(ditt svar)</span>' : '') + '</strong>';
-      /* inline() i stället för esc() – då slår **fetstil** i frågedatan
-         igenom, precis som i kompendiet. Nyckelbegreppet ska fastna. */
-      html += U.inline((f.forklaringar && f.forklaringar[i]) || '');
-      html += '</div>';
+      if (i !== f.ratt && i !== pass.valtIndex && forklaringar[i]) dolda.push(i);
     });
+
+    if (dolda.length) {
+      html += '<button class="lankbtn neutral" id="visaovriga" aria-expanded="false">' +
+              'Varför är de andra fel?</button>';
+      html += '<div id="ovrigalternativ" class="altlista" hidden>';
+      dolda.forEach(function (i) {
+        html += '<div class="altrad"><strong>' + (i + 1) + '. ' + U.esc(f.alternativ[i]) + '</strong>';
+        html += U.inline(forklaringar[i]);
+        html += '</div>';
+      });
+      html += '</div>';
+    }
 
     if (f.kalla) html += '<p class="muted mini">Källa: ' + U.esc(f.kalla) + '</p>';
 
     avslutaFacit(html);
+
+    var toggle = q('#visaovriga');
+    if (toggle) {
+      toggle.addEventListener('click', function () {
+        var lista = q('#ovrigalternativ');
+        lista.hidden = !lista.hidden;
+        toggle.textContent = lista.hidden ? 'Varför är de andra fel?' : 'Dölj';
+        toggle.setAttribute('aria-expanded', String(!lista.hidden));
+      });
+    }
   }
 
   /* Visar antingen en nivåuppgång eller, vid fel svar, när frågan

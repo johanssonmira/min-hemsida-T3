@@ -19,7 +19,7 @@ window.SYSB23 = window.SYSB23 || {};
 window.SYSB23.kalenderDelkurser = [
   { id: 'strategi',     namn: 'Strategi och ekonomistyrning',            kort: 'Strategi',              hp: 2, kopplas: 'strategi',  farg: '#DE8600' },
   { id: 'databaser',    namn: 'Databaser',                               kort: 'Databaser',             hp: 3, kopplas: 'databaser', farg: '#2B29E0' },
-  { id: 'processer',    namn: 'Processorienterad verksamhetsutveckling', kort: 'Processorienterad',     hp: 3, kopplas: null,        farg: '#7C3AED' },
+  { id: 'processer',    namn: 'Processorienterad verksamhetsutveckling', kort: 'Processorienterad',     hp: 3, kopplas: 'processer', farg: '#7C3AED' },
   { id: 'arkitektur',   namn: 'Verksamhetsarkitektur',                   kort: 'Verksamhetsarkitektur', hp: 2, kopplas: null,        farg: '#0E7490' },
   { id: 'sakerhet',     namn: 'Säkerhet i informationssystem',           kort: 'Säkerhet',              hp: 2, kopplas: null,        farg: '#C2185B' },
   { id: 'ansvarsfull',  namn: 'Ansvarsfull verksamhetsutveckling',       kort: 'Ansvarsfull',           hp: 1, kopplas: null,        farg: '#0E7A52' },

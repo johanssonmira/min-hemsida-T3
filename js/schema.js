@@ -494,8 +494,8 @@ window.SYSB23.schema = (function () {
     var dagar = U.dagarTill(t.datum);
     var passerad = dagar < 0;
 
-    var h = '<div class="tentakort' + (arNarmast ? ' narmast' : '') + '"' +
-            (passerad ? ' style="opacity:.42"' : '') + '>';
+    var h = '<div class="tentakort' + (arNarmast ? ' narmast' : '') +
+            (passerad ? ' passerad' : '') + '">';
     h += '<span>';
     h += '<span class="tk-namn"><i class="fargprick" style="background:' +
          U.delkursFarg(t.delkurs) + '"></i>' + U.esc(U.delkursNamn(t.delkurs)) + '</span>';

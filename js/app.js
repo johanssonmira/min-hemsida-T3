@@ -58,7 +58,13 @@
      med fem som alla leder någonstans. */
   var VYER_PER_DELKURS = {
     strategi:  ['hem', 'las', 'ova', 'prov', 'essa', 'statistik', 'schema'],
-    databaser: ['hem', 'las', 'sql', 'modellera', 'ova', 'statistik', 'schema']
+    databaser: ['hem', 'las', 'sql', 'modellera', 'ova', 'statistik', 'schema'],
+    /* Ingen Prov-flik än: tentornas riktiga frågor är antingen engelska med
+       flerval-med-flera-rätt (ett format Prov-formuläret inte stödjer) eller
+       byggda kring BPMN-diagram som bilder, som inte går att extrahera ur
+       PDF:en på samma sätt som Strategis rena textfrågor. Öva och Essä
+       täcker samma begrepp, bara inte tentans exakta ordalydelse. */
+    processer: ['hem', 'las', 'ova', 'essa', 'statistik', 'schema']
   };
 
   function synligaVyer() {
