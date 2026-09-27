@@ -2,7 +2,7 @@
    SYSB23 – Kalender HT 2026
    -------------------------------------------------------------------------
    Terminen löper måndag 31 augusti 2026 till söndag 17 januari 2027.
-   Underlaget är avläst mot TimeEdit 1 augusti 2026.
+   Underlaget är avläst mot TimeEdit-utskriften "SCHEMA HT26" från 26 september 2026.
 
    VIKTIGT: kontrollera alltid aktuell vecka i TimeEdit – salar och tider
    kan ändras under terminens gång. Delkurserna i november hade färre pass
@@ -41,7 +41,9 @@ window.SYSB23.tentor = [
 ];
 
 /* ----------------------------- Alla pass -----------------------------
-   Avläst rad för rad ur TimeEdit-schemat för SYSB23 HT 2026.
+   Avläst rad för rad ur TimeEdit-schemat för SYSB23 HT 2026. Rubriken är
+   TimeEdits egen kommentar ("Laboration 2 · grupp 1 & 2"), så numreringen
+   och vilken grupp passet gäller syns direkt.
 
    Varje tillfälle ligger som en egen rad, precis som i TimeEdit. Två
    labbgrupper samma dag är alltså två poster — det gick inte att slå ihop
@@ -52,124 +54,125 @@ window.SYSB23.tentor = [
         | 'handledning' | 'redovisning' | 'tenta' | 'ovrigt'              */
 window.SYSB23.pass = [
   // ---------------------------- Vecka 36 ----------------------------
-  { datum: '2026-08-31', tid: '13:00–15:00', rubrik: 'Introduktion till kursen (upprop)', delkurs: 'strategi', sal: 'MA 5', larare: 'Björn Svensson', typ: 'ovrigt', obligatorisk: true },
-  { datum: '2026-09-01', tid: '13:00–15:00', rubrik: 'Föreläsning', delkurs: 'databaser', sal: 'MA 3', larare: 'Björn Svensson', typ: 'forelasning' },
-  { datum: '2026-09-02', tid: '08:00–10:00', rubrik: 'Föreläsning', delkurs: 'databaser', sal: 'MA 3', larare: 'Björn Svensson', typ: 'forelasning' },
-  { datum: '2026-09-02', tid: '13:00–15:00', rubrik: 'Laboration', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
-  { datum: '2026-09-02', tid: '15:00–17:00', rubrik: 'Laboration', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
-  { datum: '2026-09-03', tid: '10:00–12:00', rubrik: 'Föreläsning', delkurs: 'strategi', sal: 'MA 3', larare: 'Benjamin Weaver', typ: 'forelasning' },
-  { datum: '2026-09-04', tid: '10:00–12:00', rubrik: 'Föreläsning', delkurs: 'databaser', sal: 'MA 3', larare: 'Björn Svensson', typ: 'forelasning' },
+  { datum: '2026-08-31', tid: '13:00–15:00', rubrik: 'Introduktionsmöte för hela kursen', delkurs: 'strategi', sal: 'MA 5', larare: 'Björn Svensson', typ: 'ovrigt', obligatorisk: true },
+  { datum: '2026-09-01', tid: '13:00–15:00', rubrik: 'Föreläsning 1', delkurs: 'databaser', sal: 'MA 3', larare: 'Björn Svensson', typ: 'forelasning' },
+  { datum: '2026-09-02', tid: '08:00–10:00', rubrik: 'Föreläsning 2', delkurs: 'databaser', sal: 'MA 3', larare: 'Björn Svensson', typ: 'forelasning' },
+  { datum: '2026-09-02', tid: '13:00–15:00', rubrik: 'Laboration 1 · grupp 1 & 2', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
+  { datum: '2026-09-02', tid: '15:00–17:00', rubrik: 'Laboration 1 · grupp 3 & 4', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
+  { datum: '2026-09-03', tid: '10:00–12:00', rubrik: 'Föreläsning 1', delkurs: 'strategi', sal: 'MA 3', larare: 'Benjamin Weaver', typ: 'forelasning' },
+  { datum: '2026-09-04', tid: '10:00–12:00', rubrik: 'Föreläsning 3', delkurs: 'databaser', sal: 'MA 3', larare: 'Björn Svensson', typ: 'forelasning' },
 
   // ---------------------------- Vecka 37 ----------------------------
-  { datum: '2026-09-07', tid: '10:00–12:00', rubrik: 'Föreläsning', delkurs: 'databaser', sal: 'MA 5', larare: 'Björn Svensson', typ: 'forelasning' },
-  { datum: '2026-09-08', tid: '08:00–10:00', rubrik: 'Föreläsning', delkurs: 'strategi', sal: 'EC1:Crafoordsalen', larare: 'Benjamin Weaver', typ: 'forelasning' },
-  { datum: '2026-09-08', tid: '13:00–15:00', rubrik: 'Lektion', delkurs: 'databaser', sal: 'EC2:101', larare: 'Björn Svensson', typ: 'lektion' },
-  { datum: '2026-09-08', tid: '15:00–17:00', rubrik: 'Lektion', delkurs: 'databaser', sal: 'EC2:101', larare: 'Björn Svensson', typ: 'lektion' },
-  { datum: '2026-09-09', tid: '10:00–12:00', rubrik: 'Laboration', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
-  { datum: '2026-09-09', tid: '13:00–15:00', rubrik: 'Laboration', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
-  { datum: '2026-09-11', tid: '10:00–12:00', rubrik: 'Föreläsning — sista i delkursen', delkurs: 'strategi', sal: 'MA 5', larare: 'Benjamin Weaver', typ: 'forelasning' },
-  { datum: '2026-09-11', tid: '13:00–15:00', rubrik: 'Föreläsning', delkurs: 'databaser', sal: 'MA 3', larare: 'Björn Svensson', typ: 'forelasning' },
+  { datum: '2026-09-07', tid: '10:00–12:00', rubrik: 'Föreläsning 4', delkurs: 'databaser', sal: 'MA 5', larare: 'Björn Svensson', typ: 'forelasning' },
+  { datum: '2026-09-08', tid: '08:00–10:00', rubrik: 'Föreläsning 2', delkurs: 'strategi', sal: 'EC1:Crafoordsalen', larare: 'Benjamin Weaver', typ: 'forelasning' },
+  { datum: '2026-09-08', tid: '13:00–15:00', rubrik: 'Lektion 1 · grupp 1 & 2', delkurs: 'databaser', sal: 'EC2:101', larare: 'Björn Svensson', typ: 'lektion' },
+  { datum: '2026-09-08', tid: '15:00–17:00', rubrik: 'Lektion 1 · grupp 3 & 4', delkurs: 'databaser', sal: 'EC2:101', larare: 'Björn Svensson', typ: 'lektion' },
+  { datum: '2026-09-10', tid: '13:00–15:00', rubrik: 'Laboration 2 · grupp 1 & 2', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
+  { datum: '2026-09-10', tid: '15:00–17:00', rubrik: 'Laboration 2 · grupp 3 & 4', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
+  { datum: '2026-09-11', tid: '10:00–12:00', rubrik: 'Föreläsning 3', delkurs: 'strategi', sal: 'MA 5', larare: 'Benjamin Weaver', typ: 'forelasning' },
+  { datum: '2026-09-11', tid: '13:00–15:00', rubrik: 'Föreläsning 5', delkurs: 'databaser', sal: 'MA 3', larare: 'Björn Svensson', typ: 'forelasning' },
 
   // ---------------------------- Vecka 38 ----------------------------
-  { datum: '2026-09-14', tid: '08:00–10:00', rubrik: 'Föreläsning', delkurs: 'databaser', sal: 'MA 5', larare: 'Björn Svensson', typ: 'forelasning' },
-  { datum: '2026-09-16', tid: '10:00–12:00', rubrik: 'Laboration', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
-  { datum: '2026-09-16', tid: '15:00–17:00', rubrik: 'Laboration', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
-  { datum: '2026-09-17', tid: '10:00–12:00', rubrik: 'Föreläsning', delkurs: 'databaser', sal: 'MA 3', larare: 'Björn Svensson', typ: 'forelasning' },
+  { datum: '2026-09-14', tid: '08:00–10:00', rubrik: 'Föreläsning 6', delkurs: 'databaser', sal: 'MA 5', larare: 'Björn Svensson', typ: 'forelasning' },
+  { datum: '2026-09-17', tid: '10:00–12:00', rubrik: 'Föreläsning 7', delkurs: 'databaser', sal: 'MA 3', larare: 'Björn Svensson', typ: 'forelasning' },
+  { datum: '2026-09-18', tid: '13:00–15:00', rubrik: 'Laboration 3 · grupp 1 & 2', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
+  { datum: '2026-09-18', tid: '15:00–17:00', rubrik: 'Laboration 3 · grupp 3 & 4', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
 
   // ---------------------------- Vecka 39 ----------------------------
   { datum: '2026-09-21', tid: '08:00–11:00', rubrik: 'Tentamen', delkurs: 'strategi', sal: 'Skrivsal MA 9', larare: 'Benjamin Weaver', typ: 'tenta' },
-  { datum: '2026-09-22', tid: '10:00–12:00', rubrik: 'Föreläsning — introduktion', delkurs: 'processer', sal: 'MA 3', larare: 'Benjamin Weaver', typ: 'forelasning' },
-  { datum: '2026-09-23', tid: '10:00–12:00', rubrik: 'Laboration', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
-  { datum: '2026-09-23', tid: '13:00–15:00', rubrik: 'Laboration', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
-  { datum: '2026-09-25', tid: '10:00–12:00', rubrik: 'Föreläsning', delkurs: 'processer', sal: 'EC1:Crafoordsalen', larare: 'Benjamin Weaver', typ: 'forelasning' },
-  { datum: '2026-09-25', tid: '15:00–17:00', rubrik: 'Föreläsning', delkurs: 'databaser', sal: 'MA 3', larare: 'Björn Svensson', typ: 'forelasning' },
+  { datum: '2026-09-22', tid: '10:00–12:00', rubrik: 'Föreläsning 1 — introduktion', delkurs: 'processer', sal: 'MA 3', larare: 'Benjamin Weaver', typ: 'forelasning' },
+  { datum: '2026-09-23', tid: '08:00–10:00', rubrik: 'Laboration 4 · grupp 1 & 2', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
+  { datum: '2026-09-23', tid: '13:00–15:00', rubrik: 'Laboration 4 · grupp 3 & 4', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
+  { datum: '2026-09-25', tid: '10:00–12:00', rubrik: 'Föreläsning 2', delkurs: 'processer', sal: 'EC1:Crafoordsalen', larare: 'Benjamin Weaver', typ: 'forelasning' },
+  { datum: '2026-09-25', tid: '15:00–17:00', rubrik: 'Föreläsning 8', delkurs: 'databaser', sal: 'MA 3', larare: 'Björn Svensson', typ: 'forelasning' },
 
   // ---------------------------- Vecka 40 ----------------------------
-  { datum: '2026-09-29', tid: '10:00–12:00', rubrik: 'Föreläsning', delkurs: 'processer', sal: 'MA 3', larare: 'Benjamin Weaver', typ: 'forelasning' },
-  { datum: '2026-09-30', tid: '08:00–10:00', rubrik: 'Laboration', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
-  { datum: '2026-09-30', tid: '10:00–12:00', rubrik: 'Laboration', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
-  { datum: '2026-09-30', tid: '13:00–15:00', rubrik: 'Föreläsning', delkurs: 'databaser', sal: 'MA 3', larare: 'Björn Svensson', typ: 'forelasning' },
-  { datum: '2026-10-02', tid: '10:00–12:00', rubrik: 'Föreläsning', delkurs: 'databaser', sal: 'MA 3', larare: 'Björn Svensson', typ: 'forelasning' },
+  { datum: '2026-09-29', tid: '10:00–12:00', rubrik: 'Föreläsning 3', delkurs: 'processer', sal: 'MA 3', larare: 'Benjamin Weaver', typ: 'forelasning' },
+  { datum: '2026-09-29', tid: '15:00–17:00', rubrik: 'Lektion 2 · grupp 1 & 2', delkurs: 'databaser', sal: 'EC1:Crafoordsalen', larare: 'Björn Svensson', typ: 'lektion' },
+  { datum: '2026-09-30', tid: '13:00–15:00', rubrik: 'Föreläsning 9', delkurs: 'databaser', sal: 'MA 3', larare: 'Björn Svensson', typ: 'forelasning' },
+  { datum: '2026-10-01', tid: '10:00–12:00', rubrik: 'Lektion 2 · grupp 3 & 4', delkurs: 'databaser', sal: 'EC2:169', larare: 'Björn Svensson', typ: 'lektion' },
+  { datum: '2026-10-02', tid: '08:00–10:00', rubrik: 'Laboration 5 · grupp 1 & 2', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
+  { datum: '2026-10-02', tid: '10:00–12:00', rubrik: 'Föreläsning 10', delkurs: 'databaser', sal: 'MA 3', larare: 'Björn Svensson', typ: 'forelasning' },
+  { datum: '2026-10-02', tid: '13:00–15:00', rubrik: 'Laboration 5 · grupp 3 & 4', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
 
   // ---------------------------- Vecka 41 ----------------------------
-  { datum: '2026-10-05', tid: '10:00–12:00', rubrik: 'Föreläsning', delkurs: 'processer', sal: 'MA 3', larare: 'Benjamin Weaver', typ: 'forelasning' },
-  { datum: '2026-10-07', tid: '10:00–12:00', rubrik: 'Laboration', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
-  { datum: '2026-10-07', tid: '13:00–15:00', rubrik: 'Laboration', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
+  { datum: '2026-10-05', tid: '10:00–12:00', rubrik: 'Föreläsning 4', delkurs: 'processer', sal: 'MA 3', larare: 'Benjamin Weaver', typ: 'forelasning' },
+  { datum: '2026-10-07', tid: '10:00–12:00', rubrik: 'Laboration 6 · grupp 1 & 2', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
+  { datum: '2026-10-07', tid: '13:00–15:00', rubrik: 'Laboration 6 · grupp 3 & 4', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
 
   // ---------------------------- Vecka 42 ----------------------------
-  { datum: '2026-10-12', tid: '13:00–15:00', rubrik: 'Föreläsning', delkurs: 'processer', sal: 'MA 3', larare: 'Benjamin Weaver', typ: 'forelasning' },
-  { datum: '2026-10-13', tid: '15:00–17:00', rubrik: 'Föreläsning', delkurs: 'databaser', sal: 'MA 5', larare: 'Björn Svensson', typ: 'forelasning' },
-  { datum: '2026-10-14', tid: '08:00–10:00', rubrik: 'Laboration', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
-  { datum: '2026-10-14', tid: '10:00–12:00', rubrik: 'Lektion', delkurs: 'databaser', sal: 'EC2:101', larare: 'Björn Svensson', typ: 'lektion' },
-  { datum: '2026-10-14', tid: '10:00–12:00', rubrik: 'Laboration', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
-  { datum: '2026-10-14', tid: '15:00–17:00', rubrik: 'Lektion', delkurs: 'databaser', sal: 'EC2:101', larare: 'Björn Svensson', typ: 'lektion' },
+  { datum: '2026-10-12', tid: '13:00–15:00', rubrik: 'Föreläsning 5', delkurs: 'processer', sal: 'MA 3', larare: 'Benjamin Weaver', typ: 'forelasning' },
+  { datum: '2026-10-13', tid: '15:00–17:00', rubrik: 'Föreläsning 11', delkurs: 'databaser', sal: 'MA 5', larare: 'Björn Svensson', typ: 'forelasning' },
+  { datum: '2026-10-14', tid: '10:00–12:00', rubrik: 'Lektion 2 · grupp 1 & 2', delkurs: 'databaser', sal: 'EC2:101', larare: 'Björn Svensson', typ: 'lektion' },
+  { datum: '2026-10-14', tid: '15:00–17:00', rubrik: 'Lektion 2 · grupp 3 & 4', delkurs: 'databaser', sal: 'EC2:101', larare: 'Björn Svensson', typ: 'lektion' },
   { datum: '2026-10-15', tid: '08:00–12:00', rubrik: 'Handledning', delkurs: 'processer', sal: 'EC2:241 Verona', larare: 'Benjamin Weaver', typ: 'handledning' },
+  { datum: '2026-10-15', tid: '13:00–15:00', rubrik: 'Laboration 7 · grupp 1 & 2', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
+  { datum: '2026-10-15', tid: '15:00–17:00', rubrik: 'Laboration 7 · grupp 3 & 4', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
 
   // ---------------------------- Vecka 43 ----------------------------
-  { datum: '2026-10-20', tid: '10:00–12:00', rubrik: 'Workshop', delkurs: 'processer', sal: 'MA 3', larare: 'Benjamin Weaver', typ: 'workshop' },
-  { datum: '2026-10-21', tid: '13:00–15:00', rubrik: 'Laboration', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
-  { datum: '2026-10-21', tid: '15:00–17:00', rubrik: 'Laboration', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
+  { datum: '2026-10-21', tid: '13:00–15:00', rubrik: 'Laboration 8 · grupp 1 & 2', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
+  { datum: '2026-10-21', tid: '15:00–17:00', rubrik: 'Laboration 8 · grupp 3 & 4', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
   { datum: '2026-10-22', tid: '08:00–12:00', rubrik: 'Handledning', delkurs: 'processer', sal: 'EC2:241 Verona', larare: 'Benjamin Weaver', typ: 'handledning' },
   { datum: '2026-10-23', tid: '08:00–12:00', rubrik: 'Handledning', delkurs: 'processer', sal: 'EC2:207 Bilbao', larare: 'Benjamin Weaver', typ: 'handledning' },
 
   // ---------------------------- Vecka 44 ----------------------------
   { datum: '2026-10-27', tid: '08:00–12:00', rubrik: 'Handledning', delkurs: 'processer', sal: 'EC2:241 Verona', larare: 'Benjamin Weaver', typ: 'handledning' },
-  { datum: '2026-10-27', tid: '10:00–12:00', rubrik: 'Seminarium', delkurs: 'processer', sal: 'MA 3', larare: 'Benjamin Weaver', typ: 'seminarium' },
-  { datum: '2026-10-28', tid: '13:00–15:00', rubrik: 'Laboration', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
-  { datum: '2026-10-28', tid: '15:00–17:00', rubrik: 'Laboration', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
+  { datum: '2026-10-29', tid: '13:00–15:00', rubrik: 'Laboration 9 · grupp 1 & 2', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
+  { datum: '2026-10-29', tid: '15:00–17:00', rubrik: 'Laboration 9 · grupp 3 & 4', delkurs: 'databaser', sal: 'EC2:PC011/PC015/PC059', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'laboration' },
 
   // ---------------------------- Vecka 45 ----------------------------
   { datum: '2026-11-06', tid: '08:00–11:00', rubrik: 'Omtentamen', delkurs: 'strategi', sal: 'Skrivsal MA 9', larare: 'Benjamin Weaver', typ: 'tenta' },
 
   // ---------------------------- Vecka 46 ----------------------------
-  { datum: '2026-11-09', tid: '08:00–10:00', rubrik: 'Redovisning av projektet', delkurs: 'databaser', sal: 'EC2:207 Bilbao', larare: 'Björn Svensson', typ: 'redovisning' },
-  { datum: '2026-11-09', tid: '10:00–11:00', rubrik: 'Redovisning av projektet', delkurs: 'databaser', sal: 'EC2:PC059', larare: 'Björn Svensson', typ: 'redovisning' },
-  { datum: '2026-11-09', tid: '15:00–17:00', rubrik: 'Redovisning av projektet', delkurs: 'databaser', sal: 'EC2:PC059', larare: 'Björn Svensson', typ: 'redovisning' },
+  { datum: '2026-11-09', tid: '08:00–10:00', rubrik: 'Redovisning av projektet — bokad tid', delkurs: 'databaser', sal: 'EC2:207 Bilbao', larare: 'Björn Svensson', typ: 'redovisning' },
+  { datum: '2026-11-09', tid: '10:00–11:00', rubrik: 'Redovisning av projektet — bokad tid', delkurs: 'databaser', sal: 'EC2:PC059', larare: 'Björn Svensson', typ: 'redovisning' },
+  { datum: '2026-11-09', tid: '15:00–17:00', rubrik: 'Redovisning av projektet — bokad tid', delkurs: 'databaser', sal: 'EC2:PC059', larare: 'Björn Svensson', typ: 'redovisning' },
   { datum: '2026-11-10', tid: '08:00–10:00', rubrik: 'Föreläsning — introduktion', delkurs: 'sakerhet', sal: 'MA 3', larare: 'Miranda Kajtazi', typ: 'forelasning' },
-  { datum: '2026-11-10', tid: '10:00–17:00', rubrik: 'Redovisning av projektet', delkurs: 'databaser', sal: 'EC2:PC059', larare: 'Björn Svensson', typ: 'redovisning' },
-  { datum: '2026-11-11', tid: '08:00–17:00', rubrik: 'Redovisning av projektet', delkurs: 'databaser', sal: 'EC2:PC059', larare: 'Björn Svensson', typ: 'redovisning' },
-  { datum: '2026-11-12', tid: '08:00–17:00', rubrik: 'Redovisning av projektet', delkurs: 'databaser', sal: 'EC2:PC059', larare: 'Björn Svensson', typ: 'redovisning' },
+  { datum: '2026-11-10', tid: '10:00–17:00', rubrik: 'Redovisning av projektet — bokad tid', delkurs: 'databaser', sal: 'EC2:PC059', larare: 'Björn Svensson', typ: 'redovisning' },
+  { datum: '2026-11-11', tid: '08:00–17:00', rubrik: 'Redovisning av projektet — bokad tid', delkurs: 'databaser', sal: 'EC2:PC059', larare: 'Björn Svensson', typ: 'redovisning' },
+  { datum: '2026-11-12', tid: '08:00–17:00', rubrik: 'Redovisning av projektet — bokad tid', delkurs: 'databaser', sal: 'EC2:PC059', larare: 'Björn Svensson', typ: 'redovisning' },
   { datum: '2026-11-13', tid: '08:00–13:00', rubrik: 'Tentamen', delkurs: 'processer', sal: 'Skrivsal MA 10', larare: 'Benjamin Weaver', typ: 'tenta' },
-  { datum: '2026-11-13', tid: '14:00–16:00', rubrik: 'Föreläsning', delkurs: 'sakerhet', sal: 'EC1:Crafoordsalen', larare: 'Miranda Kajtazi', typ: 'forelasning' },
+  { datum: '2026-11-13', tid: '14:00–16:00', rubrik: 'Gästföreläsning — Erik Alm, Truesec', delkurs: 'sakerhet', sal: 'EC1:Crafoordsalen', larare: 'Miranda Kajtazi', typ: 'forelasning' },
 
   // ---------------------------- Vecka 47 ----------------------------
+  { datum: '2026-11-16', tid: '08:00–10:00', rubrik: 'Tentamensrepetition', delkurs: 'databaser', sal: 'MA 3', larare: 'Alice Eriksson / Nils Törnqvist', typ: 'ovrigt' },
   { datum: '2026-11-17', tid: '08:00–13:00', rubrik: 'Tentamen', delkurs: 'databaser', sal: 'Skrivsal MA 9', larare: 'Björn Svensson', typ: 'tenta' },
-  { datum: '2026-11-18', tid: '10:00–12:00', rubrik: 'Workshop', delkurs: 'sakerhet', sal: 'Online', larare: 'Miranda Kajtazi', typ: 'workshop' },
-  { datum: '2026-11-18', tid: '14:00–16:00', rubrik: 'Föreläsning — introduktion', delkurs: 'arkitektur', sal: 'EC1:Crafoordsalen', larare: 'Umberto Fiaccadori', typ: 'forelasning' },
-  { datum: '2026-11-19', tid: '10:00–12:00', rubrik: 'Gästföreläsning', delkurs: 'sakerhet', sal: 'EC1:Crafoordsalen', larare: 'Miranda Kajtazi', typ: 'forelasning' },
-  { datum: '2026-11-19', tid: '14:00–16:00', rubrik: 'Föreläsning', delkurs: 'sakerhet', sal: 'EC1:Crafoordsalen', larare: 'Miranda Kajtazi', typ: 'forelasning' },
-  { datum: '2026-11-20', tid: '10:00–12:00', rubrik: 'Föreläsning', delkurs: 'arkitektur', sal: 'MA 3', larare: 'Umberto Fiaccadori', typ: 'forelasning' },
+  { datum: '2026-11-18', tid: '10:00–12:00', rubrik: 'Workshop — Harvard Business Simulation Game', delkurs: 'sakerhet', sal: 'Online', larare: 'Miranda Kajtazi', typ: 'workshop' },
+  { datum: '2026-11-18', tid: '14:00–16:00', rubrik: 'Föreläsning 1 — introduktion', delkurs: 'arkitektur', sal: 'EC1:Crafoordsalen', larare: 'Umberto Fiaccadori', typ: 'forelasning' },
+  { datum: '2026-11-19', tid: '10:00–12:00', rubrik: 'Föreläsning 3', delkurs: 'sakerhet', sal: 'EC1:Crafoordsalen', larare: 'Miranda Kajtazi', typ: 'forelasning' },
+  { datum: '2026-11-19', tid: '14:00–16:00', rubrik: 'Föreläsning 4', delkurs: 'sakerhet', sal: 'EC1:Crafoordsalen', larare: 'Miranda Kajtazi', typ: 'forelasning' },
+  { datum: '2026-11-20', tid: '10:00–12:00', rubrik: 'Föreläsning 2', delkurs: 'arkitektur', sal: 'MA 3', larare: 'Umberto Fiaccadori', typ: 'forelasning' },
 
   // ---------------------------- Vecka 48 ----------------------------
-  { datum: '2026-11-25', tid: '08:00–10:00', rubrik: 'Föreläsning — introduktion', delkurs: 'ansvarsfull', sal: 'MA 5', larare: 'Miranda Kajtazi', typ: 'forelasning' },
-  { datum: '2026-11-25', tid: '12:00–14:00', rubrik: 'Föreläsning', delkurs: 'arkitektur', sal: 'EC1:Crafoordsalen', larare: 'Umberto Fiaccadori', typ: 'forelasning' },
-  { datum: '2026-11-25', tid: '15:00–17:00', rubrik: 'Gästföreläsning', delkurs: 'sakerhet', sal: 'MA 5', larare: 'Miranda Kajtazi', typ: 'forelasning' },
-  { datum: '2026-11-26', tid: '12:00–14:00', rubrik: 'Gästföreläsning', delkurs: 'sakerhet', sal: 'EC1:Crafoordsalen', larare: 'Miranda Kajtazi', typ: 'forelasning' },
+  { datum: '2026-11-25', tid: '08:00–10:00', rubrik: 'Föreläsning 1 — introduktion', delkurs: 'ansvarsfull', sal: 'MA 5', larare: 'Miranda Kajtazi', typ: 'forelasning' },
+  { datum: '2026-11-25', tid: '12:00–14:00', rubrik: 'Föreläsning 3', delkurs: 'arkitektur', sal: 'EC1:Crafoordsalen', larare: 'Umberto Fiaccadori', typ: 'forelasning' },
+  { datum: '2026-11-25', tid: '15:00–17:00', rubrik: 'Föreläsning 5 — gästföreläsning', delkurs: 'sakerhet', sal: 'MA 5', larare: 'Miranda Kajtazi', typ: 'forelasning' },
+  { datum: '2026-11-26', tid: '12:00–14:00', rubrik: 'Föreläsning 6 — gästföreläsning', delkurs: 'sakerhet', sal: 'EC1:Crafoordsalen', larare: 'Miranda Kajtazi', typ: 'forelasning' },
   { datum: '2026-11-27', tid: '14:00–19:00', rubrik: 'Tentamen', delkurs: 'arkitektur', sal: 'Skrivsal MA 10', larare: 'Umberto Fiaccadori', typ: 'tenta' },
 
   // ---------------------------- Vecka 49 ----------------------------
-  { datum: '2026-12-01', tid: '13:00–15:00', rubrik: 'Seminarium', delkurs: 'ansvarsfull', sal: 'EC2:101', larare: 'Miranda Kajtazi', typ: 'seminarium' },
-  { datum: '2026-12-01', tid: '15:00–17:00', rubrik: 'Seminarium', delkurs: 'ansvarsfull', sal: 'EC2:101', larare: 'Miranda Kajtazi', typ: 'seminarium' },
+  { datum: '2026-12-02', tid: '13:00–15:00', rubrik: 'Seminarium 1 · klassgrupp 1 & 2', delkurs: 'ansvarsfull', sal: 'EC2:101', larare: 'Miranda Kajtazi', typ: 'seminarium' },
+  { datum: '2026-12-02', tid: '15:00–17:00', rubrik: 'Seminarium 1 · klassgrupp 3 & 4', delkurs: 'ansvarsfull', sal: 'EC2:101', larare: 'Miranda Kajtazi', typ: 'seminarium' },
   { datum: '2026-12-03', tid: '08:00–13:00', rubrik: 'Tentamen', delkurs: 'sakerhet', sal: 'Skrivsal MA 10', larare: 'Miranda Kajtazi', typ: 'tenta' },
 
   // ---------------------------- Vecka 50 ----------------------------
-  { datum: '2026-12-08', tid: '14:00–15:00', rubrik: 'Föreläsning — introduktion till projektrapporten', delkurs: 'isprojekt', sal: 'EC1:Crafoordsalen', larare: 'Weaver / Kajtazi / Fiaccadori', typ: 'forelasning' },
+  { datum: '2026-12-08', tid: '14:00–15:00', rubrik: 'Föreläsning 1 — introduktion till IS-projektet och uppgiften', delkurs: 'isprojekt', sal: 'EC1:Crafoordsalen', larare: 'Weaver / Kajtazi / Fiaccadori', typ: 'forelasning' },
 
   // ---------------------------- Vecka 51 ----------------------------
-  { datum: '2026-12-15', tid: '09:00–12:00', rubrik: 'Handledning — bokad tid', delkurs: 'isprojekt', sal: 'EC2:241 Verona', larare: 'Weaver / Kajtazi / Fiaccadori', typ: 'handledning' },
-  { datum: '2026-12-15', tid: '13:00–16:00', rubrik: 'Handledning — bokad tid', delkurs: 'isprojekt', sal: 'EC2:241 Verona', larare: 'Weaver / Kajtazi / Fiaccadori', typ: 'handledning' },
-  { datum: '2026-12-16', tid: '09:00–12:00', rubrik: 'Handledning — bokad tid', delkurs: 'isprojekt', sal: 'EC2:241 Verona', larare: 'Weaver / Kajtazi / Fiaccadori', typ: 'handledning' },
-  { datum: '2026-12-16', tid: '13:00–16:00', rubrik: 'Handledning — bokad tid', delkurs: 'isprojekt', sal: 'EC2:241 Verona', larare: 'Weaver / Kajtazi / Fiaccadori', typ: 'handledning' },
+  { datum: '2026-12-15', tid: '09:00–12:00', rubrik: 'Handledning 1', delkurs: 'isprojekt', sal: 'EC2:241 Verona', larare: 'Weaver / Kajtazi / Fiaccadori', typ: 'handledning' },
+  { datum: '2026-12-15', tid: '13:00–16:00', rubrik: 'Handledning 1', delkurs: 'isprojekt', sal: 'EC2:241 Verona', larare: 'Weaver / Kajtazi / Fiaccadori', typ: 'handledning' },
+  { datum: '2026-12-16', tid: '09:00–12:00', rubrik: 'Handledning 1', delkurs: 'isprojekt', sal: 'EC2:241 Verona', larare: 'Weaver / Kajtazi / Fiaccadori', typ: 'handledning' },
+  { datum: '2026-12-16', tid: '13:00–16:00', rubrik: 'Handledning 1', delkurs: 'isprojekt', sal: 'EC2:241 Verona', larare: 'Weaver / Kajtazi / Fiaccadori', typ: 'handledning' },
 
-  // ----------------------------- Vecka 1 -----------------------------
+  // ---------------------------- Vecka 1 -----------------------------
   { datum: '2027-01-05', tid: '08:00–13:00', rubrik: 'Omtentamen', delkurs: 'databaser', sal: 'Skrivsal MA 10', larare: 'Björn Svensson', typ: 'tenta' },
   { datum: '2027-01-07', tid: '08:00–13:00', rubrik: 'Omtentamen', delkurs: 'processer', sal: 'Skrivsal MA 9', larare: 'Benjamin Weaver', typ: 'tenta' },
 
-  // ----------------------------- Vecka 2 -----------------------------
-  { datum: '2027-01-11', tid: '09:00–12:00', rubrik: 'Handledning — bokad tid', delkurs: 'isprojekt', sal: 'EC2:241 Verona', larare: 'Weaver / Kajtazi / Fiaccadori', typ: 'handledning' },
-  { datum: '2027-01-11', tid: '13:00–16:00', rubrik: 'Handledning — bokad tid', delkurs: 'isprojekt', sal: 'EC2:241 Verona', larare: 'Weaver / Kajtazi / Fiaccadori', typ: 'handledning' },
-  { datum: '2027-01-12', tid: '09:00–12:00', rubrik: 'Handledning — bokad tid', delkurs: 'isprojekt', sal: 'EC2:241 Verona', larare: 'Weaver / Kajtazi / Fiaccadori', typ: 'handledning' },
-  { datum: '2027-01-12', tid: '13:00–16:00', rubrik: 'Handledning — bokad tid', delkurs: 'isprojekt', sal: 'EC2:241 Verona', larare: 'Weaver / Kajtazi / Fiaccadori', typ: 'handledning' },
+  // ---------------------------- Vecka 2 -----------------------------
+  { datum: '2027-01-11', tid: '09:00–12:00', rubrik: 'Handledning 2', delkurs: 'isprojekt', sal: 'EC2:241 Verona', larare: 'Weaver / Kajtazi / Fiaccadori', typ: 'handledning' },
+  { datum: '2027-01-11', tid: '13:00–16:00', rubrik: 'Handledning 2', delkurs: 'isprojekt', sal: 'EC2:241 Verona', larare: 'Weaver / Kajtazi / Fiaccadori', typ: 'handledning' },
+  { datum: '2027-01-12', tid: '09:00–12:00', rubrik: 'Handledning 2', delkurs: 'isprojekt', sal: 'EC2:241 Verona', larare: 'Weaver / Kajtazi / Fiaccadori', typ: 'handledning' },
+  { datum: '2027-01-12', tid: '13:00–16:00', rubrik: 'Handledning 2', delkurs: 'isprojekt', sal: 'EC2:241 Verona', larare: 'Weaver / Kajtazi / Fiaccadori', typ: 'handledning' },
   { datum: '2027-01-13', tid: '14:00–19:00', rubrik: 'Omtentamen', delkurs: 'arkitektur', sal: 'Skrivsal MA 10', larare: 'Umberto Fiaccadori', typ: 'tenta' },
   { datum: '2027-01-14', tid: '08:00–13:00', rubrik: 'Omtentamen', delkurs: 'sakerhet', sal: 'Skrivsal Sparta', larare: 'Miranda Kajtazi', typ: 'tenta' }
 ];
@@ -183,15 +186,15 @@ window.SYSB23.terminsfaser = [
     tat: false
   },
   {
-    span: '22 sep – 28 okt',
+    span: '22 sep – 29 okt',
     rubrik: 'Databaser + Processorienterad verksamhetsutveckling',
-    text: 'Processorienterad startar dagen efter Strategi-tentan – sömlöst byte. Databaser fortsätter med labbar varje vecka.',
+    text: 'Processorienterad startar dagen efter Strategi-tentan – sömlöst byte. Databaser fortsätter med labbar nästan varje vecka; den nionde och sista är 29 oktober.',
     tat: false
   },
   {
     span: '9 nov – 3 dec',
     rubrik: 'Fyra veckor med allt på en gång',
-    text: 'Databasernas redovisning löper 9–12 november, tre tentor ligger 13, 17 och 27 november, och Säkerhet startar redan 10 november medan Databaser fortfarande pågår. Verksamhetsarkitektur och Ansvarsfull kommer in 18 respektive 25 november.',
+    text: 'Databasernas redovisning löper 9–12 november och tentamensrepetitionen är 16 november. Tre tentor ligger 13, 17 och 27 november, och Säkerhet startar redan 10 november medan Databaser fortfarande pågår. Verksamhetsarkitektur och Ansvarsfull kommer in 18 respektive 25 november.',
     tat: true
   },
   {
@@ -213,7 +216,7 @@ window.SYSB23.kalenderNoteringar = {
     'MA-skrivsalarna ligger i Matteannexet, Sölvegatan 20.',
     'Skrivsal Sparta ligger på Tunavägen 39.'
   ],
-  kalla: 'Avläst mot TimeEdit 27 augusti 2026. Kontrollera alltid aktuell vecka i TimeEdit – salar och tider kan ändras.',
+  kalla: 'Avläst mot TimeEdit 26 september 2026. Kontrollera alltid aktuell vecka i TimeEdit – salar och tider kan ändras.',
   terminStart: '2026-08-31',
   terminSlut: '2027-01-17'
 };

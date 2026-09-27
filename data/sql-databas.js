@@ -8,8 +8,8 @@
       kolumnnamnen här är de du faktiskt ska kunna.
 
    2. Studenter och kurser. Tabellerna i tentans uppgift 4, som ensam är
-      värd 30 av 100 poäng. Både omtentan och uppsamlingstentan HT25
-      använder exakt de här raderna.
+      värd 30 av 100 poäng. Alla tre databastentorna HT25 — ordinarie,
+      omtenta och uppsamling — använder exakt de här raderna.
 
    DDL:en är skriven i T-SQL, precis som kursen skriver den — IDENTITY,
    NVARCHAR, namngivna constraints. js/tsql.js översätter till SQLite vid
@@ -213,7 +213,7 @@ window.SYSB23.sqlDatabaser = [
         ]
       },
       {
-        namn: 'Patient', text: 'Patienter. Fyra av sex heter Anna.',
+        namn: 'Patient', text: 'Patienter. Tre av sex heter Anna.',
         kolumner: [
           { namn: 'PatientID',          typ: 'INTEGER',      roll: 'pk' },
           { namn: 'PatientNo',          typ: 'CHAR(11)',     roll: 'unik' },
@@ -273,10 +273,11 @@ window.SYSB23.sqlDatabaser = [
     namn: 'Studenter och kurser',
     kort: 'Tabellerna i tentans uppgift 4 — 30 av 100 poäng.',
     beskrivning:
-      'Raderna är hämtade ur databastentorna HT25 och står oförändrade. ' +
-      'Uppgift 4 ber om **en enda fråga** som svarar på något i stil med ' +
-      '"kurskod, namn och snittbetyg för kurser som lästs av S1 men inte av ' +
-      'S2", eller "studenter äldre än S4 som läst minst två kurser". ' +
+      'Raderna är hämtade ur databastentorna HT25 och står oförändrade — alla tre ' +
+      'tentorna använde samma tabeller. Uppgift 4 ber om **en enda fråga** som svarar ' +
+      'på något i stil med "studenter som fått högre än snittbetyget på C1", "kurser ' +
+      'som lästs av S1 men inte av S2" eller "studenter äldre än S4 som läst minst två ' +
+      'kurser". ' +
       'Övningarna på nivå 5 till 9 tränar precis den typen av fråga.\n\n' +
       'Lägg märke till adresserna. Codd street och Chen street är inte ' +
       'slumpmässiga — det är Edgar Codd som gav oss relationsmodellen och ' +

@@ -12,8 +12,8 @@ window.SYSB23.kompendium.databaser.kapitel.push(
   id: 'db-k6',
   nr: 6,
   titel: 'Konceptuell design: ER-modellering',
-  ingress: 'Entiteter, attributtyper, samband, multiplicitet, deltagande, svaga entiteter — och vad notationen inte klarar.',
-  lastid: 12,
+  ingress: 'Entiteter, attribut och identifierare, kardinalitet och deltagande, svaga och associativa entiteter — och vad notationen inte klarar.',
+  lastid: 16,
   amnen: ['db-konceptuell'],
   avsnitt: [
     {
@@ -34,57 +34,83 @@ window.SYSB23.kompendium.databaser.kapitel.push(
     {
       rubrik: 'Entiteter',
       text:
-        '**Entitetstyp:** *en mängd saker med samma egenskaper, som av en användare eller organisation ' +
-        'identifieras som havande en oberoende existens.* Informellt kallad entitet.\n\n' +
-        'Entiteter kan ha **fysisk existens** (Student) eller **konceptuell existens** (Course).\n\n' +
-        'Nyckelordet är **oberoende existens**. Address är ett attribut till Student så länge vi inte ' +
-        'behöver lagra data om adresser för deras egen skull. Behöver vi det — kanske vill vi lagra ' +
-        'gatunamn och gatunummer separat, oberoende av vem som bor där — måste Address bli en egen ' +
-        'entitet med ett samband till Student.\n\n' +
-        'Testet: **behöver verksamheten lagra data om saken för dess egen skull?**' +
+        'Föreläsningen utgår från Peter Chens egen definition från 1976:\n\n' +
+        '> **Entitet:** *en "sak" som kan identifieras distinkt* — modellen kan skilja den från varje ' +
+        'annan entitet.\n\n' +
+        'Håll isär tre nivåer:\n\n' +
+        '- **Entitetstyp** — kategorin, till exempel Employee. Den grupperar entiteter med samma ' +
+        'relevanta egenskaper och ritas som en rektangel. Namnet är ett substantiv i singular.\n' +
+        '- **Entitetsmängd** — alla entiteter av typen som finns just nu. Den kan växa, krympa eller ' +
+        'vara tom.\n' +
+        '- **Entitet** — en enskild medlem, till exempel Mary med nummer E-104.\n\n' +
+        'En entitet är en **informationsabstraktion**, inte en fullständig beskrivning. En verklig ' +
+        'person har längd och vikt, men personalverksamheten behöver bara namn, anställningsdatum och ' +
+        'jobbmejl — resten lämnas utanför modellen.\n\n' +
+        'En **stark entitetstyp** kan identifiera varje entitet utan att vara beroende av en entitet av ' +
+        'en annan typ. Den ritas med en enkel rektangel.\n\n' +
+        'Samma test som förr gäller när du tvekar mellan attribut och entitet: Address är ett attribut ' +
+        'till Student så länge verksamheten inte behöver lagra data om adresser **för deras egen ' +
+        'skull**. Gör den det blir Address en egen entitetstyp.' +
         '\n\n[[diagram:chen-grund]]'
     },
     {
       rubrik: 'Attributtyper',
       text:
-        '- **Enkelt attribut** — ett odelbart värde, t.ex. StudentNo\n' +
-        '- **Sammansatt attribut** — består av delattribut, t.ex. Name bestående av FirstName och LastName\n' +
-        '- **Multivärt attribut** — kan ha flera värden samtidigt, t.ex. flera adresser\n' +
-        '- **Härlett attribut** — kan beräknas ur andra, t.ex. Age ur DateOfBirth\n' +
-        '- **Identifierande attribut** — unikt identifierar en förekomst. Ritas **understruket** i ' +
-        'Chen-notation\n\n' +
-        'Sammansatta attribut kan också vara identifierande. Materialet går igenom fyra varianter av ' +
-        'Student med olika unikhetskrav, och skillnaden syns i vilka attribut som är understrukna:\n\n' +
-        '- Unikt StudentNo, namnet inte unikt ⇒ StudentNo understruket\n' +
-        '- StudentNo inte unikt, men kombinationen FirstName + LastName unik ⇒ båda delattributen ' +
-        'understrukna\n' +
-        '- Både StudentNo och namnkombinationen unika ⇒ alla tre understrukna\n' +
-        '- Även adressen unik ⇒ även Address understruken\n\n' +
-        'Varje understruken uppsättning motsvarar en **kandidatnyckel** i nästa steg.' +
+        'Ett **attribut** är en namngiven egenskap hos en entitetstyp — eller hos en sambandstyp. I Chen ' +
+        'ritas det som en oval kopplad till sin ägare. Varje attribut rymmer flera beslut:\n\n' +
+        '| Fråga | Val | Chen-symbol |\n' +
+        '|---|---|---|\n' +
+        '| Kan det delas upp? | **Enkelt** eller **sammansatt** (address = gata, nummer, postnr, ort) | Sammansatt: ovaler för delarna hänger på ovalen |\n' +
+        '| Hur många värden? | **Envärt** eller **multivärt** (flera telefonnummer) | Multivärt: **dubbel oval** |\n' +
+        '| Hur fås det? | **Lagrat** eller **härlett** (yearsEmployed ur hireDate) | Härlett: **streckad oval** |\n' +
+        '| Måste det finnas? | **Obligatoriskt** eller **frivilligt** | Ingen gemensam symbol — skriv ut regeln |\n' +
+        '| Vilka värden är giltiga? | En **domän** (värdemängd) | Dokumenteras utanför diagrammet |\n\n' +
+        'Ett härlett attribut kan bero på ett samband, inte bara på entitetens egna attribut: ' +
+        'numberOfEmployees för ett projekt räknas fram ur hur många anställda som är kopplade via WorksOn.\n\n' +
+        '**Identifierare.** Ett attribut, eller en kombination, vars värden skiljer varje entitet i ' +
+        'mängden från alla andra — i **varje** giltig population, inte bara i dagens data. I Chen ' +
+        'markeras det med **understrykning**. Tre fall att hålla isär:\n\n' +
+        '- **Ett enkelt identifierande attribut:** projectNo understruket.\n' +
+        '- **Ett sammansatt identifierande attribut:** projectNo består av registrationYear och ' +
+        'sequenceNo. Då stryks **det sammansatta attributet** under, **inte** delarna. Delarna får ' +
+        'upprepas (2026-1 och 2026-2 delar år), bara helheten är unik.\n' +
+        '- **Flera identifierande attribut:** både employeeNo och workEmail identifierar en anställd var ' +
+        'för sig. Då stryks **båda** under — **separata understrykningar betyder separata ' +
+        'identifierare**, inte en gemensam.\n\n' +
+        'Varje identifierare blir en **kandidatnyckel** i nästa steg.' +
         '\n\n[[diagram:attribut]]'
     },
     {
       rubrik: 'Samband: multiplicitet och deltagande',
       text:
-        'Ett binärt samband har ett **namn** och **multipliciteter** (ibland kallade kardinaliteter).\n\n' +
-        '**Multiplicitet** — 1:1, 1:M eller M:N.\n\n' +
-        '> Skriv alltid **M:N**, aldrig M:M. Samma bokstav på båda sidor skulle påstå att antalet är ' +
-        'identiskt i båda riktningarna. M och N är fristående variabler för "många".\n\n' +
-        '**Deltagande** — obligatoriskt eller frivilligt, och det anges **per sida**. I Chen-notation ' +
-        'visas obligatoriskt deltagande med **dubbla linjer** mellan entiteten och sambandet; en enkel ' +
-        'linje betyder frivilligt.\n\n' +
-        'Detta är två **oberoende** dimensioner. En 1:M-relation kan vara obligatorisk för studenten men ' +
-        'frivillig för kursen, obligatorisk för båda, eller frivillig för båda. I UML uttrycks båda ' +
-        'samtidigt av intervallet: `1..1` mot `0..*`.\n\n' +
-        '**Relationsattribut** representerar data som uppstår som ett resultat av själva sambandet. Bara ' +
-        'en student som *har läst* en kurs kan tilldelas ett betyg — Grade hör därför varken till Student ' +
-        'eller Course utan till sambandet HasStudied. Används mest vid M:N men förekommer även vid 1:M ' +
-        'och 1:1.\n\n' +
-        'Det kan finnas **flera samband mellan samma två entiteter**, till exempel Study (pågående) och ' +
-        'HasStudied (avslutade).\n\n' +
-        '**Unära (rekursiva) samband** går från en entitet till sig själv, till exempel att en student ' +
-        'mentorerar andra studenter. Rollnamn (mentors, is_mentored) klargör riktningen. Knep: rita ut ' +
-        'det som binärt med två kopior av entiteten, så blir det uppenbart.' +
+        'En **binär sambandstyp** har exakt två deltagande roller och ritas som en romb. Ett ' +
+        '**sambandsförekomst** är ett par av entiteter, till exempel ⟨Mary, Atlas⟩ i WorksOn, och ' +
+        '**sambandsmängden** är alla sådana par just nu. Rollnamn (worker, project) behövs först när ' +
+        'samma entitetstyp deltar mer än en gång.\n\n' +
+        'Två frågor beskriver varje samband, och de är **oberoende** av varandra:\n\n' +
+        '**Kardinalitet (maxantal)** — 1:1, 1:N eller M:N. Läses **tvärs över**: 1 intill Employee ' +
+        'betyder att varje projekt har *högst en* anställd i sambandet. Siffran är ett tak — **1 betyder ' +
+        'högst en, inte exakt en**. Kursen skriver M:N; M och N betyder båda "många", och de olika ' +
+        'bokstäverna skiljer bara de två positionerna åt.\n\n' +
+        '**Deltagande** — måste varje entitet delta minst en gång? Läses vid **sin egen ände**. ' +
+        '**Dubbel linje** betyder totalt (obligatoriskt) deltagande, **enkel linje** partiellt (frivilligt). ' +
+        'Att byta linje ändrar aldrig kardinaliteten.\n\n' +
+        '**Två Chen-varianter.** Kursens standard är kardinalitetssiffror plus enkla/dubbla linjer. ' +
+        'Alternativet är **min–max-par** intill varje entitet, till exempel `(0,N)` och `(1,1)` — då läses ' +
+        'siffrorna vid *sin egen* entitet och alla linjer är enkla. N tvärs över plus enkel linje motsvarar ' +
+        '(0,N); 1 tvärs över plus dubbel linje motsvarar (1,1). **Blanda aldrig** min–max-par med dubbla ' +
+        'linjer i samma diagram.\n\n' +
+        '**Relationsattribut** ägs av sambandstypen, inte av någon av entiteterna, eftersom värdet ' +
+        'beskriver *parningen*. allocationPercentage hör till WorksOn: samma anställd kan ha 60 % på ett ' +
+        'projekt och 40 % på ett annat. Vanligast vid M:N men förekommer även vid 1:N och 1:1.\n\n' +
+        '**Unära (rekursiva) samband** har en enda deltagande entitetstyp som spelar båda rollerna, till ' +
+        'exempel Supervises med rollerna supervisor och report. Rollnamnen är nödvändiga — utan dem går ' +
+        'det inte att läsa vilken ände som är vilken. Varje roll har sin egen kardinalitet: 1 vid ' +
+        'supervisor och N vid report betyder att en chef kan ha många underställda och varje anställd ' +
+        'högst en chef.\n\n' +
+        'Notationen släpper ändå igenom konstiga populationer: någon kan vara sin egen chef, eller två ' +
+        'personer kan vara varandras. Regler som "ingen chefar över sig själv" och "inga cykler" har ' +
+        'Chen ingen symbol för — de skrivs som textuella verksamhetsregler.' +
         '\n\n[[diagram:kardinalitet]]\n\n[[diagram:deltagande]]'
     },
     {
@@ -103,32 +129,62 @@ window.SYSB23.kompendium.databaser.kapitel.push(
         '- CourseCode markeras som **partiell identifierare** (streckad understrykning)\n\n' +
         'Testet: **räcker entitetens egna attribut för att unikt identifiera en förekomst?** Om inte, och ' +
         'identifieringen kräver ägarens nyckel, är entiteten svag.\n\n' +
+        'En svag entitet beror på sin ägare på **två** sätt:\n\n' +
+        '- **Identitetsberoende** — den fullständiga identiteten innehåller ägaren (projectNo + taskNo)\n' +
+        '- **Existensberoende** — den kan inte finnas i modellen utan sin ägare\n\n' +
+        'Två fällor föreläsningen pekar ut:\n\n' +
+        '- **Obligatoriskt deltagande gör inte en entitet svag.** Varje projekt måste ha en ledare ' +
+        '(dubbel linje), men Project är ändå stark eftersom projectNo identifierar det. Svaghet kräver ' +
+        'identitetsberoende.\n' +
+        '- **Kardinaliteten avslöjar inte ägaren.** Två samband kan ha exakt samma siffror; bara den ' +
+        'dubbla romben och den streckade understrykningen visar vilket som identifierar.\n\n' +
         'Kedjan kan vara längre. Med University → Department → Course kan två institutioner vid samma ' +
         'universitet ha kurser med samma kod, eftersom kursen är unik inom institutionen och ' +
         'institutionen unik inom universitetet.' +
         '\n\n[[diagram:svag-entitet]]'
     },
     {
+      rubrik: 'Associativ entitet: när parningen blir en sak',
+      text:
+        'Ett samband med attribut är fortfarande ett samband. WorksOn med allocationPercentage och ' +
+        'assignmentStartDate behöver inte göras om till något annat — attributen beskriver parningen, ' +
+        'och det räcker.\n\n' +
+        '**Reifiera** (gör parningen till en entitetstyp) först när den måste:\n\n' +
+        '- kunna refereras som ett eget begrepp\n' +
+        '- delta i **andra** samband\n' +
+        '- ha en **egen identitet** eller livscykel\n\n' +
+        'Då blir WorksOn entitetstypen **Assignment**, kopplad med två vanliga samband (Holds mot ' +
+        'Employee, Concerns mot Project). Ingen särskild symbol behövs — det är en vanlig rektangel. ' +
+        'Attributen flyttar till Assignment, och identifieraren assignmentNo blir ett nytt åtagande: ' +
+        'verksamheten måste dela ut och bevara ett unikt nummer per uppdrag.' +
+        '\n\n[[diagram:reifiering]]'
+    },
+    {
       rubrik: 'Chen kontra Crow\'s foot',
       text:
-        'ER-diagram kan ritas i olika notationer som skiljer sig både visuellt och i vilka element de ' +
-        'erbjuder. Kursen fokuserar på Chen och Crow\'s foot, eftersom de är gjorda för ER-modellering.\n\n' +
-        '**Crow\'s foot** har sitt ursprung 1976 (Everest), är vanligt förekommande men **inte ' +
-        'standardiserat**. Det gör att du hittar många varianter.\n\n' +
-        'Vad Crow\'s foot i Visual Paradigm **saknar** jämfört med Chen:\n\n' +
-        '- **Multivärda attribut** — måste lösas med en egen entitet\n' +
-        '- **Härledda attribut** — går inte att visa\n' +
-        '- **Sammansatta attribut** — kan inte visas\n' +
-        '- **Svaga entiteter** — saknas; istället visas identifierande relation med heldragen linje ' +
-        'istället för streckad\n' +
-        '- Att visa att både StudentNo *och* kombinationen FirstName+LastName är unika samtidigt\n\n' +
-        '**Om UML.** ER-diagram kan visuellt likna UML-klassdiagram men är **fundamentalt och ' +
-        'konceptuellt olika**. ER-diagram är för design av relationsdatabaser; UML-klassdiagram för ' +
-        'objektorienterade lösningar. UML används ibland som ER-notation eftersom den är välkänd, men ' +
-        'saknar element som identifierande attribut, svaga entiteter och relationsattribut ' +
-        '(associationsklass är inte samma sak i ER-paradigmet).\n\n' +
-        'UML-multipliciteter: `0..1` noll eller ett, `1` eller `1..1` exakt ett, `0..*` eller `*` noll ' +
-        'eller många, `1..5` minst ett och högst fem.' +
+        'ER-modellen och notationen är olika saker. Entitetstyper, sambandstyper och constraints är ' +
+        'ER-begrepp; rektanglar, romber och ändpunktssymboler är notationens val. Föreläsningen ' +
+        'illustrerar det med en tunnelbana: samma fem fakta kan skrivas som text, XML eller karta utan ' +
+        'att modellen ändras. ER föreslogs av Peter Chen 1975–76 och blev en familj av varianter — det ' +
+        'finns ingen enda specifikation som låser varje symbol.\n\n' +
+        '**Crow\'s foot** härstammar från Gordon Everests "inverterade pil" 1976 och spreds via ' +
+        'Information Engineering (Finkelstein, CACI, James Martin). Den är **inte standardiserad**, så ' +
+        'läs alltid legenden. Kursen använder en konceptuell IE-variant:\n\n' +
+        '- **Entitetsruta** med namnet överst, identifieraren markerad **ID**, övriga attribut under ' +
+        'strecket. Namn skrivs project_no i stället för projectNo.\n' +
+        '- **Namngiven linje** i stället för romb.\n' +
+        '- **Ändpunkterna**: det yttre märket säger om deltagandet är frivilligt (**cirkel**) eller ' +
+        'obligatoriskt (**streck**); märket närmast rutan säger en (**streck**) eller många (**kråkfot**). ' +
+        'Märkena sitter vid den ände vars förekomster de räknar.\n\n' +
+        'Vissa verktyg ger linjestilen en annan betydelse — heldragen och streckad för identifierande ' +
+        'och icke-identifierande samband — och i Barker/Oracle-varianten betyder den *may* och *must*.\n\n' +
+        '**Det Crow\'s foot inte uttrycker direkt**, utan löser indirekt:\n\n' +
+        '- **Multivärda attribut** — blir en egen entitet i ett 1:N-samband (PHONE NUMBER)\n' +
+        '- **Relationsattribut** — linjen har ingen plats för attribut, så parningen blir en ' +
+        '**associativ entitet** (ASSIGNMENT)\n' +
+        '- **Svag identitet** — ingen dubbelram; i stället **upprepade ID-markeringar** som bildar en ' +
+        'sammansatt identifierare (project_no + task_no)\n' +
+        '- **Sammansatta, härledda och frivilliga attribut** samt **domäner** — dokumenteras separat' +
         '\n\n[[diagram:chen-crow]]\n\n[[diagram:crow-andpunkter]]'
     },
     {
@@ -147,18 +203,23 @@ window.SYSB23.kompendium.databaser.kapitel.push(
     }
   ],
   nyckelbegrepp: [
-    'Entitet: mängd saker med samma egenskaper och oberoende existens',
-    'Attributtyper: enkelt, sammansatt, multivärt, härlett, identifierande',
-    'Multiplicitet (1:1, 1:M, M:N) och deltagande (obligatoriskt/frivilligt) är oberoende dimensioner',
-    'Skriv M:N, aldrig M:M',
-    'Dubbla linjer i Chen = obligatoriskt deltagande',
-    'Relationsattribut: data som uppstår ur sambandet',
-    'Svag entitet: kan inte identifieras utan ägarens nyckel; dubbel ram + partiell identifierare',
+    'Entitet (Chen): en "sak" som kan identifieras distinkt. Håll isär typ, mängd och förekomst',
+    'Attribut: enkelt/sammansatt, envärt/multivärt (dubbel oval), lagrat/härlett (streckad oval)',
+    'Sammansatt identifierare: stryk under helheten, inte delarna. Separata understrykningar = separata identifierare',
+    'Kardinalitet (1:1, 1:N, M:N) är ett tak och läses tvärs över; 1 = högst en',
+    'Deltagande läses vid egen ände: dubbel linje = totalt, enkel = partiellt',
+    'Min–max (0,N)/(1,1) är ett alternativ — blanda det aldrig med dubbla linjer',
+    'Relationsattribut ägs av sambandet eftersom de beskriver parningen',
+    'Svag entitet: identitets- och existensberoende; dubbel ram, dubbel romb, streckad understrykning',
+    'Obligatoriskt deltagande gör inte en entitet svag',
+    'Reifiera ett samband till associativ entitet bara när parningen behöver egen identitet eller egna samband',
     'ER-modellen kan inte uttrycka värdebaserade verksamhetsregler'
   ],
   tentakoppling:
-    'ER-modellering är ett av tentans fyra områden. Räkna med att gå från en verksamhetsbeskrivning ' +
-    'i text till ett diagram, eller att avgöra vilka dataförekomster som är giltiga enligt en modell.'
+    'ER-modellering är ett av tentans fem områden. På alla tre HT25-tentorna var uppgift 1 ett ' +
+    'Chen-diagram med tio–elva påståenden att markera (+5 per rätt, −3 per fel). Påståendena prövar ' +
+    'exakt det här kapitlet: vad som identifierar vad, om deltagandet är obligatoriskt, och om två ' +
+    'förekomster får ha samma värde.'
 },
 
 /* ====================== KAPITEL 7 ====================== */
@@ -167,7 +228,7 @@ window.SYSB23.kompendium.databaser.kapitel.push(
   nr: 7,
   titel: 'Logisk design: från ER till relationer',
   ingress: 'Relationsmodellen, nyckelbegreppen och samtliga transformationsregler du behöver kunna utantill.',
-  lastid: 12,
+  lastid: 15,
   amnen: ['db-logisk'],
   avsnitt: [
     {
@@ -211,64 +272,90 @@ window.SYSB23.kompendium.databaser.kapitel.push(
     {
       rubrik: 'Nyckelbegreppen',
       text:
-        '**Kandidatnyckel** — *ett attribut eller en attributmängd som unikt kan identifiera vilken tupel ' +
-        'som helst*. Ett annat sätt att uttrycka det: ett attribut som funktionellt bestämmer alla övriga ' +
-        'attribut.\n\n' +
-        '**Primärnyckel** — *ett specifikt val av attribut som unikt identifierar en tupel*. Alltså: den ' +
-        'kandidatnyckel som databasarkitekten valt.\n\n' +
-        'En relation kan ha **flera kandidatnycklar** men bara en primärnyckel. Employee(EmployeeNo, ' +
-        'Email, Name) har till exempel två kandidatnycklar: EmployeeNo och Email. Arkitekten väljer en.\n\n' +
-        'Vid val bör man ta den som är **stabil, minimal och semantiskt meningsfull**.\n\n' +
-        '**Sammansatt kandidatnyckel** består av flera attribut, till exempel {FirstName, LastName}. Båda ' +
-        'attributen understryks då.\n\n' +
-        '**Främmande nyckel** (foreign key) — ett attribut som refererar till en kandidatnyckel i en ' +
-        'annan relation. Relationerna kallas parent/referenced/master respektive child/referencing/detail.\n\n' +
+        '**Kandidatnyckel (CK)** — en mängd attribut K som uppfyller **båda** villkoren:\n\n' +
+        '- **Unikhet:** i varje giltigt relationsvärde har inga två olika tupler samma värden på K\n' +
+        '- **Minimalitet:** inget attribut kan tas bort ur K utan att unikheten går förlorad\n\n' +
+        '{EmployeeNo, Name} är unik om EmployeeNo är det — men inte minimal, eftersom Name kan strykas. ' +
+        'Unikheten måste vara en **verksamhetsregel** som gäller alla framtida populationer. Dagens data ' +
+        'kan motbevisa en tänkt nyckel, men aldrig bevisa den.\n\n' +
+        '**Sammansatt kandidatnyckel** — ibland krävs två attribut tillsammans. I ' +
+        'WORKS_ON(EmployeeNo, ProjectNo) upprepas både E-104 och P-10, men paret är unikt och minimalt.\n\n' +
+        '**Primärnyckel (PK)** — en **vald** kandidatnyckel. Skrivs `PK = CK₁`. En relation kan ha flera ' +
+        'kandidatnycklar men bara en primärnyckel: EMPLOYEE(EmployeeNo, Name, WorkEmail) har ' +
+        'CK₁ = {EmployeeNo} och CK₂ = {WorkEmail}. Att välja EmployeeNo **tar inte bort** kravet att ' +
+        'WorkEmail är unik — CK₂ finns kvar. Välj helst en nyckel som är stabil, minimal och meningsfull.\n\n' +
+        '**Främmande nyckel (FK)** — attribut vars värden måste matcha en refererad kandidatnyckel. ' +
+        'Kursens skrivsätt:\n\n' +
+        '`PROJECT(ProjectNo, Title, LeaderEmployeeNo)`\n' +
+        '`FK: (LeaderEmployeeNo) REF EMPLOYEE(EmployeeNo)`\n\n' +
+        'Två saker att hålla isär. Ett FK-värde **får upprepas** — Mary kan leda både Atlas och Nova. ' +
+        'Och ett värde som passar domänen (E-999 har rätt form) är **inte** automatiskt en giltig ' +
+        'referens; den refererade tupeln måste finnas.\n\n' +
         '**Referensintegritet:** värdet i en främmande nyckel måste finnas i den refererade kolumnen, ' +
-        'eller vara NULL. I klartext: *du får inte arbeta i ett projekt som inte finns*.'
+        'eller vara NULL om det är tillåtet. I klartext: *du får inte arbeta i ett projekt som inte finns*.'
     },
     {
-      rubrik: 'Varför inga surrogatnycklar här?',
+      rubrik: 'Naturliga nycklar i reglerna, surrogat-ID senare',
       text:
-        'En fråga som ofta förvirrar. På den logiska nivån använder vi **naturliga nycklar** från ' +
-        'ER-modellen. Skälen:\n\n' +
-        '- **Konceptuell klarhet** — vi förlitar oss på tydligt definierade, naturliga identifierare från ' +
-        'den konceptuella modellen\n' +
-        '- **Bevarad mening** — naturliga nycklar speglar verkliga verksamhetsregler och semantik\n' +
-        '- **Inte en fysisk fråga än** — surrogatnycklar är en fysisk optimering för implementation, ' +
-        'indexering och joins\n\n' +
-        'Surrogatnycklar kommer in i **fysisk design** (kapitel 9), valda utifrån nyckelstabilitet, ' +
-        'prestanda och enkelhet.'
+        'Transformationsföreläsningen räknar genomgående med **naturliga nycklar** — EmployeeNo, ' +
+        'ProjectNo — så att reglerna syns tydligt. Det betyder inte att surrogat-ID är förbjudna i den ' +
+        'logiska modellen. Introduktionsföreläsningen HT26 säger tvärtom att **surrogat-ID dyker upp ' +
+        'först i logisk och fysisk design**, och visar en logisk modell med DepartmentId och EmployeeId ' +
+        'där EmployeeNo ligger kvar som en extra kandidatnyckel.\n\n' +
+        'Det som gäller oavsett:\n\n' +
+        '- **ER-modellen** har aldrig surrogat-ID, bara verksamhetens identifierare\n' +
+        '- I **fysisk design** (kapitel 9) används surrogatnycklar genomgående, och den naturliga ' +
+        'nyckeln behålls med UNIQUE + NOT NULL\n' +
+        '- **Tentans DDL-uppgift** kräver automatiskt inkrementerande surrogatnycklar för tabeller som ' +
+        'motsvarar vanliga och svaga entiteter\n\n' +
+        'Lär dig alltså reglerna med naturliga nycklar, och byt till surrogat när du skriver DDL.'
     },
     {
       rubrik: 'Transformationsreglerna',
       text:
-        'Detta är kapitlets kärna. Lär dig dem så väl att du inte behöver slå upp dem.\n\n' +
-        '**1. Vanlig (icke-svag) entitet.** Skapa en relation med samma namn. Ta med alla enkla och ' +
-        'envärda attribut. Sammansatta attribut tas **inte** med som sådana — bara deras atomära ' +
-        'delattribut. Välj en av de identifierande uppsättningarna till primärnyckel.\n\n' +
+        'Detta är kapitlets kärna. Föreläsningen går igenom sex regler i en bestämd ordning — vanliga ' +
+        'entiteter, svaga entiteter, 1:1, 1:N, M:N, multivärda attribut — och använder dem som en ' +
+        'checklista: varje konstruktion och varje constraint i modellen ska vara omhändertagen.\n\n' +
+        '**1. Vanlig (stark) entitet.** Skapa en relation med alla enkla attribut. Sammansatta attribut ' +
+        'tas **inte** med som sådana — bara deras enkla delar (projectPeriod blir StartDate och EndDate). ' +
+        '**Varje** identifierare blir en kandidatnyckel; välj en till primärnyckel. Är den valda ' +
+        'identifieraren sammansatt bildar alla dess delar primärnyckeln tillsammans.\n\n' +
         '`Employee(EmployeeNo, Name, Address, Salary)`\n\n' +
         '**2. Svag entitet.** Skapa en relation med den svaga entitetens enkla, envärda attribut. Lägg ' +
         'till **ägarentitetens primärnyckel som främmande nyckel**. Primärnyckeln blir **kombinationen** ' +
         'av denna främmande nyckel och den partiella identifieraren.\n\n' +
         '`Hotel(Name, Rating)`\n`Room(RoomNumber, HotelName, Price)` — PK är {RoomNumber, HotelName}\n\n' +
-        'Notera att varken RoomNumber eller HotelName är unika var för sig; bara kombinationen.\n\n' +
+        'Notera att varken RoomNumber eller HotelName är unika var för sig; bara kombinationen. Tre ' +
+        'tillägg från föreläsningen: det identifierande sambandets egna attribut (till exempel när ' +
+        'uppgiften lades till) hamnar **i den svaga relationen** — sambandet får ingen egen relation. ' +
+        'Mappa alltid **ägaren först**. Och i en kedja Project → ProjectTask → TaskStep refererar ' +
+        'TaskStep hela sin närmaste ägares nyckel, {ProjectNo, TaskNo}, som **en** sammansatt FK.\n\n' +
         '**3. Binärt 1:M.** Lägg **ett-sidans primärnyckel som främmande nyckel på många-sidan**. ' +
         'Eventuella enkla relationsattribut hamnar i samma relation.\n\n' +
         '`Project(ProjectNo, Name, Budget)`\n`Employee(EmployeeNo, Name, Address, Salary, Hours, ProjectNo)`\n\n' +
         'Minnesregel: FK hamnar alltid på **många**-sidan. Skälet är atomaritet — många-sidan har exakt ' +
         'ett värde att peka på.\n\n' +
-        '**4. Binärt 1:1.** Tre fall:\n\n' +
-        '- *Obligatoriskt för en sida:* lägg den **icke-obligatoriska** sidans primärnyckel som främmande ' +
-        'nyckel hos den **obligatoriska** sidan\n' +
-        '- *Frivilligt för båda:* främmande nyckel-metoden fungerar åt båda hållen — arkitekten väljer\n' +
-        '- *Obligatoriskt för båda*, och inget annat samband finns mellan entiteterna: de kan slås ihop ' +
-        'till **en enda relation**, eller så används främmande nyckel-metoden. Tre giltiga alternativ.\n\n' +
+        '**4. Binärt 1:1.** Normalfallet är främmande nyckel-metoden:\n\n' +
+        '- Lägg den ena sidans primärnyckel som FK hos den andra. **Välj helst sidan med totalt ' +
+        'deltagande** som värd — varje projekt har en ansvarig, så FK:n hamnar i PROJECT\n' +
+        '- **Gör FK:n till en kandidatnyckel.** Annars kan två projekt peka på samma anställd, och då ' +
+        'är det inte längre 1:1. En giltig FK garanterar bara att den anställde finns, inte att hen ' +
+        'förekommer en enda gång\n' +
+        '- Sambandets attribut följer med till värdrelationen\n\n' +
+        '`PROJECT(ProjectNo, ResponsibleEmployeeNo)` med CK₂ = {ResponsibleEmployeeNo} och ' +
+        '`FK: (ResponsibleEmployeeNo) REF EMPLOYEE(EmployeeNo)`\n\n' +
+        'Är deltagandet **totalt för båda** kan relationerna också **slås ihop** till en, där båda ' +
+        'identifierarna blir var sin kandidatnyckel. Det är valfritt — FK-metoden fungerar alltid, åt ' +
+        'vilket håll som helst. Ett tredje, sällan föredraget alternativ är en separat sambandsrelation ' +
+        'där båda deltagarnas nycklar är kandidatnycklar.\n\n' +
         '**5. Binärt M:N.** Skapa en **ny relation** för själva sambandet. Ta med primärnyckelattributen ' +
         'från båda de deltagande relationerna. Tillsammans bildar de en **sammansatt primärnyckel**, och ' +
         'båda är dessutom främmande nycklar. Relationsattribut läggs till som vanliga attribut och ingår ' +
         '**inte** i primärnyckeln.\n\n' +
         '`Employee(EmployeeNo, Name, Address, Salary)`\n`Project(ProjectNo, Name, Budget)`\n' +
         '`Work(EmployeeNo, ProjectNo, Hours)` — PK är {EmployeeNo, ProjectNo}, Hours står utanför\n\n' +
+        'Regel 6 och 7 nedan är inga egna regler i HT26-föreläsningen, utan 1:N- och M:N-regeln ' +
+        'tillämpade på ett unärt samband. Regel 9 finns inte med i HT26-materialet.\n\n' +
         '**6. Unärt 1:M.** Tillämpa 1:M-regeln — men båda sidor är samma entitet. Attributet får ett ' +
         'rollspecifikt namn.\n\n' +
         '`Employee(EmployeeNo, Name, Address, Salary, ManagerNo)` där ManagerNo är FK mot samma relation. ' +
@@ -279,13 +366,16 @@ window.SYSB23.kompendium.databaser.kapitel.push(
         'primärnyckel som främmande nyckel, samt själva det multivärda attributet. Kombinationen blir ' +
         'primärnyckel.\n\n' +
         '`Employee(EmployeeNo, Name, Salary)`\n`EmployeeAddress(EmployeeNo, Address)`\n\n' +
-        '**9. Ternärt samband.** Skapa en relation med primärnycklarna från alla tre deltagande ' +
-        'relationer.\n\n' +
+        '**9. Ternärt samband** (från förra årets föreläsning). Skapa en relation med primärnycklarna ' +
+        'från alla tre deltagande relationer.\n\n' +
         '`Delivery(supplierName, productName, customerName)`\n\n' +
         'Att istället använda tre binära samband fungerar **inte**: med "Amazon levererar stol", "IKEA ' +
         'levererar stol" och "Erdogan beställer stol" går det inte att svara på vilken leverantör som ' +
-        'levererade stolen till Erdogan. Informationen om trepartskombinationen går förlorad.' +
-        '\n\n[[diagram:reifiering]]'
+        'levererade stolen till Erdogan. Informationen om trepartskombinationen går förlorad.\n\n' +
+        '**Kontrollera tre saker separat** efter varje regel: att referenserna pekar på något som ' +
+        'finns, att nycklarna är unika, och att **deltagandet** hålls. Det sista klarar en FK inte ensam: ' +
+        'om varje projekt måste ha minst en anställd kan ett projekt utan rad i WORKS_ON ändå ha giltiga ' +
+        'nycklar. Föreläsningen påpekar uttryckligen att FK:er inte upprätthåller minsta deltagande.'
     },
     {
       rubrik: 'Multivärt attribut eller egen entitet?',
@@ -314,17 +404,21 @@ window.SYSB23.kompendium.databaser.kapitel.push(
   nyckelbegrepp: [
     'Relation = mängd tupler; oordnad, inga dubbletter, atomära värden',
     'Grad = antal attribut, kardinalitet = antal tupler',
-    'Kandidatnyckel kan vara nyckel; primärnyckel är vald till nyckel',
+    'Kandidatnyckel = unik och minimal; primärnyckel = den valda kandidatnyckeln',
+    'FK-värden får upprepas; ett värde i rätt domän är inte automatiskt en giltig referens',
     'Referensintegritet: FK måste matcha ett befintligt värde eller vara NULL',
     '1:M ⇒ FK på många-sidan',
     'M:N ⇒ ny relation med sammansatt PK; relationsattribut står utanför PK',
-    'Svag entitet ⇒ PK = ägarens PK + partiell identifierare',
+    '1:1 ⇒ FK på sidan med totalt deltagande, och FK:n görs till kandidatnyckel (UNIQUE)',
+    'Svag entitet ⇒ PK = ägarens PK + partiell identifierare; ägaren mappas först',
     'Multivärt attribut ⇒ egen relation med sammansatt PK',
-    'Ternärt samband kan inte ersättas av tre binära'
+    'FK:er garanterar inte minsta deltagande — det måste hanteras separat'
   ],
   tentakoppling:
-    'Transformation av konceptuell datamodell är ett av tentans fyra områden. Övningshäftets ' +
-    'uppgifter 4–9 är exakt den typ av uppgift som kommer.'
+    'Transformation från konceptuell till fysisk datamodell är ett av tentans fem områden. På ' +
+    'HT25-tentorna var det uppgift 2 (25 p): ett ER-diagram som skulle bli färdig DDL med alla ' +
+    'constraints och surrogatnycklar. Det här kapitlet är första halvan av den uppgiften, kapitel 9 ' +
+    'den andra. Övningshäftets uppgifter 4–9 tränar den här halvan.'
 },
 
 /* ====================== KAPITEL 8 ====================== */
@@ -332,49 +426,110 @@ window.SYSB23.kompendium.databaser.kapitel.push(
   id: 'db-k8',
   nr: 8,
   titel: 'Normalformer och normalisering',
-  ingress: 'Funktionella beroenden, 1NF–3NF, dekomposition, lossless join och dependency preservation — med en arbetsgång som fungerar varje gång.',
-  lastid: 13,
+  ingress: 'Anomalier, funktionella beroenden, attributslutning och nycklar, 1NF–3NF, lossless join och dependency preservation — med en arbetsgång som fungerar varje gång.',
+  lastid: 20,
   amnen: ['db-normalisering'],
   avsnitt: [
     {
       rubrik: 'Problemet: anomalier',
       text:
-        'Transformationsregeln för M:N säger att man ska skapa tre relationer. Men hur vet vi att det ' +
-        'ger en **bra** uppdelning? Varför tre och inte en?\n\n' +
-        'Anta att vi implementerar en M:N-modell som **en enda** relation:\n\n' +
-        '`EmployeeProject(EmployeeNo, Name, Address, ProjectNo, ProjectName, Budget)`\n\n' +
-        'Två saker går fel.\n\n' +
-        '**Uppdateringsanomali.** Ska budgeten för projekt P3 höjas måste flera celler ändras, eftersom ' +
-        'P3 förekommer på raderna för både E4 och E5. Ändras bara den ena blir datan **inkonsistent** — ' +
-        'databasen påstår två olika budgetar för samma projekt.\n\n' +
-        '**Borttagningsanomali.** Tas projekt P3 bort försvinner även raderna för E4 och E5, alltså all ' +
-        'information om två anställda. *Att radera information om en entitet ska normalt inte medföra att ' +
-        'information om en helt annan entitet går förlorad.*\n\n' +
-        'Grundorsaken är **redundans** — samma faktum lagras på flera ställen. Normalformerna ger ett ' +
-        'formellt sätt att mäta "godhet" hos relationer.'
+        'Transformationsreglerna ger flera relationer. Men hur vet vi att det blir en **bra** ' +
+        'uppdelning? Föreläsningen testar genom att strunta i reglerna och lägga allt i en enda ' +
+        'relation:\n\n' +
+        '`ASSIGNMENT_REGISTER(EmployeeNo, EmployeeName, DepartmentNo, DepartmentName, ProjectNo, ' +
+        'ProjectTitle, AllocationPercentage)`\n\n' +
+        'En tupel är ett uppdrag: E-104 Mary på avdelning D-10 Analysis arbetar 60 % på P-10 Atlas. ' +
+        'Kandidatnyckeln är {EmployeeNo, ProjectNo}. Alla fakta stämmer och alla tupler är unika — ändå ' +
+        'går tre saker fel:\n\n' +
+        '**Uppdateringsanomali.** P-10 döps om från Atlas till Atlas Renewal. Titeln står på två rader, ' +
+        'en för varje person i projektet. Missas den ena har P-10 plötsligt **två motstridiga titlar**.\n\n' +
+        '**Insättningsanomali.** Projektet P-40 Orion ska läggas in innan någon arbetar i det. Det går ' +
+        'inte: EmployeeNo ingår i primärnyckeln och kan varken utelämnas eller hittas på. *Ett giltigt ' +
+        'projekt får ingen plats.*\n\n' +
+        '**Borttagningsanomali.** Garys uppdrag på Beacon avslutas och raden tas bort. Det var den enda ' +
+        'raden som nämnde Beacon — så **projektet försvinner** fast det fortfarande finns.\n\n' +
+        'Alla tre har samma orsak: projektfakta lagras bara **inuti uppdragstupler**, fast ett projekt ' +
+        'kan finnas utan uppdrag. Problemet är hur fakta kombineras, inte antalet kolumner.\n\n' +
+        'Håll isär **upprepade referenser** och **upprepade fakta**. Att P-10 står på två rader behövs — ' +
+        'det identifierar två olika uppdrag. Att "P-10 heter Atlas" står på två rader är **redundans**: ' +
+        'samma faktum lagrat två gånger.\n\n' +
+        'Delar man upp i EMPLOYEE, DEPARTMENT, PROJECT och WORKS_ON får varje händelse ett enda mål: ' +
+        'namnbytet ändrar en PROJECT-tupel, Orion läggs in i PROJECT utan uppdrag, och Garys uppdrag ' +
+        'tas bort ur WORKS_ON medan Beacon finns kvar. Det är därför transformationsreglerna fungerar. ' +
+        'Men godtycklig uppdelning räcker inte — resten av kapitlet handlar om vilka uppdelningar som är ' +
+        'säkra.'
     },
     {
       rubrik: 'Funktionella beroenden',
       text:
-        'Ett **funktionellt beroende** innebär att värdet av ett attribut är associerat med **precis ett** ' +
-        'värde av ett annat attribut.\n\n' +
-        '`EmployeeNo → Name`\n\n' +
-        'Läses "EmployeeNo bestämmer funktionellt Name". Notera att det inte behöver gälla åt andra ' +
-        'hållet: flera anställda kan heta Bob, så Name bestämmer inte EmployeeNo.\n\n' +
+        '`EmployeeNo → EmployeeName` läses "EmployeeNo bestämmer funktionellt EmployeeName". Vänster ' +
+        'sida är **determinanten**, höger sida det **beroende** attributet.\n\n' +
+        '> **Funktionellt beroende.** X → Y gäller när två tupler som har **samma värden på X** alltid ' +
+        'också har **samma värden på Y** — i **varje tillåten population**, inte bara den som ligger i ' +
+        'tabellen nu.\n\n' +
+        'Fem saker som följer av definitionen:\n\n' +
+        '- **Ett enda motexempel räcker.** Två tupler med E-104 men namnen Mary och Maria bryter mot ' +
+        'EmployeeNo → EmployeeName.\n' +
+        '- **Värden får ändras.** Byter Mary namn till Maria på alla rader gäller beroendet fortfarande — ' +
+        'det kräver överensstämmelse inom varje tillstånd, inte att värdet aldrig ändras.\n' +
+        '- **Pilen har riktning.** EmployeeNo → DepartmentNo betyder inte att DepartmentNo → EmployeeNo; ' +
+        'D-10 har flera anställda.\n' +
+        '- **Beroenden kommer från regler, inte från data.** Att alla namn råkar vara olika i dag bevisar ' +
+        'inte att EmployeeName → EmployeeNo. Reglerna tillåter en andra Mary.\n' +
+        '- **En determinant behöver inte vara en nyckel.** EmployeeNo bestämmer namnet men inte vilket ' +
+        'projekt eller vilken procentsats — det är ingen nyckel i ASSIGNMENT_REGISTER.\n\n' +
+        '**Trivialt beroende:** X → Y där Y redan ingår i X, till exempel {EmployeeNo, ProjectNo} → ' +
+        'ProjectNo. Det säger ingenting nytt.\n\n' +
         '**Klammerparenteserna spelar roll — och sidan de står på:**\n\n' +
-        '`{A, B} → {C, D}` betyder `{A,B} → C` och `{A,B} → D`. Alltså: A och B **tillsammans** bestämmer ' +
-        'C och D.\n\n' +
-        'Det betyder **inte** `A → C`, `A → D`, `B → C`, `B → D`.\n\n' +
-        'Vänster sida (determinanten) hänger ihop; höger sida kan delas upp.\n\n' +
-        '**Definitioner du behöver ordagrant:**\n\n' +
-        '- **Kandidatnyckel:** ett attribut eller en attributmängd som unikt kan identifiera vilken tupel ' +
-        'som helst\n' +
-        '- **Primärattribut (prime):** ett attribut som är medlem i **någon** kandidatnyckel\n' +
-        '- **Icke-primärt attribut (non-prime):** ett attribut som inte är medlem i någon kandidatnyckel\n' +
-        '- **Äkta delmängd:** en delmängd av t.ex. {A,B} som inte är lika med {A,B}. Både A och B är ' +
-        'äkta delmängder av {A,B}\n' +
-        '- **Transitivt beroende:** X → Z indirekt, genom X → Y och Y → Z, där det **inte** gäller att ' +
-        'Y → X'
+        '`{A, B} → {C, D}` betyder `{A,B} → C` och `{A,B} → D`. Höger sida får delas upp ' +
+        '(**dekomposition**) och beroenden med samma vänsterled får slås ihop (**union**). Vänster sida ' +
+        'får **aldrig** delas: det betyder **inte** `A → C` eller `B → D`.\n\n' +
+        '**Transitivitet:** EmployeeNo → DepartmentNo och DepartmentNo → DepartmentName ger ' +
+        'EmployeeNo → DepartmentName. Det är ingen ny verksamhetsregel, utan en följd av de två.\n\n' +
+        '**F och F⁺.** F är de beroenden vi anger. F⁺ är **allt** som följer av dem — F självt, ' +
+        'följder som den transitiva ovan, och de triviala. Båda är mängder av beroenden, inte av attribut.'
+    },
+    {
+      rubrik: 'Attributslutning, supernyckel och kandidatnyckel',
+      text:
+        'Hur hittar man nyckeln på ett sätt som går att visa? Med **attributslutningen** X⁺: mängden av ' +
+        'alla attribut som X bestämmer under de givna beroendena. X⁺ innehåller alltid X självt.\n\n' +
+        '**Så räknar du ut X⁺:**\n\n' +
+        '1. Börja med attributen i X\n' +
+        '2. Leta upp ett beroende vars **hela** vänsterled redan finns i mängden\n' +
+        '3. Lägg till attributen på dess högersida\n' +
+        '4. Upprepa tills ett helt varv inte ger något nytt\n\n' +
+        'Gå tillbaka till tidigare beroenden — ett attribut du fått sent kan låsa upp ett du redan ' +
+        'passerat.\n\n' +
+        '**Exempel** med beroendena i ASSIGNMENT_REGISTER:\n\n' +
+        '- {EmployeeNo}⁺ = {EmployeeNo, EmployeeName, DepartmentNo, DepartmentName}. ProjectNo saknas, ' +
+        'så varken projekttiteln eller procentsatsen går att nå.\n' +
+        '- {ProjectNo}⁺ = {ProjectNo, ProjectTitle}\n' +
+        '- {EmployeeNo, ProjectNo}⁺ = alla sju attributen — först när båda finns kan ' +
+        '{EmployeeNo, ProjectNo} → AllocationPercentage användas.\n\n' +
+        '> **Supernyckel:** en attributmängd vars slutning innehåller **alla** relationens attribut.\n\n' +
+        '> **Kandidatnyckel:** en **minimal** supernyckel — tar man bort vilket attribut som helst slutar ' +
+        'den vara supernyckel.\n\n' +
+        '{EmployeeNo, ProjectNo, EmployeeName} är en supernyckel men ingen kandidatnyckel, eftersom ' +
+        'EmployeeName kan strykas. Minimal betyder att inget kan tas bort — inte att alla kandidatnycklar ' +
+        'måste vara lika stora.\n\n' +
+        '**Knepet som gör det snabbt:** ett attribut som **aldrig står på någon högersida** kan ingen ' +
+        'slutning lägga till. Det måste alltså ingå i **varje** nyckel. I ASSIGNMENT_REGISTER gäller det ' +
+        'både EmployeeNo och ProjectNo — och eftersom paret redan är en kandidatnyckel är det den enda.\n\n' +
+        '**Flera kandidatnycklar** uppstår när attribut bestämmer varandra. I EMPLOYEE(EmployeeNo, ' +
+        'WorkEmail, EmployeeName) med EmployeeNo → WorkEmail och WorkEmail → EmployeeNo är både ' +
+        '{EmployeeNo} och {WorkEmail} kandidatnycklar.\n\n' +
+        '**Arbetsgången för nycklar:**\n\n' +
+        '1. Skriv upp attributen och beroendena\n' +
+        '2. Ta med alla attribut som inte står på någon högersida — de måste finnas i varje nyckel\n' +
+        '3. Räkna ut slutningen; räcker den inte, lägg till fler attribut\n' +
+        '4. Kontrollera minimaliteten\n' +
+        '5. Pröva andra startmängder och förklara varför inga andra minimala mängder finns\n\n' +
+        'Först **därefter** klassificerar du attributen:\n\n' +
+        '- **Primärattribut (prime):** medlem i **minst en** kandidatnyckel\n' +
+        '- **Icke-primärt attribut (non-prime):** medlem i **ingen** kandidatnyckel\n\n' +
+        'Titta på **alla** kandidatnycklar, inte bara den som valts till primärnyckel. WorkEmail är ' +
+        'primärt även om EmployeeNo blev PK — valet av primärnyckel ändrar ingenting.'
     },
     {
       rubrik: 'De tre normalformerna',
@@ -382,15 +537,34 @@ window.SYSB23.kompendium.databaser.kapitel.push(
         'Normalformerna **bygger på varandra**: för att uppfylla 3NF måste relationen redan uppfylla 2NF. ' +
         'Ju högre normalform, desto mindre redundans och desto mindre utrymme för anomalier.\n\n' +
         '**Första normalformen (1NF):**\n\n' +
-        '> En relation är i 1NF om värdena i varje attribut är **atomära**.\n\n' +
-        'En cell med "P1, P5" bryter mot 1NF. Lösningen är att lägga varje kombination på en egen rad.\n\n' +
+        '> En relation är i 1NF när varje attributvärde i varje tupel är ett enda, **atomärt** värde — ' +
+        'inte en samling värden.\n\n' +
+        'En cell med {P-10, P-20} bryter mot 1NF. Lösningen är ett projektnummer per tupel. Ett ' +
+        'atomärt värde **får** ha delar: ett datum har år, månad och dag men är ett värde. Flera datum i ' +
+        'samma cell bryter däremot mot 1NF. Och 1NF tar **inte** bort redundans — relationen ovan har ' +
+        'fortfarande alla tre anomalierna.\n\n' +
         '**Andra normalformen (2NF):**\n\n' +
         '> En relation är i 2NF om och endast om den är i 1NF och **inget icke-primärt attribut är ' +
         'funktionellt beroende av någon äkta delmängd av någon kandidatnyckel**.\n\n' +
+        'En **äkta delmängd** är en delmängd som inte är lika med hela mängden: {A} och {B} är äkta ' +
+        'delmängder av {A, B}. Två begrepp gör definitionen lättare att använda:\n\n' +
+        '- **Fullt beroende:** ingen äkta delmängd av X bestämmer A. AllocationPercentage behöver både ' +
+        'EmployeeNo och ProjectNo.\n' +
+        '- **Partiellt beroende:** en äkta delmängd räcker. EmployeeName behöver bara EmployeeNo — det ' +
+        'bryter mot 2NF.\n\n' +
+        'Följ kedjorna: EmployeeNo → DepartmentNo → DepartmentName gör också DepartmentName partiellt ' +
+        'beroende av {EmployeeNo, ProjectNo}.\n\n' +
         '**Tredje normalformen (3NF):**\n\n' +
-        '> En relation är i 3NF om och endast om båda villkoren gäller:\n' +
-        '> - Relationen är i 2NF\n' +
-        '> - **Varje icke-primärt attribut är icke-transitivt beroende av varje kandidatnyckel**\n\n' +
+        '> En relation är i 3NF om och endast om den är i 2NF och **inget icke-primärt attribut är ' +
+        'transitivt beroende av någon kandidatnyckel**.\n\n' +
+        '> **Transitivt beroende:** X → Z indirekt, via X → Y och Y → Z, där det **inte** gäller att ' +
+        'Y → X.\n\n' +
+        'I EMPLOYEE_DETAILS(EmployeeNo, EmployeeName, DepartmentNo, DepartmentName) är DepartmentName ' +
+        'icke-primärt och beror på nyckeln via DepartmentNo, som inte bestämmer EmployeeNo — alltså inte ' +
+        '3NF. Mellanledet får inte innehålla målattributet självt; ett trivialt steg räknas inte. Ett ' +
+        'likvärdigt sätt att se det, som föreläsningen också använder: beroendet DepartmentNo → ' +
+        'DepartmentName bryter mot 3NF eftersom DepartmentNo inte är en supernyckel och DepartmentName ' +
+        'inte ingår i någon kandidatnyckel.\n\n' +
         'Notera att både 2NF och 3NF uteslutande handlar om **icke-primära** attribut. Det ger en ' +
         'användbar genväg: har relationen **inga icke-primära attribut alls** är den automatiskt i 3NF.'
     },
@@ -399,8 +573,9 @@ window.SYSB23.kompendium.databaser.kapitel.push(
       text:
         'Följ alltid samma fem steg. Det är så facit i övningshäftet är formulerat, och det är så du bör ' +
         'svara på tentan.\n\n' +
-        '**Steg 1 — bestäm kandidatnyckel/-nycklar.** Vilket attribut eller vilken attributmängd bestämmer ' +
-        '(direkt eller via kedjor) alla övriga attribut? Leta efter **flera** — det är en vanlig miss.\n\n' +
+        '**Steg 1 — bestäm kandidatnyckel/-nycklar** med attributslutning. Börja med attributen som inte ' +
+        'står på någon högersida, räkna ut slutningen och kontrollera minimaliteten. Leta efter ' +
+        '**flera** — det är en vanlig miss.\n\n' +
         '**Steg 2 — klassificera attributen.** Vilka är primära (medlemmar i någon kandidatnyckel) och ' +
         'vilka är icke-primära?\n\n' +
         '**Steg 3 — kontrollera 2NF.** Ställ först frågan: *är kandidatnyckeln sammansatt?*\n\n' +
@@ -411,7 +586,10 @@ window.SYSB23.kompendium.databaser.kapitel.push(
         '**Steg 4 — kontrollera 3NF.** Finns kedjor X → Y → Z där Y inte bestämmer X, och Z är ' +
         'icke-primärt? Då är relationen bara i 2NF.\n\n' +
         '**Steg 5 — normalisera vid behov** genom dekomposition, och ange primärnyckel för varje ny ' +
-        'relation.\n\n' +
+        'relation. Receptet är detsamma för båda normalformerna: skapa en ny relation med den mindre ' +
+        'determinanten och det den bestämmer, ta bort de beroende attributen ur originalet, men **behåll ' +
+        'determinanten** där så att delarna går att koppla ihop igen. Dela inte mer än 3NF kräver — ' +
+        'tentan drar poäng för övernormalisering.\n\n' +
         '**Motivera alltid.** Facit skriver till exempel: *"Normalform: 2NF. Reason: Non-prime attribute ' +
         'D is transitively dependent of candidate key A."*'
     },
@@ -445,37 +623,66 @@ window.SYSB23.kompendium.databaser.kapitel.push(
     {
       rubrik: 'Lossless join',
       text:
-        'Dekomposition kan lösa ett problem och skapa ett värre. Betrakta:\n\n' +
-        '`R(A,B,C,D,E,F)` med `A → {B,C}` och `D → {E,F}`\n\n' +
-        'Föreslagen dekomposition: `R1(A,B,C)` och `R2(D,E,F)`. Båda ser ut att vara i 3NF. Vad är felet?\n\n' +
-        '**De har inga gemensamma attribut.** De går inte att joina tillbaka — kopplingen mellan delarna ' +
-        'är förlorad.\n\n' +
-        '> **Lossless join** (non-additive join) är en egenskap hos en dekomposition: en naturlig join av ' +
-        'de mindre relationerna ska ge tillbaka den ursprungliga relationen.\n\n' +
-        'Det konkreta exemplet: Employee och Project var för sig är i 3NF, men efter uppdelningen vet man ' +
-        'inte längre **vem som arbetar i vilket projekt**. Lösningen är kopplingsrelationen ' +
-        '`Work(EmployeeNo, ProjectNo)`, som återställer lossless join.\n\n' +
-        '(En **naturlig join** matchar automatiskt kolumner med samma namn och datatyp — ingen ON-sats ' +
-        'behövs.)\n\n' +
-        'Kontrollera alltid efter en dekomposition att delarna har gemensamma attribut att joina på.'
+        'Dekomposition kan lösa ett problem och skapa ett värre.\n\n' +
+        '> **Lossless join** (non-additive join): en dekomposition är förlustfri om originalrelationen ' +
+        'kan **återskapas exakt** genom att joina delarna — för **varje** population som uppfyller ' +
+        'beroendena. Ingen tupel får saknas och ingen får tillkomma.\n\n' +
+        'Det som går fel är sällan att tupler försvinner, utan att det **tillkommer falska tupler** ' +
+        '(*spurious tuples*). Delas WORKS_ON(EmployeeNo, ProjectNo, AllocationPercentage) upp i ' +
+        '(EmployeeNo, ProjectNo) och (ProjectNo, AllocationPercentage) delar de ProjectNo. Men P-10 har ' +
+        'både 60 % och 50 %, och joinen parar ihop varje anställd med **båda** — E-104 får plötsligt ' +
+        '50 % och E-207 60 %. Vem som hade vilken andel är borta. Utan gemensamma attribut alls blir det ' +
+        'ännu värre: varje par kombineras med varje procentsats.\n\n' +
+        '**Testet för två delar** — det du ska använda på tentan:\n\n' +
+        '> Uppdelningen i R₁ och R₂ är förlustfri **om och endast om** de gemensamma attributen ' +
+        'bestämmer **alla attribut i minst en av delarna**: (R₁ ∩ R₂) → R₁ eller (R₁ ∩ R₂) → R₂.\n\n' +
+        'Så gör du:\n\n' +
+        '1. Skriv upp originalrelationen, dess beroenden F och attributen i varje del\n' +
+        '2. Ta fram de gemensamma attributen X = R₁ ∩ R₂\n' +
+        '3. Räkna ut X⁺ med de **ursprungliga** beroendena\n' +
+        '4. Innehåller X⁺ hela R₁ eller hela R₂ är uppdelningen förlustfri, annars inte\n\n' +
+        '**Gemensamma attribut räcker inte** — de måste bestämma en hel del. EMPLOYEE(EmployeeNo, ' +
+        'EmployeeName, DepartmentNo) och DEPARTMENT(DepartmentNo, DepartmentName) delar DepartmentNo, och ' +
+        '{DepartmentNo}⁺ täcker hela DEPARTMENT: förlustfri. I procentexemplet ovan är {ProjectNo}⁺ = ' +
+        '{ProjectNo} — det täcker ingen av delarna: förlustig.\n\n' +
+        '**Fler än två delar:** joina två delar i taget. Om de gemensamma attributen bestämmer den ena ' +
+        'delen helt, slå ihop dem och fortsätt. Når du hela originalrelationen är uppdelningen förlustfri. ' +
+        'Exempel: R(A,B,C,D,E) med A → B, B → C och C → D, uppdelad i (A,B), (C,D), (A,E) och (B,C). Joina ' +
+        '(A,B) med (A,E) på A (A → B), sedan med (B,C) på B (B → C), sedan med (C,D) på C (C → D) — hela R ' +
+        'är tillbaka. Fastnar du bevisar det däremot ingenting.\n\n' +
+        'Två varningar från föreläsningen: **ett lyckat tupelexempel bevisar inte** förlustfrihet, men ' +
+        '**ett motexempel räcker** för att motbevisa den. Och det klassiska felet — Employee och Project ' +
+        'var för sig i 3NF, men ingen vet vem som arbetar var — löses med kopplingsrelationen ' +
+        '`Work(EmployeeNo, ProjectNo)`.'
     },
     {
       rubrik: 'Dependency preservation',
       text:
         'Den andra egenskapen en dekomposition kan ha.\n\n' +
-        '> Ett funktionellt beroende är **bevarat** om dess två ingående attribut finns i **samma ' +
-        'relation**.\n\n' +
-        'Splittras X och Y i olika relationer kan beroendet X → Y inte längre upprätthållas lokalt av ' +
-        'databasen — ansvaret flyttas till applikationen.\n\n' +
-        'Exempel på förlust. Utgå från:\n\n' +
-        '`EmployeeProject(EmployeeNo, Name, Address, ProjectNo, ProjectName, Budget)` med\n' +
-        '`EmployeeNo → {Name, Address, ProjectNo, ProjectName}`, `ProjectNo → {ProjectName, Budget}` och ' +
-        '`ProjectName → {ProjectNo, Budget}`\n\n' +
-        'Efter dekomposition till `Employee(EmployeeNo, Name, Address, ProjectNo)` och ' +
-        '`Project(ProjectNo, Name, Budget)` är beroendet **EmployeeNo → ProjectName** förlorat: ' +
-        'EmployeeNo hamnade i Employee, ProjectName i Project.\n\n' +
+        '> **Dependency preservation:** en dekomposition är beroendebevarande om de beroenden som kan ' +
+        'kontrolleras **inom varje enskild relation** tillsammans **implicerar alla ursprungliga ' +
+        'beroenden**.\n\n' +
+        'Ett beroende är **lokalt** när alla dess attribut finns i samma resulterande relation. Det ' +
+        'praktiska testet blir alltså: ligger X och Y i samma relation är X → Y bevarat. Splittras de ' +
+        'måste du kontrollera om beroendet ändå **följer av** de lokala beroendena. Med A → B och B → C ' +
+        'i (A,B) och (B,C) är till exempel A → C bevarat fast A och C aldrig står ihop, eftersom det ' +
+        'följer av de två lokala.\n\n' +
+        'Går ett beroende förlorat kan databasen inte längre upprätthålla det lokalt. Föreläsningens ' +
+        'exempel: EMPLOYEE(EmployeeNo, Email, Office) med EmployeeNo → Email, uppdelad i ' +
+        '(EmployeeNo, Office) och (Email, Office). Ingen av delarna innehåller både EmployeeNo och Email. ' +
+        'Varje del för sig är felfri, men joinar man på Office får E1 två olika mejladresser — och ingen ' +
+        'lokal kontroll kan upptäcka det.\n\n' +
+        '**Se upp med den gamla formuleringen.** Förra årets föreläsning (som fortfarande ligger bland ' +
+        'materialet) sa bara att ett beroende är bevarat "om dess två attribut finns i samma relation", ' +
+        'och gav som exempel att EmployeeNo → ProjectName går förlorat när EmployeeProject delas upp i ' +
+        '`Employee(EmployeeNo, Name, Address, ProjectNo)` och `Project(ProjectNo, ProjectName, Budget)`. ' +
+        'Med den nya, fullständiga definitionen är det beroendet **inte** förlorat: EmployeeNo → ProjectNo ' +
+        'gäller i Employee och ProjectNo → ProjectName i Project, och tillsammans implicerar de ' +
+        'EmployeeNo → ProjectName. Samma-relation-testet är alltså ett **tillräckligt** villkor, inte ett ' +
+        'nödvändigt. Pröva alltid om ett splittrat beroende följer av de lokala innan du säger att det ' +
+        'gått förlorat.\n\n' +
         'Lossless join och dependency preservation är **oberoende** egenskaper. En dekomposition kan ha ' +
-        'den ena utan den andra.'
+        'den ena utan den andra — mejlexemplet ovan saknar faktiskt båda.'
     },
     {
       rubrik: 'Ett verkligt exempel: World of Warcraft',
@@ -494,19 +701,27 @@ window.SYSB23.kompendium.databaser.kapitel.push(
     }
   ],
   nyckelbegrepp: [
-    'Uppdateringsanomali och borttagningsanomali orsakas av redundans',
-    'X → Y: X bestämmer funktionellt Y. {A,B} → C betyder A och B TILLSAMMANS',
+    'Tre anomalier — uppdatering, insättning, borttagning — med samma orsak: samma faktum lagrat flera gånger',
+    'X → Y: samma X kräver samma Y i varje tillåten population. Beroenden kommer från regler, inte data',
+    '{A,B} → C betyder A och B TILLSAMMANS; vänsterledet får aldrig delas',
+    'Attributslutning X⁺: allt X bestämmer. Supernyckel: X⁺ = alla attribut. Kandidatnyckel: minimal supernyckel',
+    'Attribut som aldrig står på en högersida ingår i varje kandidatnyckel',
     '1NF: atomära värden',
     '2NF: inget icke-primärt attribut beror på en äkta delmängd av en kandidatnyckel',
     '3NF: inga transitiva beroenden för icke-primära attribut',
     'Enkel kandidatnyckel ⇒ 2NF kan inte brytas',
     'Inga icke-primära attribut ⇒ automatiskt 3NF',
-    'Lossless join: delarna måste kunna joinas tillbaka till originalet',
-    'Dependency preservation: båda attributen i ett beroende måste ligga i samma relation'
+    'Lossless join: exakt återskapande; misslyckas det uppstår falska tupler',
+    'Binärt test: (R₁ ∩ R₂)⁺ måste innehålla hela R₁ eller hela R₂',
+    'Dependency preservation: de lokala beroendena ska tillsammans implicera alla ursprungliga'
   ],
   tentakoppling:
-    'Normalformer och normalisering är ett av tentans fyra områden, och det område där arbetsgången ' +
-    'betyder mest. Öva övningshäftets uppgifter 10–13 tills du gör dem på under fem minuter styck.'
+    'Normalformer och normalisering är ett av tentans fem områden. På HT25-tentorna var det uppgift 3 ' +
+    '(20 p): fem sant/falskt-påståenden om tre givna uppdelningar (2 p rätt, −1 p fel) — normalform, ' +
+    'kandidatnyckel, primärattribut, lossless join och dependency preservation — och sedan två ' +
+    'relationer att bestämma normalform för och normalisera till 3NF (5 p var). Sant/falskt-delen ' +
+    'löser du med attributslutning och det binära lossless-testet ovan. Öva övningshäftets uppgifter ' +
+    '10–13 och Modelleras normaliseringsuppgifter tills du gör dem på under fem minuter styck.'
 },
 
 /* ====================== KAPITEL 9 ====================== */
@@ -688,7 +903,10 @@ window.SYSB23.kompendium.databaser.kapitel.push(
     'NCHAR/NVARCHAR för unicode; prefix N framför strängkonstanten'
   ],
   tentakoppling:
-    'Transformation till fysisk datamodell är ett av tentans fyra områden. Övningshäftets uppgifter ' +
+    'Transformation till fysisk datamodell är ett av tentans fem områden, och på HT25-tentorna ' +
+    'uppgift 2 (25 p). Uppgiftstexten kräver att reserverade ord skrivs ut helt (PRIMARY KEY, ' +
+    'CONSTRAINT), att alla constraints är med, och att tabeller för vanliga och svaga entiteter får ' +
+    'automatiskt inkrementerande surrogatnycklar; constraints behöver inte namnges. Övningshäftets uppgifter ' +
     '18–22 går från ER-diagram till komplett DDL — exakt den uppgiftstypen.'
 },
 
@@ -697,17 +915,21 @@ window.SYSB23.kompendium.databaser.kapitel.push(
   id: 'db-k10',
   nr: 10,
   titel: 'Klientutveckling, säkerhet och metadata',
-  ingress: 'JDBC, DAO-mönstret, SQL-injektion och hur man hanterar hemligheter — grunden för projektuppgiften.',
+  ingress: 'JDBC, DAO-mönstret, SQL-injektion, hemligheter och metadata — grunden för projektet, och från HT26 även ett tentaområde.',
   lastid: 11,
   amnen: ['db-klient', 'db-sakerhet', 'db-metadata'],
   avsnitt: [
     {
       rubrik: 'Vad det här kapitlet är till för',
       text:
-        'Kapitel 2–9 täckte salstentans fyra områden. Detta kapitel hör till delkursens **andra halva**: ' +
-        'databasprojektuppgiften, där ni i grupp utvecklar en Java-applikation som kommunicerar med er ' +
-        'egen databasserver, med resurshantering, felhantering, säkerhet och metadata.\n\n' +
-        'Läs det när du börjar med projektet — inte när du pluggar till tentan.'
+        'Detta kapitel hör till delkursens tredje del, **applikationsutveckling**: databasprojektet, där ' +
+        'ni i grupp utvecklar en Java-klient som pratar med SQL Server via JDBC, med resurshantering, ' +
+        'felhantering, säkerhet och metadata.\n\n' +
+        '> **Nytt för HT26:** introduktionsföreläsningen räknar upp applikationsutveckling — *"writing ' +
+        'code for relational databases"* — som ett av tentans fem områden. Det ingick inte i HT25-tentorna, ' +
+        'så det finns inga gamla uppgifter att gå efter. Läs alltså kapitlet både för projektet och för ' +
+        'tentan, och kunna särskilt JDBC-flödet, try-with-resources, parametriserade frågor och ' +
+        'ResultSetMetaData.'
     },
     {
       rubrik: 'JDBC-grunderna',
@@ -878,8 +1100,10 @@ window.SYSB23.kompendium.databaser.kapitel.push(
     'ResultSetMetaData beskriver resultatmängden och visar aliasen, inte tabellen'
   ],
   tentakoppling:
-    'Detta område ingår INTE i salstentan, som täcker ER-modellering, transformation, normalformer ' +
-    'och SQL. Kapitlet hör till databasprojektuppgiften.'
+    'Applikationsutveckling är från HT26 ett av tentans fem områden, men hur uppgiften ser ut vet ' +
+    'ingen än — HT25-tentorna hade den inte. Det säkraste är att kunna skriva och läsa koden i det här ' +
+    'kapitlet utan att titta: en try-with-resources med PreparedStatement och platshållare, ' +
+    'skillnaden mellan executeQuery och executeUpdate, och varför en sammanfogad sträng är sårbar.'
 }
 
 );

@@ -5,8 +5,8 @@
 
      lasdiagram    uppgift 1 (25 p) – ett ER-diagram och tio påståenden,
                    markera alla som är sanna. +5 för rätt, −3 för fel.
-     erschema      uppgift 2 (25 p) – transformera ER-diagrammet till ett
-                   relationsschema.
+     erschema      uppgift 2 (25 p) – tentan vill ha färdig DDL; här
+                   tränas steget före, ER-diagram till relationsschema.
      normalisering uppgift 3 (20 p) – högsta normalform, och uppdelning
                    till 3NF när relationen inte redan är där.
 

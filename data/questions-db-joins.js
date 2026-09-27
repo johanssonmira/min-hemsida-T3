@@ -148,7 +148,7 @@ window.SYSB23.fragor.push(
     'Fel. Att kolumnen är en FK förklarar varför den *finns* i båda tabellerna, men det är SELECT * som gör att båda *visas*.'
   ],
   forklaring: 'Ännu ett skäl att undvika SELECT *: dubbletter av join-kolumner och onödig datamängd. Kursmaterialet rekommenderar att alltid räkna upp kolumnerna explicit, gärna med tabellprefix och AS-alias.',
-  kalla: '01introduction.pdf, 02-03-sql.pdf'
+  kalla: '01-introduction.pdf, 02-03-sql.pdf'
 },
 {
   id: 'db-sqlj-07',
@@ -167,7 +167,7 @@ window.SYSB23.fragor.push(
     'Prefixa kolumnerna med tabellnamn för läsbarhet, särskilt eftersom UnitID finns i båda tabellerna.'
   ],
   forklaring: 'Med testdatan tillhör E1 (Anna), E2 (Eva) och E6 (Peter) enheten U1 General Surgery. Alternativt kan man filtrera på Unit.UnitNo = \'U1\', men att filtrera på namnet är närmare affärsfrågans formulering.',
-  kalla: 'databasessqlassignment.pdf fråga 16'
+  kalla: 'databases-sql-assignment.pdf fråga 16'
 },
 {
   id: 'db-sqlj-08',
@@ -186,7 +186,7 @@ window.SYSB23.fragor.push(
     'Ge konstanten ett alias, annars visas kolumnrubriken som "(No column name)".'
   ],
   forklaring: 'Två tekniker kombineras: NULL-hantering med IS NULL och literaler i SELECT-listan. Med testdatan blir svaret C1 och C6, som båda har EmployeeID NULL.',
-  kalla: 'databasessqlassignment.pdf fråga 8'
+  kalla: 'databases-sql-assignment.pdf fråga 8'
 },
 {
   id: 'db-sqlj-09',
@@ -207,7 +207,7 @@ window.SYSB23.fragor.push(
     'Med testdatan blir svaret Peter (E6), som är den enda anställd utan bil.'
   ],
   forklaring: 'De tre mönstren för "hitta rader utan matchning" är LEFT JOIN + IS NULL, NOT IN och NOT EXISTS. NOT EXISTS är oftast säkrast eftersom den hanterar NULL korrekt utan extra villkor.',
-  kalla: 'databasessqlassignment.pdf fråga 7'
+  kalla: 'databases-sql-assignment.pdf fråga 7'
 },
 {
   id: 'db-sqlj-10',
@@ -226,7 +226,7 @@ window.SYSB23.fragor.push(
     'UNION tar bort dubbletter. Vill man behålla dem (t.ex. om samma person är både anställd och patient med samma adress) används UNION ALL.'
   ],
   forklaring: 'Skillnaden mot JOIN är avgörande: JOIN kombinerar kolumner från olika tabeller på samma rad, UNION staplar rader från olika frågor. Ett vanligt fel är att försöka lösa "både A och B"-frågor med en join.',
-  kalla: 'databasessqlassignment.pdf fråga 34, 02-03-sql.pdf'
+  kalla: 'databases-sql-assignment.pdf fråga 34, 02-03-sql.pdf'
 },
 
 /* ======================== db-sql-subquery ======================== */
@@ -410,7 +410,7 @@ window.SYSB23.fragor.push(
     'DISTINCT behövs eftersom en patient som delar flera sjukdomar med PP4 annars skulle listas flera gånger. Villkoret <> \'PP4\' utesluter patienten själv.'
   ],
   forklaring: 'Med testdatan lider PP4 av Cough. Även PP3 lider av Cough, så svaret blir Bo (PP3). Notera samma princip som i "vem har samma lön som E2" – värdet måste hämtas dynamiskt, inte hårdkodas.',
-  kalla: 'databasessqlassignment.pdf fråga 17'
+  kalla: 'databases-sql-assignment.pdf fråga 17'
 },
 {
   id: 'db-sqls-09',
@@ -430,7 +430,7 @@ window.SYSB23.fragor.push(
     'Använd en kolumn som aldrig kan vara NULL i den bevarade tabellen (t.ex. primärnyckeln EmployeeID) i IS NULL-testet.'
   ],
   forklaring: 'Med testdatan har alla tre avdelningarna anställda, så resultatet blir tomt. Frågan är ändå korrekt – och det är just en sådan här kontroll man vill kunna köra när datan förändras.',
-  kalla: 'databasessqlassignment.pdf fråga 30'
+  kalla: 'databases-sql-assignment.pdf fråga 30'
 },
 {
   id: 'db-sqls-10',
@@ -449,7 +449,7 @@ window.SYSB23.fragor.push(
     'Alternativ i två steg: först CREATE TABLE LoveTable (…) och sedan INSERT INTO LoveTable (…) SELECT … – samma mönster som StudentCopy i föreläsningsmaterialet.'
   ],
   forklaring: 'Med testdatan lider PP1 (Anna) och PP2 (Hans) av Love sickness. Notera att SELECT INTO ärver kolumnernas datatyper men inte constraints – den nya tabellen får varken primärnyckel eller UNIQUE-villkor.',
-  kalla: 'databasessqlassignment.pdf fråga 25, 02-03-sql.pdf'
+  kalla: 'databases-sql-assignment.pdf fråga 25, 02-03-sql.pdf'
 },
 {
   id: 'db-sqls-11',

@@ -70,7 +70,9 @@ window.SYSB23.modellera = (function () {
       kort: 'Tentans uppgift 2 · 25 p',
       intro: 'Ett ER-diagram, och du skriver relationsschemat. Rättningen bryr sig om ' +
              '**vad som identifierar och vad som refererar vad** — inte om vad du döper ' +
-             'relationerna eller de främmande nycklarna till.',
+             'relationerna eller de främmande nycklarna till. På tentan ska svaret vara ' +
+             'färdig **DDL** med alla constraints och surrogatnycklar; det här är steget före. ' +
+             'Skriv sedan tabellerna efter mönstret i kompendiets kapitel 9.',
       lista: function () { return S.erschema || []; } },
 
     { id: 'normalisering', namn: 'Normalisering',

@@ -15,22 +15,22 @@ window.SYSB23.fragor.push(
   amne: 'db-konceptuell',
   typ: 'flerval',
   svarighet: 1,
-  fraga: 'Vad är en entitetstyp i ER-modellering?',
+  fraga: 'Hur definierar föreläsningen (efter Chen 1976) en entitet?',
   alternativ: [
     'En enskild kolumn i en databastabell, alltså en egenskap hos en tabellrad',
-    'En mängd saker med samma egenskaper som har en oberoende existens',
+    'En "sak" som kan identifieras distinkt, skild från varje annan entitet',
     'Ett samband mellan två tabeller, alltså kopplingen dem emellan i modellen',
     'Ett villkor som begränsar vilka värden ett attribut får anta i modellen'
   ],
   ratt: 1,
   forklaringar: [
-    'Fel. En kolumn motsvarar ett *attribut* på den konceptuella nivån. Entiteten är det som attributen beskriver.',
-    'Rätt. Detta är kursens definition. Nyckelordet är "oberoende existens": Address är ett attribut till Student så länge vi inte behöver lagra data om adresser oberoende av studenter – först då blir Address en egen entitet.',
-    'Fel. Ett samband är en *relationship*, ritad som en romb i Chen-notation.',
-    'Fel. Det beskriver ett constraint, vilket hör hemma på den fysiska nivån (t.ex. CHECK).'
+    'Fel. En kolumn motsvarar ett *attribut*. Entiteten är det som attributen beskriver.',
+    'Rätt. Chens definition: "a thing which can be distinctly identified". Distinkt identifierad betyder att modellen kan skilja den från varje annan entitet. Entitetstypen (rektangeln) grupperar entiteter med samma relevanta egenskaper.',
+    'Fel. Ett samband är en *relationship type*, ritad som en romb i Chen-notation.',
+    'Fel. Det beskriver en domän eller ett constraint, inte en entitet.'
   ],
-  forklaring: 'Entiteter kan ha fysisk existens (Student) eller konceptuell existens (Course). Testet för om något ska vara entitet eller attribut är just den oberoende existensen – behöver verksamheten lagra data om saken för sin egen skull?',
-  kalla: '04conceptualdatabasedesign.pdf'
+  forklaring: 'Håll isär tre nivåer: entitetstypen (Employee), entitetsmängden (alla anställda just nu) och entiteten (Mary, E-104). En entitet är en informationsabstraktion — personalverksamheten lagrar namn och jobbmejl, inte längd och vikt. En stark entitetstyp kan identifiera sina entiteter utan hjälp av en annan entitetstyp.',
+  kalla: '04-conceptual-database-design.pdf'
 },
 {
   id: 'db-kon-02',
@@ -52,8 +52,8 @@ window.SYSB23.fragor.push(
     'Fel. Understrykning används för identifierande attribut (nyckelattribut), inte för multiplicitet.',
     'Fel. Pilspetsar tillhör inte Chen-notationen; de förekommer i vissa andra notationer.'
   ],
-  forklaring: 'Två oberoende dimensioner beskriver ett samband: (1) multiplicitet – 1:1, 1:M eller M:N, och (2) deltagande – obligatoriskt eller frivilligt per sida. I UML uttrycks båda samtidigt av multiplicitetsintervallet, t.ex. 1..1 mot 0..*.',
-  kalla: '04conceptualdatabasedesign.pdf'
+  forklaring: 'Två oberoende dimensioner beskriver ett samband: (1) multiplicitet – 1:1, 1:M eller M:N, och (2) deltagande – obligatoriskt eller frivilligt per sida. Chen har också en alternativ skrivning med min–max-par intill varje entitet, t.ex. (1,1) och (0,N) — men blanda aldrig min–max-par med dubbla linjer i samma diagram.',
+  kalla: '04-conceptual-database-design.pdf'
 },
 {
   id: 'db-kon-03',
@@ -61,22 +61,22 @@ window.SYSB23.fragor.push(
   amne: 'db-konceptuell',
   typ: 'flerval',
   svarighet: 2,
-  fraga: 'Varför ska man skriva M:N och inte M:M för ett många-till-många-samband?',
+  fraga: 'I ett Chen-diagram står 1 intill Employee och N intill Project på sambandet Leads. Vad säger 1:an?',
   alternativ: [
-    'Det är bara en stilfråga utan betydelse, båda skrivsätten läses likadant',
-    'M:M säger att båda sidorna har samma multiplicitet, vilket är fel',
-    'M:N är den notation som SQL Server kräver för att kunna generera tabellerna',
-    'M:M är reserverat för unära relationer, alltså samband inom samma entitet'
+    'Att varje anställd måste leda exakt ett projekt',
+    'Att varje projekt har högst en ledande anställd',
+    'Att varje projekt måste ha exakt en ledande anställd',
+    'Att en anställd kan leda högst ett projekt'
   ],
   ratt: 1,
   forklaringar: [
-    'Fel. Kursmaterialet är uttryckligt: "Using M:M would be incorrect".',
-    'Rätt. Samma bokstav på båda sidor säger att antalet är detsamma i båda riktningarna. Två olika bokstäver, M och N, markerar att multipliciteterna är oberoende av varandra – en student kan läsa 5 kurser medan en kurs har 200 studenter.',
-    'Fel. ER-notation är en modelleringskonvention, inte något SQL Server har åsikter om.',
-    'Fel. Unära (rekursiva) relationer använder samma notationsregler som binära.'
+    'Fel. Kardinaliteten läses tvärs över sambandet, och den säger inget om "måste".',
+    'Rätt. Siffran läses tvärs över: för ett fast projekt får högst en anställd delta. Och den anger ett tak — 1 betyder högst en, inte exakt en.',
+    'Fel. "Måste" avgörs av deltagandet (dubbel linje vid Project), inte av kardinaliteten. Utan dubbel linje får ett projekt sakna ledare.',
+    'Fel. Det är N:et intill Project som säger hur många projekt en anställd får leda — många.'
   ],
-  forklaring: 'M och N är fristående variabler för "många". Att använda samma symbol två gånger vore att påstå att värdena alltid är lika.',
-  kalla: '04conceptualdatabasedesign.pdf'
+  forklaring: 'Kardinalitet och deltagande är oberoende. Kardinaliteten (1:1, 1:N, M:N) är ett maxantal och läses tvärs över; deltagandet (enkel eller dubbel linje) läses vid sin egen ände. I M:N betyder både M och N "många" — de olika bokstäverna skiljer bara de två positionerna åt.',
+  kalla: '04-conceptual-database-design.pdf'
 },
 {
   id: 'db-kon-04',
@@ -99,7 +99,7 @@ window.SYSB23.fragor.push(
     'Fel. "Härledd" gäller attribut som kan beräknas ur andra attribut, t.ex. Age ur DateOfBirth.'
   ],
   forklaring: 'Testet för svag entitet: räcker entitetens egna attribut för att unikt identifiera en förekomst? Om inte – och identifieringen kräver ägarens nyckel – är entiteten svag. Vid transformationen blir ägarens primärnyckel en del av den svaga entitetens sammansatta primärnyckel.',
-  kalla: '04conceptualdatabasedesign.pdf'
+  kalla: '04-conceptual-database-design.pdf'
 },
 {
   id: 'db-kon-05',
@@ -122,7 +122,7 @@ window.SYSB23.fragor.push(
     'Fel. Relationsattribut har normala värden; NULL har inget med saken att göra.'
   ],
   forklaring: 'Vid transformationen av M:N hamnar relationsattributet i kopplingsrelationen – men det blir INTE en del av primärnyckeln. Exempel: Work(EmployeeNo, ProjectNo, Hours) där bara de två första är understrukna.',
-  kalla: '04conceptualdatabasedesign.pdf, 05logicaldatabasedesign.pdf'
+  kalla: '04-conceptual-database-design.pdf, 05-logical-database-design.pdf'
 },
 {
   id: 'db-kon-06',
@@ -130,22 +130,22 @@ window.SYSB23.fragor.push(
   amne: 'db-konceptuell',
   typ: 'flerval',
   svarighet: 2,
-  fraga: 'Vilka modelleringselement saknas i Crow’s foot-notation (Visual Paradigm) jämfört med Chen-notation?',
+  fraga: 'Vilket av följande kan kursens Crow’s foot-notation INTE uttrycka direkt, utan måste lösa indirekt?',
   alternativ: [
-    'Entiteter och relationer, alltså modellens två grundläggande byggstenar',
-    'Multivärda attribut, härledda attribut och sammansatta attribut',
-    'Primärnycklar och främmande nycklar, alltså kopplingarna mellan tabellerna',
-    'Multiplicitet och obligatoriskt deltagande på ömse sidor om sambandet'
+    'Entitetstyper och deras identifierande attribut',
+    'Multivärda attribut och attribut på ett samband',
+    'Om deltagandet är frivilligt eller obligatoriskt',
+    'Unära samband med två rollnamn'
   ],
   ratt: 1,
   forklaringar: [
-    'Fel. Entiteter och relationer är just kärnan i Crow’s foot-notationen.',
-    'Rätt. Materialet påpekar att multivärda attribut är ett konceptuellt element som saknas i Crow’s foot – man måste lösa det med en egen entitet. Härledda attribut går inte heller att visa, och Visual Paradigm kan inte visa sammansatta attribut.',
-    'Fel. Visual Paradigm markerar tvärtom nycklar med en nyckelsymbol.',
-    'Fel. Multiplicitet och obligatoriskt deltagande är just vad "kråkfoten" och linjerna uttrycker.'
+    'Fel. Entitetsrutor med ID-markerade identifierare är kärnan i notationen.',
+    'Rätt. Ett multivärt attribut blir en egen entitet i ett 1:N-samband (PHONE NUMBER), och eftersom linjen saknar plats för attribut blir ett samband med attribut en associativ entitet (ASSIGNMENT).',
+    'Fel. Det är precis vad ändpunkterna gör: yttre cirkel = frivilligt, yttre streck = obligatoriskt.',
+    'Fel. En självlinje med rollerna supervisor och report går att rita direkt.'
   ],
-  forklaring: 'Notationsval har konsekvenser för vad som går att uttrycka. Crow’s foot saknar dessutom ett standardiserat sätt att visa svaga entiteter – Visual Paradigm använder en heldragen linje för identifierande relation istället för streckad.',
-  kalla: '04conceptualdatabasedesign.pdf'
+  forklaring: 'Föreläsningen listar det som bara representeras indirekt eller dokumenteras separat: multivärda attribut, sammansatta, härledda och frivilliga attribut, domäner, svag identitet (blir upprepade ID-markeringar, alltså en sammansatt identifierare) och attribut på samband. Notationen är inte standardiserad — läs alltid legenden.',
+  kalla: '04-conceptual-database-design.pdf'
 },
 {
   id: 'db-kon-07',
@@ -168,7 +168,7 @@ window.SYSB23.fragor.push(
     'Fel svar – det går. En M:1-relation med obligatoriskt deltagande på kurssidan.'
   ],
   forklaring: 'ER-modellen fångar struktur (entiteter, samband, kardinalitet) men inte alla verksamhetsregler. Värdebegränsningar hanteras senare i den fysiska designen, t.ex. CONSTRAINT CK_… CHECK(…).',
-  kalla: '04conceptualdatabasedesign.pdf'
+  kalla: '04-conceptual-database-design.pdf'
 },
 {
   id: 'db-kon-08',
@@ -196,7 +196,7 @@ window.SYSB23.fragor.push(
     'Multivärt attribut transformeras till egen relation med sammansatt PK (FK + attributet)',
     'Valet ska styras av en uttalad verksamhetsregel, inte av modelleringsvana'
   ],
-  kalla: '05logicaldatabasedesign.pdf'
+  kalla: '05-logical-database-design.pdf'
 },
 
 /* ============================ db-logisk ============================ */
@@ -216,7 +216,7 @@ window.SYSB23.fragor.push(
     'Fel. Domän är mängden av alla tillåtna värden för ett dataelement, ungefär som en datatyp.'
   ],
   forklaring: 'Terminologitabellen: Relation/Tabell/Fil, Attribut/Kolumn/Fält, Tupel/Rad/Post. Antalet attribut kallas relationens *grad* (degree) och antalet tupler dess *kardinalitet*.',
-  kalla: '05logicaldatabasedesign.pdf'
+  kalla: '05-logical-database-design.pdf'
 },
 {
   id: 'db-log-02',
@@ -239,7 +239,7 @@ window.SYSB23.fragor.push(
     'Fel svar på frågan – detta ÄR en relationsegenskap.'
   ],
   forklaring: 'Relationsegenskaperna: unikt namn, atomära värden, distinkta attributnamn, samma datatyp/domän per attribut, attributordning irrelevant, tupelordning irrelevant, inga dubbletter.',
-  kalla: '05logicaldatabasedesign.pdf'
+  kalla: '05-logical-database-design.pdf'
 },
 {
   id: 'db-log-03',
@@ -247,22 +247,22 @@ window.SYSB23.fragor.push(
   amne: 'db-logisk',
   typ: 'flerval',
   svarighet: 2,
-  fraga: 'Vad är skillnaden mellan en kandidatnyckel och en primärnyckel?',
+  fraga: 'Vilka två villkor måste en kandidatnyckel K uppfylla?',
   alternativ: [
-    'Ingen skillnad alls – de två begreppen är synonymer för samma sak',
-    'Flera kandidatnycklar kan identifiera en tupel, primärnyckeln är den valda',
-    'Kandidatnyckeln är alltid sammansatt medan primärnyckeln alltid består av en kolumn',
-    'Primärnyckeln får innehålla NULL medan en kandidatnyckel aldrig får göra det'
+    'Den ska vara ett heltal och genereras automatiskt av databasen',
+    'Unikhet i varje giltigt relationsvärde, och minimalitet',
+    'Den ska vara vald av arkitekten och stå först i relationen',
+    'Den ska vara unik i den data som finns lagrad just nu'
   ],
   ratt: 1,
   forklaringar: [
-    'Fel. En relation kan ha flera kandidatnycklar men bara en primärnyckel.',
-    'Rätt. Alla attribut eller attributmängder som unikt identifierar en tupel är kandidatnycklar. Databasarkitekten väljer en av dem till primärnyckel – helst en som är stabil, minimal och semantiskt meningsfull.',
-    'Fel. Båda kan vara enkla eller sammansatta. Employee(EmployeeNo, FirstName, LastName, Email) kan t.ex. ha kandidatnycklarna EmployeeNo (enkel) och {FirstName, LastName} (sammansatt).',
-    'Fel. Primärnyckeln får aldrig innehålla NULL – det är entitetsintegritet. Inte heller någon delmängd av en sammansatt primärnyckel får vara NULL.'
+    'Fel. Det beskriver en surrogatnyckel med IDENTITY, inte vad en kandidatnyckel är.',
+    'Rätt. Unikhet: inga två tupler har samma värden på K, i varje giltigt relationsvärde. Minimalitet: inget attribut kan tas bort utan att unikheten går förlorad. {EmployeeNo, Name} är unik men inte minimal.',
+    'Fel. Den valda är primärnyckeln. Övriga kandidatnycklar finns kvar och måste fortfarande vara unika.',
+    'Fel. Unikheten måste vara en verksamhetsregel för alla framtida populationer. Dagens data kan motbevisa en nyckel men aldrig bevisa den.'
   ],
-  forklaring: 'Kandidatnyckel = kan vara nyckel. Primärnyckel = är vald till nyckel. Övriga kandidatnycklar bör i den fysiska designen få UNIQUE- och NOT NULL-constraints så att deras unikhet bevaras.',
-  kalla: '05logicaldatabasedesign.pdf'
+  forklaring: 'Primärnyckeln är en vald kandidatnyckel. EMPLOYEE med CK₁ = {EmployeeNo} och CK₂ = {WorkEmail}: väljs EmployeeNo som PK måste WorkEmail ändå vara unik — i DDL med UNIQUE och NOT NULL.',
+  kalla: '05-logical-database-design.pdf'
 },
 {
   id: 'db-log-04',
@@ -285,7 +285,7 @@ window.SYSB23.fragor.push(
     'Fel. Sammanslagning är ett alternativ endast vid 1:1 med obligatoriskt deltagande på båda sidor.'
   ],
   forklaring: 'Minnesregel: FK hamnar alltid på "många"-sidan. Skälet är atomaritet – många-sidan har exakt ett värde att peka på, medan ett-sidan skulle behöva peka på flera.',
-  kalla: '05logicaldatabasedesign.pdf'
+  kalla: '05-logical-database-design.pdf'
 },
 {
   id: 'db-log-05',
@@ -293,22 +293,22 @@ window.SYSB23.fragor.push(
   amne: 'db-logisk',
   typ: 'flerval',
   svarighet: 3,
-  fraga: 'Ett 1:1-samband där båda sidorna har obligatoriskt deltagande och inget annat samband finns mellan entiteterna. Vilka transformationsalternativ finns?',
+  fraga: 'Varje projekt har exakt en ansvarig anställd, och en anställd är ansvarig för högst ett projekt. Du lägger ResponsibleEmployeeNo som FK i PROJECT. Vad mer krävs för att 1:1 ska hållas?',
   alternativ: [
-    'Endast att slå ihop de två entiteterna till en gemensam relation',
-    'Antingen slå ihop dem, eller använda främmande nyckel i vald riktning',
-    'Endast att skapa en separat kopplingsrelation mellan de två entiteterna',
-    'Det går inte att transformera ett sådant samband till ett relationsschema'
+    'Ingenting — främmande nyckeln räcker',
+    'ResponsibleEmployeeNo måste också vara en kandidatnyckel (UNIQUE)',
+    'EMPLOYEE måste få en FK tillbaka till PROJECT',
+    'Sambandet måste få en egen relation'
   ],
   ratt: 1,
   forklaringar: [
-    'Fel. Sammanslagning är tillåtet, men inte det enda alternativet.',
-    'Rätt. Materialet listar tre alternativ: (1) en gemensam relation EmployeeProject(…), (2) ProjectNo som FK i Employee, eller (3) EmployeeNo som FK i Project. Databasarkitekten väljer – båda FK-riktningarna fungerar.',
-    'Fel. En separat kopplingsrelation är M:N-mönstret och skulle här ge onödig komplexitet.',
-    'Fel. Sambandet är fullt transformerbart, med flera giltiga alternativ.'
+    'Fel. FK:n garanterar bara att den anställde finns. Två projekt kan då peka på samma person, och sambandet är 1:N.',
+    'Rätt. Föreläsningen: gör den kopierade FK:n till en kandidatnyckel så att varje refererad tupel förekommer högst en gång. NOT NULL på den ger dessutom det totala deltagandet för projekten.',
+    'Fel. En FK åt varje håll är onödig dubbellagring; en räcker.',
+    'Fel. En separat sambandsrelation är ett tillåtet men sällan föredraget alternativ — och även där krävs att nycklarna är kandidatnycklar.'
   ],
-  forklaring: 'Regeln om sammanslagning gäller bara när båda sidorna är obligatoriska OCH inget annat samband (t.ex. en 1:N-relation) finns mellan entiteterna. Vid 1:1 med obligatorisk sida på bara en av entiteterna placeras FK:n hos den obligatoriska sidan.',
-  kalla: '05logicaldatabasedesign.pdf'
+  forklaring: 'Regeln för 1:1: lägg FK:n helst hos sidan med totalt deltagande, och gör den till kandidatnyckel. Är deltagandet totalt för båda kan relationerna också slås ihop, med båda identifierarna som kandidatnycklar — men FK-metoden fungerar alltid.',
+  kalla: '05-logical-database-design.pdf'
 },
 {
   id: 'db-log-06',
@@ -316,22 +316,22 @@ window.SYSB23.fragor.push(
   amne: 'db-logisk',
   typ: 'flerval',
   svarighet: 2,
-  fraga: 'Varför införs INTE surrogatnycklar redan i den logiska databasdesignen?',
+  fraga: 'Var i designprocessen dyker surrogatnycklar (som EmployeeId) upp enligt HT26-materialet?',
   alternativ: [
-    'De stöds inte av relationsmodellen och saknar därför motsvarighet i schemat',
-    'Den logiska modellen ska bevara naturliga identifierare, surrogat är fysiskt',
-    'De skulle bryta mot tredje normalformen och göra schemat ogiltigt',
-    'De kan bara skapas i efterhand, när data redan har lagts in i tabellen'
+    'Redan i ER-modellen, som ett extra understruket attribut på varje entitet',
+    'I logisk och fysisk design — ER-modellen har bara verksamhetens identifierare',
+    'Först när data har lagts in, eftersom värdena genereras vid INSERT',
+    'Aldrig — kursen använder bara naturliga nycklar'
   ],
   ratt: 1,
   forklaringar: [
-    'Fel. Relationsmodellen har inga invändningar mot artificiella nycklar – de är fullt giltiga kandidatnycklar.',
-    'Rätt. Materialet motiverar detta med tre skäl: konceptuell klarhet (naturliga identifierare från ER-modellen), bevarad mening (naturliga nycklar speglar verkliga verksamhetsregler), och att surrogatnycklar är en fysisk optimering för implementation, indexering och joins.',
-    'Fel. Surrogatnycklar bryter inte mot någon normalform.',
-    'Fel. IDENTITY-kolumner definieras i DDL, alltså innan någon data finns.'
+    'Fel. Introduktionsföreläsningen: på den konceptuella nivån är employeeNo och departmentName identifierare; surrogat-ID förekommer bara i logisk och fysisk design.',
+    'Rätt. Introduktionsföreläsningen visar en logisk modell med DepartmentId och EmployeeId, där EmployeeNo ligger kvar som extra kandidatnyckel. I fysisk design används surrogatnycklar genomgående.',
+    'Fel. IDENTITY-kolumnen definieras i DDL, innan någon data finns.',
+    'Fel. Tentans DDL-uppgift kräver tvärtom automatiskt inkrementerande surrogatnycklar för vanliga och svaga entiteter.'
   ],
-  forklaring: 'Surrogatnycklar introduceras i den fysiska designen, valda utifrån nyckelstabilitet, prestanda och enkelhet. Semantiskt är surrogatnyckeln en "surrogat" (ställföreträdare) för den naturliga nyckeln, som behålls med UNIQUE + NOT NULL.',
-  kalla: '05logicaldatabasedesign.pdf, 07-physical-database-design.pdf'
+  forklaring: 'Transformationsföreläsningen räknar med naturliga nycklar för att reglerna ska synas, och det är så du bör lära dig dem. När du skriver DDL byter du till surrogatnyckel som PK och behåller den naturliga nyckeln med UNIQUE + NOT NULL.',
+  kalla: '01-introduction.pdf, 05-logical-database-design.pdf, 07-physical-database-design.pdf'
 },
 {
   id: 'db-log-07',
@@ -352,7 +352,7 @@ window.SYSB23.fragor.push(
     'Kontrollera resultatet mot verkligheten: rumsnummer 101 kan finnas på både Hilton och Grand Hotel, men kombinationen är unik – precis vad den sammansatta nyckeln uttrycker.'
   ],
   forklaring: 'Regeln för svaga entiteter: PK = ägarens PK (som FK) + den partiella identifieraren. Notera att varken RoomNumber eller HotelName är unika var för sig – bara kombinationen.',
-  kalla: '05logicaldatabasedesign.pdf, sysb23databaseexercises.pdf övning 7'
+  kalla: '05-logical-database-design.pdf, sysb23databaseexercises.pdf övning 7'
 },
 {
   id: 'db-log-08',
@@ -373,7 +373,7 @@ window.SYSB23.fragor.push(
     'Jämför med den unära 1:M-varianten, som istället bara ger Employee(EmployeeNo, Name, Address, Salary, ManagerNo) med ManagerNo som FK mot samma relation.'
   ],
   forklaring: 'Nyckeln till unära relationer är att rita ut dem som binära med två kopior av entiteten. Skillnaden mot binära fall är bara att attributen måste ges rollspecifika namn för att undvika namnkollision.',
-  kalla: '05logicaldatabasedesign.pdf'
+  kalla: '05-logical-database-design.pdf'
 },
 
 /* ======================== db-normalisering ======================== */
@@ -398,7 +398,7 @@ window.SYSB23.fragor.push(
     'Fel. Fullständigt beroende av hela kandidatnyckeln är 2NF-kravet.'
   ],
   forklaring: 'Normalformerna bygger på varandra: 3NF förutsätter 2NF, som förutsätter 1NF. 1NF = atomära värden, 2NF = inget icke-primärt attribut beror på en äkta delmängd av en kandidatnyckel, 3NF = inga transitiva beroenden.',
-  kalla: '06normalformsnormalization.pdf'
+  kalla: '06-normal-forms-normalization.pdf'
 },
 {
   id: 'db-norm-02',
@@ -421,7 +421,7 @@ window.SYSB23.fragor.push(
     'Fel. NOT NULL är ett constraint på den fysiska nivån.'
   ],
   forklaring: 'Att identifiera primära och icke-primära attribut är det avgörande steget innan man bedömer 2NF och 3NF – båda definitionerna handlar uttryckligen om *icke-primära* attribut.',
-  kalla: '06normalformsnormalization.pdf'
+  kalla: '06-normal-forms-normalization.pdf'
 },
 {
   id: 'db-norm-03',
@@ -439,7 +439,7 @@ window.SYSB23.fragor.push(
     'Fel. Inget tyder på icke-atomära värden.'
   ],
   forklaring: 'Arbetsgång: (1) bestäm kandidatnyckel/-nycklar, (2) lista primära och icke-primära attribut, (3) är kandidatnyckeln sammansatt? Om nej kan 2NF inte brytas. (4) Finns transitiva beroenden? Normalisering ger R1(A,B,C) och R2(C,D).',
-  kalla: '06normalformsnormalization.pdf'
+  kalla: '06-normal-forms-normalization.pdf'
 },
 {
   id: 'db-norm-04',
@@ -457,7 +457,7 @@ window.SYSB23.fragor.push(
     'Fel. Relationen är i 1NF; värdena är atomära.'
   ],
   forklaring: 'Nyckelinsikt: 2NF kan bara brytas när kandidatnyckeln är sammansatt. Är kandidatnyckeln ett enda attribut finns inga äkta delmängder att bero på. Normalisering här ger R1(A,B,C) och R2(B,D).',
-  kalla: '06normalformsnormalization.pdf, sysb23databaseexercises.pdf'
+  kalla: '06-normal-forms-normalization.pdf, sysb23databaseexercises.pdf'
 },
 {
   id: 'db-norm-05',
@@ -483,45 +483,45 @@ window.SYSB23.fragor.push(
   amne: 'db-normalisering',
   typ: 'flerval',
   svarighet: 2,
-  fraga: 'Vad innebär att en dekomposition har egenskapen lossless join?',
+  fraga: 'R(A, B, C) med A → B delas upp i R₁(A, B) och R₂(A, C). Är uppdelningen förlustfri (lossless join)?',
   alternativ: [
-    'Att inga rader går förlorade när man raderar ur en av relationerna',
-    'Att en naturlig join av de mindre relationerna återskapar den ursprungliga relationen',
-    'Att samtliga funktionella beroenden bevaras i de nya relationerna',
-    'Att samtliga resulterande relationer hamnar i tredje normalformen'
+    'Ja, eftersom delarna har ett gemensamt attribut',
+    'Ja, eftersom de gemensamma attributen {A} bestämmer hela R₁',
+    'Nej, eftersom C inte bestäms av någonting',
+    'Nej, eftersom B och C hamnat i olika relationer'
   ],
   ratt: 1,
   forklaringar: [
-    'Fel. Egenskapen gäller schemadesign, inte DML-operationer.',
-    'Rätt. Lossless join (non-additive join) betyder att man kan joina ihop delrelationerna och få tillbaka exakt originalrelationen. Bryter man R(A,B,C,D,E,F) i R1(A,B,C) och R2(D,E,F) saknas gemensamma attribut helt – de går inte att joina, och kopplingen mellan delarna är förlorad.',
-    'Fel. Det är dependency preservation, en separat egenskap. En dekomposition kan ha den ena utan den andra.',
-    'Fel. Delrelationerna kan mycket väl vara i 3NF var för sig och ändå sakna lossless join – vilket är precis poängen i materialets exempel.'
+    'Fel skäl. Ett gemensamt attribut räcker inte — det måste bestämma alla attribut i minst en av delarna.',
+    'Rätt. Binära testet: R₁ ∩ R₂ = {A}, och {A}⁺ = {A, B} innehåller hela R₁. Då återskapar joinen exakt originalet.',
+    'Fel. Att C saknar beroende hindrar inte förlustfrihet; testet handlar om de gemensamma attributen.',
+    'Fel. Att attribut hamnar i olika delar är själva poängen med en uppdelning.'
   ],
-  forklaring: 'I exemplet med Employee och Project är båda relationerna i 3NF, men efter dekompositionen vet man inte längre vem som arbetar i vilket projekt. Lösningen är en kopplingsrelation Work(EmployeeNo, ProjectNo), som återställer lossless join.',
-  kalla: '06normalformsnormalization.pdf'
+  forklaring: 'Lossless join: originalrelationen återskapas exakt genom join, för varje population som följer beroendena. Testet för två delar: (R₁ ∩ R₂) → R₁ eller (R₁ ∩ R₂) → R₂, uträknat med de ursprungliga beroendena. Misslyckas det uppstår falska tupler (spurious tuples) — rader som aldrig fanns.',
+  kalla: '06-normalization-and-normal-forms-new.pdf'
 },
 {
   id: 'db-norm-07',
   delkurs: 'databaser',
   amne: 'db-normalisering',
   typ: 'flerval',
-  svarighet: 2,
-  fraga: 'När är ett funktionellt beroende bevarat (dependency preservation) efter en dekomposition?',
+  svarighet: 3,
+  fraga: 'R(A, B, C) med A → B, B → C och A → C delas upp i R₁(A, B) och R₂(B, C). Är uppdelningen beroendebevarande?',
   alternativ: [
-    'När båda de ingående attributen finns i samma relation',
-    'När attributen finns någonstans i schemat, oavsett relation',
-    'När beroendet gäller mellan primärnycklar',
-    'När relationen som beroendet gäller har normaliserats till 3NF'
+    'Nej, A → C går förlorat eftersom A och C inte står i samma relation',
+    'Ja, de lokala beroendena A → B och B → C implicerar A → C',
+    'Nej, eftersom B förekommer i båda relationerna',
+    'Det går inte att avgöra utan exempeldata'
   ],
-  ratt: 0,
+  ratt: 1,
   forklaringar: [
-    'Rätt. Kursmaterialets formulering: "A functional dependency is preserved if its two constituent attributes exist in the same relation." Splittras X och Y i olika relationer kan beroendet X → Y inte längre upprätthållas lokalt.',
-    'Fel. Det räcker inte att attributen finns kvar någonstans – de måste finnas i samma relation för att beroendet ska kunna kontrolleras.',
-    'Fel. Beroendet kan gälla vilka attribut som helst, inte bara nycklar.',
-    'Fel. 3NF och dependency preservation är oberoende egenskaper.'
+    'Fel. "Samma relation" är ett tillräckligt test, inte ett nödvändigt. A → C följer av de två lokala beroendena genom transitivitet.',
+    'Rätt. Definitionen: de beroenden som kan kontrolleras inom varje relation ska tillsammans implicera alla ursprungliga. A → B (i R₁) och B → C (i R₂) ger A → C.',
+    'Fel. Ett gemensamt attribut är normalt och behövs dessutom för lossless join.',
+    'Fel. Beroendebevarande avgörs ur beroendena, inte ur data.'
   ],
-  forklaring: 'I materialets exempel förloras EmployeeNo → ProjectName vid dekompositionen, eftersom EmployeeNo hamnar i Employee och ProjectName i Project. Konsekvensen är att beroendet måste upprätthållas av applikationen istället för av databasen.',
-  kalla: '06normalformsnormalization.pdf'
+  forklaring: 'Förra årets föreläsning sa bara att ett beroende är bevarat "om dess attribut finns i samma relation". HT26-föreläsningen ger den fullständiga definitionen. Ett beroende är verkligen förlorat först när det inte går att härleda ur de lokala — som i exemplet EmployeeNo → Email när EMPLOYEE delas i (EmployeeNo, Office) och (Email, Office).',
+  kalla: '06-normalization-and-normal-forms-new.pdf'
 },
 {
   id: 'db-norm-08',
@@ -545,7 +545,7 @@ window.SYSB23.fragor.push(
     'Klassificera attributen: A och B är primära (ingår i kandidatnyckeln), C, D och E är icke-primära.',
     'Kontrollera 2NF: är kandidatnyckeln sammansatt? Ja ⇒ 2NF kan brytas. Finns beroenden från en äkta delmängd till ett icke-primärt attribut? Ja, både A → D och B → E. ⇒ 1NF.',
     'Normalisera genom dekomposition: bryt ut varje partiellt beroende i en egen relation, med determinanten som primärnyckel.',
-    'Kontrollera lossless join: R1 delar A med R2 och B med R3, så relationerna kan joinas tillbaka. Kontrollera dependency preservation: alla tre beroendena har båda sina attribut inom samma relation. ✔'
+    'Kontrollera lossless join med det binära testet, två delar i taget: R1 ∩ R2 = {A} och A → D bestämmer hela R2; den sammanslagna delen ∩ R3 = {B} och B → E bestämmer hela R3. Kontrollera dependency preservation: alla tre beroendena kan kontrolleras inom en enda relation. ✔'
   ],
   forklaring: 'Detta är övningshäftets Exercise 11:3 respektive 12:6, med facit R1(A,B,C), R2(A,D), R3(B,E). Mönstret "sammansatt nyckel där varje del bestämmer sitt eget attribut" är ett av de vanligaste på tentan.',
   kalla: 'sysb23databaseexercises.pdf övning 11:3, 12:6'
@@ -572,7 +572,7 @@ window.SYSB23.fragor.push(
     'Kontrollera 2NF: bestämmer A eller B ensamt något icke-primärt attribut? Nej. ⇒ minst 2NF.',
     'Kontrollera 3NF: leta efter kedjor X → Y → Z där Y inte bestämmer X. Här: {A,B} → C → D, alltså är D transitivt beroende av kandidatnyckeln. ⇒ endast 2NF.',
     'Dekomponera vid varje "led" i kedjan: determinanten blir primärnyckel i sin egen relation tillsammans med det den bestämmer.',
-    'Verifiera: R1 och R2 delar C, R2 och R3 delar D ⇒ lossless join. Alla tre beroendena är intakta inom var sin relation ⇒ dependency preservation. ✔'
+    'Verifiera lossless join två delar i taget: R1 ∩ R2 = {C} och C → D bestämmer hela R2; sedan är gemensamt {D} och D → {E,F} bestämmer hela R3. Alla tre beroendena kan kontrolleras inom var sin relation ⇒ dependency preservation. ✔'
   ],
   forklaring: 'Detta är övningshäftets Exercise 11:8 (facit R1(A,B,C), R2(C,D), R3(D,E,F)). Kedjemönstret {A,B} → C → D → E löses alltid genom att bryta upp kedjan i länkar.',
   kalla: 'sysb23databaseexercises.pdf övning 11:8'
@@ -583,24 +583,222 @@ window.SYSB23.fragor.push(
   amne: 'db-normalisering',
   typ: 'oppen',
   svarighet: 2,
-  fraga: 'Förklara vad update- och deletionsanomalier är, och varför normalisering minskar risken för dem. Använd relationen EmployeeProject(EmployeeNo, Name, Address, ProjectNo, ProjectName, Budget) som exempel.',
+  fraga: 'Förklara uppdaterings-, insättnings- och borttagningsanomali med ASSIGNMENT_REGISTER(EmployeeNo, EmployeeName, DepartmentNo, DepartmentName, ProjectNo, ProjectTitle, AllocationPercentage), där en tupel är ett uppdrag. Varför minskar normalisering risken för dem?',
   modellsvar:
-    'Anomalierna uppstår därför att relationen blandar information om två olika entiteter – anställda och projekt – i samma tabell. Det gör att uppgifter om ett projekt upprepas på varje rad där någon arbetar i projektet.\n\n' +
-    '**Uppdateringsanomali:** Om budgeten för projekt P3 ska höjas måste flera celler ändras, eftersom P3 förekommer på raderna för både E4 och E5. Ändras bara en av dem blir datan inkonsistent – databasen påstår då två olika budgetar för samma projekt.\n\n' +
-    '**Borttagningsanomali:** Om projekt P3 tas bort försvinner även raderna för E4 och E5, alltså all information om två anställda. Att radera information om en entitet ska normalt inte medföra att information om en helt annan entitet går förlorad.\n\n' +
-    '**Varför normalisering hjälper:** Anomalierna orsakas av redundans, som i sin tur orsakas av att attribut är funktionellt beroende av något annat än hela kandidatnyckeln. Genom dekomposition till\n\n' +
-    'Employee(EmployeeNo, Name, Address, ProjectNo)\n' +
-    'Project(ProjectNo, ProjectName, Budget)\n\n' +
-    'lagras varje projektfaktum på exakt ett ställe. En budgetändring blir en cell, och att ta bort ett projekt påverkar inte de anställdas grunddata. Ju högre normalform, desto mindre redundans och desto mindre utrymme för anomalier.\n\n' +
-    'Man bör dock kontrollera att dekompositionen har lossless join – annars har man bytt en anomali mot informationsförlust.',
+    'Relationen lagrar fyra sorters fakta i samma tupel: om den anställde, om avdelningen, om projektet och om uppdraget. Kandidatnyckeln är {EmployeeNo, ProjectNo}.\n\n' +
+    '**Uppdateringsanomali:** P-10 byter titel från Atlas till Atlas Renewal. Titeln står på varje rad där någon arbetar i P-10. Missas en rad har projektet två motstridiga titlar.\n\n' +
+    '**Insättningsanomali:** Ett nytt projekt, P-40 Orion, kan inte läggas in innan någon arbetar i det. EmployeeNo ingår i primärnyckeln och kan varken utelämnas eller hittas på.\n\n' +
+    '**Borttagningsanomali:** Garys uppdrag på Beacon avslutas. Var det den enda raden som nämnde Beacon försvinner projektet ur databasen, fast det fortfarande finns.\n\n' +
+    '**Gemensam orsak:** projektfakta lagras bara inuti uppdragstupler, fast ett projekt kan finnas utan uppdrag. Samma faktum ("P-10 heter Atlas") lagras flera gånger — det är redundans. Att P-10 som referens står på flera rader är däremot inget problem.\n\n' +
+    '**Varför normalisering hjälper:** EmployeeName, DepartmentNo och ProjectTitle beror på en del av nyckeln (2NF-brott), och DepartmentName beror på nyckeln via DepartmentNo (3NF-brott). Delas relationen upp i\n\n' +
+    'EMPLOYEE(EmployeeNo, EmployeeName, DepartmentNo)\n' +
+    'DEPARTMENT(DepartmentNo, DepartmentName)\n' +
+    'PROJECT(ProjectNo, ProjectTitle)\n' +
+    'WORKS_ON(EmployeeNo, ProjectNo, AllocationPercentage)\n\n' +
+    'får varje händelse ett enda mål: namnbytet ändrar en PROJECT-tupel, Orion läggs in i PROJECT utan uppdrag, och Garys uppdrag tas bort ur WORKS_ON medan Beacon finns kvar.\n\n' +
+    'Uppdelningen måste dessutom vara förlustfri (lossless join) — annars byter man anomalier mot falska tupler.',
   nyckelpunkter: [
-    'Uppdateringsanomali: samma faktum lagrat på flera ställen ⇒ risk för inkonsistens',
-    'Borttagningsanomali: radering av en entitet raderar oavsiktligt data om en annan',
-    'Grundorsaken är redundans, som beror på beroenden av annat än hela kandidatnyckeln',
-    'Dekomposition ger ett faktum på exakt ett ställe',
-    'Dekompositionen måste bevara lossless join för att inte skapa nya problem'
+    'Uppdateringsanomali: ett faktum på flera ställen ⇒ risk för motstridiga värden',
+    'Insättningsanomali: ett faktum får ingen plats utan ett annat (projekt utan uppdrag)',
+    'Borttagningsanomali: att ta bort ett faktum raderar oavsiktligt ett annat',
+    'Gemensam orsak: redundans — upprepade fakta, inte upprepade referenser',
+    'Normalisering ger varje faktum en egen plats; uppdelningen måste vara lossless'
   ],
-  kalla: '06normalformsnormalization.pdf'
+  kalla: '06-normalization-and-normal-forms-new.pdf'
+},
+
+/* ------------ Tillagt efter HT26-föreläsningarna (4, 5 och 6) ------------ */
+{
+  id: 'db-kon-09',
+  delkurs: 'databaser',
+  amne: 'db-konceptuell',
+  typ: 'flerval',
+  svarighet: 2,
+  fraga: 'projectNo är ett sammansatt attribut med delarna registrationYear och sequenceNo, och det är helheten som är unik. Hur markeras identifieraren i Chen?',
+  alternativ: [
+    'Både registrationYear och sequenceNo stryks under',
+    'Det sammansatta attributet projectNo stryks under, inte delarna',
+    'Delarna stryks under med streckad linje',
+    'Ingenting stryks under — sammansatta attribut kan inte identifiera'
+  ],
+  ratt: 1,
+  forklaringar: [
+    'Fel. Separata understrykningar betyder separata identifierare — att vart och ett av attributen är unikt för sig. Här får både år och löpnummer upprepas.',
+    'Rätt. Föreläsningen: "Underline the composite parent." Delarna får upprepas (2026-1 och 2026-2 delar år), bara det fullständiga värdet är unikt.',
+    'Fel. Streckad understrykning betyder partiell identifierare hos en svag entitet.',
+    'Fel. Ett sammansatt attribut kan mycket väl vara identifierande.'
+  ],
+  forklaring: 'Jämför med employeeNo och workEmail, som identifierar en anställd var för sig: då stryks båda under, och det är två identifierare — inte en gemensam. Vid transformationen blir en sammansatt identifierare en kandidatnyckel med alla delarna.',
+  kalla: '04-conceptual-database-design.pdf'
+},
+{
+  id: 'db-kon-10',
+  delkurs: 'databaser',
+  amne: 'db-konceptuell',
+  typ: 'flerval',
+  svarighet: 2,
+  fraga: 'I ett Chen-diagram med min–max-notation står (1,1) intill Project på sambandet Leads. Vad betyder det, och hur ritas samma sak i kursens standardnotation?',
+  alternativ: [
+    'Varje projekt deltar exakt en gång; standard: 1 tvärs över och dubbel linje vid Project',
+    'Varje projekt har minst en och högst en anställd; standard: (1,1) plus dubbel linje',
+    'En anställd leder exakt ett projekt; standard: N vid Project och enkel linje',
+    'Projektet är en svag entitet; standard: dubbel ram'
+  ],
+  ratt: 0,
+  forklaringar: [
+    'Rätt. Min–max läses vid sin egen entitet: varje projekt deltar minst 1 och högst 1 gång — leds av exakt en anställd. I standardnotationen blir det 1 intill Employee (läst tvärs över) plus dubbel linje vid Project.',
+    'Fel. Min–max-par och dubbla linjer får aldrig blandas i samma diagram.',
+    'Fel. Paret står intill Project och beskriver alltså projektens deltagande, inte de anställdas.',
+    'Fel. Deltagande och svaghet är olika saker. Obligatoriskt deltagande gör inte en entitet svag.'
+  ],
+  forklaring: 'Motsvarigheterna: N tvärs över + enkel linje ⇔ (0,N); 1 tvärs över + dubbel linje ⇔ (1,1). I min–max-diagram är alla linjer enkla, eftersom första talet redan bär deltagandekravet.',
+  kalla: '04-conceptual-database-design.pdf'
+},
+{
+  id: 'db-kon-11',
+  delkurs: 'databaser',
+  amne: 'db-konceptuell',
+  typ: 'flerval',
+  svarighet: 2,
+  fraga: 'Påstående: Project har dubbel linje mot sambandet Leads — varje projekt måste ledas av en anställd — och är därför en svag entitet.',
+  alternativ: ['Sant', 'Falskt'],
+  ratt: 1,
+  forklaringar: [
+    'Fel. Obligatoriskt deltagande säger bara att projektet måste delta, inte att det behöver en ägare för att identifieras.',
+    'Rätt. Project identifieras av projectNo och är därför stark. Svaghet kräver identitetsberoende: att entitetens fullständiga identitet innehåller ägarens nyckel.'
+  ],
+  forklaring: 'En svag entitet beror på sin ägare på två sätt: identitet (projectNo + taskNo) och existens (ingen uppgift utan projekt). Den ritas med dubbel ram, det identifierande sambandet med dubbel romb och den partiella identifieraren med streckad understrykning. Kardinaliteten ensam avslöjar inte vilken entitet som är ägare.',
+  kalla: '04-conceptual-database-design.pdf'
+},
+{
+  id: 'db-kon-12',
+  delkurs: 'databaser',
+  amne: 'db-konceptuell',
+  typ: 'flerval',
+  svarighet: 3,
+  fraga: 'WorksOn mellan Employee och Project har attributen allocationPercentage och assignmentStartDate. När bör sambandet reifieras till entitetstypen Assignment?',
+  alternativ: [
+    'Alltid när ett samband har attribut',
+    'När parningen måste kunna refereras, delta i andra samband eller ha egen identitet',
+    'Aldrig — Chen tillåter inte att samband blir entiteter',
+    'Bara när sambandet är 1:1'
+  ],
+  ratt: 1,
+  forklaringar: [
+    'Fel. Föreläsningen: relationsattribut ensamma tvingar inte fram reifiering. Attributen kan ägas av sambandet.',
+    'Rätt. Behåll sambandet så länge modellen bara behöver beskriva parningen. Reifiera när den blir en "sak" i sig — då blir Assignment en vanlig entitet med sambanden Holds och Concerns.',
+    'Fel. Reifiering görs med helt vanliga Chen-former: en rektangel och två romber.',
+    'Fel. Exemplet är M:N, och det är där reifiering oftast blir aktuell.'
+  ],
+  forklaring: 'Får Assignment en identifierare som assignmentNo blir det ett nytt åtagande för verksamheten: någon måste dela ut och bevara ett unikt nummer per uppdrag. I Crow’s foot, där linjer saknar plats för attribut, blir ett samband med attribut alltid en associativ entitet.',
+  kalla: '04-conceptual-database-design.pdf'
+},
+{
+  id: 'db-norm-11',
+  delkurs: 'databaser',
+  amne: 'db-normalisering',
+  typ: 'flerval',
+  svarighet: 3,
+  fraga: 'R(A, B, C, D, E) med A → B, B → C och {A, D} → E. Vilken är relationens enda kandidatnyckel?',
+  alternativ: ['{A}', '{A, D}', '{A, B, D}', '{D, E}'],
+  ratt: 1,
+  forklaringar: [
+    'Fel. {A}⁺ = {A, B, C}. D och E nås inte, så A är ingen supernyckel.',
+    'Rätt. A och D står aldrig på någon högersida och måste därför ingå i varje nyckel. {A, D}⁺ = {A, D, B, C, E} — alla attribut. Paret är minimalt: varken {A}⁺ eller {D}⁺ räcker.',
+    'Fel. Det är en supernyckel men inte minimal — B kan strykas eftersom A → B.',
+    'Fel. {D, E}⁺ = {D, E}. Ingen av dem bestämmer något.'
+  ],
+  forklaring: 'Attributslutning: börja med startmängden, använd varje beroende vars hela vänsterled finns i mängden, och fortsätt tills inget nytt tillkommer. Supernyckel = slutningen innehåller alla attribut. Kandidatnyckel = minimal supernyckel.',
+  kalla: '06-normalization-and-normal-forms-new.pdf'
+},
+{
+  id: 'db-norm-12',
+  delkurs: 'databaser',
+  amne: 'db-normalisering',
+  typ: 'flerval',
+  svarighet: 2,
+  fraga: 'Vad skiljer en kandidatnyckel från en supernyckel?',
+  alternativ: [
+    'Ingenting, begreppen är synonymer',
+    'En kandidatnyckel är en minimal supernyckel — inget attribut kan tas bort',
+    'En supernyckel är den valda kandidatnyckeln',
+    'En supernyckel består alltid av ett enda attribut'
+  ],
+  ratt: 1,
+  forklaringar: [
+    'Fel. Varje kandidatnyckel är en supernyckel, men inte tvärtom.',
+    'Rätt. En supernyckel bestämmer alla attribut i relationen. En kandidatnyckel gör det också, men slutar göra det om något attribut tas bort. {EmployeeNo, ProjectNo, EmployeeName} är supernyckel; {EmployeeNo, ProjectNo} är kandidatnyckel.',
+    'Fel. Den valda kandidatnyckeln är primärnyckeln.',
+    'Fel. Supernycklar kan ha hur många attribut som helst, och innehåller ofta onödiga.'
+  ],
+  forklaring: 'Minimal betyder att inget kan tas bort — inte att alla kandidatnycklar är lika stora. EMPLOYEE kan ha kandidatnycklarna {EmployeeNo} och {WorkEmail}, och en annan relation kan ha en tvådelad.',
+  kalla: '06-normalization-and-normal-forms-new.pdf'
+},
+{
+  id: 'db-norm-13',
+  delkurs: 'databaser',
+  amne: 'db-normalisering',
+  typ: 'flerval',
+  svarighet: 2,
+  fraga: 'I ASSIGNMENT_REGISTER, där en tupel är ett uppdrag med nyckeln {EmployeeNo, ProjectNo}, går det inte att lägga in ett nytt projekt innan någon arbetar i det. Vilken anomali är det?',
+  alternativ: ['Uppdateringsanomali', 'Insättningsanomali', 'Borttagningsanomali', 'Ingen anomali — det är ett nyckelbrott'],
+  ratt: 1,
+  forklaringar: [
+    'Fel. Uppdateringsanomali är när ett faktum står på flera ställen och bara några ändras.',
+    'Rätt. Projektet är giltigt men får ingen plats: EmployeeNo ingår i primärnyckeln och kan varken utelämnas eller hittas på.',
+    'Fel. Borttagningsanomali är när ett projekt försvinner för att dess sista uppdrag tas bort.',
+    'Fel. Nyckeln fungerar som den ska — problemet är att projektfakta bara kan lagras inuti uppdragstupler.'
+  ],
+  forklaring: 'Alla tre anomalierna har samma orsak: fakta om projekt lagras bara i tupler om uppdrag, fast ett projekt kan finnas utan uppdrag. En egen PROJECT-relation ger projektet en egen plats.',
+  kalla: '06-normalization-and-normal-forms-new.pdf'
+},
+{
+  id: 'db-norm-14',
+  delkurs: 'databaser',
+  amne: 'db-normalisering',
+  typ: 'flerval',
+  svarighet: 3,
+  fraga: 'R(A, B, C, D) med A → B och C → D delas upp i R₁(A, B) och R₂(B, C, D).\n\nPåstående: uppdelningen har egenskapen lossless join.',
+  alternativ: ['Sant', 'Falskt'],
+  ratt: 1,
+  forklaringar: [
+    'Fel. Delarna har ett gemensamt attribut, men det räcker inte.',
+    'Rätt. R₁ ∩ R₂ = {B}, och {B}⁺ = {B} — B bestämmer ingenting. Slutningen täcker varken hela R₁ eller hela R₂, så joinen kan ge falska tupler.'
+  ],
+  forklaring: 'Binära testet: uppdelningen är förlustfri om och endast om (R₁ ∩ R₂)⁺ innehåller alla attribut i minst en av delarna. Hade uppdelningen i stället varit (A, B) och (A, C, D) hade de delat A, och A → B täcker hela den första delen.',
+  kalla: '06-normalization-and-normal-forms-new.pdf'
+},
+{
+  id: 'db-norm-15',
+  delkurs: 'databaser',
+  amne: 'db-normalisering',
+  typ: 'flerval',
+  svarighet: 3,
+  fraga: 'R(A, B, C, D) med A → B, B → C och C → D delas upp i R₁(A, B), R₂(B, C) och R₃(A, D).\n\nPåstående: samtliga funktionella beroenden från R är bevarade.',
+  alternativ: ['Sant', 'Falskt'],
+  ratt: 1,
+  forklaringar: [
+    'Fel. A → B och B → C finns lokalt, men C och D står aldrig i samma relation.',
+    'Rätt. De lokala beroendena är A → B, B → C och (i R₃) A → D. Ur dem går C → D inte att härleda, så det beroendet är förlorat.'
+  ],
+  forklaring: 'Ett splittrat beroende är bara förlorat om det inte följer av de lokala. Här följer A → D av originalet och kan kontrolleras i R₃ — men åt andra hållet hjälper det inte: C → D kan inte härledas ur A → B, B → C och A → D.',
+  kalla: '06-normalization-and-normal-forms-new.pdf'
+},
+{
+  id: 'db-norm-16',
+  delkurs: 'databaser',
+  amne: 'db-normalisering',
+  typ: 'flerval',
+  svarighet: 3,
+  fraga: 'R(A, B, C, D) med A → B, B → A och {A, C} → D. Primärnyckeln är {A, C}.\n\nPåstående: B är ett primärattribut.',
+  alternativ: ['Sant', 'Falskt'],
+  ratt: 0,
+  forklaringar: [
+    'Rätt. Kandidatnycklarna är {A, C} och {B, C}: C står aldrig på någon högersida, och {B, C}⁺ = {B, C, A, D}. B ingår alltså i en kandidatnyckel och är primärt — att {A, C} valts till primärnyckel ändrar ingenting.',
+    'Fel. Primärattribut avgörs av alla kandidatnycklar, inte bara den som valts till primärnyckel.'
+  ],
+  forklaring: 'Hitta alltid alla kandidatnycklar innan du klassificerar attributen. Här är bara D icke-primärt, och eftersom D beror på hela {A, C} (och på hela {B, C}) är relationen i 3NF.',
+  kalla: '06-normalization-and-normal-forms-new.pdf'
 },
 
 /* ============================ db-fysisk ============================ */

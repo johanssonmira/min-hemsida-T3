@@ -30,7 +30,7 @@ window.SYSB23.fragor.push(
     'Fel. Gränssnittet definieras i FXML och kopplas ihop av controllern.'
   ],
   forklaring: 'Arkitekturen i exempelappen: GUI i FXML → Controller (MVC) → Data Access Layer (DAO) → JDBC → databas. Den egna undantagsklassen DaoException ger dessutom lös koppling: controllern behöver inte fånga SQLException och därmed inte känna till att det är just en SQL-databas bakom.',
-  kalla: '08-09-db-client-application-development.pdf, 10dbclientapplicationsecurity.pdf'
+  kalla: '08-09-db-client-application-development.pdf, 10-db-client-application-security.pdf'
 },
 {
   id: 'db-kli-02',
@@ -127,7 +127,7 @@ window.SYSB23.fragor.push(
     'Lösning 1: systemmiljövariabler via System.getenv()',
     'Lösning 2: properties-fil utanför versionshanteringen; dokumentera nycklarna i README'
   ],
-  kalla: '10dbclientapplicationsecurity.pdf, codingstandards.pdf'
+  kalla: '10-db-client-application-security.pdf, codingstandards.pdf'
 },
 
 /* =========================== db-sakerhet =========================== */
@@ -153,7 +153,7 @@ window.SYSB23.fragor.push(
     'Fel. executeUpdate() är korrekt för INSERT.'
   ],
   forklaring: 'Skyddet är att använda platshållare och sättermetoder: prepareStatement("INSERT … VALUES (?, ?, ?)") följt av statement.setString(1, …), setString(2, …), setDouble(3, …). Då behandlas indata alltid som *värden*, aldrig som kod – injektionssträngen sparas som ett kuriöst men ofarligt namn.',
-  kalla: '10dbclientapplicationsecurity.pdf'
+  kalla: '10-db-client-application-security.pdf'
 },
 {
   id: 'db-sak-02',
@@ -176,7 +176,7 @@ window.SYSB23.fragor.push(
     'Fel. Byte av databas görs med USE, som dessutom inte kan förekomma mitt i en INSERT.'
   ],
   forklaring: 'Anatomin i en injektion: (1) fnutt som bryter ut ur strängvärdet, (2) semikolon som avslutar den legitima satsen, (3) den skadliga koden, (4) -- som kommenterar bort resten. Parametriserade frågor omintetgör alla fyra stegen, eftersom indata aldrig tolkas som SQL.',
-  kalla: '10dbclientapplicationsecurity.pdf'
+  kalla: '10-db-client-application-security.pdf'
 },
 {
   id: 'db-sak-03',
@@ -199,7 +199,7 @@ window.SYSB23.fragor.push(
     'Fel. Det är nätfiske (phishing).'
   ],
   forklaring: 'Poängen är att applikationens säkerhet inte bara beror på den egna koden. Varje beroende är en förtroendelänk. Motmedel: lås versioner, granska nya beroenden och håll antalet nere.',
-  kalla: '10dbclientapplicationsecurity.pdf'
+  kalla: '10-db-client-application-security.pdf'
 },
 {
   id: 'db-sak-04',
@@ -222,7 +222,7 @@ window.SYSB23.fragor.push(
     'Fel. Det egna kontot har högre behörighet och delade inloggningar omöjliggör spårbarhet.'
   ],
   forklaring: 'Uppgiften låter grupperna verifiera varandras konfiguration genom att testa destruktiva kommandon (DELETE Employee, DROP TABLE Car, DROP DATABASE Hospital). Lyckas något av dem har behörigheterna satts fel. Detta är principen om minsta möjliga behörighet i praktiken.',
-  kalla: 'databasessqlassignment.pdf Task 2'
+  kalla: 'databases-sql-assignment.pdf Task 2'
 },
 {
   id: 'db-sak-05',
@@ -257,7 +257,7 @@ window.SYSB23.fragor.push(
     'PreparedStatement i sig skyddar inte – platshållarna måste faktiskt användas',
     'Djupförsvar: minsta behörighet, indatavalidering, constraints, återhållsamma felmeddelanden'
   ],
-  kalla: '10dbclientapplicationsecurity.pdf'
+  kalla: '10-db-client-application-security.pdf'
 },
 
 /* =========================== db-metadata =========================== */
@@ -277,7 +277,7 @@ window.SYSB23.fragor.push(
     'Fel. tempdb är en global resurs för tillfälliga tabeller och procedurer. Den återskapas från grunden varje gång SQL Server startar – ingenting där sparas mellan sessioner.'
   ],
   forklaring: 'De fyra systemdatabaserna har database_id 1–4. Därför kan man lista användarskapade databaser med WHERE database_id > 4. Materialet påminner om att alltid säkerhetskopiera model och msdb innan man ändrar dem.',
-  kalla: '11metadatainrelationaldbs.pdf'
+  kalla: '11-metadata-in-relational-dbs.pdf'
 },
 {
   id: 'db-met-02',
@@ -300,7 +300,7 @@ window.SYSB23.fragor.push(
     'Fel. Varje användardatabas har sina egna INFORMATION_SCHEMA-vyer.'
   ],
   forklaring: 'Bakgrunden är att master lagrar det mesta i skyddade, dolda systemtabeller. Vyerna är det publika gränssnittet mot dem – användaren behöver då inte känna till de dolda tabellernas struktur.',
-  kalla: '11metadatainrelationaldbs.pdf'
+  kalla: '11-metadata-in-relational-dbs.pdf'
 },
 {
   id: 'db-met-03',
@@ -324,7 +324,7 @@ window.SYSB23.fragor.push(
     'Fel. Endast de kolumner som SELECT-satsen faktiskt producerar ingår.'
   ],
   forklaring: 'Skillnaden är viktig: ResultSetMetaData beskriver resultatet av just den frågan och ändras när SELECT-satsen ändras. Vill man ha den faktiska tabelldefinitionen måste man fråga INFORMATION_SCHEMA.COLUMNS – då får man med EmployeeID, EmpNo, EmpName och EmpSalary oavsett hur frågan såg ut.',
-  kalla: '11metadatainrelationaldbs.pdf'
+  kalla: '11-metadata-in-relational-dbs.pdf'
 },
 {
   id: 'db-met-04',
@@ -353,7 +353,7 @@ window.SYSB23.fragor.push(
     'Kör vid behov USE <databasnamn> först, eftersom INFORMATION_SCHEMA alltid avser den aktuella databasen.'
   ],
   forklaring: 'Klassisk fallgrop: att skriva IS_NULLABLE = 1 eller IS_NULLABLE = true. Kolumnen är en textsträng. Detsamma gäller DATA_TYPE, som jämförs mot gemena typnamn.',
-  kalla: '11metadatainrelationaldbs.pdf'
+  kalla: '11-metadata-in-relational-dbs.pdf'
 },
 {
   id: 'db-met-05',
@@ -392,7 +392,7 @@ window.SYSB23.fragor.push(
     'UNION staplar de två resultatmängderna. Kolumnerna är union-kompatibla eftersom de har samma antal, ordning och typer.'
   ],
   forklaring: 'Mönstret "strängliteral som ursprungsmarkör + UNION" är standardlösningen när man ska slå ihop likadana resultat från flera källor och behöva veta varifrån varje rad kom.',
-  kalla: '11metadatainrelationaldbs.pdf'
+  kalla: '11-metadata-in-relational-dbs.pdf'
 }
 
 );

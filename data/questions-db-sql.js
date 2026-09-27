@@ -32,7 +32,7 @@ window.SYSB23.fragor.push(
     'Fel. Kalkylblad är en av flera tekniker för persistent datalagring, men saknar relationsmodellens integritetsregler, frågespråk och fleranvändarhantering.'
   ],
   forklaring: 'RDBMS = programvaran som implementerar relationsmodellen och står för lagring, skydd och hämtning av data. Skilj det från (a) servern/VM:en det körs på och (b) modelleringsverktygen som används vid design.',
-  kalla: '01introduction.pdf'
+  kalla: '01-introduction.pdf'
 },
 {
   id: 'db-intro-02',
@@ -55,7 +55,7 @@ window.SYSB23.fragor.push(
     'Fel. DDL-koden är slutprodukten i processen, inte startpunkten.'
   ],
   forklaring: 'De tre abstraktionsnivåerna hänger ihop: ER-diagram (konceptuell) → relationsschema R(attribut, …) (logisk) → CREATE TABLE-satser (fysisk). Normalisering görs på den logiska nivån om transformationen gett relationer som inte uppfyller 3NF.',
-  kalla: '01introduction.pdf, 04conceptualdatabasedesign.pdf'
+  kalla: '01-introduction.pdf, 04-conceptual-database-design.pdf'
 },
 {
   id: 'db-intro-03',
@@ -113,7 +113,7 @@ window.SYSB23.fragor.push(
   modellsvar:
     'En **databas** är en strukturerad samling data som lagras och nås elektroniskt, t.ex. databasen Hospital med tabellerna Unit, Employee, Patient, Illness och Car.\n\n' +
     'Ett **RDBMS** (t.ex. Microsoft SQL Server) är programvaran som hostar databasen: den tar emot SQL-frågor, kör dem via query processor och storage engine, upprätthåller constraints och hanterar behörigheter. Ett och samma RDBMS kan hosta flera databaser samtidigt.\n\n' +
-    'En **databasserver** är den dator som RDBMS:et körs på – "en dator som aldrig stängs av". Fysiskt kan det vara ett server blade i ett rack i ett datacenter, med helt annan profil än en laptop (t.ex. flera TB RAM, upp till 32 CPU-socklar, ingen skärm eller tangentbord).\n\n' +
+    'En **databasserver** är den dator som RDBMS:et körs på – "en dator som aldrig stängs av". Minnesregeln är just en minnesregel — servrar startas om och tas ned för underhåll. Typiskt är det en rackmonterad server i ett datacenter, byggd för delad, ständig last: många minnesplatser, utbytbara diskar, dubblerad strömförsörjning och fjärradministration, men ingen skärm eller tangentbord.\n\n' +
     'En **virtuell maskin** är en logisk dator som delar en fysisk dators resurser. Med molnplattformar som Microsoft Azure skapas en VM med ett klick och hyrs per timme. I kursens labbmiljö skapar man en Windows Server-VM i Azure, installerar SQL Server på den och får därmed en databasserver i molnet, som man ansluter till från sin egen laptop via VS Code med mssql-tillägget.\n\n' +
     'Kedjan blir alltså: laptop (klient) → nätverk → virtuell maskin (server) → SQL Server (RDBMS) → databasen Hospital (data).',
   nyckelpunkter: [
@@ -123,7 +123,7 @@ window.SYSB23.fragor.push(
     'VM = logisk dator som delar fysiska resurser; skapas på begäran i molnet',
     'Ett RDBMS kan hosta flera databaser; klienten kommunicerar över nätverk'
   ],
-  kalla: '01introduction.pdf'
+  kalla: '01-introduction.pdf'
 },
 
 /* ========================= db-sql-grund ========================= */
@@ -330,7 +330,7 @@ window.SYSB23.fragor.push(
     'Formatera med en klausul per rad och versaler på nyckelord (SQL-standarden i codingstandards.pdf).'
   ],
   forklaring: 'Notera att den medföljande testdatan i hospital-ddl.sql inte innehåller någon patient i Malmö (adresserna är Lund, Dalby, London och Berlin) – frågan är ändå korrekt och returnerar då en tom resultatmängd. En korrekt fråga behöver inte returnera rader.',
-  kalla: 'databasessqlassignment.pdf fråga 3, hospital-ddl.sql'
+  kalla: 'databases-sql-assignment.pdf fråga 3, hospital-ddl.sql'
 },
 {
   id: 'db-sqlg-10',
@@ -351,7 +351,7 @@ window.SYSB23.fragor.push(
     'Eftersom uppgiften säger "all information" är SELECT * motiverat här, trots att kursmaterialet annars avråder från det.'
   ],
   forklaring: 'Poängen med uppgiften är att se att flera SQL-konstruktioner kan besvara samma affärsfråga – men att de inte alltid är semantiskt identiska. IN och OR ger identiska resultat; LIKE-varianten är bredare.',
-  kalla: 'databasessqlassignment.pdf fråga 4'
+  kalla: 'databases-sql-assignment.pdf fråga 4'
 },
 {
   id: 'db-sqlg-11',
@@ -370,7 +370,7 @@ window.SYSB23.fragor.push(
     'Kontrollera efteråt med SELECT * FROM Car; att värdena blivit som förväntat.'
   ],
   forklaring: 'Vanligt fel: att skriva SET Price = 0.95 (vilket sätter alla priser till 0,95) istället för SET Price = Price * 0.95. Uttrycket på höger sida om likhetstecknet utvärderas per rad med radens nuvarande värden.',
-  kalla: 'databasessqlassignment.pdf fråga 14'
+  kalla: 'databases-sql-assignment.pdf fråga 14'
 },
 {
   id: 'db-sqlg-12',
@@ -395,7 +395,7 @@ window.SYSB23.fragor.push(
     'Subquery hämtar värdet dynamiskt vid körning',
     'Uteslut vid behov raden man jämför med (EmpNo != \'E2\')'
   ],
-  kalla: '01introduction.pdf'
+  kalla: '01-introduction.pdf'
 },
 
 /* ======================== db-sql-aggregat ======================== */
@@ -534,7 +534,7 @@ window.SYSB23.fragor.push(
     'Ge alltid resultatkolumnen ett alias – annars visas "(No column name)".'
   ],
   forklaring: 'Notera skillnaden mot uppgift 14 i SQL-uppgiften: här *beräknas* ett hypotetiskt värde med SELECT, tabellen ändras inte. Ska datan faktiskt ändras krävs UPDATE.',
-  kalla: 'databasessqlassignment.pdf frågorna 9–10'
+  kalla: 'databases-sql-assignment.pdf frågorna 9–10'
 },
 {
   id: 'db-sqla-07',
@@ -553,7 +553,7 @@ window.SYSB23.fragor.push(
     'Villkoret "fler än en patient" gäller ett aggregat och måste därför stå i HAVING, inte i WHERE.'
   ],
   forklaring: 'Med testdatan blir svaret Insomnia (3 patienter: PP1, PP2, PP3), Love sickness (2: PP1, PP2) och Cough (2: PP3, PP4). Amnesia och Incontinence har bara en patient var och filtreras bort av HAVING.',
-  kalla: 'databasessqlassignment.pdf fråga 21'
+  kalla: 'databases-sql-assignment.pdf fråga 21'
 },
 {
   id: 'db-sqla-08',
@@ -572,7 +572,7 @@ window.SYSB23.fragor.push(
     'Alternativ lösning: HAVING fungerar inte här eftersom vi vill filtrera enskilda rader, inte grupper.'
   ],
   forklaring: 'Klassiskt mönster: skalär subquery som jämförelsevärde. Med testdatan (25000, 55000, 37500, 18000, 279000, 32000) blir medellönen 74416,67 och endast Eva med 279000 hamnar över.',
-  kalla: 'databasessqlassignment.pdf fråga 29'
+  kalla: 'databases-sql-assignment.pdf fråga 29'
 }
 
 );

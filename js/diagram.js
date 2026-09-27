@@ -214,7 +214,7 @@ window.SYSB23.diagram = (function () {
 
     return figur('0 0 640 305',
       'Employee omgiven av fem attributtyper: employeeNo understruket som nyckel, name som enkel ellips, phoneNo i dubbel ellips för flervärt, yearsEmployed i streckad ellips för härlett, och address som förgrenar sig i street och city.',
-      'De fem attributtyperna. **Härlett** betyder att värdet räknas fram ur något annat — anställningsår ur anställningsdatum — och därför inte ska lagras. **Flervärt** betyder att en anställd kan ha flera telefonnummer, och det är den formen som senare tvingar fram en egen tabell.',
+      'De fem attributtyperna. **Härlett** betyder att värdet kan räknas fram ur något annat — anställningsår ur anställningsdatum. Det beskriver ett begreppsligt beroende, inte om värdet sedan lagras eller räknas fram. **Flervärt** betyder att en anställd kan ha flera telefonnummer, och det är den formen som senare tvingar fram en egen tabell.',
       s);
   };
 
@@ -238,7 +238,7 @@ window.SYSB23.diagram = (function () {
 
     return figur('0 0 640 235',
       'Tre Chen-diagram som visar kardinaliteterna 1 till 1 mellan Employee och Desk, 1 till N mellan Unit och Employee, och M till N mellan Employee och Project.',
-      'Kardinalitet läses **tvärs över** relationen: siffran vid Unit säger hur många Unit varje Employee hör till, inte tvärtom. Det är den vanligaste förväxlingen, och den enda som kostar poäng på uppgift 1.',
+      'Kardinalitet läses **tvärs över** relationen: siffran vid Unit säger hur många Unit varje Employee hör till, inte tvärtom. Och siffran är ett **tak**: 1 betyder *högst* en, inte exakt en — om det måste finnas en avgör deltagandet. Förväxlingen kostar poäng på uppgift 1.',
       s);
   };
 
@@ -314,25 +314,33 @@ window.SYSB23.diagram = (function () {
     s += '<path d="M 470 90 L 500 90" stroke="' + OCKRA + '" stroke-width="2"/>';
     s += '<path d="M 494 84 L 502 90 L 494 96 Z" fill="' + OCKRA + '"/>';
 
+    /* Efter: Assignment är en vanlig entitetstyp, kopplad med två vanliga
+       samband. Chen drar aldrig streck direkt mellan två rektanglar. */
     s += txt(20, 185, 'EFTER', { anchor: 'start', fet: true, farg: MID, ts: TS - 1 });
-    s += ram(20, 210, 100, 38, 'Employee', { ts: TS - 1 });
-    s += linje(120, 229, 165, 229);
-    s += ram(165, 210, 110, 38, 'Assignment', { ts: TS - 2, farg: GRON });
-    s += linje(275, 229, 320, 229);
-    s += ram(320, 210, 100, 38, 'Project', { ts: TS - 1 });
-    s += txt(142, 218, '1', { fet: true, farg: BLA });
-    s += txt(188, 218, 'N', { fet: true, farg: BLA });
-    s += txt(252, 218, 'N', { fet: true, farg: BLA });
-    s += txt(298, 218, '1', { fet: true, farg: BLA });
-    s += attribut(220, 290, 'startDate');
-    s += linje(220, 251, 220, 275);
+    s += ram(10, 210, 90, 38, 'Employee', { ts: TS - 1 });
+    s += linje(100, 229, 122, 229);
+    s += romb(152, 229, 60, 34, 'Holds', { ts: TS - 2 });
+    s += dubbellinje(182, 229, 204, 229);
+    s += ram(204, 210, 104, 38, 'Assignment', { ts: TS - 2, farg: GRON });
+    s += dubbellinje(308, 229, 330, 229);
+    s += romb(366, 229, 72, 34, 'Concerns', { ts: TS - 2 });
+    s += linje(402, 229, 424, 229);
+    s += ram(424, 210, 84, 38, 'Project', { ts: TS - 1 });
+    s += txt(111, 217, '1', { fet: true, farg: BLA });
+    s += txt(193, 215, 'N', { fet: true, farg: BLA });
+    s += txt(319, 215, 'N', { fet: true, farg: BLA });
+    s += txt(413, 217, '1', { fet: true, farg: BLA });
+    s += attribut(206, 292, 'assignmentNo', { nyckel: 'hel' });
+    s += linje(230, 277, 245, 248);
+    s += attribut(318, 292, 'startDate');
+    s += linje(305, 277, 285, 248);
 
     s += txt(540, 150, 'M:N blir två 1:N', { anchor: 'middle', fet: true, ts: TS - 1 });
     s += txt(540, 172, 'med en ny entitet emellan', { anchor: 'middle', ts: TS - 2, farg: MID });
 
     return figur('0 0 640 310',
-      'Överst Employee, WorksOn och Project i ett M till N-förhållande med attributet startDate på relationen. Underst samma modell där WorksOn ersatts av entitetstypen Assignment, med 1 till N från Employee och N till 1 till Project.',
-      'Varje M:N-relation blir en egen tabell i den logiska modellen. Relationens attribut följer med dit — och det är just därför `startDate` inte kunde ligga på vare sig Employee eller Project. Kopplingstabellerna `Examines`, `Suffers` och `HasStudied` i övningsdatabaserna är alla resultatet av precis den här omvandlingen.',
+      'Överst Employee, WorksOn och Project i ett M till N-förhållande med attributet startDate på relationen. Underst samma modell där WorksOn ersatts av entitetstypen Assignment med nyckeln assignmentNo och attributet startDate, kopplad till Employee via sambandet Holds och till Project via sambandet Concerns, båda 1 till N med dubbel linje vid Assignment.',
+      '**Reifiering**: sambandet WorksOn görs om till entitetstypen Assignment, med vanliga Chen-former — en rektangel och två samband. Gör det när parningen måste kunna refereras, delta i andra samband eller ha egen identitet. Bara att sambandet har attribut räcker inte som skäl. Identifieraren `assignmentNo` är ett nytt åtagande: någon måste dela ut och bevara ett unikt nummer per uppdrag.',
       s);
   };
 

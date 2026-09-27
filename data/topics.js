@@ -17,8 +17,14 @@ window.SYSB23.delkurser = [
     examination:
       'Skriftlig salstentamen 3,0 hp (individuell) + uppgifter 4,0 hp (grupp). Betygsskala U–A.',
     tentaInfo:
-      'Tentan täcker fyra områden: ER-modellering, transformation av konceptuell ' +
-      'datamodell till fysisk datamodell, normalformer/normalisering samt SQL.'
+      'Tentan HT26 knyter ihop fem områden: ER-modellering, transformation från konceptuell ' +
+      'till fysisk datamodell, normalformer och normalisering, SQL samt applikationsutveckling ' +
+      '(kod mot relationsdatabaser). Den ligger sist i delkursen. HT25-tentorna hade fyra ' +
+      'uppgifter: ER-diagram med påståenden (25 p, +5 per rätt markerat, −3 per fel), DDL med ' +
+      'surrogatnycklar (25 p), normalisering (20 p: fem sant/falskt à 2 p med −1 för fel, två ' +
+      'normaliseringar à 5 p) och en enda SQL-fråga (30 p). Applikationsutveckling fanns inte ' +
+      'med där, så hur den delen ser ut vet ingen än. Betyg: A 85 %, B 75, C 65, D 55, E 50. ' +
+      'Hjälpmedel: utskrivna föreläsningsslides och kursboken i fysiskt format.'
   },
   {
     id: 'strategi',
@@ -56,7 +62,7 @@ window.SYSB23.amnen = [
     delkurs: 'databaser',
     namn: 'Introduktion till relationsdatabaser',
     kapitel: 'Föreläsning 1',
-    kalla: '01introduction.pdf',
+    kalla: '01-introduction.pdf',
     beskrivning:
       'Vad en databas är, RDBMS, server/klient, virtuella maskiner och molnplattformar, ' +
       'persistent datalagring samt databasdesignprocessens tre nivåer.'
@@ -106,32 +112,32 @@ window.SYSB23.amnen = [
     delkurs: 'databaser',
     namn: 'Konceptuell databasdesign (ER-modellering)',
     kapitel: 'Föreläsning 4',
-    kalla: '04conceptualdatabasedesign.pdf',
+    kalla: '04-conceptual-database-design.pdf',
     beskrivning:
       'Chen- och Crow’s foot-notation, entitetstyper, attributtyper (enkla, ' +
-      'sammansatta, multivärda, härledda), binära/unära relationer, multiplicitet, ' +
-      'obligatoriskt deltagande, svag entitet och svag relation.'
+      'sammansatta, multivärda, härledda), identifierare, binära/unära samband, ' +
+      'kardinalitet och deltagande (även min–max), svag entitet och associativ entitet.'
   },
   {
     id: 'db-logisk',
     delkurs: 'databaser',
     namn: 'Logisk databasdesign (transformation)',
     kapitel: 'Föreläsning 5',
-    kalla: '05logicaldatabasedesign.pdf',
+    kalla: '05-logical-database-design.pdf',
     beskrivning:
-      'Relationsmodellen, relationsegenskaper, primärnyckel, kandidatnyckel, ' +
-      'främmande nyckel samt transformationsreglerna från ER-modell till relationsschema.'
+      'Relationsmodellen, relationsegenskaper, kandidatnyckel (unik och minimal), ' +
+      'primärnyckel, främmande nyckel samt transformationsreglerna från ER-modell till relationsschema.'
   },
   {
     id: 'db-normalisering',
     delkurs: 'databaser',
     namn: 'Normalformer och normalisering',
     kapitel: 'Föreläsning 6',
-    kalla: '06normalformsnormalization.pdf',
+    kalla: '06-normalization-and-normal-forms-new.pdf',
     beskrivning:
-      'Funktionella beroenden, kandidatnycklar, primära/icke-primära attribut, ' +
-      '1NF–3NF, transitiva beroenden, dekomposition, lossless join och ' +
-      'dependency preservation.'
+      'Anomalier, funktionella beroenden, attributslutning, supernyckel och kandidatnyckel, ' +
+      'primära/icke-primära attribut, 1NF–3NF, partiella och transitiva beroenden, ' +
+      'dekomposition, lossless join och dependency preservation.'
   },
   {
     id: 'db-fysisk',
@@ -159,7 +165,7 @@ window.SYSB23.amnen = [
     delkurs: 'databaser',
     namn: 'Databas- och klientapplikationssäkerhet',
     kapitel: 'Föreläsning 10',
-    kalla: '10dbclientapplicationsecurity.pdf',
+    kalla: '10-db-client-application-security.pdf',
     beskrivning:
       'SQL-injektion och motmedel, hantering av anslutningsuppgifter ' +
       '(miljövariabler och properties-filer), versionshantering av hemligheter ' +
@@ -170,7 +176,7 @@ window.SYSB23.amnen = [
     delkurs: 'databaser',
     namn: 'Metadata i relationsdatabaser',
     kapitel: 'Föreläsning 11',
-    kalla: '11metadatainrelationaldbs.pdf',
+    kalla: '11-metadata-in-relational-dbs.pdf',
     beskrivning:
       'Systemdatabaserna master, model, msdb och tempdb, sys-vyer på instansnivå, ' +
       'INFORMATION_SCHEMA på databasnivå samt ResultSetMetaData i JDBC.'

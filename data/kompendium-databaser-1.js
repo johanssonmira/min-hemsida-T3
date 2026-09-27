@@ -9,15 +9,18 @@ window.SYSB23.kompendium.databaser = {
   delkurs: 'databaser',
   titel: 'Databaser',
   intro:
-    'Delkursen har två halvor. Den första handlar om att **fråga, designa och driftsätta** ' +
-    'relationsdatabaser — det är den som salstentan examinerar. Den andra handlar om att ' +
-    '**bygga applikationer** som pratar med databasen, och examineras genom projektuppgiften.\n\n' +
+    'Delkursen har tre delar som hänger ihop: **relationsdatabaser och SQL**, **databasdesign** ' +
+    '(konceptuell, logisk och fysisk, med normalisering däremellan) och **applikationsutveckling** ' +
+    'mot databasen. SQL-uppgiften och databasprojektet löper längs vägen, och den skriftliga tentan ' +
+    'ligger sist — HT26 har den flyttats till slutet av delkursen.\n\n' +
     'Kompendiet följer föreläsningsordningen. Kapitel 1–5 ger SQL, kapitel 6–8 ger designkedjan ' +
     'från verksamhetskrav till normaliserat schema, kapitel 9 ger DDL och kapitel 10 ger ' +
     'applikationsdelen.\n\n' +
-    '> **Tentan täcker fyra områden:** ER-modellering, transformation av konceptuell datamodell ' +
-    'till fysisk, normalformer och normalisering, samt SQL. Kapitel 2–9 är alltså tentapensum. ' +
-    'Kapitel 10 hör till projektuppgiften.\n\n' +
+    '> **Tentan knyter ihop fem områden:** ER-modellering, transformation från konceptuell till ' +
+    'fysisk datamodell, normalformer och normalisering, SQL — och, nytt för HT26, ' +
+    '**applikationsutveckling** (att skriva kod mot relationsdatabaser). Hela kompendiet är alltså ' +
+    'tentapensum. De gamla tentorna från HT25 hade bara de fyra första, så hur uppgiften i ' +
+    'applikationsutveckling ser ut finns det inget facit för än.\n\n' +
     'Det här ämnet lär man sig inte genom att läsa. Ha en fråga öppen i VS Code medan du läser, ' +
     'och kör exemplen mot Hospital-databasen.',
   kapitel: []
@@ -57,15 +60,21 @@ window.SYSB23.kompendium.databaser.kapitel.push(
         'Microsoft SQL Server, PostgreSQL, SQLite. Den tar emot SQL-frågor, kör dem via query processor ' +
         'och storage engine, upprätthåller constraints och hanterar behörigheter. **Ett RDBMS kan hosta ' +
         'flera databaser samtidigt.**\n\n' +
-        '**Server** — datorn som RDBMS:et körs på. Enklaste definitionen från föreläsningen: *"en dator ' +
-        'som aldrig stängs av"*. En laptop duger inte. Ett server blade väger 20+ kilo, är relativt fult, ' +
-        'låter mycket, blir varmt och saknar både skärm och tangentbord — men har upp till 6 TB RAM och ' +
-        'plats för 32 CPU-socklar. Server blades sitter i server racks, och racks står i datacenter. Det ' +
-        'är vad "molnet" faktiskt är.\n\n' +
-        '**Virtuell maskin** — en logisk dator som delar en fysisk dators resurser. I det gamla ' +
-        'paradigmet var en fysisk dator lika med en server. Med virtualisering kunde en server köra flera ' +
-        'operativsystem samtidigt. Med molnplattformar som Microsoft Azure skapas en VM med ett klick, ' +
-        'och man hyr den per timme.\n\n' +
+        '**Server** — datorn som tar emot förfrågningar från klienter och skickar tillbaka svar. ' +
+        'Föreläsningens minnesregel är *"en dator som aldrig stängs av"* — men det är just en ' +
+        'minnesregel, inte en regel: servrar startas om och tas ned för underhåll. En laptop går att ' +
+        'använda men är ett dåligt val; en server är byggd för delad, ständig last. Den typiska ' +
+        'servern är en **rackmonterad server** med många minnesplatser, utbytbara diskar, dubblerad ' +
+        'strömförsörjning och fjärradministration — och varken skärm eller tangentbord. Racket i sig är ' +
+        'ingen server utan infrastrukturen som håller, strömförsörjer och kopplar ihop utrustningen. ' +
+        'Racken står i **datacenter**, och det är där "molnet" till slut körs.\n\n' +
+        '**Virtuell maskin** — en logisk dator som delar en fysisk dators resurser. Förr köpte man en ' +
+        'fysisk dator per server. Med virtualisering fördelar en **hypervisor** en fysisk dators CPU, ' +
+        'minne, lagring och nätverk mellan flera isolerade gäster, till exempel en Windows Server och en ' +
+        'Linux. I molnet beställer man en VM i Azure-portalen och Azure placerar den på sin egen ' +
+        'hårdvara; man betalar för den tid den är igång.\n\n' +
+        'Azure-portalen startar, stoppar och övervakar den virtuella maskinen — men den är **inte** ' +
+        'databashanteraren och kör inga SQL-frågor. Det gör SQL Server, som körs på VM:en.\n\n' +
         'Kedjan i kursens labbmiljö blir alltså: **din laptop (klient) → nätverk → virtuell maskin i ' +
         'Azure (server) → SQL Server (RDBMS) → databasen Hospital (data)**.\n\n' +
         'LADOK och TimeEdit är inte databaser i sig — de är applikationer som kommunicerar med databaser, ' +
@@ -97,28 +106,39 @@ window.SYSB23.kompendium.databaser.kapitel.push(
         '**1. Konceptuell databasdesign** — ER-modellering. Resultatet är ett **ER-diagram**: entiteter, ' +
         'attribut, samband och multipliciteter. Här tänker man inte på tabeller och kolumner.\n\n' +
         '**2. Logisk databasdesign** — transformation av den konceptuella modellen, plus normalisering om ' +
-        'det behövs. Resultatet är en **textuell representation av relationer**:\n\n' +
+        'det behövs. Resultatet är en **textuell representation av relationer** med kandidatnycklar, ' +
+        'vald primärnyckel och främmande nycklar:\n\n' +
         '`Employee(EmpNo, Name, Salary, DepartmentName)`\n' +
         '`Department(Name, Budget)`\n\n' +
+        'Introduktionsföreläsningen visar att **surrogat-ID** (som EmployeeId och DepartmentId) kan ' +
+        'föras in redan här — men aldrig i ER-modellen, där bara verksamhetens egna identifierare finns. ' +
+        'Den naturliga nyckeln (EmployeeNo) blir då kvar som en extra kandidatnyckel.\n\n' +
         '**3. Fysisk databasdesign** — implementering av den logiska modellen. Resultatet är **SQL ' +
         'DDL-kod**: `CREATE TABLE`-satser med datatyper och constraints.\n\n' +
         'Notera var normaliseringen sitter: på den **logiska** nivån, alltså efter att ER-modellen ' +
-        'transformerats till relationer, inte före ER-modelleringen. Det är en vanlig tentafälla.'
+        'transformerats till relationer, inte före ER-modelleringen. Det är en vanlig tentafälla. ' +
+        'Föreläsningen beskriver den som en **kontroll**: ange nycklar och beroenden, pröva relationerna ' +
+        'mot normalformen, och dela bara upp när ett misslyckat test visar onödig redundans. ' +
+        '*Normalisering är inte en städning av rader efter att tabellerna byggts.*'
     },
     {
       rubrik: 'Verktygen i delkursen',
       text:
         '- **Microsoft Azure** — molnplattform där du skapar den virtuella maskin som blir din databasserver\n' +
         '- **SQL Server** — RDBMS:et som hostar databaserna\n' +
-        '- **SSMS** — serverside-verktyg för administration: skapa konton, tilldela behörigheter, skapa ' +
-        'databaser, starta och stoppa tjänster. Endast Windows.\n' +
-        '- **VS Code** med mssql-tillägget — för att köra SQL-frågor mot servern, och för Java-utveckling\n' +
-        '- **GitHub** — versionshantering och inlämning av kod\n\n' +
-        'Två rekommenderade uppsättningar: antingen VS Code lokalt på laptopen med SQL Server i Azure ' +
-        '(utnyttjar din dators prestanda), eller allt installerat på den virtuella maskinen (inget att ' +
-        'installera lokalt, men begränsad prestanda).\n\n' +
-        'Delkursens flöde: kursintro → labbuppgifter → SQL-uppgiften → plugga till tentan → presentera ' +
-        'SQL-uppgiften → **skriftlig tenta** → projektuppgiften → presentera den.' +
+        '- **SSMS** — Windows-klient för administration och frågor: skapa databaser, inloggningar och ' +
+        'användare, tilldela behörigheter. Körs på den virtuella maskinen.\n' +
+        '- **VS Code** med tillägget SQL Server (mssql) — ännu en klient, för att köra SQL mot servern, ' +
+        'och editorn för Java-utvecklingen\n' +
+        '- **Git och GitHub** — Git är själva versionshanteringen; GitHub är tjänsten som hostar ' +
+        'repona\n\n' +
+        'Både SSMS och VS Code är **klienter**. Databashanteraren är SQL Server, oavsett vilket verktyg ' +
+        'du skickar frågorna från.\n\n' +
+        'Rekommenderad uppsättning: verktygen lokalt på laptopen och SQL Server i Azure. Du når ' +
+        'VM:ens skrivbord via **RDP med en Windows-inloggning**, men VS Code ansluter direkt till SQL ' +
+        'Server med en separat **SQL-inloggning** och krypterad anslutning (Encrypt: Mandatory).\n\n' +
+        'Delkursens flöde HT26: kursintro och labbar → SQL-uppgiften med redovisning → databasprojektet ' +
+        '→ **skriftlig tenta sist**. Tentaplugget löper parallellt hela vägen.' +
         '\n\nDatabasen du övar mot i SQL-verkstaden är kursens egen hospital-ddl.sql:\n\n[[diagram:db-sjukhus]]'
     }
   ],
@@ -131,7 +151,7 @@ window.SYSB23.kompendium.databaser.kapitel.push(
   ],
   tentakoppling:
     'Detta kapitel ger inga direkta tentafrågor, men designprocessens tre nivåer är ramen för tre ' +
-    'av tentans fyra områden. Kan du dem vet du alltid vilken sorts svar en uppgift efterfrågar.'
+    'av tentans fem områden. Kan du dem vet du alltid vilken sorts svar en uppgift efterfrågar.'
 },
 
 /* ====================== KAPITEL 2 ====================== */
@@ -304,8 +324,8 @@ window.SYSB23.kompendium.databaser.kapitel.push(
     'En affärsfråga ska besvaras med en enda SQL-fråga'
   ],
   tentakoppling:
-    'SQL är ett av tentans fyra områden. NULL-hanteringen och LIKE-wildcards är de detaljer som ' +
-    'oftast avgör om en fråga blir rätt.'
+    'SQL är ett av tentans fem områden, och på HT25-tentorna var SQL-frågan ensam värd 30 av 100 ' +
+    'poäng. NULL-hanteringen och LIKE-wildcards är de detaljer som oftast avgör om en fråga blir rätt.'
 },
 
 /* ====================== KAPITEL 3 ====================== */

@@ -288,8 +288,8 @@ window.SYSB23.sqlNivaer = [
       '5. Alltså: studenten har läst allihop.\n\n' +
       'Den dubbla negationen är det som gör konstruktionen svår att läsa och lätt ' +
       'att skriva fel. Kan du bygga den utantill är du färdig med SQL-delen.\n\n' +
-      '> Nedan ligger också de två SQL-uppgifterna från databastentorna HT25, ' +
-      'ordagrant. De är värda 30 poäng styck.'
+      '> Nedan ligger också SQL-uppgifterna från alla tre databastentorna HT25, ' +
+      'med egna ord. De är värda 30 poäng styck.'
   }
 ];
 
@@ -959,5 +959,29 @@ window.SYSB23.sqlOvningar = [
       'Det viktiga är placeringen. Åldern hör till WHERE eftersom den gäller ' +
       'enskilda rader, antalet kurser hör till HAVING eftersom det gäller ' +
       'färdiga grupper.'
+  },
+  {
+    id: 'sq9-6', niva: 9, db: 'tenta', tenta: 'Ordinarie tentamen 16 september 2025, uppgift 4 (30 p)',
+    fraga:
+      'Skriv EN fråga som returnerar studentnummer, namn och antal lästa kurser för ' +
+      'de studenter som fått högre betyg än snittbetyget på kurs C1.',
+    losning:
+      "SELECT s.StudentNo, s.Name, COUNT(*) AS AntalKurser FROM Student AS s " +
+      "INNER JOIN HasStudied AS hs ON s.StudentNo = hs.StudentNo " +
+      "WHERE s.StudentNo IN (SELECT StudentNo FROM HasStudied WHERE Code = 'C1' " +
+      "AND Grade > (SELECT AVG(Grade) FROM HasStudied WHERE Code = 'C1')) " +
+      "GROUP BY s.StudentNo, s.Name;",
+    ledtrad:
+      'Två filter på olika nivåer: vem som slog snittet på C1, och hur många kurser ' +
+      'den personen läst totalt. Räknar du i samma WHERE som filtrerar på C1 blir ' +
+      'antalet alltid 1.',
+    forklaring:
+      'S2 Olivia med 2 kurser. Snittet på C1 är (7 + 9) / 2 = 8, och bara Olivias 9 ' +
+      'är högre — Phoebes 7 är det inte. Den vanliga fällan är att lägga ' +
+      "`hs.Code = 'C1'` i den yttre frågans WHERE: då räknas bara C1-raden och " +
+      'svaret blir 1 i stället för 2. Urvalet av studenter hör hemma i en underfråga, ' +
+      'så att COUNT får se alla studentens kurser.\n\n' +
+      'Notera också att snittet måste räknas fram i frågan. Att skriva in 8 för hand ' +
+      'ger rätt svar i dag men fel svar så fort ett betyg ändras.'
   }
 ];
