@@ -3,14 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#12324a">
+  <meta name="theme-color" content="#FBFAF6">
   <title>SYSB23 Plugg</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="css/style.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="ikoner/icon-192.png" type="image/png">
   <link rel="apple-touch-icon" href="ikoner/apple-touch-icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="SYSB23">
 </head>
 <body>
@@ -31,10 +34,6 @@
       <button class="navbtn" data-vy="schema">Schema</button>
     </nav>
 
-    <button id="btn-tema" class="temaknapp" aria-label="Byt färgtema" title="Byt färgtema">
-      <span class="tema-prickar" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span class="tema-text">Tema</span>
-    </button>
 
     <div class="delkursvaljare">
       <span class="dv-etikett" aria-hidden="true">Delkurs</span>
@@ -44,9 +43,6 @@
       </span>
     </div>
   </div>
-
-  <!-- Kontextband: visar hela tiden vilken delkurs som är vald och hur den går -->
-  <div class="delkursband"><div class="wrap dkb-rad" id="delkursband"></div></div>
 </header>
 
 <main class="wrap">
@@ -67,7 +63,7 @@
 <footer class="wrap">
   <p class="muted liten">
     Innehållet bygger på kursmaterialet i <code>sysb23-kursmaterial/</code> och gamla tentor.
-    Kalendern är avläst mot TimeEdit 1 augusti 2026 – kontrollera alltid aktuell vecka själv.
+    Kalendern är avläst mot TimeEdit – kontrollera alltid aktuell vecka själv.
     All statistik sparas lokalt i din webbläsare.
   </p>
 </footer>
@@ -103,7 +99,6 @@
 <script src="js/diagram.js"></script>
 <script src="js/normalform.js"></script>
 <script src="js/store.js"></script>
-<script src="js/tema.js"></script>
 <script src="js/hem.js"></script>
 <script src="js/las.js"></script>
 <script src="js/ova.js"></script>

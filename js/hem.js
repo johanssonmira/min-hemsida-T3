@@ -1,10 +1,13 @@
 /* =========================================================================
    hem.js – startvyn.
 
-   Bärande idé: användaren ska aldrig behöva fundera på vad hen ska göra.
-   "Dagens plan" räknar fram tre konkreta steg ur det faktiska läget –
-   repetera det som glappar, läs nästa kapitel, öva svagaste ämnet –
-   och lägger dem i den ordning som ger mest inlärning per minut.
+   Uppifrån och ner, i den ordning man undrar saker:
+     1. Vilken tenta är nästa, och hur lång tid har jag?  (nedräkning)
+     2. Vad händer den här veckan?                         (veckoremsa)
+     3. Vad pluggar jag nu, och hur ligger jag till?       (delkurs + läge)
+     4. Hur kommer jag igång?                              (vägar in)
+     5. Vad finns mer, och hur räknas tentan?
+   Inget här kräver att man förstår appen först.
    ========================================================================= */
 
 window.SYSB23 = window.SYSB23 || {};
@@ -13,22 +16,25 @@ window.SYSB23.hem = (function () {
   var S = window.SYSB23;
   var U = S.ui;
 
+  var valdDag = null;   // 'YYYY-MM-DD' i veckoremsan, null = idag
+
+  var VECKODAGAR = ['MÅ', 'TI', 'ON', 'TO', 'FR', 'LÖ', 'SÖ'];
+
   function rendera() {
     var delkurs = S.store.delkurs();
 
-    /* Huvudspalten är "vad gör jag nu", sidospalten "hur ligger jag till".
-       På smal skärm läggs sidospalten under huvudspalten, i samma ordning. */
-    var html = '<div class="sida">';
-    html += '<div class="huvud">';
-    html += nedrakningskort(delkurs);
-    html += dagensPlan(delkurs);
-    html += atgardskort(delkurs);
+    var html = '<div class="kort hem-topp">';
+    html += nedrakning();
+    html += veckan();
     html += '</div>';
-    html += '<aside class="sido">';
-    html += lagekort(delkurs);
-    html += veckanskort();
-    html += tentaformatkort(delkurs);
-    html += '</aside>';
+
+    html += delkursintro(delkurs);
+    html += lage(delkurs);
+    html += vagar(delkurs);
+
+    html += '<div class="hem-tva">';
+    html += ovrigaDelkurser(delkurs);
+    html += tentaformat(delkurs);
     html += '</div>';
 
     var vy = U.el('vy-hem');
@@ -37,274 +43,111 @@ window.SYSB23.hem = (function () {
   }
 
   /* ================================================================ */
-  /* Nedräkning                                                        */
+  /* 1. Nedräkning till nästa tenta                                    */
   /* ================================================================ */
 
-  function nedrakningskort(delkurs) {
-    var tenta = U.nastaTenta(delkurs, true);
-    var html = '<div class="kort nedrakning">';
+  function nedrakning() {
+    var t = U.nastaAktuellTenta();
+    var h = '<div class="hem-nedrakning">';
 
-    if (!tenta) {
-      html += '<div class="etikett">Ingen kommande examination</div>';
-      html += '<h1>' + U.esc(U.delkursNamn(delkurs)) + '</h1>';
-      html += '<p class="fakta">Alla inlagda tentatillfällen för den här delkursen har passerat.</p>';
-      return html + '</div>';
+    if (!t) {
+      h += '<div class="nr-rad"><span class="nr-text">Inga fler tentor inlagda</span></div>';
+      h += '<p class="muted">Alla ordinarie tentor den här terminen är skrivna.</p>';
+      return h + '</div>';
     }
 
-    var dagar = U.dagarTill(tenta.datum);
-    html += '<div class="etikett">Nästa examination · ' +
-            (tenta.typ === 'omtenta' ? 'Omtentamen' : 'Ordinarie') + '</div>';
-    html += '<h1>' + U.esc(U.delkursNamn(tenta.delkurs)) + '</h1>';
+    var dagarTenta = U.dagarTill(t.datum);
+    var anmalan = U.parse(t.datum);
+    anmalan.setDate(anmalan.getDate() - 7);
+    var anmalanIso = iso(anmalan);
+    var dagarAnmalan = U.dagarTill(anmalanIso);
 
-    html += '<div class="dagar"><span class="siffra">' + dagar + '</span>' +
-            '<span class="text">' + (dagar === 1 ? 'dag kvar' : 'dagar kvar') + '</span></div>';
+    var visaAnmalan = dagarAnmalan >= 0;
+    var siffra = visaAnmalan ? dagarAnmalan : dagarTenta;
+    var etikett = visaAnmalan
+      ? (siffra === 1 ? 'dag kvar att anmäla' : 'dagar kvar att anmäla')
+      : (siffra === 0 ? 'tentan är idag' : (siffra === 1 ? 'dag kvar till tentan' : 'dagar kvar till tentan'));
 
-    html += '<div class="fakta">';
-    html += '<div>' + U.esc(U.langtDatum(tenta.datum)) + ', ' + U.esc(tenta.tid) + '</div>';
-    html += '<div>' + U.esc(tenta.sal) + (tenta.larare ? ' · ' + U.esc(tenta.larare) : '') + '</div>';
-    html += '</div>';
-
-    html += radtips(delkurs, dagar);
-    return html + '</div>';
-  }
-
-  /* Konkret lästakt utifrån hur mycket som återstår */
-  function radtips(delkurs, dagar) {
-    var komp = S.kompendium[delkurs];
-    if (!komp || !komp.kapitel.length) return '';
-
-    var totalt = komp.kapitel.length;
-    var lasta = S.store.antalLasta(komp.kapitel);
-    var kvar = totalt - lasta;
-    var text;
-
-    if (kvar === 0) {
-      text = '**Alla ' + totalt + ' kapitel lästa.** Nu handlar det om att öva frågor ' +
-             'och skriva essäsvar.';
-    } else if (dagar <= 0) {
-      text = kvar + ' olästa kapitel och **tentan är idag**. Läs kapitlet om tentataktik ' +
-             'om inget annat.';
-    } else {
-      var takt = Math.floor(dagar / kvar);
-      text = kvar + ' olästa kapitel på ' + dagar + ' dagar — ' +
-             (takt >= 2 ? '**ett kapitel var ' + takt + ':e dag** räcker.'
-                        : '**ungefär ' + Math.ceil(kvar / dagar) + ' kapitel om dagen.**');
+    h += '<div class="nr-rad"><span class="nr-siffra">' + (siffra === 0 && !visaAnmalan ? '' : siffra) +
+         '</span><span class="nr-text">' + etikett + '</span></div>';
+    h += '<div class="nr-kurs">' + U.esc(U.delkursNamn(t.delkurs)) + '</div>';
+    h += '<p class="nr-fakta">';
+    if (visaAnmalan) {
+      h += 'Anmälan i Ladok senast ' + U.esc(dagMånad(anmalanIso)) + ' · ';
     }
-    return '<div class="radtips">' + U.inline(text) + '</div>';
+    h += 'tentan ' + U.esc(dagMånad(t.datum)) + ', ' + U.esc(t.tid) + ', ' + U.esc(t.sal) + '</p>';
+
+    h += '<button class="primar bred-knapp" data-pluggatenta="' + U.esc(t.delkurs) + '">' +
+         'Plugga till den här tentan</button>';
+    return h + '</div>';
   }
 
   /* ================================================================ */
-  /* Dagens plan                                                       */
+  /* 2. Veckoremsan                                                    */
   /* ================================================================ */
 
-  function dagensPlan(delkurs) {
-    var steg = byggSteg(delkurs);
-    var streak = S.store.streak();
-
-    var mal = S.store.dagsmal();
-
-    var html = '<div class="kort">';
-    html += '<h2>Dagens plan';
-    if (streak > 0) {
-      html += '<span class="streak">🔥 ' + streak + (streak === 1 ? ' dag' : ' dagar') + ' i rad</span>';
-    }
-    html += '</h2>';
-
-    /* Dagsmålet ligger överst: en liten, avbockningsbar sak som gör att
-       varje pass känns avslutat i stället för oändligt. */
-    html += '<div class="dagsmal' + (mal.klart ? ' klart' : '') + '">';
-    html += '<div class="dm-text">' + (mal.klart
-      ? '<strong>Dagens mål är klart.</strong> ' + mal.antal + ' frågor idag — allt utöver det är bonus.'
-      : '<strong>' + mal.antal + ' av ' + mal.mal + ' frågor idag.</strong> ' +
-        (mal.antal === 0 ? 'Tio frågor räcker för att dagen ska räknas.'
-                         : 'Bara ' + (mal.mal - mal.antal) + ' kvar.')) + '</div>';
-    html += '<div class="progress' + (mal.klart ? ' gron' : '') + '">' +
-            '<div style="width:' + mal.andel + '%"></div></div>';
-    html += '</div>';
-
-    if (!steg.length) {
-      html += '<p class="muted">Inget som brådskar just nu. Byt delkurs eller gör ett prov ' +
-              'för att testa hela kursen.</p>';
-      return html + '</div>';
-    }
-
-    html += '<p class="muted liten">Tre saker att göra härnäst, <strong>viktigast först</strong>. ' +
-            'Listan ändrar sig när du svarat på frågor.</p>';
-
-    steg.forEach(function (s) {
-      html += '<button class="plansteg' + (s.klar ? ' klar' : '') + '"' +
-              (s.gatill ? ' data-gatill="' + U.esc(s.gatill) + '"' : '') +
-              (s.amne ? ' data-ovaamne="' + U.esc(s.amne) + '"' : '') +
-              (s.kapitel ? ' data-laskap="' + U.esc(s.kapitel) + '"' : '') +
-              (s.repetition ? ' data-repetition="1"' : '') + '>';
-      html += '<span class="plan-ikon plan-' + s.ikonKlass + '">' + s.ikon + '</span>';
-      html += '<span class="plan-kropp">';
-      html += '<span class="plan-rubrik">' + U.esc(s.rubrik) + '</span>';
-      html += '<span class="plan-under">' + U.inline(s.under) + '</span>';
-      html += '</span>';
-      html += '<span class="plan-pil">→</span>';
-      html += '</button>';
-    });
-
-    return html + '</div>';
-  }
-
-  /* Prioriteringsordningen är medveten:
-     1. Repetition först – det du höll på att glömma ger störst effekt
-     2. Läsning – förståelse innan mer testning
-     3. Svagaste ämnet – riktad övning
-     4. Nytt ämne – bredda när grunden sitter
-     5. Prov – när det mesta är på plats */
-  function byggSteg(delkurs) {
-    var steg = [];
-
-    var rep = S.store.repetitioner(delkurs);
-    if (rep.length) {
-      steg.push({
-        ikon: '↻', ikonKlass: 'rep',
-        rubrik: 'Repetera ' + rep.length + (rep.length === 1 ? ' fråga' : ' frågor'),
-        under: 'Frågor du svarat fel på. **Här lär du dig mest.**',
-        repetition: true
-      });
-    }
-
-    var komp = S.kompendium[delkurs];
-    if (komp && komp.kapitel.length) {
-      var nasta = komp.kapitel.filter(function (k) { return !S.store.arLast(k.id); })[0];
-      if (nasta) {
-        steg.push({
-          ikon: '§', ikonKlass: 'las',
-          rubrik: 'Läs kapitel ' + nasta.nr + ': ' + nasta.titel,
-          under: '**Ca ' + nasta.lastid + ' min.** ' + nasta.ingress,
-          kapitel: nasta.id
-        });
-      }
-    }
-
-    var svaga = S.store.svagaAmnen(delkurs);
-    if (svaga.length) {
-      var x = svaga[0];
-      steg.push({
-        ikon: '✎', ikonKlass: 'ova',
-        rubrik: 'Öva ' + x.amne.namn,
-        under: 'Ditt **svagaste ämne**: nivå ' + x.niva.n + ' av 5, **' +
-               x.stat.procent + ' % rätt** hittills.',
-        amne: x.amne.id
-      });
-    } else {
-      var orord = S.store.orordaAmnen(delkurs);
-      if (orord.length) {
-        steg.push({
-          ikon: '✎', ikonKlass: 'ova',
-          rubrik: 'Öva ' + orord[0].namn,
-          under: '**Nytt ämne.** ' +
-                 S.fragor.filter(function (f) { return f.amne === orord[0].id; }).length +
-                 ' frågor att testa.',
-          amne: orord[0].id
-        });
-      }
-    }
-
-    /* När grunden sitter blir provet nästa naturliga steg */
-    var kursniva = S.store.delkursNiva(delkurs);
-    if (steg.length < 3 && kursniva.snitt >= 2.5) {
-      steg.push({
-        ikon: '★', ikonKlass: 'prov',
-        rubrik: 'Gör ett prov',
-        under: 'Du kan tillräckligt för att **testa hela kursen** med tentans poäng.',
-        gatill: 'prov'
-      });
-    }
-
-    /* Har man inte gjort något alls: mjuk ingång */
-    if (!steg.length) {
-      steg.push({
-        ikon: '✎', ikonKlass: 'ova',
-        rubrik: 'Öva frågor',
-        under: 'Appen **väljer frågorna åt dig** utifrån vad du behöver mest.',
-        gatill: 'ova'
-      });
-    }
-
-    return steg.slice(0, 3);
-  }
-
-  /* ================================================================ */
-  /* Läget                                                             */
-  /* ================================================================ */
-
-  function lagekort(delkurs) {
-    var s = S.store.sammanfattning(delkurs);
-    var kursniva = S.store.delkursNiva(delkurs);
-    var komp = S.kompendium[delkurs];
-
-    var html = '<div class="kort">';
-    html += '<h2>Var står du?</h2>';
-
-    /* Kursläget som helhet – en enda siffra att följa över tid */
-    html += '<div style="display:flex;align-items:center;gap:.85rem;margin-bottom:1rem">';
-    html += '<div class="progress' + (kursniva.andel >= 80 ? ' gron' :
-            (kursniva.andel >= 50 ? ' barn' : '')) + '" style="flex:1">' +
-            '<div style="width:' + kursniva.andel + '%"></div></div>';
-    html += '<span class="liten muted" style="white-space:nowrap">' +
-            kursniva.andel + ' % av kursen sitter</span>';
-    html += '</div>';
-
-    html += '<div class="statgrid">';
-    html += ruta(s.forsok, 'frågor du svarat på');
-    html += ruta(s.procent === null ? '—' : s.procent + ' %', 'rätt svar',
-                 s.procent === null ? '' : (s.procent >= 75 ? 'god' : (s.procent < 60 ? 'varn' : '')));
-    html += ruta(kursniva.befasta + '/' + kursniva.totalt, 'ämnen du är stark på',
-                 kursniva.befasta === kursniva.totalt && kursniva.totalt ? 'god' : '');
-    html += ruta(komp ? S.store.antalLasta(komp.kapitel) + '/' + komp.kapitel.length : '—',
-                 'kapitel lästa');
-    html += '</div>';
-
-    /* Nivåtrappan förklarad, så skalan blir begriplig */
-    if (s.forsok === 0) {
-      html += '<div class="notis info" style="margin-top:1rem">Varje ämne har fem nivåer, från ' +
-              '<strong>Ny</strong> till <strong>Sitter</strong>. Du går uppåt genom att svara rätt. ' +
-              'För att nå högsta nivån måste du kunna ämnet vid flera olika tillfällen — ' +
-              'inte bara en gång.</div>';
-    }
-
-    return html + '</div>';
-
-    function ruta(v, l, klass) {
-      return '<div class="statruta ' + (klass || '') + '"><div class="v">' + U.esc(v) +
-             '</div><div class="l">' + U.esc(l) + '</div></div>';
-    }
-  }
-
-  /* ================================================================ */
-  /* Veckan                                                            */
-  /* ================================================================ */
-
-  function veckanskort() {
+  function veckan() {
     var idag = U.idag();
-    var pass = U.allaPass().filter(function (p) {
-      var d = U.parse(p.datum);
-      if (!d) return false;
-      var diff = Math.round((d - idag) / 86400000);
-      return diff >= 0 && diff < 7;
-    });
+    var mandag = new Date(idag);
+    mandag.setDate(idag.getDate() - ((idag.getDay() + 6) % 7));
 
-    var html = '<div class="kort">';
-    html += '<h2>Närmaste sju dagarna</h2>';
-
-    if (!pass.length) {
-      var start = U.dagarTill(S.kalenderNoteringar.terminStart);
-      html += start > 0
-        ? '<p class="muted">Inga pass den här veckan. Terminen börjar om ' + start + ' dagar — ' +
-          U.esc(U.langtDatum(S.kalenderNoteringar.terminStart)) + '.</p>'
-        : '<p class="muted">Inga inbokade pass de närmaste sju dagarna.</p>';
-    } else {
-      pass.forEach(function (p) { html += passrad(p); });
+    var dagar = [];
+    for (var i = 0; i < 7; i++) {
+      var d = new Date(mandag);
+      d.setDate(mandag.getDate() + i);
+      dagar.push(d);
     }
 
-    html += '<div class="knapprad"><button class="sekundar" data-gatill="schema">' +
-            'Hela kalendern</button></div>';
-    return html + '</div>';
+    var allaPass = U.allaPass();
+    var passPerDag = {};
+    allaPass.forEach(function (p) { (passPerDag[p.datum] = passPerDag[p.datum] || []).push(p); });
+
+    var idagIso = iso(idag);
+    var vald = valdDag || idagIso;
+    var antalVeckan = dagar.reduce(function (n, d) { return n + (passPerDag[iso(d)] || []).length; }, 0);
+
+    var h = '<div class="hem-veckan">';
+    h += '<div class="vk-huvud"><h2 class="utan-markor">Den här veckan</h2>';
+    h += '<span class="muted liten">v.' + veckonummer(mandag) + ' · ' +
+         mandag.getDate() + '–' + dagar[6].getDate() + ' ' + manadKort(dagar[6]) + ' · ' +
+         antalVeckan + (antalVeckan === 1 ? ' pass' : ' pass') + '</span></div>';
+
+    h += '<div class="veckoremsa">';
+    dagar.forEach(function (d, i) {
+      var dIso = iso(d);
+      var pass = passPerDag[dIso] || [];
+      var klasser = ['vk-dag'];
+      if (dIso === idagIso) klasser.push('idag');
+      if (dIso === vald) klasser.push('vald');
+      if (pass.some(function (p) { return p.typ === 'tenta'; })) klasser.push('tentadag');
+
+      var prickar = pass.slice(0, 3).map(function (p) {
+        return '<i style="background:' + (p.delkurs ? U.delkursFarg(p.delkurs) : 'var(--egen)') + '"></i>';
+      }).join('');
+
+      h += '<button class="' + klasser.join(' ') + '" data-veckodag="' + dIso + '" ' +
+           'aria-label="' + U.esc(U.langtDatum(dIso)) + ', ' +
+           (pass.length ? pass.length + ' pass' : 'inget inbokat') +
+           (dIso === idagIso ? ', idag' : '') + '"' +
+           (dIso === vald ? ' aria-pressed="true"' : ' aria-pressed="false"') + '>';
+      h += '<span class="vk-namn">' + (dIso === idagIso ? 'IDAG' : VECKODAGAR[i]) + '</span>';
+      h += '<span class="vk-nr">' + d.getDate() + '</span>';
+      h += '<span class="vk-prickar">' + (prickar || '<i class="tom"></i>') + '</span>';
+      h += '</button>';
+    });
+    h += '</div>';
+
+    var valdaPass = passPerDag[vald] || [];
+    h += '<div class="vk-dagrubrik">' + U.esc(U.langtDatum(vald)) +
+         (vald === idagIso ? ' · <span class="vk-idag">idag</span>' : '') + '</div>';
+    if (valdaPass.length) {
+      valdaPass.forEach(function (p) { h += passrad(p); });
+    } else {
+      h += '<p class="muted vk-tom">Inget inbokat.</p>';
+    }
+
+    h += '<button class="lankbtn" data-gatill="schema">Hela kalendern →</button>';
+    return h + '</div>';
   }
 
   function passrad(p) {
@@ -324,40 +167,133 @@ window.SYSB23.hem = (function () {
   }
 
   /* ================================================================ */
-  /* Åtgärder och tentaformat                                          */
+  /* 3. Delkursen och läget                                            */
   /* ================================================================ */
 
-  function atgardskort(delkurs) {
+  function delkursintro(delkurs) {
+    var d = info(delkurs);
     var komp = S.kompendium[delkurs];
-    var antal = S.fragor.filter(function (f) { return f.delkurs === delkurs; }).length;
-    var essa = S.fragor.filter(function (f) {
-      return f.delkurs === delkurs && f.typ === 'oppen';
-    }).length;
+    var fragor = S.fragor.filter(function (f) { return f.delkurs === delkurs; });
+    var essa = fragor.filter(function (f) { return f.typ === 'oppen'; }).length;
+    var amnen = S.amnen.filter(function (a) { return a.delkurs === delkurs; }).length;
 
-    var html = '<div class="kort">';
-    html += '<h2>Alla lägen</h2>';
-    html += '<div class="atgarder">';
+    var delar = [];
+    if (komp) delar.push(komp.kapitel.length + ' kapitel');
+    delar.push(fragor.length - essa + ' frågor');
+    if (amnen) delar.push(amnen + ' ämnen');
+    if (essa) delar.push(essa + ' essäfrågor');
 
-    html += kort('a-las', 'las', 'Läs kompendiet',
-                 komp ? komp.kapitel.length + ' kapitel, ca ' +
-                        komp.kapitel.reduce(function (n, k) { return n + k.lastid; }, 0) + ' min'
-                      : 'Inte skrivet än');
-    html += kort('a-ova', 'ova', 'Öva frågor', antal + ' frågor, en i taget med facit');
-    html += kort('a-prov', 'prov', 'Gör ett prov', 'Tentans poängsystem');
-    if (essa) html += kort('a-essa', 'essa', 'Träna essäsvar', essa + ' frågor med checklista');
+    var h = '<section class="hem-intro">';
+    h += '<span class="overrubrik">SYSB23 · Delkurs' + (d && d.avslutad ? ' · avslutad' : '') + '</span>';
+    h += '<h1>' + U.esc(U.delkursNamn(delkurs)) + '</h1>';
+    if (d) h += '<p class="hem-ingress">' + U.esc(d.beskrivning) + '</p>';
+    h += '<p class="hem-meta">' + delar.join(' · ') + '</p>';
+    return h + '</section>';
+  }
 
-    html += '</div>';
-    return html + '</div>';
+  function lage(delkurs) {
+    var s = S.store.sammanfattning(delkurs);
+    var komp = S.kompendium[delkurs];
+    var prov = S.store.historik().filter(function (x) {
+      return x.lage === 'prov' && x.delkurs === delkurs;
+    })[0];
 
-    function kort(klass, vy, rubrik, under) {
-      return '<button class="atgard ' + klass + '" data-gatill="' + vy + '">' +
-             '<span class="rubrik">' + U.esc(rubrik) + '</span>' +
-             '<span class="under">' + U.esc(under) + '</span></button>';
+    var h = '<div class="kort">';
+    h += '<h2>Var står du?</h2>';
+    h += '<div class="statgrid fyra">';
+    h += ruta(s.forsok, 'Besvarade frågor');
+    h += ruta(s.procent === null ? '—' : s.procent + ' %', 'Träffsäkerhet',
+              s.procent === null ? '' : (s.procent >= 75 ? 'god' : (s.procent < 55 ? 'varn' : '')));
+    h += ruta(komp ? S.store.antalLasta(komp.kapitel) + '/' + komp.kapitel.length : '—', 'Lästa kapitel');
+    h += ruta(prov ? (prov.maxPoang ? prov.poang + '/' + prov.maxPoang : prov.procent + ' %') : '—',
+              'Senaste prov');
+    h += '</div>';
+
+    if (s.forsok < 5) {
+      h += '<p class="muted liten" style="margin:.9rem 0 0">Svara på några frågor så börjar ' +
+           'sidan visa var du är stark och var du behöver öva mer.</p>';
+    } else {
+      var svaga = S.store.svagaAmnen(delkurs);
+      if (svaga.length) {
+        h += '<p class="liten" style="margin:.9rem 0 0">Svagast just nu: <strong>' +
+             U.esc(svaga[0].amne.namn) + '</strong> (' + svaga[0].stat.procent + ' % rätt). ' +
+             '<button class="lankbtn" data-ovaamne="' + U.esc(svaga[0].amne.id) + '">Öva det →</button></p>';
+      }
+    }
+    return h + '</div>';
+
+    function ruta(v, l, klass) {
+      return '<div class="statruta ' + (klass || '') + '"><div class="l">' + U.esc(l) +
+             '</div><div class="v">' + U.esc(String(v)) + '</div></div>';
     }
   }
 
-  function tentaformatkort(delkurs) {
-    var d = S.delkurser.filter(function (x) { return x.id === delkurs; })[0];
+  /* ================================================================ */
+  /* 4. Vägar in                                                       */
+  /* ================================================================ */
+
+  function vagar(delkurs) {
+    var synliga = S.app.synligaVyer();
+    var komp = S.kompendium[delkurs];
+    var fragor = S.fragor.filter(function (f) { return f.delkurs === delkurs; });
+    var essa = fragor.filter(function (f) { return f.typ === 'oppen'; }).length;
+
+    var rader = [];
+    if (synliga.indexOf('las') > -1 && komp) {
+      rader.push(['las', 'Läs kompendiet',
+        S.store.antalLasta(komp.kapitel) + ' av ' + komp.kapitel.length + ' kapitel lästa']);
+    }
+    if (synliga.indexOf('ova') > -1) {
+      rader.push(['ova', 'Öva frågor', 'En fråga i taget, med förklaring till varje alternativ']);
+    }
+    if (synliga.indexOf('sql') > -1) {
+      rader.push(['sql', 'Skriv SQL', 'Frågor mot riktiga databaser, rättade på resultatet']);
+    }
+    if (synliga.indexOf('modellera') > -1) {
+      rader.push(['modellera', 'Modellera', 'ER-diagram, ER till schema och normalisering']);
+    }
+    if (synliga.indexOf('prov') > -1) {
+      rader.push(['prov', 'Gör ett prov', 'De riktiga gamla tentorna, med tentans poäng']);
+    }
+    if (synliga.indexOf('essa') > -1 && essa) {
+      rader.push(['essa', 'Träna essäsvar', essa + ' frågor med checklista och modellsvar']);
+    }
+
+    var h = '<div class="kort vagar">';
+    rader.forEach(function (r) {
+      h += '<button class="vag" data-gatill="' + r[0] + '">' +
+           '<span class="vag-kropp"><span class="vag-rubrik">' + U.esc(r[1]) + '</span>' +
+           '<span class="vag-under">' + U.esc(r[2]) + '</span></span>' +
+           '<span class="vag-pil" aria-hidden="true">→</span></button>';
+    });
+    return h + '</div>';
+  }
+
+  /* ================================================================ */
+  /* 5. Övriga delkurser och tentaformatet                             */
+  /* ================================================================ */
+
+  function ovrigaDelkurser(delkurs) {
+    var h = '<div class="kort">';
+    h += '<h2>Övriga delkurser</h2>';
+    h += '<p class="muted liten">Du byter delkurs i väljaren högst upp, eller här.</p>';
+    h += '<div class="dk-lista">';
+    S.kalenderDelkurser.forEach(function (k) {
+      if (k.id === delkurs) return;
+      var d = info(k.id);
+      var status = !d ? 'kommer under terminen' : (d.avslutad ? 'avslutad' : 'klar att plugga');
+      var klass = !d ? 'senare' : (d.avslutad ? 'avslutad' : 'klar');
+      h += '<button class="dk-rad ' + klass + '"' + (d ? ' data-bytdelkurs="' + k.id + '"' : ' disabled') + '>' +
+           '<i class="fargprick" style="background:' + k.farg + '"></i>' +
+           '<span class="dk-namn">' + U.esc(k.namn) + '</span>' +
+           '<span class="dk-status">' + status + '</span></button>';
+    });
+    h += '</div>';
+    return h + '</div>';
+  }
+
+  function tentaformat(delkurs) {
+    var d = info(delkurs);
     if (!d) return '';
     return '<div class="kort rosa">' +
            '<h2>Så räknas tentan</h2>' +
@@ -368,18 +304,51 @@ window.SYSB23.hem = (function () {
 
   /* ================================================================ */
 
+  function info(id) { return S.delkurser.filter(function (x) { return x.id === id; })[0] || null; }
+
+  function iso(d) {
+    return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+  }
+
+  var MANADER = ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli',
+                 'augusti', 'september', 'oktober', 'november', 'december'];
+  function dagMånad(isoDatum) {
+    var d = U.parse(isoDatum);
+    return d.getDate() + ' ' + MANADER[d.getMonth()];
+  }
+  function manadKort(d) { return MANADER[d.getMonth()].slice(0, 3); }
+
+  function veckonummer(d) {
+    var t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    var dag = (t.getUTCDay() + 6) % 7;
+    t.setUTCDate(t.getUTCDate() - dag + 3);
+    var forsta = new Date(Date.UTC(t.getUTCFullYear(), 0, 4));
+    return 1 + Math.round(((t - forsta) / 86400000 - 3 + ((forsta.getUTCDay() + 6) % 7)) / 7);
+  }
+
   function koppla(vy) {
-    Array.prototype.forEach.call(vy.querySelectorAll('[data-gatill]'), function (b) {
+    function alla(sel, fn) { Array.prototype.forEach.call(vy.querySelectorAll(sel), fn); }
+
+    alla('[data-gatill]', function (b) {
       b.addEventListener('click', function () { S.app.visaVy(b.dataset.gatill); });
     });
-    Array.prototype.forEach.call(vy.querySelectorAll('[data-ovaamne]'), function (b) {
+    alla('[data-ovaamne]', function (b) {
       b.addEventListener('click', function () { S.app.ovaAmne(b.dataset.ovaamne); });
     });
-    Array.prototype.forEach.call(vy.querySelectorAll('[data-laskap]'), function (b) {
-      b.addEventListener('click', function () { S.las.oppna(b.dataset.laskap); });
+    alla('[data-veckodag]', function (b) {
+      b.addEventListener('click', function () { valdDag = b.dataset.veckodag; rendera(); });
     });
-    Array.prototype.forEach.call(vy.querySelectorAll('[data-repetition]'), function (b) {
-      b.addEventListener('click', function () { S.ova.startaRepetition(); });
+    alla('[data-bytdelkurs]', function (b) {
+      b.addEventListener('click', function () {
+        S.app.bytDelkurs(b.dataset.bytdelkurs);
+        window.scrollTo(0, 0);
+      });
+    });
+    alla('[data-pluggatenta]', function (b) {
+      b.addEventListener('click', function () {
+        if (S.store.delkurs() !== b.dataset.pluggatenta) S.app.bytDelkurs(b.dataset.pluggatenta);
+        S.app.visaVy('las');
+      });
     });
   }
 

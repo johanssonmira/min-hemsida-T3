@@ -8,7 +8,7 @@
    filer städas bort i activate.
    ========================================================================= */
 
-var VERSION = 'sysb23-v12';
+var VERSION = 'sysb23-v13';
 
 var FILER = [
   './',
@@ -49,7 +49,6 @@ var FILER = [
   'js/diagram.js',
   'js/normalform.js',
   'js/store.js',
-  'js/tema.js',
   'js/hem.js',
   'js/las.js',
   'js/ova.js',

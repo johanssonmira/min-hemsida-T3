@@ -11,7 +11,6 @@ window.SYSB23.store = (function () {
   var tomtLage = {
     version: 3,
     delkurs: 'strategi',      // vald delkurs i gränssnittet
-    tema: 'creme',            // färgtema, se js/tema.js
     amnen: {},                // amneId  -> { ratt, delvis, fel, forsok, senast, dagar: [] }
     fragor: {},               // fragaId -> { forsok, ratt, fel, senast, prioritet }
     lasta: {},                // kapitelId -> ISO-datum
@@ -91,9 +90,6 @@ window.SYSB23.store = (function () {
     delkurs: function () { return data.delkurs; },
     sattDelkurs: function (id) { data.delkurs = id; spara(); },
 
-    /* ---------------------- Färgtema ---------------------- */
-    tema: function () { return data.tema || 'creme'; },
-    sattTema: function (id) { data.tema = id; spara(); },
 
     /* ---------------------- Svar på frågor ---------------------- */
     // utfall: 'ratt' | 'delvis' | 'fel'
@@ -144,6 +140,7 @@ window.SYSB23.store = (function () {
       data.historik.unshift({
         datum: new Date().toISOString(),
         lage: pass.lage || 'ova',
+        delkurs: pass.delkurs || data.delkurs,
         rubrik: pass.rubrik,
         antal: pass.antal,
         ratt: pass.ratt,

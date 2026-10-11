@@ -55,7 +55,7 @@ window.SYSB23.schema = (function () {
 
   function nedrakningskort() {
     var vald = S.store.delkurs();
-    var tenta = U.nastaTenta(null, true);
+    var tenta = U.nastaAktuellTenta();
     if (!tenta) return '';
 
     /* Liggande banner: siffran, vilken tenta det gäller och knappen på

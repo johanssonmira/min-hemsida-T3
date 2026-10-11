@@ -31,7 +31,7 @@ window.SYSB23.kompendium.processer = {
     '> **Tentan:** ett fåtal essäfrågor (inte om BPMN) plus 10–15 flervalsfrågor som ' +
     'täcker båda delarna, rätt svar ger poäng (anges per fråga i BPMN-delen), fel svar ' +
     '−1 p, obesvarat 0 p.\n\n' +
-    'Kapitel 1–6 här täcker BPM-delen. Kapitel 7–10 (i nästa fil) täcker BPMN.',
+    'Kapitel 1–7 täcker BPM-delen och kapitel 8–11 BPMN.',
   kapitel: []
 };
 

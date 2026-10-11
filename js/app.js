@@ -91,7 +91,6 @@
 
   function bytDelkurs(id) {
     S.store.sattDelkurs(id);
-    S.tema.uppdateraForDelkurs();
     S.ova.aterstall();
     S.las.stang();
     var sel = U.el('sel-delkurs');
@@ -157,7 +156,6 @@
     if (!a) return;
     if (a.delkurs !== S.store.delkurs()) {
       S.store.sattDelkurs(a.delkurs);
-      S.tema.uppdateraForDelkurs();
       var sel = U.el('sel-delkurs');
       if (sel) sel.value = a.delkurs;
     }
@@ -170,29 +168,37 @@
     var sel = U.el('sel-delkurs');
     sel.innerHTML = '';
 
-    /* Två grupper, så att det syns direkt vad man kan välja mellan */
-    var klara = document.createElement('optgroup');
-    klara.label = 'Delkurser du kan plugga här';
-    S.delkurser.forEach(function (d) {
+    /* Tre grupper i terminens ordning: det man pluggar nu, det som kommer,
+       och det som redan är avklarat. Avslutade delkurser ligger sist men
+       finns kvar — omtentan kan fortfarande behöva dem. */
+    function grupp(etikett) {
+      var g = document.createElement('optgroup');
+      g.label = etikett;
+      return g;
+    }
+    function alternativ(id, namn, avstangd) {
       var o = document.createElement('option');
-      o.value = d.id;
-      o.textContent = d.namn;
-      klara.appendChild(o);
-    });
-    sel.appendChild(klara);
+      o.value = id;
+      o.textContent = namn;
+      o.disabled = !!avstangd;
+      return o;
+    }
 
-    /* Delkurser som finns i kalendern men saknar material – visas inaktiva */
-    var senare = document.createElement('optgroup');
-    senare.label = 'Ligger senare i terminen — inget material än';
+    var aktuella = grupp('Aktuella');
+    var kommande = grupp('Kommer senare — inget material än');
+    var avslutade = grupp('Avslutade');
+
+    S.delkurser.forEach(function (d) {
+      (d.avslutad ? avslutade : aktuella).appendChild(alternativ(d.id, d.namn));
+    });
     S.kalenderDelkurser.forEach(function (k) {
       if (S.delkurser.some(function (d) { return d.id === k.id; })) return;
-      var o = document.createElement('option');
-      o.value = k.id;
-      o.textContent = k.namn;
-      o.disabled = true;
-      senare.appendChild(o);
+      kommande.appendChild(alternativ(k.id, k.namn, true));
     });
-    if (senare.children.length) sel.appendChild(senare);
+
+    [aktuella, kommande, avslutade].forEach(function (g) {
+      if (g.children.length) sel.appendChild(g);
+    });
 
     sel.value = S.store.delkurs();
     sel.addEventListener('change', function () { bytDelkurs(sel.value); });
@@ -203,7 +209,6 @@
       b.addEventListener('click', function () { visaVy(b.dataset.vy); });
     });
     U.el('btn-hem').addEventListener('click', function () { visaVy('hem'); });
-    U.el('btn-tema').addEventListener('click', function () { S.tema.oppna(); });
 
     /* Siffertangenterna hör till Öva, där man svarar på en fråga i taget.
        Provet är ett formulär med alla frågor på en gång — där skulle de
@@ -276,7 +281,6 @@
       return;
     }
 
-    S.tema.start();
     kontrolleraData();
     fyllDelkursval();
     koppla();
@@ -331,6 +335,7 @@
 
   S.app = {
     visaVy: visaVy,
+    synligaVyer: synligaVyer,
     rendera: rendera,
     bytDelkurs: bytDelkurs,
     ovaAmne: ovaAmne

@@ -210,6 +210,21 @@ window.SYSB23.ui = (function () {
     return kandidater[0] || null;
   }
 
+  /* Nästa ordinarie tenta i en delkurs som inte är avslutad. Det är den
+     Hem och Schema räknar ned mot — en avklarad delkurs omtenta ska inte
+     ta över nedräkningen för den som redan skrivit tentan. */
+  function nastaAktuellTenta() {
+    var S = window.SYSB23;
+    var avslutade = (S.delkurser || []).filter(function (d) { return d.avslutad; })
+                                       .map(function (d) { return d.id; });
+    var kandidater = S.tentor.filter(function (t) {
+      var d = dagarTill(t.datum);
+      return t.typ === 'ordinarie' && d !== null && d >= 0 && avslutade.indexOf(t.delkurs) === -1;
+    });
+    kandidater.sort(function (a, b) { return a.datum < b.datum ? -1 : 1; });
+    return kandidater[0] || null;
+  }
+
   function delkursNamn(id) {
     var S = window.SYSB23;
     var k = S.kalenderDelkurser.filter(function (d) { return d.id === id; })[0];
@@ -477,6 +492,7 @@ window.SYSB23.ui = (function () {
     parse: parse, idag: idag, dagarTill: dagarTill,
     langtDatum: langtDatum, kortDatum: kortDatum, veckonummer: veckonummer,
     tidssedan: tidssedan, nastaTenta: nastaTenta,
+    nastaAktuellTenta: nastaAktuellTenta,
     delkursNamn: delkursNamn, delkursKort: delkursKort, delkursFarg: delkursFarg,
     amneNamn: amneNamn,
     nivaMatare: nivaMatare, nivaEtikett: nivaEtikett, nivaPrick: nivaPrick,

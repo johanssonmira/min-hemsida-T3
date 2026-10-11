@@ -29,6 +29,7 @@ window.SYSB23.delkurser = [
   {
     id: 'strategi',
     namn: 'Strategi och ekonomistyrning',
+    avslutad: true,   /* tentan 21 sep är skriven; omtenta 6 nov */
     beskrivning:
       'Ekonomistyrningens utgångspunkter, företags mål, effektivitet, ' +
       'organisationsformer, Balanced Scorecard, strategiperspektiv och hållbarhet.',

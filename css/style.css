@@ -1,350 +1,82 @@
 /* =========================================================================
    SYSB23 Plugg – formgivning
    -------------------------------------------------------------------------
-   Palett hämtad från Scribblepie-referensen: varm creme som bas, elektrisk
-   blå som handlingsfärg, ockra som uppmärksamhetsfärg och puderrosa som
-   lugn sektionsfärg. Feta serifrubriker mot sans i gränssnittet.
+   Ett enda utseende: ljust papper, vita kort med tunn kant, mörkgrönt för
+   det man ska göra och mässing för det man ska lägga märke till. Fraunces
+   i rubrikerna, Inter i allt annat.
 
    Principer:
-   1. FÄRG BÄR BETYDELSE, INTE DEKORATION. Grön = rätt, röd = fel,
-      ockra = delvis eller "titta hit", blå = det du ska göra härnäst.
-      Samma färg betyder samma sak i hela appen.
-   2. VARM BAS. Creme istället för grått och rent vitt – mindre bländande
-      vid långa lässessioner och trevligare att återvända till.
-   3. TRE TYPSNITTSROLLER. Serif display för rubriker, sans för
-      gränssnitt, serif för brödtext i kompendiet (signalerar läsläge).
-   4. EN ACCENT I TAGET. Elektriskt blå reserveras för nästa handling,
-      så blicken hittar rätt utan att leta.
-   5. KONTRAST DÄR DET RÄKNAS. Brödtext ligger långt över WCAG AA.
+   1. LUGNT. Inga färgade banderoller, inga skuggor att tala om, inga
+      teman. Färg används när den betyder något.
+   2. FÄRG BÄR BETYDELSE. Grönt = rätt, rött = fel, mässing = titta hit,
+      mörkgrönt = nästa handling. Samma färg betyder samma sak överallt.
+   3. LÄSBART FÖRST. 17 px brödtext, generöst radavstånd, rader som inte
+      blir längre än ögat orkar följa.
+   4. KONTRAST. All text ligger över WCAG AA mot sin bakgrund.
+
+   Variabelnamnen är kvar från den gamla paletten (creme-*, blaa-*,
+   ockra-*) så att varje komponent längre ner i filen byter utseende utan
+   att röras. blaa-* är alltså numera mörkgrönt och ockra-* mässing.
    ========================================================================= */
 
 :root {
-  /* --- Creme: bakgrunder och ytor --- */
-  --creme-50:  #FFFAF7;   /* kort */
-  --creme-100: #FCF0EA;   /* sidbakgrund */
-  --creme-200: #F7E3D9;   /* dämpade band */
-  --creme-300: #EDD2C4;   /* kantlinjer */
-  --creme-400: #DDB49F;   /* starkare kantlinjer */
+  /* --- Ytor och linjer --- */
+  --creme-50:  #FFFFFF;   /* kort */
+  --creme-100: #FBFAF6;   /* sidbakgrund, papper */
+  --creme-200: #F3F1EA;   /* dämpade band, inaktiva ytor */
+  --creme-300: #E5E1D6;   /* kantlinjer */
+  --creme-400: #CFC8B6;   /* starkare kantlinjer */
 
-  /* --- Bläck --- */
-  /* Kontrast mot creme-100 kontrollerad: ink 15,5:1, mid 8,4:1, soft 5,5:1.
-     Samtliga över WCAG AA (4,5:1) även för liten text. */
-  --ink:      #1C1B4B;    /* djupblå, ej svart */
-  --ink-mid:  #4A4977;
-  --ink-soft: #605E7E;
+  /* --- Text --- 15,0:1 · 9,4:1 · 5,9:1 mot papperet */
+  --ink:      #22282A;
+  --ink-mid:  #3F4749;
+  --ink-soft: #5B6365;
 
-  /* --- Elektrisk blå: handling och navigering --- */
-  --blaa-50:  #E9E9FD;
-  --blaa-100: #CFCEFA;
-  --blaa-500: #2B29E0;
-  --blaa-600: #201FBE;
-  --blaa-700: #1A1996;
-  --blaa-900: #12124F;
+  /* --- Mörkgrönt: handling och navigering --- */
+  --blaa-50:  #EAF1EF;
+  --blaa-100: #CFE0DA;
+  --blaa-500: #1F4E45;
+  --blaa-600: #173B34;
+  --blaa-700: #122F29;
+  --blaa-900: #0E2420;
 
-  /* --- Ockra: uppmärksamhet, delvis rätt, tentor --- */
-  --ockra-50:  #FDEFD8;
-  --ockra-100: #F9DFB4;
-  --ockra-500: #DE8600;   /* dekor och ytor – aldrig bakgrund till vit text */
-  --ockra-600: #8A5200;   /* text på ljus ockra: 5,6:1 */
-  --ockra-700: #6E4100;   /* bakgrund till vit text: 6,4:1 */
+  /* --- Mässing: uppmärksamhet, tentor --- */
+  --ockra-50:  #F8F1DE;
+  --ockra-100: #EFE1B8;
+  --ockra-500: #B9932F;   /* dekor och linjer – aldrig bakgrund till vit text */
+  --ockra-600: #7A5C10;   /* text på ljus mässing: 5,6:1 */
+  --ockra-700: #654C0D;   /* bakgrund till vit text: 7,5:1 */
 
-  /* --- Rosa: lugna sektioner --- */
-  --rosa-100: #FDE6F4;
-  --rosa-200: #F9C7E7;
-  --rosa-400: #E88BC4;
+  /* --- Neutrala sektioner (hette rosa förr) --- */
+  --rosa-100: #F6F4EE;
+  --rosa-200: #E9E4D6;
+  --rosa-400: #CFC4A8;
 
-  /* --- Semantik --- */
-  --gron-50:  #DFF3E7;
-  --gron-100: #BCE8CF;
-  --gron-500: #0E7A52;
-  --gron-600: #0A5E3F;
-  --gron-700: #10553B;
+  /* --- Rätt och fel --- */
+  --gron-50:  #EAF4EF;
+  --gron-100: #CDE6D9;
+  --gron-500: #2E7D5B;
+  --gron-600: #24664A;
+  --gron-700: #1D553D;
 
-  --rod-50:   #FCE3DE;
-  --rod-500:  #D6402C;
-  --rod-600:  #AE2E1E;
+  --rod-50:   #F9ECE8;
+  --rod-500:  #B3402E;
+  --rod-600:  #983322;
 
-  /* --- Egna poster ---
-     Medvetet en dämpad blågrå och inte en åttonde signalfärg. De sju
-     delkursfärgerna bär redan betydelse; ett åttonde skrikigt hue hade
-     krävt inlärning. Det som säger "det här är mitt" är i stället den
-     streckade kanten och pennan – form läser sig själv, färg måste läras. */
-  --egen: #57557E;
-
-  /* Ytan i skrivfält och rullgardiner. Egen variabel för att mörkt tema
-     ska kunna göra den mörk utan att alla kort blir det. */
+  --egen: #5B6365;
   --falt-yta: #FFFFFF;
-
-  /* --- Delkursaccenter --- */
-  --strategi:  #DE8600;
-  --databaser: #2B29E0;
 
   --r-s: 8px;
-  --r-m: 14px;
-  --r-l: 20px;
+  --r-m: 12px;
+  --r-l: 16px;
 
-  --skugga-s: 0 1px 2px rgba(28,27,75,.06);
-  --skugga-m: 0 2px 4px rgba(28,27,75,.06), 0 8px 20px rgba(28,27,75,.06);
-  --skugga-l: 0 6px 16px rgba(28,27,75,.12), 0 16px 40px rgba(28,27,75,.10);
+  --skugga-s: none;
+  --skugga-m: 0 1px 2px rgba(34,40,42,.04);
+  --skugga-l: 0 6px 24px rgba(34,40,42,.10);
 
-  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
   --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-}
-
-/* =========================================================================
-   TEMAN
-   -------------------------------------------------------------------------
-   Ett tema byter bara ut variablerna ovan. Ingen regel längre ner i filen
-   känner till vilket tema som är aktivt, och ingen text, siffra eller
-   funktion ändras – bara ytorna.
-
-   Rollerna är desamma i alla fyra:
-     creme-*  ytor och kantlinjer      blaa-*  handling och navigering
-     ockra-*  uppmärksamhet, tentor    rosa-*  lugna sektioner
-     gron/rod rätt och fel
-
-   Rätt och fel behåller grönt och rött i samtliga teman. Det är den enda
-   färgparet som betyder något i sig, och den betydelsen får inte flyttas.
-   I det gröna temat, där hueen annars vore upptagen, bär ✓ och ✕ i facit
-   samma besked utan att man behöver se färgen alls.
-   ========================================================================= */
-
-/* ---------- Skog: salviagrönt och puderrosa ---------- */
-[data-tema="skog"] {
-  --creme-50:  #F8FCF6;
-  --creme-100: #E9F3E4;
-  --creme-200: #D9EAD1;
-  --creme-300: #C0DCB4;
-  --creme-400: #9DC48D;
-
-  --ink:      #14301F;
-  --ink-mid:  #3A5643;
-  --ink-soft: #4F6857;
-
-  --blaa-50:  #DCF0E2;
-  --blaa-100: #B6E0C2;
-  --blaa-500: #1B7A45;
-  --blaa-600: #146036;
-  --blaa-700: #0F4B2A;
-  --blaa-900: #0B2E1C;
-
-  --ockra-50:  #FCE5EC;
-  --ockra-100: #F8C9D8;
-  --ockra-500: #E0577F;
-  --ockra-600: #9E2547;
-  --ockra-700: #85203C;
-
-  --rosa-100: #FBE8EF;
-  --rosa-200: #F6CFDC;
-  --rosa-400: #E495B0;
-
-  --gron-50:  #D8F5E3;
-  --gron-100: #B4EDCB;
-  --gron-500: #067F4A;
-  --gron-600: #05603A;
-  --gron-700: #044D2E;
-
-  --rod-50:   #FCE0DB;
-  --rod-500:  #D23E27;
-  --rod-600:  #A82D19;
-
-  --egen: #4A6153;
-  --skugga-s: 0 1px 2px rgba(20,48,31,.07);
-  --skugga-m: 0 2px 4px rgba(20,48,31,.07), 0 8px 20px rgba(20,48,31,.07);
-  --skugga-l: 0 6px 16px rgba(20,48,31,.13), 0 16px 40px rgba(20,48,31,.10);
-}
-
-/* ---------- Konditori: prinsesstårtans rosa, blått och gult ---------- */
-[data-tema="konditori"] {
-  --creme-50:  #FFF9FB;
-  --creme-100: #FCEAF0;
-  --creme-200: #F9D9E4;
-  --creme-300: #F2C0D2;
-  --creme-400: #E39BB5;
-
-  --ink:      #2A1220;
-  --ink-mid:  #5A3247;
-  --ink-soft: #70435A;
-
-  --blaa-50:  #E3EFFA;
-  --blaa-100: #BFDCF4;
-  --blaa-500: #1A6DC0;
-  --blaa-600: #145699;
-  --blaa-700: #0F4377;
-  --blaa-900: #0B2B4D;
-
-  --ockra-50:  #FDEFD9;
-  --ockra-100: #F9DEB6;
-  --ockra-500: #DA8A1C;
-  --ockra-600: #8A5200;
-  --ockra-700: #6E4100;
-
-  --rosa-100: #FBE0EC;
-  --rosa-200: #F6C3D9;
-  --rosa-400: #E68CB2;
-
-  --gron-50:  #DDF3E6;
-  --gron-100: #B9E9CE;
-  --gron-500: #0C7A50;
-  --gron-600: #095E3D;
-  --gron-700: #074B31;
-
-  --rod-50:   #FCE1DC;
-  --rod-500:  #D33F2A;
-  --rod-600:  #AB2D1B;
-
-  --egen: #6A4A5C;
-  --skugga-s: 0 1px 2px rgba(42,18,32,.07);
-  --skugga-m: 0 2px 4px rgba(42,18,32,.07), 0 8px 20px rgba(42,18,32,.07);
-  --skugga-l: 0 6px 16px rgba(42,18,32,.13), 0 16px 40px rgba(42,18,32,.10);
-}
-
-/* ---------- Neon: magenta och solgult på vitt ---------- */
-[data-tema="neon"] {
-  --creme-50:  #FFFFFF;
-  --creme-100: #FFF0F5;
-  --creme-200: #FFE0EC;
-  --creme-300: #FFC7DC;
-  --creme-400: #F79CBE;
-
-  --ink:      #1B0A22;
-  --ink-mid:  #4A2354;
-  --ink-soft: #613668;
-
-  --blaa-50:  #FFE3F4;
-  --blaa-100: #FFC2E8;
-  --blaa-500: #C4118C;
-  --blaa-600: #A00E73;
-  --blaa-700: #7D0B59;
-  --blaa-900: #2A0A33;
-
-  --ockra-50:  #FFF4CC;
-  --ockra-100: #FFE894;
-  --ockra-500: #F5C518;
-  --ockra-600: #8A6100;
-  --ockra-700: #6B4B00;
-
-  --rosa-100: #FFE7F3;
-  --rosa-200: #FFC9E4;
-  --rosa-400: #FF8FC6;
-
-  --gron-50:  #D9F7E5;
-  --gron-100: #B2F0CE;
-  --gron-500: #00875A;
-  --gron-600: #00693F;
-  --gron-700: #005232;
-
-  --rod-50:   #FFE0DA;
-  --rod-500:  #E23A20;
-  --rod-600:  #B32912;
-
-  --egen: #6B4B75;
-  --skugga-s: 0 1px 2px rgba(27,10,34,.07);
-  --skugga-m: 0 2px 4px rgba(27,10,34,.07), 0 8px 20px rgba(27,10,34,.08);
-  --skugga-l: 0 6px 16px rgba(27,10,34,.14), 0 16px 40px rgba(27,10,34,.11);
-}
-
-/* =========================================================================
-   TEMA SOM FÖLJER DELKURSEN
-   -------------------------------------------------------------------------
-   Väljer man "Följ delkursen" tar hela sidan färg efter den delkurs man
-   pluggar. Då går frågan "vilken kurs är jag inne på?" inte att missa –
-   svaret är hela skärmen, inte en prick i hörnet.
-
-   Bara ytor, bläck och handlingsfärg byts. Ockra, rosa, grönt och rött
-   ligger kvar från grundtemat, så att uppmärksamhet, rätt och fel betyder
-   samma sak oavsett vilken delkurs man står i.
-   ========================================================================= */
-
-[data-delkurstema="strategi"] {
-  --creme-50:#FFFAF4; --creme-100:#FDF2E4; --creme-200:#F9E5CB; --creme-300:#F0D2AA; --creme-400:#DCB27B;
-  --ink:#33230A; --ink-mid:#5C4322; --ink-soft:#6B5230;
-  --blaa-50:#FCEBD6; --blaa-100:#F7D6AC; --blaa-500:#A85400; --blaa-600:#8A4500; --blaa-700:#6E3700; --blaa-900:#3A1E00;
-  --egen:#6B5230;
-}
-[data-delkurstema="databaser"] {
-  --creme-50:#FAFBFF; --creme-100:#EDF0FE; --creme-200:#DDE3FC; --creme-300:#C6D0F8; --creme-400:#A3B3F0;
-  --ink:#10143C; --ink-mid:#333A6B; --ink-soft:#434A78;
-  --blaa-50:#E9E9FD; --blaa-100:#CFCEFA; --blaa-500:#2B29E0; --blaa-600:#201FBE; --blaa-700:#1A1996; --blaa-900:#12124F;
-  --egen:#434A78;
-}
-[data-delkurstema="processer"] {
-  --creme-50:#FCFAFF; --creme-100:#F3EDFD; --creme-200:#E7DCFB; --creme-300:#D5C3F6; --creme-400:#B79BEC;
-  --ink:#23103F; --ink-mid:#452B66; --ink-soft:#533872;
-  --blaa-50:#EFE6FD; --blaa-100:#DCC9FA; --blaa-500:#6D28D9; --blaa-600:#5B21B6; --blaa-700:#4C1D95; --blaa-900:#2A1259;
-  --egen:#533872;
-}
-[data-delkurstema="arkitektur"] {
-  --creme-50:#F7FCFD; --creme-100:#E5F3F7; --creme-200:#D2EBF1; --creme-300:#B2DBE5; --creme-400:#86C3D2;
-  --ink:#0C2A31; --ink-mid:#2B4E57; --ink-soft:#3A5C65;
-  --blaa-50:#DDF0F5; --blaa-100:#B8E1EB; --blaa-500:#0E7490; --blaa-600:#0B5C73; --blaa-700:#084857; --blaa-900:#062E3A;
-  --egen:#3A5C65;
-}
-[data-delkurstema="sakerhet"] {
-  --creme-50:#FFFAFC; --creme-100:#FCE9F0; --creme-200:#F9D7E3; --creme-300:#F3BBCE; --creme-400:#E68EAE;
-  --ink:#33091C; --ink-mid:#5C2B41; --ink-soft:#6B394E;
-  --blaa-50:#FBE4EE; --blaa-100:#F7C7DC; --blaa-500:#BE185D; --blaa-600:#9D174D; --blaa-700:#7D123D; --blaa-900:#470A24;
-  --egen:#6B394E;
-}
-[data-delkurstema="ansvarsfull"] {
-  --creme-50:#F8FCF6; --creme-100:#E9F3E4; --creme-200:#D9EAD1; --creme-300:#C0DCB4; --creme-400:#9DC48D;
-  --ink:#14301F; --ink-mid:#3A5643; --ink-soft:#4B6453;
-  --blaa-50:#DCF0E4; --blaa-100:#B6E0C6; --blaa-500:#0E7A52; --blaa-600:#0A5E3F; --blaa-700:#084B32; --blaa-900:#062E1F;
-  --egen:#4B6453;
-}
-[data-delkurstema="isprojekt"] {
-  --creme-50:#FFFBF6; --creme-100:#F8EEE1; --creme-200:#F1DFC9; --creme-300:#E4CAA9; --creme-400:#CFAD82;
-  --ink:#2E1E0B; --ink-mid:#55401F; --ink-soft:#634E2D;
-  --blaa-50:#F6E7D0; --blaa-100:#EDD1A8; --blaa-500:#8A5200; --blaa-600:#6E4100; --blaa-700:#563300; --blaa-900:#2E1C00;
-  --egen:#634E2D;
-}
-
-
-/* ---------- Ljust: nedtonat gråvitt, minsta möjliga färg ---------- */
-[data-tema="ljust"] {
-  --creme-50:  #FFFFFF;
-  --creme-100: #F4F5F7;
-  --creme-200: #E9EBEF;
-  --creme-300: #D8DCE3;
-  --creme-400: #B4BAC5;
-
-  --ink:      #14161C;
-  --ink-mid:  #3F4550;
-  --ink-soft: #5A616D;
-
-  --blaa-50:  #E7EEFB;
-  --blaa-100: #C7D8F5;
-  --blaa-500: #1B5FBF;
-  --blaa-600: #164C99;
-  --blaa-700: #123B77;
-  --blaa-900: #101319;
-
-  --ockra-50:  #FCF0D9;
-  --ockra-100: #F7E1B4;
-  --ockra-500: #D9911A;
-  --ockra-600: #8A5800;
-  --ockra-700: #6E4500;
-
-  --rosa-100: #F7E7EF;
-  --rosa-200: #EDCBDD;
-  --rosa-400: #D48DB4;
-
-  --gron-50:  #DFF2E8;
-  --gron-100: #BCE5D0;
-  --gron-500: #12784F;
-  --gron-600: #0D5C3C;
-  --gron-700: #0A4A30;
-
-  --rod-50:   #FBE3DF;
-  --rod-500:  #CE3D2A;
-  --rod-600:  #A62C1C;
-
-  --egen: #5A616D;
-  --falt-yta: #FFFFFF;
-  --skugga-s: 0 1px 2px rgba(20,22,28,.06);
-  --skugga-m: 0 2px 4px rgba(20,22,28,.06), 0 8px 20px rgba(20,22,28,.06);
-  --skugga-l: 0 6px 16px rgba(20,22,28,.12), 0 16px 40px rgba(20,22,28,.10);
 }
 
 * { box-sizing: border-box; }
@@ -353,403 +85,354 @@ html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 body {
   margin: 0;
   font-family: var(--sans);
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.6;
   color: var(--ink);
   background: var(--creme-100);
   -webkit-font-smoothing: antialiased;
 }
 
-.wrap { max-width: 1720px; margin: 0 auto; padding-left: 1.75rem; padding-right: 1.75rem; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: 1.75rem; padding-right: 1.75rem; }
+@media (max-width: 640px) { .wrap { padding-left: 1rem; padding-right: 1rem; } }
 .dold { display: none !important; }
 .muted { color: var(--ink-soft); }
 .liten { font-size: .875rem; }
 .mini  { font-size: .78rem; }
 
-/* Läsbredd. Bred skärm ska ge fler kolumner, inte längre rader – över
-   ungefär 80 tecken tappar ögat raden på väg tillbaka. */
-#vy-ova, #vy-prov, #vy-essa { max-width: 880px; margin: 0 auto; }
-#vy-las { max-width: 940px; margin: 0 auto; }
+/* Läsbredd. Över ungefär 75 tecken tappar ögat raden på väg tillbaka. */
+#vy-ova, #vy-prov, #vy-essa { max-width: 860px; margin: 0 auto; }
+#vy-las { max-width: 860px; margin: 0 auto; }
 
 /* -------------------------------------------------------------------------
-   Sidlayouten: en huvudspalt och en smalare sidospalt, samma upplägg som
-   de flesta webbplatser. Korten staplas inuti sin spalt och fyller den
-   uppifrån och ner, så det uppstår aldrig hål mellan olika höga kort.
-
+   Sidlayouten: en huvudspalt och en smalare sidospalt.
    .sida   – behållaren
    .huvud  – huvudspalten, det man håller på med
    .sido   – sidospalten, sådant man sneglar på
-   .bred   – kort som ligger direkt i .sida och spänner över båda spalterna
+   .bred   – kort som spänner över båda spalterna
    ------------------------------------------------------------------------- */
 .sida { display: grid; gap: 0; }
 .sida > * { min-width: 0; }
 
-@media (min-width: 1060px) {
-  .sida { grid-template-columns: minmax(0, 1fr) 21rem; column-gap: 1.25rem; }
+@media (min-width: 1000px) {
+  .sida { grid-template-columns: minmax(0, 1fr) 20rem; column-gap: 1.25rem; }
   .sida > .bred { grid-column: 1 / -1; }
 }
-@media (min-width: 1500px) {
-  .sida { grid-template-columns: minmax(0, 1fr) 23rem; column-gap: 1.5rem; }
-}
 
-/* Bred skärm ska ge bredare kort men aldrig längre rader. Löptexten kapas
-   här i stället för att hela sidan kapas — då kan kalender, mätare och
-   listor breda ut sig medan brödtexten står kvar på läsbar radlängd. */
-.kort p, .kort ul, .kort ol, .kort .notis { max-width: 82ch; }
+.kort p, .kort ul, .kort ol, .kort .notis { max-width: 75ch; }
 
-/* =========================== Topbar =========================== */
-/* Accentlinjen under topbaren tar aktiv delkurs färg. Det är den enda
-   platsen i gränssnittet där färgen byts – därav "var är jag"-känslan. */
+/* =========================== Sidhuvud =========================== */
+/* Ljust och stilla: titeln till vänster, delkursen som ett kort till
+   höger, flikarna som en rad under. Inget färgat band — det enda som
+   sticker ut är fliken du står på. */
 .topbar {
-  background: var(--blaa-900);
-  color: #fff;
+  background: var(--creme-100);
+  border-bottom: 1px solid var(--creme-300);
   position: sticky; top: 0; z-index: 50;
 }
 .topbar-rad {
   display: flex; align-items: center; flex-wrap: wrap;
-  gap: .5rem 1.4rem; padding-top: .6rem; padding-bottom: .1rem;
+  gap: .75rem 1.25rem; padding-top: .9rem; padding-bottom: .75rem;
 }
 .logo {
-  background: none; border: none; color: #fff; cursor: pointer; padding: 0;
-  font-family: var(--serif); font-size: 1.22rem; font-weight: 700;
-  letter-spacing: -.01em; flex: 0 0 auto;
+  background: none; border: none; color: var(--blaa-500); cursor: pointer; padding: 0;
+  font-family: var(--serif); font-size: 1.4rem; font-weight: 600;
+  letter-spacing: -.01em; flex: 0 0 auto; order: 1;
 }
-.logo span { font-weight: 400; opacity: .68; font-style: italic; }
+.logo span { font-weight: 600; }
 
-/* ---- Temaknappen ---- */
-.temaknapp {
-  flex: 0 0 auto; margin-left: auto; display: flex; align-items: center; gap: .5rem;
-  background: rgba(255,255,255,.09); color: #fff;
-  border: 1px solid rgba(255,255,255,.2); border-radius: 999px;
-  padding: .3rem .8rem .3rem .55rem; font-size: .82rem; font-weight: 600;
-}
-.temaknapp:hover { background: rgba(255,255,255,.18); }
-.tema-prickar { display: flex; }
-/* Prickarna överlappar som färgprover i en solfjäder */
-.tema-prickar i {
-  width: 11px; height: 11px; border-radius: 50%;
-  border: 1.5px solid var(--blaa-900); margin-right: -4px;
-}
-.tema-prickar i:nth-child(1) { background: var(--creme-200); }
-.tema-prickar i:nth-child(2) { background: var(--blaa-500); }
-.tema-prickar i:nth-child(3) { background: var(--ockra-500); margin-right: 0; }
-
-/* Delkursväljaren tar över marginalen när temaknappen finns före den */
-.temaknapp + .delkursvaljare { margin-left: 0; }
-
-/* ---- Temaväljaren i dialogen ---- */
-.temalista { display: grid; gap: .55rem; margin: .9rem 0 .2rem; }
-.temakort {
-  display: flex; align-items: center; gap: .85rem; text-align: left;
-  padding: .75rem .85rem; border-radius: var(--r-m);
-  background: var(--creme-50); border: 2px solid var(--creme-300);
-  font-family: inherit; color: var(--ink); font-weight: 500;
-}
-.temakort:hover { border-color: var(--blaa-500); }
-.temakort.vald { border-color: var(--blaa-500); background: var(--blaa-50); }
-.tk-prickar { display: flex; flex: 0 0 auto; }
-.tk-prickar i {
-  width: 26px; height: 26px; border-radius: 50%;
-  border: 2px solid var(--creme-50); margin-right: -9px;
-}
-.tk-prickar i:last-child { margin-right: 0; }
-.tk-text { min-width: 0; }
-.tk-titel { display: block; font-weight: 700; font-size: .96rem; }
-.tk-besk { display: block; font-size: .82rem; color: var(--ink-soft); }
-.tk-vald {
-  font-size: .64rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em;
-  background: var(--blaa-500); color: #fff; padding: .1rem .42rem;
-  border-radius: 4px; vertical-align: 2px;
-}
-
-/* ---- Delkursväljaren ---- */
-/* min-width:0 hela vägen ner, annars vägrar select krympa under sin
-   innehållsbredd och hela sidan får vågrät rullning på smala skärmar. */
+/* ---- Delkursväljaren: ett litet kort med etikett ovanför ---- */
+/* min-width:0 hela vägen ner, annars vägrar select krympa och sidan får
+   vågrät rullning på smala skärmar. */
 .delkursvaljare {
-  flex: 0 1 auto; min-width: 0; margin-left: auto;
-  display: flex; align-items: center; gap: .6rem;
-  background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.2);
-  border-radius: 999px; padding: .18rem .3rem .18rem .85rem;
+  order: 2; margin-left: auto; flex: 0 1 17rem; min-width: 0;
+  position: relative;
+  background: var(--creme-50); border: 1px solid var(--creme-300);
+  border-radius: var(--r-m); padding: .4rem .85rem .45rem;
 }
 .dv-etikett {
-  font-size: .64rem; font-weight: 800; letter-spacing: .12em;
-  text-transform: uppercase; color: rgba(255,255,255,.6); white-space: nowrap;
+  display: block; font-size: .66rem; font-weight: 600; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--ockra-600); line-height: 1.3;
 }
-.dv-kontroll { display: flex; align-items: center; gap: .45rem; min-width: 0;
-  background: rgba(255,255,255,.14); border-radius: 999px; padding: .16rem .5rem .16rem .6rem; }
+.dv-kontroll { display: flex; align-items: center; gap: .45rem; min-width: 0; }
 .dv-prick {
-  width: 10px; height: 10px; border-radius: 50%; flex: 0 0 10px;
+  width: 9px; height: 9px; border-radius: 50%; flex: 0 0 9px;
   background: var(--aktiv, var(--blaa-500));
-  box-shadow: 0 0 0 2px rgba(255,255,255,.28);
 }
 .delkursval {
-  background: none; color: #fff; border: none;
-  padding: .18rem 0; font-size: .9rem; font-weight: 600;
-  font-family: inherit; cursor: pointer;
-  min-width: 0; max-width: 100%; text-overflow: ellipsis;
+  -webkit-appearance: none; appearance: none;
+  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2322282A'/%3E%3C/svg%3E") no-repeat right center;
+  color: var(--ink); border: none; width: 100%;
+  padding: .05rem 1.1rem .05rem 0; font-size: 1rem; font-weight: 600;
+  font-family: var(--serif); cursor: pointer;
+  min-width: 0; text-overflow: ellipsis;
 }
-.delkursval:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
-.delkursval option { color: var(--ink); background: var(--falt-yta); font-weight: 500; }
+.delkursval:focus-visible { outline: 2px solid var(--blaa-500); outline-offset: 4px; border-radius: 4px; }
+.delkursval option, .delkursval optgroup { color: var(--ink); background: var(--falt-yta); font-family: var(--sans); font-weight: 500; }
 
-/* ---- Kontextbandet: vilken delkurs som är aktiv, alltid synligt ---- */
-.delkursband { background: var(--blaa-900); border-top: 1px solid rgba(255,255,255,.1); }
-.dkb-rad {
-  display: flex; align-items: center; flex-wrap: wrap; gap: .3rem .85rem;
-  padding-top: .4rem; padding-bottom: .4rem;
-  font-size: .8rem; color: rgba(255,255,255,.66);
-}
-.dkb-namn {
-  display: flex; align-items: center; gap: .45rem;
-  font-weight: 700; color: #fff; font-size: .86rem;
-}
-.dkb-namn .fargprick { box-shadow: 0 0 0 2px rgba(255,255,255,.22); margin-right: 0; }
-.dkb-del { display: flex; align-items: center; gap: .35rem; white-space: nowrap; }
-.dkb-del b { color: rgba(255,255,255,.95); font-weight: 700; }
-.dkb-avdelare { color: rgba(255,255,255,.25); }
-
-.topbar::after {
-  content: ''; display: block; height: 4px;
-  background: var(--aktiv, var(--blaa-500));
-}
-
+/* ---- Flikraden ---- */
 .navrad {
-  display: flex; gap: .12rem; overflow-x: auto; flex: 0 1 auto;
+  order: 3; flex-basis: 100%;
+  display: flex; gap: .3rem; overflow-x: auto;
   scrollbar-width: none; -ms-overflow-style: none;
+  padding: .1rem 0;
 }
 .navrad::-webkit-scrollbar { display: none; }
 .navbtn {
-  background: none; border: none; border-bottom: 3px solid transparent;
-  color: rgba(255,255,255,.72); cursor: pointer; white-space: nowrap;
-  padding: .55rem .8rem; font-size: .92rem; font-family: inherit;
-  transition: color .15s, border-color .15s;
+  background: none; border: none; border-radius: var(--r-s);
+  color: var(--ink-mid); cursor: pointer; white-space: nowrap;
+  padding: .45rem .8rem; font-size: .94rem; font-weight: 500; font-family: inherit;
+  transition: none;
 }
-.navbtn:hover { color: #fff; }
-.navbtn.active { color: #fff; font-weight: 600; border-bottom-color: #fff; }
+.navbtn:hover { background: var(--creme-200); color: var(--ink); }
+.navbtn.active { background: var(--blaa-600); color: #fff; }
+.navbtn:focus-visible { outline: 2px solid var(--blaa-500); outline-offset: 2px; }
 
-@media (max-width: 860px) {
-  .navrad { order: 3; flex-basis: 100%; }
-  .delkursvaljare { padding-left: .6rem; }
-  .dv-etikett { display: none; }
-  /* På mobil räcker färgprickarna – ordet "Tema" tar plats från delkursen */
-  .tema-text { display: none; }
-  .temaknapp { padding: .3rem .5rem; }
+/* Kontextbandet: en tunn rad med läget i den valda delkursen */
+.delkursband { border-top: 1px solid var(--creme-300); background: var(--creme-100); }
+.dkb-rad {
+  display: flex; align-items: center; flex-wrap: wrap; gap: .2rem .8rem;
+  padding-top: .45rem; padding-bottom: .45rem;
+  font-size: .82rem; color: var(--ink-soft);
+}
+.dkb-rad:empty { display: none; }
+.delkursband:has(.dkb-rad:empty) { display: none; }
+.dkb-namn { display: flex; align-items: center; gap: .45rem; font-weight: 600; color: var(--ink); }
+.dkb-namn .fargprick { margin-right: 0; }
+.dkb-del { display: flex; align-items: center; gap: .35rem; white-space: nowrap; }
+.dkb-del b { color: var(--ink); font-weight: 600; }
+.dkb-avdelare { color: var(--creme-400); }
+
+@media (max-width: 640px) {
+  .topbar-rad { gap: .55rem .75rem; padding-top: .65rem; padding-bottom: .55rem; }
+  .logo { font-size: 1.2rem; }
+  .delkursvaljare { flex-basis: 12.5rem; padding: .3rem .7rem .35rem; }
+  .navbtn { padding: .45rem .65rem; font-size: .9rem; }
+  .dkb-rad { font-size: .78rem; }
 }
 
-main { padding-top: 1.4rem; padding-bottom: 2.5rem; }
+main { padding-top: 1.6rem; padding-bottom: 2.5rem; }
 footer { padding-bottom: 2.5rem; }
 
 /* ============================ Kort ============================ */
 .kort {
   background: var(--creme-50);
-  border: 1.5px solid var(--creme-300);
+  border: 1px solid var(--creme-300);
   border-radius: var(--r-m);
-  padding: 1.2rem 1.35rem;
-  margin-bottom: 1.05rem;
-  box-shadow: var(--skugga-s);
+  padding: 1.35rem 1.5rem;
+  margin-bottom: 1.1rem;
 }
+@media (max-width: 640px) { .kort { padding: 1.1rem 1.1rem; } }
 .kort > :first-child { margin-top: 0; }
 .kort > :last-child { margin-bottom: 0; }
 
-/* Rosa lugn sektion, används för sammanfattande innehåll */
+/* Neutral sektion, används för sammanfattande innehåll */
 .kort.rosa { background: var(--rosa-100); border-color: var(--rosa-200); }
 
 h1 {
-  font-family: var(--serif); font-size: 1.72rem; margin: 0 0 .55rem;
-  line-height: 1.18; letter-spacing: -.02em; font-weight: 700;
+  font-family: var(--serif); font-size: 1.85rem; margin: 0 0 .55rem;
+  line-height: 1.15; letter-spacing: -.015em; font-weight: 600; color: var(--blaa-500);
 }
 h2 {
-  font-family: var(--serif); font-size: 1.2rem; margin: 0 0 .85rem;
-  letter-spacing: -.01em; font-weight: 700;
+  font-family: var(--serif); font-size: 1.32rem; margin: 0 0 .8rem;
+  line-height: 1.25; letter-spacing: -.01em; font-weight: 600; color: var(--blaa-500);
   display: flex; align-items: center; gap: .55rem; flex-wrap: wrap;
 }
-h3 { font-family: var(--sans); font-size: .96rem; margin: 1.3rem 0 .45rem; font-weight: 700; }
+h3 { font-family: var(--sans); font-size: 1rem; margin: 1.3rem 0 .45rem; font-weight: 600; }
 p { margin: 0 0 .85rem; }
 
-/* Färgmarkör före rubriker – ger rytm utan att skrika */
-h2::before {
-  content: ''; width: 5px; height: 1.05em; border-radius: 3px;
-  background: var(--blaa-500); flex: 0 0 5px;
+/* Små versaler ovanför en rubrik — "SYSB23 · DELKURS" */
+.overrubrik {
+  display: block; font-size: .72rem; font-weight: 600; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--ockra-600); margin-bottom: .35rem;
 }
-h2.utan-markor::before { display: none; }
 
 /* =========================== Knappar =========================== */
-.knapprad { display: flex; gap: .55rem; flex-wrap: wrap; margin-top: 1rem; }
+.knapprad { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1rem; align-items: center; }
 button {
-  font-family: inherit; font-size: .92rem; font-weight: 600; cursor: pointer;
-  padding: .6rem 1.15rem; border-radius: var(--r-s); border: 2px solid transparent;
-  line-height: 1.3; letter-spacing: .01em;
-  transition: background .15s, border-color .15s, transform .06s, color .15s;
+  font-family: inherit; font-size: .94rem; font-weight: 500; cursor: pointer;
+  padding: .62rem 1.15rem; border-radius: var(--r-s); border: 1px solid transparent;
+  line-height: 1.3;
+  transition: background .15s, border-color .15s, color .15s;
 }
-button:active { transform: translateY(1px); }
+button:focus-visible { outline: 2px solid var(--blaa-500); outline-offset: 2px; }
 
 .primar { background: var(--blaa-500); color: #fff; }
 .primar:hover { background: var(--blaa-600); }
 
-.sekundar { background: transparent; color: var(--blaa-600); border-color: var(--blaa-500); }
-.sekundar:hover { background: var(--blaa-500); color: #fff; }
+.sekundar { background: var(--creme-50); color: var(--ink); border-color: var(--creme-400); }
+.sekundar:hover { border-color: var(--blaa-500); color: var(--blaa-600); }
 
 .fara { background: transparent; color: var(--rod-600); border-color: var(--rod-500); }
 .fara:hover { background: var(--rod-500); color: #fff; }
 
-button:disabled { opacity: .42; cursor: not-allowed; }
-button:disabled:active { transform: none; }
+button:disabled { opacity: .45; cursor: not-allowed; }
 
 .lankbtn {
-  background: none; border: none; color: var(--ink-soft);
-  text-decoration: underline; padding: 0; font-size: .85rem; font-weight: 400;
+  background: none; border: none; color: var(--blaa-500);
+  text-decoration: underline; text-underline-offset: 3px; padding: 0;
+  font-size: .92rem; font-weight: 500;
 }
-.lankbtn:hover { color: var(--rod-500); }
+.lankbtn:hover { color: var(--blaa-600); }
+.lankbtn.neutral { color: var(--ink-soft); }
 
-/* ======================= Nedräkningskort ======================= */
+/* ============================ Hem ============================ */
+/* Översta kortet: nedräkningen till vänster, veckan till höger, delade
+   av en tunn linje. På smal skärm hamnar veckan under. */
+.hem-topp {
+  display: grid; grid-template-columns: minmax(0, 1fr); padding: 0; overflow: hidden;
+  border-left: 3px solid var(--blaa-500);
+}
+@media (min-width: 820px) {
+  .hem-topp { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); }
+  .hem-veckan { border-left: 1px solid var(--creme-300); }
+}
+.hem-nedrakning, .hem-veckan { padding: 1.35rem 1.5rem; min-width: 0; }
+@media (max-width: 819px) { .hem-veckan { border-top: 1px solid var(--creme-300); } }
+@media (max-width: 640px) { .hem-nedrakning, .hem-veckan { padding: 1.1rem; } }
+
+.nr-rad { display: flex; align-items: baseline; gap: .55rem; flex-wrap: wrap; }
+.nr-siffra {
+  font-family: var(--serif); font-size: 2.6rem; font-weight: 600; line-height: 1;
+  color: var(--blaa-500); letter-spacing: -.02em;
+}
+.nr-text { font-size: 1rem; color: var(--ink); }
+.nr-kurs { font-weight: 600; margin-top: .35rem; }
+.nr-fakta { font-size: .9rem; color: var(--ink-soft); margin: .2rem 0 1.1rem; }
+.bred-knapp { width: 100%; padding-top: .75rem; padding-bottom: .75rem; }
+
+.vk-huvud {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: .5rem; flex-wrap: wrap; margin-bottom: .75rem;
+}
+.vk-huvud h2 { margin: 0; font-size: 1.15rem; }
+.veckoremsa { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: .35rem; }
+.vk-dag {
+  display: flex; flex-direction: column; align-items: center; gap: .1rem;
+  padding: .45rem .1rem .4rem; border-radius: var(--r-s);
+  background: var(--creme-50); border: 1px solid var(--creme-300); color: var(--ink);
+  font-weight: 400; min-width: 0;
+}
+.vk-dag:hover { border-color: var(--blaa-500); }
+.vk-namn { font-size: .66rem; letter-spacing: .08em; color: var(--ink-soft); font-weight: 600; }
+.vk-nr { font-size: 1.05rem; font-weight: 500; line-height: 1.25; }
+.vk-prickar { display: flex; gap: 3px; height: 6px; align-items: center; }
+.vk-prickar i { width: 5px; height: 5px; border-radius: 50%; display: block; }
+.vk-prickar i.tom { background: transparent; }
+.vk-dag.tentadag { border-color: var(--ockra-500); }
+.vk-dag.vald { background: var(--blaa-600); border-color: var(--blaa-600); color: #fff; }
+.vk-dag.vald .vk-namn { color: rgba(255,255,255,.85); }
+.vk-dag.vald .vk-prickar i { box-shadow: 0 0 0 1.5px #fff; }
+.vk-dagrubrik {
+  font-size: .9rem; font-weight: 600; margin: 1rem 0 .4rem;
+  padding-top: .8rem; border-top: 1px solid var(--creme-300);
+}
+.vk-idag { color: var(--ockra-600); font-weight: 500; }
+.vk-tom { margin: 0 0 .8rem; font-size: .92rem; }
+.hem-veckan .lankbtn { margin-top: .5rem; }
+@media (max-width: 400px) { .vk-namn { font-size: .58rem; letter-spacing: .02em; } .vk-nr { font-size: .95rem; } }
+
+.hem-intro { margin: 2rem 0 1.25rem; }
+.hem-intro h1 { font-size: 2.1rem; margin-bottom: .6rem; }
+@media (max-width: 640px) { .hem-intro h1 { font-size: 1.65rem; } }
+.hem-ingress { font-size: 1.02rem; color: var(--ink-mid); max-width: 62ch; margin-bottom: .6rem; }
+.hem-meta { font-size: .9rem; color: var(--ink-soft); margin: 0; }
+
+/* Vägarna in: hela raden är knappen */
+.vagar { padding: .35rem 0; }
+.vag {
+  display: flex; align-items: center; gap: 1rem; width: 100%; text-align: left;
+  background: none; border: none; border-radius: 0; color: var(--ink);
+  padding: .95rem 1.5rem; font-weight: 400;
+}
+.vag + .vag { border-top: 1px solid var(--creme-300); }
+.vag:hover { background: var(--creme-100); }
+.vag:hover .vag-pil { transform: translateX(3px); }
+.vag-kropp { flex: 1; min-width: 0; }
+.vag-rubrik { display: block; font-weight: 600; font-size: 1.02rem; }
+.vag-under { display: block; font-size: .88rem; color: var(--ink-soft); margin-top: .1rem; }
+.vag-pil { color: var(--blaa-500); font-size: 1.2rem; transition: transform .15s; }
+@media (max-width: 640px) { .vag { padding: .85rem 1.1rem; } }
+
+.hem-tva { display: grid; gap: 0 1.1rem; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 820px) { .hem-tva { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; } }
+
+.dk-lista { display: grid; gap: .1rem; }
+.dk-rad {
+  display: flex; align-items: center; gap: .6rem; width: 100%; text-align: left;
+  background: none; border: none; color: var(--ink); font-weight: 400;
+  padding: .55rem .35rem; border-radius: var(--r-s);
+}
+.dk-rad:hover:not(:disabled) { background: var(--creme-100); }
+.dk-rad:disabled { opacity: 1; cursor: default; }
+.dk-namn { flex: 1; min-width: 0; }
+.dk-status { font-size: .8rem; color: var(--ink-soft); white-space: nowrap; }
+.dk-rad.klar .dk-status { color: var(--gron-600); font-weight: 500; }
+.dk-rad.senare .dk-namn { color: var(--ink-soft); }
+
+/* ======================= Nedräkning i Schema ======================= */
 .nedrakning {
-  background: var(--blaa-500);
-  color: #fff; border: none; box-shadow: var(--skugga-l);
-  position: relative; overflow: hidden;
+  background: var(--creme-50); color: var(--ink);
+  border-left: 3px solid var(--blaa-500);
 }
-.nedrakning::before {
-  content: ''; position: absolute; right: -60px; top: -70px;
-  width: 230px; height: 230px; border-radius: 50%;
-  background: rgba(255,255,255,.07); pointer-events: none;
-}
-.nedrakning > * { position: relative; }
-.nedrakning h1 { color: #fff; margin-bottom: .85rem; }
-.nedrakning h2::before { display: none; }
-/* Ingen opacitet: med .78 hamnade etiketten på 3,8–4,4:1 på det färgade
-   kortet. Versaler, spärrning och liten storlek skiljer den redan från
-   rubriken. */
+.nedrakning h1 { margin-bottom: .6rem; }
 .etikett {
-  font-size: .68rem; letter-spacing: .15em; text-transform: uppercase;
-  margin-bottom: .45rem; font-weight: 700;
+  font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
+  margin-bottom: .4rem; font-weight: 600; color: var(--ockra-600);
 }
-.dagar { display: flex; align-items: baseline; gap: .6rem; margin-bottom: .85rem; }
+.dagar { display: flex; align-items: baseline; gap: .55rem; margin-bottom: .6rem; }
 .dagar .siffra {
-  font-family: var(--serif);
-  font-size: 3.6rem; font-weight: 700; line-height: .92; letter-spacing: -.04em;
-  color: var(--ockra-100);
+  font-family: var(--serif); font-size: 2.8rem; font-weight: 600; line-height: .95;
+  letter-spacing: -.02em; color: var(--blaa-500);
 }
-/* Ingen nedtoning. Med opacity .82 hamnade "dagar kvar" på 4,1:1 i skog,
-   konditori och neon. Hierarkin mot den stora siffran bär storleken ensam. */
 .dagar .text { font-size: .95rem; }
-.nedrakning .fakta { font-size: .9rem; opacity: .94; }
+.nedrakning .fakta { font-size: .92rem; color: var(--ink-soft); }
 .nedrakning .fakta div { margin-bottom: .12rem; }
-/* Ytan mörkar banderollen i stället för att ljusa upp den. En vit slöja
-   drog ner kontrasten mot den vita texten till 3,97:1 i konditori och
-   4,01:1 i skog — under AA. En svart slöja går åt andra hållet och
-   fungerar därför i alla teman, inte bara i de mörkaste. */
-.nedrakning .knapprad button {
-  background: rgba(0,0,0,.18); color: #fff; border-color: rgba(255,255,255,.55);
-}
-.nedrakning .knapprad button:hover { background: #fff; color: var(--blaa-600); }
-/* Liggande variant, används där kortet spänner över hela bredden.
-   Samma innehåll, men på en rad i stället för som en hög blå kloss. */
 .nedrakning.banner {
-  display: flex; align-items: center; flex-wrap: wrap; gap: 1.1rem 2rem;
-  padding: 1.1rem 1.6rem;
+  display: flex; align-items: center; flex-wrap: wrap; gap: .9rem 1.6rem;
+  padding-top: 1rem; padding-bottom: 1rem;
 }
 .nedrakning.banner .dagar { margin: 0; align-items: center; gap: .7rem; }
-.nedrakning.banner .siffra { font-size: 3.2rem; }
+.nedrakning.banner .siffra { font-size: 2.6rem; }
 .nedrakning.banner .dagar .text { line-height: 1.15; font-size: .85rem; }
 .nedrakning.banner .banner-kropp { flex: 1 1 16rem; min-width: 0; }
-.nedrakning.banner h1 { font-size: 1.35rem; margin: 0 0 .25rem; }
+.nedrakning.banner h1 { font-size: 1.3rem; margin: 0 0 .25rem; }
 .nedrakning.banner .etikett { margin-bottom: .2rem; }
 .nedrakning.banner .knapprad { margin-top: 0; flex: 0 0 auto; }
 
-/* Mörk slöja, inte vit — samma skäl som knappen i banderollen: en vit
-   slöja ljusar upp kortet och drog den vita texten till 4,2:1 i skog och
-   konditori. En mörk höjer kontrasten i alla teman. */
-.radtips {
-  margin-top: .95rem; padding: .7rem .9rem;
-  background: rgba(0,0,0,.16); border-radius: var(--r-s);
-  border-left: 4px solid var(--ockra-500);
-  font-size: .89rem;
-}
-
-/* ========================= Dagens plan ========================= */
-/* Dagsmålet. Litet, avbockningsbart och alltid samma – ett mål du klarar
-   varje dag driver mer än ett stort du klarar ibland. */
-.dagsmal {
-  background: var(--blaa-50); border: 1.5px solid var(--blaa-100);
-  border-radius: var(--r-s); padding: .7rem .9rem; margin-bottom: 1rem;
-}
-.dagsmal.klart { background: var(--gron-50); border-color: #B6E3CB; }
-.dagsmal .dm-text { font-size: .89rem; margin-bottom: .5rem; }
-.dagsmal .progress { margin: 0; }
-
-.plansteg {
-  display: flex; gap: .85rem; align-items: flex-start; width: 100%;
-  text-align: left; background: var(--creme-50);
-  border: 2px solid var(--creme-300); border-radius: var(--r-s);
-  padding: .82rem 1rem; margin-bottom: .5rem; cursor: pointer;
-  font-family: inherit; color: var(--ink); font-size: .95rem;
-  transition: border-color .15s, background .15s, transform .06s;
-}
-.plansteg:hover { border-color: var(--blaa-500); background: var(--blaa-50); }
-.plansteg:active { transform: translateY(1px); }
-.plansteg.klar { opacity: .5; }
-.plansteg.klar:hover { border-color: var(--creme-300); background: var(--creme-50); }
-
-.plan-ikon {
-  flex: 0 0 2.1rem; height: 2.1rem; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1rem; font-weight: 700; color: #fff;
-}
-.plan-las  { background: var(--ockra-700); }
-/* 600 och inte 500: ikonen bär vit text, och femhundran hamnar under AA
-   i neon-temat. Samma skäl som att läs-ikonen använder ockra-700. */
-.plan-rep  { background: var(--rod-600); }
-.plan-ova  { background: var(--blaa-500); }
-.plan-prov { background: var(--gron-500); }
-.plan-klar { background: var(--creme-400); }
-
-.plan-kropp { flex: 1; min-width: 0; }
-/* Blockvisning krävs – annars flyter rubrik och undertext ihop utan mellanrum */
-.plan-rubrik { display: block; font-weight: 700; }
-.plan-under { display: block; font-size: .84rem; color: var(--ink-soft); margin-top: .15rem; line-height: 1.5; }
-.plan-pil { flex: 0 0 auto; color: var(--blaa-500); font-size: 1.15rem; padding-top: .15rem; }
-
-/* Streak */
 .streak {
-  display: inline-flex; align-items: center; gap: .4rem;
-  background: var(--ockra-700); color: #fff;
-  border-radius: 999px; padding: .24rem .75rem;
-  font-size: .82rem; font-weight: 700;
+  font-family: var(--sans); font-size: .78rem; font-weight: 600;
+  background: var(--ockra-50); color: var(--ockra-600);
+  padding: .15rem .55rem; border-radius: 999px; margin-left: auto;
 }
 
 /* ========================== Statrutor ========================== */
-.statgrid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(116px, 1fr)); gap: .6rem;
-}
+.statgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; }
+.statgrid.fyra { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 640px) { .statgrid.fyra { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .statruta {
-  background: var(--creme-100); border: 1.5px solid var(--creme-300);
-  border-radius: var(--r-s); padding: .8rem .5rem; text-align: center;
+  background: var(--creme-100); border: 1px solid var(--creme-300);
+  border-radius: var(--r-s); padding: .8rem .9rem;
 }
 .statruta .v {
-  font-family: var(--serif);
-  font-size: 1.6rem; font-weight: 700; color: var(--blaa-500);
-  line-height: 1.12; letter-spacing: -.02em;
+  font-family: var(--serif); font-size: 1.6rem; font-weight: 600;
+  line-height: 1.15; color: var(--ink); margin-top: .15rem;
 }
-.statruta .l { font-size: .74rem; color: var(--ink-soft); line-height: 1.35; }
-.statruta.god  { background: var(--gron-50);  border-color: #B8DFCB; }
-.statruta.god .v  { color: var(--gron-500); }
+.statruta .l { font-size: .8rem; color: var(--ink-soft); line-height: 1.35; }
+.statruta.god  { background: var(--gron-50); border-color: var(--gron-100); }
+.statruta.god .v  { color: var(--gron-600); }
 .statruta.varn { background: var(--ockra-50); border-color: var(--ockra-100); }
 .statruta.varn .v { color: var(--ockra-600); }
 
-/* ======================== Åtgärdsrutor ======================== */
+/* Åtgärdsrutor används inte längre på Hem men finns kvar för andra vyer */
 .atgarder { display: grid; gap: .6rem; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
 .atgard {
-  display: block; width: 100%; text-align: left;
-  background: var(--creme-50); border: 2px solid var(--creme-300);
-  border-radius: var(--r-s); padding: .95rem 1rem; cursor: pointer;
-  font-family: inherit; color: var(--ink); border-top-width: 5px;
-  transition: border-color .15s, background .15s, transform .06s;
+  text-align: left; background: var(--creme-50); color: var(--ink);
+  border: 1px solid var(--creme-300); border-radius: var(--r-m);
+  padding: .9rem 1rem; font-weight: 400;
 }
-.atgard:hover { border-color: var(--blaa-500); background: var(--blaa-50); transform: translateY(-2px); }
-.atgard.a-las  { border-top-color: var(--ockra-500); }
-.atgard.a-ova  { border-top-color: var(--blaa-500); }
-.atgard.a-prov { border-top-color: var(--gron-500); }
-.atgard.a-essa { border-top-color: var(--rosa-400); }
-.atgard .rubrik { display: block; font-weight: 700; font-size: .97rem; margin-bottom: .14rem; }
-.atgard .under { display: block; font-size: .82rem; color: var(--ink-soft); line-height: 1.5; }
+.atgard:hover { border-color: var(--blaa-500); }
+.atgard .rubrik { display: block; font-weight: 600; font-size: .97rem; margin-bottom: .14rem; }
+.atgard .under { display: block; font-size: .84rem; color: var(--ink-soft); line-height: 1.5; }
 
 /* ========================== Progress ========================== */
 .progress {

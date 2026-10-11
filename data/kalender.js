@@ -17,13 +17,13 @@ window.SYSB23 = window.SYSB23 || {};
 /* "farg" används i kalendern så att varje delkurs går att känna igen på
    färgen ensam, utan att man behöver läsa texten. */
 window.SYSB23.kalenderDelkurser = [
-  { id: 'strategi',     namn: 'Strategi och ekonomistyrning',            kort: 'Strategi',              hp: 2, kopplas: 'strategi',  farg: '#DE8600' },
-  { id: 'databaser',    namn: 'Databaser',                               kort: 'Databaser',             hp: 3, kopplas: 'databaser', farg: '#2B29E0' },
-  { id: 'processer',    namn: 'Processorienterad verksamhetsutveckling', kort: 'Processorienterad',     hp: 3, kopplas: 'processer', farg: '#7C3AED' },
-  { id: 'arkitektur',   namn: 'Verksamhetsarkitektur',                   kort: 'Verksamhetsarkitektur', hp: 2, kopplas: null,        farg: '#0E7490' },
-  { id: 'sakerhet',     namn: 'Säkerhet i informationssystem',           kort: 'Säkerhet',              hp: 2, kopplas: null,        farg: '#C2185B' },
-  { id: 'ansvarsfull',  namn: 'Ansvarsfull verksamhetsutveckling',       kort: 'Ansvarsfull',           hp: 1, kopplas: null,        farg: '#0E7A52' },
-  { id: 'isprojekt',    namn: 'Informationssystemsprojekt',              kort: 'IS-projekt',            hp: 6, kopplas: null,        farg: '#6E4100' }
+  { id: 'strategi',     namn: 'Strategi och ekonomistyrning',            kort: 'Strategi',              hp: 2, kopplas: 'strategi',  farg: '#A35400' },
+  { id: 'databaser',    namn: 'Databaser',                               kort: 'Databaser',             hp: 3, kopplas: 'databaser', farg: '#00559A' },
+  { id: 'processer',    namn: 'Processorienterad verksamhetsutveckling', kort: 'Processorienterad',     hp: 3, kopplas: 'processer', farg: '#006235' },
+  { id: 'arkitektur',   namn: 'Verksamhetsarkitektur',                   kort: 'Verksamhetsarkitektur', hp: 2, kopplas: null,        farg: '#8A6D12' },
+  { id: 'sakerhet',     namn: 'Säkerhet i informationssystem',           kort: 'Säkerhet',              hp: 2, kopplas: null,        farg: '#8D2B6C' },
+  { id: 'ansvarsfull',  namn: 'Ansvarsfull verksamhetsutveckling',       kort: 'Ansvarsfull',           hp: 1, kopplas: null,        farg: '#037680' },
+  { id: 'isprojekt',    namn: 'Informationssystemsprojekt',              kort: 'IS-projekt',            hp: 6, kopplas: null,        farg: '#7556A6' }
 ];
 
 /* -------------------------- Examinationer -------------------------- */
