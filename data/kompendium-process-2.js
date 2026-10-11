@@ -1,5 +1,5 @@
 /* =========================================================================
-   Kompendium – Processorienterad verksamhetsutveckling, kapitel 8–11
+   Kompendium – Processorienterad verksamhetsutveckling, kapitel 11–14
    (BPMN: notationen för att rita och läsa processdiagram)
    -------------------------------------------------------------------------
    Källa: "Introduction to Business Process Modeling" (Björn Svensson),
@@ -12,10 +12,10 @@ window.SYSB23 = window.SYSB23 || {};
 window.SYSB23.kompendium = window.SYSB23.kompendium || {};
 window.SYSB23.kompendium.processer.kapitel.push(
 
-/* ====================== KAPITEL 8 ====================== */
+/* ====================== KAPITEL 11 ====================== */
 {
   id: 'proc-k8',
-  nr: 8,
+  nr: 11,
   titel: 'BPMN-grunder: pooler, roller och aktiviteter',
   ingress: 'Vad BPMN passar för och inte, instansbegreppet, och de tre aktivitetstyperna som skiljer människa från maskin.',
   lastid: 9,
@@ -52,7 +52,7 @@ window.SYSB23.kompendium.processer.kapitel.push(
         'Ett **start event** representerar utlösaren (triggern) som sätter igång en ' +
         'processinstans. Namnkonventionen är **"Motta [meddelandenamn]"** — t.ex. "Motta ' +
         'låneansökan" — där själva meddelandet ofta inte modelleras separat förrän man ' +
-        'går in på meddelandeflöden (kapitel 10).\n\n' +
+        'går in på meddelandeflöden (kapitel 14).\n\n' +
         'För **aktiviteter** gäller den omvända konventionen: **verb–objekt**. "Granska ' +
         'låneansökan" är korrekt, "Låneansökan granskning" är fel. Det är en liten regel, ' +
         'men den testas — och den gör diagrammen mycket lättare att läsa högt för sig ' +
@@ -88,7 +88,7 @@ window.SYSB23.kompendium.processer.kapitel.push(
         'gatewayen **testar ett datavillkor** och varje utgående sekvensflöde motsvarar ett ' +
         'booleskt villkor (sant/falskt). En **XOR-gateway** (exklusiv, ingen symbol i ' +
         'romben) betyder att exakt ett av de utgående flödena aktiveras. De övriga ' +
-        'gatewaytyperna får ett eget kapitel (kapitel 9).'
+        'gatewaytyperna får ett eget kapitel (kapitel 12).'
     }
   ],
   nyckelbegrepp: [
@@ -105,10 +105,10 @@ window.SYSB23.kompendium.processer.kapitel.push(
     'i beskrivningen.'
 },
 
-/* ====================== KAPITEL 9 ====================== */
+/* ====================== KAPITEL 12 ====================== */
 {
   id: 'proc-k9',
-  nr: 9,
+  nr: 12,
   titel: 'Gateways: förgrening och sammanslagning',
   ingress: 'De fyra gatewaytyperna, och den enda som faktiskt kan lösa ett deadlock.',
   lastid: 8,
@@ -187,10 +187,10 @@ window.SYSB23.kompendium.processer.kapitel.push(
     'göra det i huvudet är där de flesta felsvaren kommer ifrån.'
 },
 
-/* ====================== KAPITEL 10 ====================== */
+/* ====================== KAPITEL 13 ====================== */
 {
   id: 'proc-k10',
-  nr: 10,
+  nr: 13,
   titel: 'Events: starta, vänta och reagera',
   ingress: 'Skillnaden mellan att kasta och fånga en signal, och de boundary events som avgör om en pågående aktivitet avbryts eller fortsätter.',
   lastid: 9,
@@ -231,7 +231,7 @@ window.SYSB23.kompendium.processer.kapitel.push(
       rubrik: 'Event gateway och event subprocess',
       text:
         'Håll isär två liknande men olika begrepp:\n\n' +
-        '- **Event-based gateway** (kapitel 9) — en punkt **i huvudflödet** där processen ' +
+        '- **Event-based gateway** (kapitel 12) — en punkt **i huvudflödet** där processen ' +
         'väntar på vilken av flera möjliga händelser som inträffar först.\n' +
         '- **Event subprocess** — en **separat delprocess** som ligger vid sidan av ' +
         'huvudflödet och triggas av en händelse, inte av ett inkommande sekvensflöde. Den ' +
@@ -271,10 +271,10 @@ window.SYSB23.kompendium.processer.kapitel.push(
     'event-subprocess — det är en av de mest lönsamma sakerna att ha helt klart för sig.'
 },
 
-/* ====================== KAPITEL 11 ====================== */
+/* ====================== KAPITEL 14 ====================== */
 {
   id: 'proc-k11',
-  nr: 11,
+  nr: 14,
   titel: 'Subprocesser, återanvändning och dataflöden',
   ingress: 'Hur processlogik återanvänds mellan diagram, hur pooler och lanes visar vem som gör vad, och hur BPMN kopplas till beslutsregler i DMN.',
   lastid: 9,

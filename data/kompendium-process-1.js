@@ -1,19 +1,17 @@
 /* =========================================================================
-   Kompendium – Processorienterad verksamhetsutveckling, kapitel 1–6
-   (BPM som managementdisciplin: historia, livscykel, 7FE-ramverket)
+   Kompendium – Processorienterad verksamhetsutveckling, kapitel 1–10
+   (BPM som managementdisciplin: historia, livscykel, 7FE-ramverket och
+   andra perspektiv)
    -------------------------------------------------------------------------
-   Källor: 01_SYSB23_BPM_HT26.pdf (Föreläsning 1, Benjamin Weaver, 22 sep 2026),
-   Jeston (2022) Business Process Management: Practical Guidelines to Successful
-   Implementation (5th ed.) — via kursens fyra riktiga tentor (HT24 x2, HT25 x2),
-   samt Hammer (1990) Reengineering Work: Don't Automate, Obliterate, HBR.
+   Källor: föreläsning F1–F4b HT26 (Benjamin Weaver, 22 sep – 5 okt 2026),
+   som följer Jeston (2022) Business Process Management: Practical Guidelines
+   to Successful Implementation (5th ed.), samt artiklarna Hammer (1990),
+   Houy et al. (2012), Reijers (2021) och Rosemann et al. (2024). Tentorna
+   HT24 och HT25 har använts för att se vad som prövas.
 
-   En sak värd att vara medveten om: föreläsning 2–4 (som enligt kursöversikten
-   går igenom 7FE-ramverket i detalj) fanns inte bland de filer som lästes in när
-   det här kapitlet skrevs — bara föreläsning 1 och de fyra tentorna. Kapitel 3–5
-   är därför byggda genom att extrahera varje begrepp som faktiskt förekommer i
-   tentafrågorna och förklara det så exakt materialet tillåter, inte genom att
-   återge bokens kapitelindelning ordagrant. Har du föreläsning 2–4 som PDF är
-   det värt att skicka dem — då går det att skärpa det här ytterligare.
+   Kapitlen följer föreläsningarnas ordning: F1 → kap. 1–2, F2 → kap. 3–5,
+   F3 → kap. 6–7, F4a → kap. 7–9, F4b → kap. 10. All text är skriven med
+   egna ord; inget är kopierat ur bilderna eller boken.
    ========================================================================= */
 
 window.SYSB23 = window.SYSB23 || {};
@@ -23,15 +21,16 @@ window.SYSB23.kompendium.processer = {
   delkurs: 'processer',
   titel: 'Processorienterad verksamhetsutveckling',
   intro:
-    'Delkursen har två halvor som examineras på olika sätt. Den ena är **BPM som ' +
-    'managementdisciplin** — historia, livscykel och Jestons 7FE-ramverk för att ' +
-    'faktiskt driva ett BPM-initiativ. Den examineras på salstentan tillsammans med ' +
-    'en andra del om **BPMN**, notationen för att rita processdiagram. BPMN examineras ' +
-    'dessutom praktiskt genom en gruppuppgift där ni visualiserar en verksamhetsprocess.\n\n' +
-    '> **Tentan:** ett fåtal essäfrågor (inte om BPMN) plus 10–15 flervalsfrågor som ' +
-    'täcker båda delarna, rätt svar ger poäng (anges per fråga i BPMN-delen), fel svar ' +
-    '−1 p, obesvarat 0 p.\n\n' +
-    'Kapitel 1–7 täcker BPM-delen och kapitel 8–11 BPMN.',
+    'Delkursen har två halvor. Den ena är **BPM som managementdisciplin** — historia, ' +
+    'livscykel och Jestons 7FE-ramverk för att driva ett BPM-initiativ. Den andra är ' +
+    '**BPMN**, notationen för att rita och läsa processdiagram (Silver-boken). Båda ' +
+    'prövas på salstentan; BPMN och DMN examineras dessutom genom gruppuppgiften, som ' +
+    'lämnas in 5 november kl. 15.00.\n\n' +
+    '> **Tentan 13 november** (digital, Inspera, **inga hjälpmedel**): 2–3 kortare ' +
+    'essäfrågor à max 15 p — inte om BPMN — och 10–15 flervalsfrågor som även täcker ' +
+    'BPMN. I BPM-delen ger rätt svar 5 p; i BPMN-delen anges poängen per fråga. Fel svar ' +
+    'ger −1 p, obesvarad 0 p. Frågorna bygger på litteraturen och föreläsningarna.\n\n' +
+    'Kapitel 1–10 täcker BPM-delen i föreläsningarnas ordning, kapitel 11–14 BPMN.',
   kapitel: []
 };
 
@@ -43,7 +42,7 @@ window.SYSB23.kompendium.processer.kapitel.push(
   nr: 1,
   titel: 'BPM: definition, historia och drivkrafter',
   ingress: 'Vad BPM faktiskt är enligt Jeston, och de tio–femton årens strömningar som ledde fram till att det blev ett eget fält.',
-  lastid: 9,
+  lastid: 11,
   amnen: ['proc-intro'],
   avsnitt: [
     {
@@ -74,12 +73,33 @@ window.SYSB23.kompendium.processer.kapitel.push(
         'som efterliknar en människas klick i ett gränssnitt).'
     },
     {
+      rubrik: 'BPM och Enterprise Architecture',
+      text:
+        'BPM och **Enterprise Architecture (EA)** har samma mål: att genomföra strategin, ' +
+        'få IT i linje med strategin och stärka konkurrenskraften. Men de har olika roller:\n\n' +
+        '- **EA är den övergripande ritningen** för hur företaget ska realisera sin ' +
+        'strategi: vilka värdeskapande processer och förmågor som behövs, och vilka regler ' +
+        'och principer som gäller.\n' +
+        '- **BPM är ett operativt lager i EA**: processerna kopplar ihop strategin med ' +
+        'IT-arkitekturen, BPM säkerställer styrning och prestationsmätning av processerna, ' +
+        'driver kontinuerlig förbättring och kan exekvera processer i ett BPMS.\n\n' +
+        'Tänk i tre skikt: **strategi** överst, **verksamhet** i mitten, **applikationer och ' +
+        'infrastruktur** längst ner. BPM verkar i mitten och binder ihop de andra två. BPM ' +
+        'och EA är alltså varken oberoende av varandra eller två namn på samma sak.'
+    },
+    {
       rubrik: 'Produktivitetsparadoxen — samma problem som i Strategi',
       text:
         'Om du läser Strategi och ekonomistyrning parallellt känner du igen det här: på ' +
         '70- och 80-talet syntes IT-investeringar **inte** i produktivitetsstatistiken. ' +
         'Robert Solow, 1987:\n\n' +
         '> "You can see the computer age everywhere but in the productivity statistics."\n\n' +
+        'Processtänkandet är äldre än så. Det går tillbaka till **Taylors Scientific ' +
+        'Management** (1880–1920) och kvalitetsrörelsen med statistisk processkontroll: ' +
+        '**TQM** och **Six Sigma** (3,4 fel per miljon tillfällen) från mitten av 80-talet. ' +
+        'Strategiskt kopplades processer till **Porters värdekedja**, **resource-based view**, ' +
+        'dynamiska förmågor och idén om **strategic alignment** — att processer och IT ska ' +
+        'stödja strategin för en uthållig konkurrensfördel.\n\n' +
         'Förklaringen som växte fram under 90-talet var att teknik som läggs ovanpå ' +
         '**oförändrade processer** inte ger någon effekt. Det öppnade för en hel våg av ' +
         'managementtrender som alla, på olika sätt, försökte lösa paradoxen genom att ' +
@@ -101,9 +121,7 @@ window.SYSB23.kompendium.processer.kapitel.push(
         'process**. Hammers mest citerade exempel är Fords leverantörsreskontra, där ' +
         'hela avstämningssteget mellan följesedel, order och faktura togs bort i stället ' +
         'för att effektiviseras — antalet anställda i avdelningen minskade med tre ' +
-        'fjärdedelar. IBM Credit är ett annat klassiskt exempel: genom att ersätta en kedja ' +
-        'av specialister med en enda generalist per ärende kortades handläggningstiden ' +
-        'från en vecka till några timmar.\n\n' +
+        'fjärdedelar.\n\n' +
         '**BPR gick för långt.** Kursen sammanfattar det som "good BPR" och "bad BPR":\n\n' +
         '| BPR bra | BPR dåligt |\n' +
         '| --- | --- |\n' +
@@ -170,6 +188,7 @@ window.SYSB23.kompendium.processer.kapitel.push(
   ],
   nyckelbegrepp: [
     'BPM = implementering, exekvering och styrning av processer — inte bara mjukvara eller modellering',
+    'EA = övergripande ritning för att realisera strategin; BPM = operativt lager som kopplar strategi, verksamhet och IT',
     'Produktivitetsparadoxen (Solow 1987): IT ovanpå oförändrade processer ger ingen effekt',
     'BPR (Hammer 1990): "obliterate, don\'t automate" — radikal omdesign, inte snabbare gamla processer',
     'BPR gick för långt: dyrt, riskabelt, blev ursäkt för nedskärningar — BPM är den mognare efterföljaren',
@@ -178,7 +197,8 @@ window.SYSB23.kompendium.processer.kapitel.push(
     'BPM → RPA (2015–2022) → agentisk AI: samma tänkande, nya verktyg'
   ],
   tentakoppling:
-    'Flera flervalsfrågor på både HT24- och HT25-tentorna testar just varför BPR misslyckades ' +
+    'HT25-ordinarie frågade hur BPM förhåller sig till Enterprise Architecture. Flera ' +
+    'flervalsfrågor på både HT24- och HT25-tentorna testar dessutom varför BPR misslyckades ' +
     '(för radikalt, för kostsamt, för stort motstånd — inte att det saknade IT-koppling) och ' +
     'vad som är BPM:s "primära syfte" (att anpassa processer efter strategi, inte att byta ' +
     'teknik eller sänka alla kostnader).'
@@ -265,427 +285,1071 @@ window.SYSB23.kompendium.processer.kapitel.push(
 
 /* ====================== KAPITEL 3 ====================== */
 {
-  id: 'proc-k3',
+  id: 'proc-bpm-3',
   nr: 3,
-  titel: '7FE-ramverket: faser och artefakter',
-  ingress: 'Jestons metodik för att faktiskt driva ett BPM-initiativ, och de konkreta verktyg som hör till varje steg.',
-  lastid: 10,
-  amnen: ['proc-7fe'],
+  titel: 'Att starta BPM: vem, när och hur',
+  ingress: 'Vilka som ska vara med, de sex framgångsfaktorerna, drivers och triggers, top-down mot bottom-up, tre sätt att initiera BPM och Jestons fyra scenarier.',
+  lastid: 11,
+  amnen: ['proc-start'],
   avsnitt: [
     {
-      rubrik: 'Vad "7FE" står för',
+      rubrik: 'Vem ska vara med?',
       text:
-        'Jestons metodik heter 7FE Process Framework. Enligt en av tentafrågorna (HT24) ' +
-        'består ramverkets **essentiella komponenter** av: **Foundations, Findings and ' +
-        'Solutions, Fulfilment, Future**, samt de tre stödjande enablerna **Leadership, ' +
-        'People Change Management** och **Business Process Project Management**. ' +
-        'Alliterationen (fyra F-ord) är själva minnesknepet i namnet "7FE".\n\n' +
-        'Praktiskt organiseras arbetet kring **faser** som återkommer i tentafrågor under ' +
-        'egna namn: **Foundation(s)**, **Launch**, **Understand**, **Innovate**, ' +
-        '**Execution/Develop/Implement**, **Realize (value)** och **Sustainability/' +
-        'Follow-up**, med **Evaluation** och **Enablement** som löpande, styrande ' +
-        'inslag genom hela arbetet snarare än enskilda engångssteg.\n\n' +
-        '> Den här strukturen är rekonstruerad ur kursens fyra riktiga tentor, inte ur ' +
-        'bokens eget register — har du föreläsningsslides 2–4 eller Jeston-kapitlen ' +
-        'själva är det värt att jämföra mot dem.'
+        'BPM är inte en sak för processanalytiker ensamma. Involveringen kan gälla allt från ' +
+        'att driva projekten, detaljgranska processer, modellera och mäta, till ' +
+        'omdesign, implementering och den löpande förvaltningen. Den kan också sträcka sig ' +
+        '**utanför organisationen**: kunder, leverantörer längs värdekedjan och andra ' +
+        'externa intressenter.\n\n' +
+        'Jeston delar in BPM-arbete i fyra typer efter hur komplext det är och var det ' +
+        'startar:\n\n' +
+        '| Typ | Sponsor | Riktning |\n' +
+        '| --- | --- | --- |\n' +
+        '| 1. Enkla projekt med liten påverkan | Affärsenhet, ofta processintresserade chefer | Bottom-up |\n' +
+        '| 2. Projekt med stor påverkan | Divisions- eller högre chef | |\n' +
+        '| 3. Storskaliga BPM-program | Högsta ledningen, mycket förändringsledning | |\n' +
+        '| 4. Transformation av hela företaget | VD eller ledningsgruppen | Top-down |\n\n' +
+        '**Externa BPM-experter och konsulter** kan vara värdefulla som coacher för interna ' +
+        'BPM-chefer, som oberoende granskare av kvalitet och resultat, som konfliktlösare när ' +
+        'ett program kört fast, och som startstöd med beprövad erfarenhet. Men på lång sikt ' +
+        'bör BPM-kompetensen finnas **inne i organisationen**.'
     },
     {
-      rubrik: 'Foundations — grunden BPM-arbetet vilar på',
+      rubrik: 'Sex kritiska framgångsfaktorer',
       text:
-        'Foundations-fasen handlar om att komma överens om komponenterna i den ' +
-        '**target operating model (TOM)** och en uppsättning styrande principer för hur ' +
-        'organisationen ska hantera sina processer. En **Target Operating Model** är en ' +
-        'övergripande beskrivning av **hur organisationens olika delar ska fungera i ' +
-        'framtiden** för att BPM-implementeringen ska lyckas — inte en detaljerad karta ' +
-        'över nuläget, och inte bara en IT-arkitekturbild.'
+        '1. **Den högsta ledningens drivkraft** — synligt stöd från VD och ledning är den ' +
+        'enskilt viktigaste faktorn\n' +
+        '2. **Tydliga affärsdrivkrafter** — vet varför ni gör BPM, annars löser ni fel problem\n' +
+        '3. **En tydlig vision** — en gemensam bild av hur verksamheten ser ut efteråt ' +
+        '("start with the end in mind")\n' +
+        '4. **Mätbart affärsvärde** — framgång definierad i mätbara termer, KPI:er\n' +
+        '5. **En BPM-ledare och ett team med mandat** — befogenheter, erfarenhet och synligt ' +
+        'stöd uppifrån, ibland i form av en Chief Transformation Officer\n' +
+        '6. **Kopplade incitament** — chefers KPI:er, belöningar och konsekvenser hänger ' +
+        'ihop med BPM-resultaten\n\n' +
+        'Jestons råd är rakt på sak:\n\n' +
+        '- Har ett **storskaligt** BPM-program inte stöd från VD eller ledningen ska man ' +
+        '**helt enkelt låta bli**. Övriga framgångsfaktorer spelar då ingen roll.\n' +
+        '- BPM-projekt som drivs med enbart **traditionell projektledning** ger sämre resultat ' +
+        'än de som följer en strukturerad ansats som 7FE.\n' +
+        '- **Anpassa takten efter organisationens processmognad.** Går man fortare än mognaden ' +
+        'tillåter ökar risken att misslyckas.'
     },
-    {
-      rubrik: 'Launch — att välja var man börjar',
-      text:
-        'Launch-fasen (eller "Launch Pad") har tre huvudsakliga utfall:\n\n' +
-        '1. **val av var** den första (eller nästa) BPM-aktiviteten ska starta i ' +
-        'organisationen\n' +
-        '2. **överenskommelse om processmål och/eller vision** när processerna väl är valda\n' +
-        '3. **etablering** av den valda aktiviteten\n\n' +
-        'Det är här man avgör **hur** BPM-arbetet ska drivas: top-down (för strategiskt ' +
-        'viktiga, tvärfunktionella förändringar som kräver mandat och samordning över hela ' +
-        'organisationen) eller bottom-up (lokala, små förbättringar för att bygga momentum ' +
-        'när ledningen inte är engagerad och strategin är oklar).'
-    },
-    {
-      rubrik: 'Understand — kartlägg innan du designar',
-      text:
-        'I **Understand-fasen** är huvudsyftet med modellering **inte** att direkt ' +
-        'producera automatiseringsklara processbeskrivningar eller detaljerade KPI:er. ' +
-        'Syftet är att få fram **en gemensam, faktabaserad bild av hur processen faktiskt ' +
-        'fungerar i dag**, som underlag för att analysera hur den kan optimeras.\n\n' +
-        'Ett centralt verktyg här är **process asset**: ett vidare begrepp än en ren ' +
-        'processmodell. En processmodell beskriver en specifik sekvens av aktiviteter — ' +
-        'en process asset innehåller **dessutom** regler, ägarskap, risker, IT-stöd och ' +
-        'dokumentationskrav. Uppstår en incident kopplad till en process, är det process ' +
-        'asseten (inte bara diagrammet) man vänder sig till för att förstå steg, regler, ' +
-        'ansvar och beslutspunkter.'
-    },
-    {
-      rubrik: 'Red Wine Test — att formulera framgång innan man är där',
-      text:
-        'Ett av Jestons mer konkreta workshop-verktyg. I ett **Red Wine Test** ombeds ' +
-        'deltagarna föreställa sig att BPM-projektet redan är genomfört, och beskriva hur ' +
-        'organisationens **framtida tillstånd** ser ut — informellt, som om man satt med ' +
-        'ett glas rödvin och pratade om hur bra allt blivit ("kunderna får sina ärenden ' +
-        'lösta i ett steg", "medarbetarna är engagerade", "vi har bättre tvärfunktionellt ' +
-        'samarbete"). Syftet är att skapa **ett gemensamt narrativ om hur framgång ser ut** ' +
-        '— inte att kartlägga nuläget (det är Understand-fasens jobb) och inte att ta fram ' +
-        'detaljerade to-be-modeller.'
-    },
-    {
-      rubrik: 'Quick wins',
-      text:
-        'En **quick win** är en förbättring som kan genomföras **snabbt, utan stora ' +
-        'kostnader, och som ger omedelbar effekt** i en verksamhetsprocess. Poängen med ' +
-        'att medvetet leta efter quick wins tidigt i ett BPM-initiativ är att bygga ' +
-        'momentum och trovärdighet innan de större, mer tidskrävande förändringarna ' +
-        'genomförs — motsatsen till att en quick win skulle kräva omfattande ' +
-        'förstudiearbete eller minska behovet av workshops.'
-    },
-    {
-      rubrik: 'Realize och Sustainability — att inte tappa värdet man skapat',
-      text:
-        '**Realize (value)**-fasen säkerställer att de nyttoeffekter som beskrevs i business ' +
-        'caset faktiskt **realiseras** — inte bara att processerna är designade eller ' +
-        'implementerade, utan att den utlovade nyttan verkligen kommer organisationen ' +
-        'till del.\n\n' +
-        '**Sustainability** (Follow-up) handlar om att processförbättringarna inte bara ' +
-        'ska **implementeras och kommuniceras**, utan fortsätta ha **styrning (governance) ' +
-        'och kontinuerlig förbättring** efter att projektet formellt är avslutat. Att tro ' +
-        'att uppföljning blir onödig bara för att en utvärdering visat att målen uppnåtts ' +
-        'är precis den fällan tentan varnar för — BPM är en cykel, inte ett engångsprojekt ' +
-        '(jämför kapitel 2).'
-    }
-  ],
-  nyckelbegrepp: [
-    '7FE:s fyra F: Foundations, Findings and Solutions, Fulfilment, Future — plus enablerna Leadership, People Change Management, Business Process Project Management',
-    'Target Operating Model (TOM) = övergripande bild av hur organisationen ska fungera i framtiden, inte en as-is-karta',
-    'Understand-fasens modellering ska skapa en gemensam bild av nuläget — inte automatiseringsklara modeller eller KPI:er',
-    'Process asset = processmodell + regler, ägarskap, risker, IT-stöd och dokumentationskrav',
-    'Red Wine Test = föreställ dig att projektet redan lyckats, formulera det gemensamma narrativet om framgång',
-    'Quick win = snabb, billig förbättring med omedelbar effekt — bygger momentum tidigt',
-    'Sustainability/Follow-up är aldrig "klart" bara för att Evaluation visat gott resultat — kontinuerlig styrning krävs'
-  ],
-  tentakoppling:
-    'Det här kapitlet är troligen det mest tentatäta i hela delkursen — nästan hälften av ' +
-    'HT24-tentans 50 frågor rör en enskild 7FE-fas eller -artefakt. Läs varje avsnitt två ' +
-    'gånger och öva särskilt på att skilja näraliggande faser åt (Foundations mot Launch, ' +
-    'Realize mot Sustainability).'
-},
-
-/* ====================== KAPITEL 4 ====================== */
-{
-  id: 'proc-k4',
-  nr: 4,
-  titel: 'Att starta och driva BPM-arbete',
-  ingress: 'Vad som får ett BPM-initiativ att börja över huvud taget, och de fyra sätt Jeston beskriver att det faktiskt brukar se ut i praktiken.',
-  lastid: 7,
-  amnen: ['proc-implementering'],
-  avsnitt: [
     {
       rubrik: 'Drivers och triggers',
       text:
-        'Två begrepp som lätt blandas ihop, men som betyder olika saker:\n\n' +
-        '- En **driver** är en **långsiktig, strategisk motivator** för BPM — en ' +
-        'bakomliggande anledning till att organisationen alls bryr sig om sina processer ' +
-        '(t.ex. konkurrenstryck, regulatoriska krav, digitaliseringsstrategi).\n' +
-        '- En **trigger** är en **specifik händelse eller ett specifikt villkor** som ' +
-        'utlöser omedelbar handling — ett akut problem eller en möjlighet som gör att man ' +
-        'agerar just nu.\n\n' +
-        'Skillnaden är alltså tidsperspektiv och konkretion, inte "intern kontra extern" ' +
-        'eller "mätbar kontra symbolisk" (två vanliga men felaktiga distraktorer på ' +
-        'tentafrågor om detta).'
+        'Två begrepp som ofta blandas ihop:\n\n' +
+        '- **Driver** — ett affärsskäl eller motiv som får organisationen att agera för att ' +
+        'nå ett affärsmål. Exempel: växa, öka lönsamheten, nå strategin, korssälja, bättre ' +
+        'kundnöjdhet, mobilitet.\n' +
+        '- **Trigger** — en händelse som får organisationen att agera för att lösa ett ' +
+        'omedelbart problem eller svara på en förändring utifrån. Exempel: en ny lag, en ' +
+        'kris, ett uppköp.\n\n' +
+        'Enkelt uttryckt: en driver är **varför vi vill**, en trigger är **det som händer** ' +
+        'och gör att vi måste.\n\n' +
+        '**När ska man starta BPM?** Först när drivers och triggers är **bestämda och ' +
+        'överenskomna** av alla intressenter, **dokumenterade, kommunicerade och förstådda**, ' +
+        'och man är säker på att de är synliga i hela organisationen.'
     },
     {
-      rubrik: 'Business-issue-led kontra strategy-led',
+      rubrik: 'Top-down, bottom-up — eller båda',
       text:
-        'Ett BPM-initiativ kan starta på två principiellt olika nivåer:\n\n' +
-        '- **Business-issue-led** — initiativet drivs av ett **operativt eller ' +
-        'verksamhetsnära problem** hos en avdelning eller enhet. Beslutet fattas alltså ' +
-        'på en **lägre organisatorisk nivå** än strateginivån.\n' +
-        '- **Strategy-led** — initiativet härleds direkt ur den övergripande strategin, ' +
-        'och drivs top-down.\n\n' +
-        'När förändringen är **strategiskt viktig och tvärfunktionell** (t.ex. en myndighet ' +
-        'som måste anpassa sig till nya nationella regler som berör hela verksamheten) ' +
-        'rekommenderar Jeston att man driver arbetet **top-down**, för att säkerställa ' +
-        'styrning, mandat och samordning över organisationsgränserna — inte att man väntar, ' +
-        'decentraliserar beslutet till varje avdelning, eller kör ett rent bottom-up-upplägg.'
+        '| | Top-down | Bottom-up |\n' +
+        '| --- | --- | --- |\n' +
+        '| Initieras av | Högsta ledningen som förstår vad BPM ger | Processägare eller team som vill förbättra lokalt |\n' +
+        '| Styrka | Kopplat till strategin, hela organisationen i fokus | Snabba resultat, engagemang underifrån |\n' +
+        '| Kräver | Starkt ledarskap, sponsorskap och styrning | Lite — men får begränsad räckvidd |\n' +
+        '| Risk | Missar den operativa verkligheten, svagt engagemang hos medarbetarna | Stannar lokalt och påverkar aldrig strategin |\n\n' +
+        '> **Top-down ger riktning, bottom-up ger fäste — de bästa BPM-programmen blandar ' +
+        'båda.**\n\n' +
+        'Två typsituationer från tentorna:\n\n' +
+        '- **Ledningen är inte engagerad och strategin är oklar** → börja **lokalt med små ' +
+        'bottom-up-förbättringar** som skapar värde och bygger momentum. Att vänta på en ny ' +
+        'strategi eller starta ett top-down-program utan mandat fungerar inte.\n' +
+        '- **Strategiskt viktig, tvärfunktionell förändring som berör hela organisationen** ' +
+        '(t.ex. nya nationella regler) → driv BPM **top-down** för styrning, mandat och ' +
+        'samordning.'
+    },
+    {
+      rubrik: 'Tre sätt att initiera BPM',
+      text:
+        '1. **Strategy-led** — utlöst av strategin och top-down-transformationsprogram. ' +
+        'Initiativet utgår från strategiska mål och startar i 7FE:s **Foundations och ' +
+        'Enablement**.\n' +
+        '2. **Business issue-led** — ett svar på ett konkret verksamhetsproblem, till exempel ' +
+        'kundklagomål eller höga kostnader. Oftast taktiskt, lokalt och bottom-up.\n' +
+        '3. **Process-led** — startat inifrån av processchefer eller analytiker som vill ' +
+        'förbättra oberoende av den bredare strategin. Används ofta för att visa vad BPM kan ' +
+        'ge genom små vinster.'
     },
     {
       rubrik: 'Fyra implementeringsscenarier',
       text:
-        'Jeston beskriver flera typiska sätt BPM-arbete faktiskt uppstår och pågår i en ' +
-        'organisation, bland dem:\n\n' +
-        '- **Business as usual** — BPM är en etablerad, löpande del av hur organisationen ' +
-        'redan arbetar, inte ett separat projekt.\n' +
-        '- **Under the radar** — enskilda medarbetare (t.ex. ett par ' +
-        'processanalytiker på en HR-avdelning) börjar kartlägga och förbättra sina egna ' +
-        'processer på eget initiativ. Ledningen känner till det men har inte prioriterat ' +
-        'eller formellt finansierat det — arbetet sker sporadiskt, utan budget eller ' +
-        'formell styrning.\n' +
-        '- **Pilot project** — ett avgränsat, tidsbegränsat försök innan man skalar upp.\n' +
-        '- **In the driver\'s seat** — organisationen (eller en specifik roll) har ' +
-        'tydligt och aktivt tagit kontroll över och driver BPM-arbetet.\n\n' +
-        'Att kunna para ihop ett scenariobeskrivet case (som i exempel ovan) med rätt ' +
-        'etikett är en återkommande frågetyp på tentan.'
-    },
-    {
-      rubrik: 'BPM-mognad — one size fits all fungerar inte',
-      text:
-        'Jestons genomgående budskap är att BPM-arbete **måste anpassas** efter ' +
-        'organisationens **mognadsgrad, kultur och förutsättningar** — det finns ingen ' +
-        'universallösning. En organisation som aldrig arbetat processorienterat behöver ' +
-        'ett annat angreppssätt än en som redan har etablerad governance, KPI-uppföljning ' +
-        'och processägarskap på plats. Det är samma tanke som ligger bakom att börja litet ' +
-        'och expandera (kapitel 2) och bakom valet mellan top-down och bottom-up ovan: ' +
-        'metodiken är robust, men **appliceringen** måste vara situationsanpassad.'
+        'Jeston beskriver fyra scenarier längs två axlar: hur stor **påverkan på ' +
+        'organisationen** är, och hur mycket **ledningen är informerad och engagerad**.\n\n' +
+        '1. **Under the radar** — små, informella BPM-insatser med begränsat stöd från ' +
+        'ledningen. Typexempel: ett par analytiker har själva börjat kartlägga sina processer, ' +
+        'cheferna känner till det men har inte prioriterat det, och arbetet sker sporadiskt ' +
+        'utan budget eller formell styrning.\n' +
+        '2. **Pilot project** — riktade projekt som ska **bevisa** vad BPM kan ge.\n' +
+        '3. **In the driver’s seat** — BPM ses som en strategisk möjliggörare, med växande ' +
+        'styrning.\n' +
+        '4. **Business as usual** — BPM är helt inbäddat i organisationens sätt att arbeta.\n\n' +
+        'Vilket scenario man befinner sig i avgör **hur strikt och brett** 7FE tillämpas.'
     }
   ],
   nyckelbegrepp: [
-    'Driver = långsiktig strategisk motivator, trigger = specifik händelse som utlöser handling nu',
-    'Business-issue-led = initiativ från lägre organisatorisk nivå, strategy-led = härlett direkt ur strategin',
-    'Strategiskt viktiga, tvärfunktionella förändringar bör drivas top-down för styrning och samordning',
-    'Fyra implementeringsscenarier: business as usual, under the radar, pilot project, in the driver\'s seat',
-    'BPM-mognad avgör hur ett initiativ bör läggas upp — ingen universallösning'
+    'Fyra projekttyper: från enkla bottom-up-projekt till företagsövergripande top-down-transformation',
+    'Viktigaste framgångsfaktorn: ledningens stöd — saknas det i ett storskaligt program, låt bli',
+    'Driver = affärsskäl att agera; trigger = händelse som tvingar fram handling',
+    'Top-down ger riktning, bottom-up ger fäste; bäst är att kombinera',
+    'Utan ledningens engagemang: börja lokalt bottom-up. Tvärfunktionellt och strategiskt: top-down',
+    'Tre sätt att initiera: strategy-led, business issue-led, process-led',
+    'Fyra scenarier: under the radar, pilot, in the driver’s seat, business as usual'
   ],
   tentakoppling:
-    '"Under the radar" har förekommit som facit till ett scenario om två processanalytiker ' +
-    'som kartlägger sina egna processer utan formell styrning — ett exempel värt att kunna ' +
-    'känna igen i omvänd riktning också.'
+    'HT25-omtentan hade både en scenariofråga (två analytiker utan budget = under the radar) ' +
+    'och en fråga om när top-down är rätt. HT25-ordinarie frågade vad Jeston rekommenderar ' +
+    'när ledningen inte är engagerad (svar: bottom-up i liten skala).'
+},
+
+/* ====================== KAPITEL 4 ====================== */
+{
+  id: 'proc-bpm-4',
+  nr: 4,
+  titel: 'Improve before automate: teknik och perspektiv',
+  ingress: 'Varför processer ska förbättras före automatisering, spreadsheet-testet, vad ett BPMS består av, processoptimeringslösningarna och balansen mellan kund och medarbetare.',
+  lastid: 11,
+  amnen: ['proc-teknik'],
+  avsnitt: [
+    {
+      rubrik: 'Automatisering förstärker det som redan finns',
+      text:
+        'En av Jestons mest centrala principer: **automatisera aldrig en ineffektiv process**.\n\n' +
+        '- **Automatisering förstärker befintliga förhållanden.** En effektiv process blir ' +
+        'effektivare, en ineffektiv blir sämre — bara snabbare.\n' +
+        '- **Risken med att automatisera dåliga processer** är bortkastade investeringar, ' +
+        'frustrerade medarbetare och system som inte används.\n' +
+        '- **Teknik är en möjliggörare, inte en lösning.** Den kan inte kompensera för dålig ' +
+        'processdesign.\n' +
+        '- **Förbättra först:** minska komplexiteten och optimera innan tekniken kommer in.\n' +
+        '- **Grunderna först:** förstå, kartlägg och förbättra flödet och affärsreglerna ' +
+        'innan systemet implementeras.\n\n' +
+        'Tanken går tillbaka på BPR och Hammers "don’t automate, obliterate", men utan BPR:s ' +
+        'radikala allt-på-en-gång-ansats.'
+    },
+    {
+      rubrik: 'Spreadsheet-testet',
+      text:
+        'Jestons enkla diagnos: **"Hur många av era kritiska affärsprocesser eller processteg ' +
+        'är beroende av kalkylblad?"**\n\n' +
+        'De flesta organisationer löser processproblem genom att lägga till fler kalkylblad i ' +
+        'stället för att förstå och åtgärda grundorsaken. Används kalkylblad i en ' +
+        'affärsprocess är det ett tecken på att processen först behöver **förbättras** innan ' +
+        'den automatiseras. System som är **fit for purpose** ska göra kalkylbladen onödiga.'
+    },
+    {
+      rubrik: 'Vad ett BPM-system består av',
+      text:
+        'Ett BPMS (Business Process Management System) har tre grupper av komponenter:\n\n' +
+        '| Modellering och design | Exekvering och spårning | Prestationsstyrning |\n' +
+        '| --- | --- | --- |\n' +
+        '| Hur processen beskrivs och ritas | Allt som rör att köra processen | Styrning av processerna via KPI:er |\n' +
+        '| Processmodellering (BPMN) | Ärendehantering (work management) | Balanced scorecard |\n' +
+        '| Activity-based costing | Regelmotor (business rules engine) | Business analytics, BI |\n' +
+        '| Processimulering | Systemintegration, dokumenthantering | Dataanalys |\n' +
+        '| | RPA, (agentisk AI-orkestrering) | |\n\n' +
+        'Dagens **iBPM** lägger till RPA och low-code, **process mining**, avancerad analys och ' +
+        'AI-orkestrering. BPM-system ingår numera i kategorin **BOAT** — Business ' +
+        'Orchestration and Automation Technologies (t.ex. Appian, Pega, ServiceNow, UiPath).\n\n' +
+        '**Activity-Based Costing (ABC)** var en stor managementinnovation på 80- och 90-talet: ' +
+        'kostnader kopplas till aktiviteter och resursanvändning. Den visade sig dyr och svår ' +
+        'att underhålla, men principen lever vidare i ERP, analysverktyg och ' +
+        'prestationsstyrning som ger samma kostnadsinsyn automatiskt.'
+    },
+    {
+      rubrik: 'Processoptimeringslösningar',
+      text:
+        'Jeston räknar med fem typiska lösningar att välja mellan:\n\n' +
+        '- **Processoptimering (BPM)** — omdesign eller innovation av själva processen\n' +
+        '- **Outsourcing** — låta en extern leverantör utföra processen\n' +
+        '- **Shared services** — samla gemensamma processer på ett ställe\n' +
+        '- **RPA** — mjukvarurobotar för regelstyrda, repetitiva steg\n' +
+        '- **Cloud computing** — molnbaserade lösningar\n\n' +
+        'Teknik är fortfarande en möjliggörare: tas inte kultur och människor om hand ' +
+        'misslyckas även de bästa verktygen.\n\n' +
+        '**RPA** är mjukvara som fungerar som en **virtuell medarbetare**: den utför ' +
+        'regelstyrda, repetitiva uppgifter genom att efterlikna hur en människa klickar i ' +
+        'systemen, utan att systemen behöver byggas om. RPA växte fram ur makron, skript, ' +
+        'workflow och regelmotorer. Den går snabbt att införa, arbetar felfritt dygnet runt, ' +
+        'ökar spårbarheten och är billigare än arbetskraft — och **kompletterar** snarare än ' +
+        'ersätter människor. Typiska fall: datainmatning, sortera och skicka e-post, arkivera, ' +
+        'periodisk rapportering, OCR och formatkonvertering.\n\n' +
+        '> Exempel: ett team kopierar dagligen hundratals fakturarader från e-post till ERP. ' +
+        'Stegen är alltid desamma och kräver inget omdöme → **RPA**.\n\n' +
+        '**Varför skalade många tidiga RPA-fall inte?** RPA arbetar via ' +
+        '**gränssnittet (UI)**, inte via robusta systemintegrationer. Ändras en skärmbild ' +
+        'går roboten sönder. Att skala RPA till företagsnivå kräver dessutom tid, kompetens ' +
+        'och styrning.'
+    },
+    {
+      rubrik: 'Kund i centrum — eller medarbetare?',
+      text:
+        '**Customer-centric BPM.** Många organisationer fokuserar hårt på kundnöjdhet, men ' +
+        'fina kundmått kan dölja ett djupare missnöje. Jestons figur över servicenivåer har ' +
+        'en **irritationszon**, en linje av **absolut likgiltighet** och en zon av ' +
+        '**excellens**. Poängen: det är effektivare att **ta bort det som irriterar kunden** ' +
+        'än att lägga mycket pengar på "wow-faktorer" som tillför lite. Processer och KPI:er ' +
+        'ska spegla den verkliga kundupplevelsen, inte bara interna dashboards.\n\n' +
+        '> Fokus på snabbare svar, färre hand-offs och en tydlig kontaktpunkt för kunden = ' +
+        '**customer-centric**.\n\n' +
+        '**Employee-centric BPM.** Motiverade medarbetare är grunden för bra service — en ' +
+        'medelmåttig process med entusiastiska medarbetare slår ofta en utmärkt process med ' +
+        'oengagerade. Fokus på empowerment, omsorg och rätt arbetsmiljö. Chefer ska vara ' +
+        '**tjänande ledare** som stöttar och coachar i stället för att detaljstyra. ' +
+        '"FAIL" omtolkas som **First Attempt In Learning** — en lärande kultur.\n\n' +
+        '**Balansen:** utan kunder ingen verksamhet, utan medarbetare ingen service. ' +
+        'Bedöm en omdesignad process ur båda perspektiven: hur effektiv och tillfredsställande ' +
+        'är den för kunden, och hur effektiv och stärkande är den för medarbetaren?'
+    }
+  ],
+  nyckelbegrepp: [
+    'Automatisering förstärker det som finns: förbättra processen först',
+    'Teknik är en möjliggörare, inte en lösning',
+    'Spreadsheet-testet: kalkylblad i kritiska processer signalerar att processen behöver förbättras',
+    'BPMS: modellering och design, exekvering och spårning, prestationsstyrning',
+    'Fem optimeringslösningar: BPM-omdesign, outsourcing, shared services, RPA, cloud computing',
+    'RPA = virtuell medarbetare för repetitiva, regelstyrda steg; skalar dåligt eftersom den arbetar via UI',
+    'Customer-centric: ta bort irritationsmoment snarare än att jaga wow-faktorer',
+    'Employee-centric: tjänande ledarskap, FAIL = First Attempt In Learning'
+  ],
+  tentakoppling:
+    'HT25-ordinarie hade en hel essä om varför processer ska förbättras innan de ' +
+    'automatiseras, plus flervalsfrågor om RPA-fallet med fakturarader och customer-centric ' +
+    'BPM. HT25-omtentan frågade varför RPA inte skalade och vilka optimeringslösningar ' +
+    'Jeston räknar med.'
 },
 
 /* ====================== KAPITEL 5 ====================== */
 {
-  id: 'proc-k5',
+  id: 'proc-bpm-5',
   nr: 5,
-  titel: 'Leadership och people change management',
-  ingress: 'Varför BPM-husets grund inte är teknik utan människor, och det förändringsledningsgrepp kursen lyfter fram särskilt.',
-  lastid: 6,
-  amnen: ['proc-forandring'],
+  titel: '7FE-ramverket och BPM-huset',
+  ingress: 'Jestons husmetafor, 7FE:s tio faser och tre essentials, framgångspallen, ramverkets styrkor och svagheter — och varför one size fits all inte fungerar.',
+  lastid: 10,
+  amnen: ['proc-7fe'],
   avsnitt: [
     {
-      rubrik: 'BPM-huset: flera lager, inte ett enda golv',
+      rubrik: 'Bokens upplägg',
       text:
-        'Jeston illustrerar BPM med en **husmetafor**: BPM består av flera lager som ' +
-        'tillsammans skapar en effektiv organisation — från strategiska grunder ' +
-        '(fundament) upp till operativa och innovativa processer. Poängen med metaforen ' +
-        'är att BPM **inte** ska ses som ett enskilt projekt eller som något man bygger ' +
-        'stegvis rent tekniskt enligt en arkitekturplan. Det är en organisatorisk ' +
-        'struktur som måste bäras upp av flera samverkande delar samtidigt, inte en ' +
-        'checklista man bockar av uppifrån och ner.\n\n' +
-        'Byggstenarna som håller huset uppe (enligt "the house metaphor") inkluderar ' +
-        'ramverk för **processtransformation, people change management** och ' +
-        '**benefits realization/processförbättring** — utan alla tre delar riskerar ' +
-        'huset att kollapsa, oavsett hur bra själva processdesignen är.'
+        'Jeston (2022) har tre delar:\n\n' +
+        '1. **Del 1, kapitel 1–10:** en översikt i FAQ-form — vad, varför, hur och vem\n' +
+        '2. **Del 2, kapitel 11–27:** hur man gör BPM, alltså **7FE-ramverket**. För varje ' +
+        'fas: varför (rationale), resultat, hur (steg för steg), output och risker\n' +
+        '3. **Del 3, kapitel 28–29:** fallstudier och BPM-mognad'
     },
     {
-      rubrik: '60 % av arbetet är kommunikation, inte teknik',
+      rubrik: 'BPM-huset',
       text:
-        'En av kursens mest citerade siffror: Jeston framhåller att **omkring 60 % av ' +
-        'arbetet** i ett BPM-initiativ handlar om **kommunikation och mänskliga aspekter** ' +
-        '— inte om teknik eller modellering. Riskerna med att inte prioritera detta är ' +
-        'konkreta: motstånd från medarbetare, uteblivet adoption av nya arbetssätt, och att ' +
-        'processer som ser bra ut på papper aldrig faktiskt används i praktiken (jämför ' +
-        'BPR:s misslyckanden i kapitel 1 — teknisk elegans utan förankring räcker inte).'
+        'Jestons egen modell — han är mycket stolt över den — beskriver processfokuserad ' +
+        'verksamhetsförändring som ett **hus i flera lager**:\n\n' +
+        '- **Grunden: Foundations.** Komponenterna i målbilden (Target Operating Model) och ' +
+        'övergripande principer: organisatorisk anpassning, process, organisationsdesign, ' +
+        'prestationsstyrning, människor, processtyrning, teknik, innovation, kundstrategi, ' +
+        'arbetsplatsstrategi och social miljö. Under alltihop ligger regelverket.\n' +
+        '- **Enablement:** principer och riktlinjer som gör det möjligt att leverera ' +
+        'målbilden och förmågorna.\n' +
+        '- **Organizational alignment:** spårbarhet mellan strategi, målbild, förmågor och ' +
+        'vägledande principer.\n' +
+        '- **Business transformation program management, "set for success":** ramverk för ' +
+        'processförändring och -förbättring, förändringsledning och nyttorealisering.\n' +
+        '- **Tre slags processer:** *operativa* (kärnprocesser som order-to-activate och ' +
+        'procure-to-pay, stödprocesser som ekonomi, HR och IT) som ger **effektivitet**; ' +
+        '*ledningsprocesser* (portföljstyrning, strategiutveckling, scenarioplanering, ' +
+        'riskaptit) som ger **uthållig konkurrensfördel**; och *innovationsprocesser* ' +
+        '(ambition, samla, filtrera, utveckla, välja, mobilisera) som **framtidssäkrar**.\n' +
+        '- **Taket: Sustainability och performance management** — processtyrning, ' +
+        'organisationens process asset, prestationsstyrning, ramverk för nyttostyrning och ' +
+        'organisationskultur. Taket håller ihop allt och bär en kultur som upprätthåller ' +
+        'processfokus över tid.\n\n' +
+        '> Husmetaforen säger att BPM består av **flera lager** — från strategiska grunder ' +
+        'till operativa och innovativa processer — som **tillsammans** skapar en effektiv ' +
+        'organisation. Inte ett projekt, inte en IT-plan.'
     },
     {
-      rubrik: 'Leadership som stödjande komponent',
+      rubrik: 'Strategin är drivkraften',
       text:
-        '**Leadership** i 7FE-sammanhang handlar specifikt om att organisationens ledare ' +
-        'ger det **stöd och den vägledning** som krävs för att BPM-aktiviteten och ' +
-        'organisationen ska vara i linje med varandra och leverera rätt affärsutfall — ' +
-        'inte om att detaljstyra resurser, budget och tidsplaner (det är snarare **Business ' +
-        'Process Project Management**s roll) och inte specifikt om att säkerställa att alla ' +
-        'intressenter är villiga att bidra till lösningen (det ligger närmare **People ' +
-        'Change Management**s ansvar).'
+        'Allt utgår från **strategin och affärsmodellen**: värdeskapande och värdefångst. ' +
+        'Strategin genomförs genom en **Business Operating Model**, som i sin tur kräver ' +
+        'förmågor och resurser i tre dimensioner: **människor** (organisation och kultur), ' +
+        '**teknik** och **process**.\n\n' +
+        '**Framgångspallen (the BPM success stool)** har tre ben som alla måste bära: ' +
+        'strategi, processer och människor/beteende. Jeston visar också att olika ' +
+        'intressenter **uppfattar BPM olika** — för en är det processmodellering, för en ' +
+        'annan prestationsmätning, för en tredje förändringsledning. Det är en anledning till ' +
+        'att ramverket måste vara brett.'
     },
     {
-      rubrik: 'Appreciative inquiry — bygg på det som fungerar',
+      rubrik: '7FE: tio faser i fyra F och tre essentials',
       text:
-        '**Appreciative inquiry** är den förändringsledningsansats kursen lyfter fram. Den ' +
-        'skiljer sig markant från en traditionell problemlösningsansats:\n\n' +
-        '| Appreciative inquiry | Traditionell problemfokusering |\n' +
+        '"7FE" — "10P3" vore en ärligare beteckning — betyder **tio faser** som är grupperade ' +
+        'i **fyra grupper som börjar på F**, plus **tre essentials**:\n\n' +
+        '| Grupp | Faser |\n' +
         '| --- | --- |\n' +
-        '| Fokuserar på **vad som fungerar** | Fokuserar på vad som är fel |\n' +
-        '| Söker **rotorsaker till framgång** | Söker rotorsaker till misslyckanden |\n' +
-        '| Hinder behandlas som **möjligheter att lära av** | Hinder behandlas som barriärer |\n\n' +
-        'Logiken är att organisationer och människor förändras mer hållbart genom att ' +
-        'förstärka det som redan fungerar än genom att jaga fel — vilket kopplar direkt ' +
-        'tillbaka till Red Wine Test i kapitel 3, som bygger på samma framåtblickande, ' +
-        'positiva grundidé.'
+        '| **F**oundations | 1. Foundations, 2. Enablement, 3. Launch |\n' +
+        '| **F**indings & solutions | 4. Understand, 5. Innovate |\n' +
+        '| **F**ulfilment | 6. People, 7. Develop, 8. Implement |\n' +
+        '| **F**uture | 9. Realize (de strategiska målen), 10. Sustainability |\n\n' +
+        '**Tre essentials** (förmågor som måste genomsyra alla faser): **Leadership**, ' +
+        '**Project management** och **People change management**.\n\n' +
+        'Två saker att inte blanda ihop:\n\n' +
+        '- **Realize** handlar om att faktiskt få ut de **strategiska nyttorna**\n' +
+        '- **Sustainability** betyder **uthållig konkurrensfördel** — att förbättringarna ' +
+        'består — inte miljömässig hållbarhet\n\n' +
+        'Varför en strukturerad ansats alls? Enkla omdesigninitiativ stannar ofta när ' +
+        'processen är implementerad och glömmer både prestationsstyrning och kopplingen till ' +
+        'strategin. Att omdesigna en process utan att förstå hur den hänger ihop med ' +
+        'strategin riskerar att lösa fel problem. 7FE skapar en **återkopplingsloop**: ' +
+        'strukturerad BPM → strategisk anpassning → kontinuerlig förbättring och lärande.'
+    },
+    {
+      rubrik: 'Styrkor och svagheter',
+      text:
+        '| Styrkor | Svagheter |\n' +
+        '| --- | --- |\n' +
+        '| En helhetsbild: inte bara modellering utan strategi, ledarskap och kultur | Namnet "7FE" är ett misslyckat minnesstöd; de fyra grupperna verkar efterkonstruerade |\n' +
+        '| Starkt förankrat i strategiskt managementtänkande som fortfarande gäller | En blandning av sekventiella och parallella steg — faserna överlappar och gränserna blir otydliga |\n' +
+        '| Väver ihop människor och teknik, som andra BPM-metoder ofta missar | För komplext: projektledning, förändringsledning och omdesign i ett enda metaramverk |\n' +
+        '| En upprepbar struktur för stora organisationer och konsulter | Pedagogiskt svagt — mest listor och checklistor, lite visuellt |\n' +
+        '| Fungerar som allmän förändringsmetod även utanför BPM (ERP, dataplattform, AI) | |'
+    },
+    {
+      rubrik: 'One size fits all fungerar inte',
+      text:
+        'Jeston betonar att samma upplägg **inte** passar alla:\n\n' +
+        '- Organisationer skiljer sig i **BPM-mognad**, kultur, ledarskap och processvana\n' +
+        '- Även när BPM stöds uppifrån saknar projekten ofta uthållig uppmärksamhet och ' +
+        'resurser\n' +
+        '- Vissa har redan solida grunder (vision, mål, processarkitektur), andra börjar med ' +
+        'splittrade insatser\n' +
+        '- Att **hoppa över faser** i 7FE går, men avråds om man inte kan motivera det\n\n' +
+        '**BPM-mognad** beskriver hur långt organisationen kommit i att arbeta processorienterat. ' +
+        'Låg mognad gör BPM-insatserna svårare att genomföra. Det är därför man ska anpassa ' +
+        'takten: försöker man gå fortare än mognaden tillåter ökar risken för misslyckande. ' +
+        'Kartlägg dessutom **BPM-resan hittills** — pågående förbättringsprojekt bör föras in ' +
+        'under BPM-teamets styrning.'
     }
   ],
   nyckelbegrepp: [
-    'BPM-huset: flera samverkande lager (strategi, people change management, benefits realization) — inte ett enskilt projekt',
-    'Cirka 60 % av BPM-arbetet handlar om kommunikation och människor, inte teknik',
-    'Leadership säkerställer att BPM-aktiviteten och organisationen är i linje och levererar rätt utfall',
-    'Appreciative inquiry: fokusera på vad som fungerar och rotorsaker till framgång, inte på fel och barriärer'
+    'Husmetaforen: flera lager från Foundations till taket med sustainability och performance management',
+    'Tre processlager: operativa (effektivitet), lednings- (konkurrensfördel), innovations- (framtidssäkring)',
+    'Strategin driver allt; den kräver förmågor i människor, teknik och process',
+    '7FE = 10 faser i 4 F-grupper + 3 essentials (leadership, project management, people change management)',
+    'Foundations: Foundations, Enablement, Launch · Findings & solutions: Understand, Innovate · Fulfilment: People, Develop, Implement · Future: Realize, Sustainability',
+    'Sustainability = uthållig konkurrensfördel, inte miljöhållbarhet',
+    'One size fits all fungerar inte: anpassa efter BPM-mognad, kultur och förutsättningar'
   ],
   tentakoppling:
-    'En av HT25:s essäfrågor bygger direkt på 60-procentssiffran: varför de mänskliga delarna ' +
-    'är avgörande för att BPM-arbete ska lyckas, och vilka risker som uppstår om de ' +
-    'nedprioriteras. Öva på att svara med konkreta risker (motstånd, uteblivet adoption), ' +
-    'inte bara "det är viktigt med kommunikation".'
+    'Husmetaforen var en flervalsfråga på HT25-ordinarie. HT25-omtentan hade en hel essä om ' +
+    'BPM-mognad och varför one size fits all inte fungerar.'
 },
 
 /* ====================== KAPITEL 6 ====================== */
 {
-  id: 'proc-k6',
+  id: 'proc-bpm-6',
   nr: 6,
-  titel: 'Processoptimering: från BPR till agentisk AI',
-  ingress: 'De konkreta lösningarna Jeston räknar upp när en process väl ska förbättras, och varför RPA sällan skalar som utlovat.',
-  lastid: 7,
-  amnen: ['proc-optimering'],
+  titel: 'Foundations och Enablement',
+  ingress: 'De två faserna som lägger grunden: strategy execution void, Red Wine Test, Target Operating Model, processnivåer, processtyrning, process asset och prestationsstyrning.',
+  lastid: 14,
+  amnen: ['proc-foundations'],
   avsnitt: [
     {
-      rubrik: 'Processoptimeringslösningar',
+      rubrik: 'Foundations: kanske den viktigaste fasen',
       text:
-        'När analysfasen (kapitel 2) har identifierat vad som behöver förbättras, räknar ' +
-        'Jeston upp en uppsättning konkreta **processoptimeringslösningar** att välja ' +
-        'mellan: **process redesign, outsourcing, shared services, RPA** och ' +
-        '**molntjänster (cloud computing)**. Det här är en annan sorts lista än ' +
-        'perspektiven "integration-centric / human-centric / customer-centric BPM" ' +
-        '(som beskriver **vilket fokus** ett initiativ har) eller enablerna "leadership, ' +
-        'project management, people change management" (som är **stödjande komponenter**, ' +
-        'inte optimeringslösningar i sig).'
+        'Foundations lägger den strategiska och strukturella grund som allt annat BPM-arbete ' +
+        'vilar på — precis som grunden i ett hus. Utan den blir senare insatser splittrade ' +
+        'eller frikopplade från verksamhetens mål.\n\n' +
+        '> Foundations handlar **inte om att skapa strategin** utan om att säkerställa ' +
+        '**samstämmighet** mellan strategin, processtyrningen och de enskilda processerna.\n\n' +
+        'Fasen har **fem steg**, som oftast görs i tur och ordning men kan överlappa. ' +
+        'Kommunikation pågår hela tiden, och djupet varierar med organisation och mognad:\n\n' +
+        '1. Hämta strategin\n' +
+        '2. Förstå organisationens omgivning\n' +
+        '3. Välj BPM-ansats (top-down eller bottom-up)\n' +
+        '4. Ta fram en Target Operating Model\n' +
+        '5. Kommunicera'
     },
     {
-      rubrik: 'Customer-centric mot andra BPM-perspektiv',
+      rubrik: 'Steg 1: Hämta strategin — och strategy execution void',
       text:
-        'Ett BPM-initiativ kan drivas med olika tyngdpunkt. Fokuserar arbetet på att kunder ' +
-        'ska få snabbare svar, färre överlämningar mellan avdelningar (hand-offs) och en ' +
-        'tydlig kontaktpunkt, dominerar ett **customer-centric** perspektiv — till skillnad ' +
-        'från ett **system-centric** perspektiv (fokus på IT-integration) eller ett ' +
-        '**employee-centric** perspektiv (fokus på medarbetarupplevelsen).'
+        'Första uppgiften är att **förstå organisationens strategi**, inte att skapa eller ' +
+        'kritisera den. Skaffa strategidokumentet och se till att det är förstått. Bygg ' +
+        '**spårbarhet**: strategi → BPM-program → Red Wine Test-utfall → aktiviteter i ' +
+        'BPM-kompetenscentret. Allt BPM-arbete ska tillföra värde till de strategiska målen. ' +
+        'Strategin är visionen om vart man ska; BPM är ett av medlen för att komma dit.\n\n' +
+        '**Strategy execution void** är **gapet mellan den strategiska avsikten och ' +
+        'förmågan att genomföra strategin**. Att formulera strategi är svårt, men att ' +
+        'genomföra den är svårare — och där misslyckas de flesta. Gapet har två ' +
+        'sammanhängande komponenter:\n\n' +
+        '- **Management effectiveness** — förmågan och disciplinen i **ledningsprocesserna**: ' +
+        'styrning, beslutsfattande, anpassning av struktur och kultur. Ger **uthållig ' +
+        'konkurrensfördel** när den är inbäddad i hela organisationen.\n' +
+        '- **Operational efficiency** — kvaliteten i de **operativa processerna** som ' +
+        'levererar produkter och tjänster. Ökar produktiviteten men ger sällan bestående ' +
+        'fördel utan management effectiveness.\n\n' +
+        'Fokuserar man bara på operativ effektivitet blir resultatet **"different sameness"** ' +
+        '— små förbättringar utan verklig förändring.\n\n' +
+        'I BPM-huset motsvarar det tre zoner: den **blå** zonen är management effectiveness ' +
+        '(miljön för genomförandet), den **röda** är operational efficiency (själva ' +
+        'genomförandet), och den **gröna** är BPM som det strukturerade ramverk som binder ' +
+        'ihop dem. För att stänga gapet krävs tydlig koppling från strategi till strategiska ' +
+        'teman och nyckelprocesser (nivå 1–2), samordnade program och projekt mot ' +
+        'flaskhalsarna med tydlig överlämning och ägarskap, och **kontinuerliga ' +
+        'återkopplingsloopar** mellan strategi och verksamhet.'
     },
     {
-      rubrik: 'Varför RPA sällan skalade som utlovat',
+      rubrik: 'Steg 2: Förstå omgivningen — och Red Wine Test',
       text:
-        'RPA byggde sitt löfte på att vara enkelt: mjukvarurobotar som klickar sig igenom ' +
-        'samma gränssnitt en människa skulle använt, utan att kräva ny systemintegration. ' +
-        'Den tekniska begränsningen som gjorde att många initiala RPA-case **inte skalade** ' +
-        'är precis den egenskapen: **RPA arbetar via UI-interaktioner, inte robusta ' +
-        'systemintegrationer**, vilket gör lösningarna sköra — ett litet gränssnittsbyte i ' +
-        'det underliggande systemet kan slå ut en hel bot. Det var alltså inte brist på ' +
-        'molnstöd, API-integrationer eller kodningskompetens som var flaskhalsen, utan ' +
-        'själva arkitekturvalet att simulera en användare i stället för att integrera ' +
-        'direkt mot systemen.'
+        'Som innan man bygger ett hus: man måste känna till tomtens storlek och form, ' +
+        'omgivningen och ekonomin. BPM kräver förståelse för organisationens **struktur och ' +
+        'kultur**, omvärlden den verkar i, och de begränsningar och möjligheter som formar ' +
+        'förändringen. Organisationen är ett **levande system** — generationsskiften i ' +
+        'arbetskraften, pandemins effekter på arbetsplatsen och digitala kundtrender kräver ' +
+        'anpassade ledningssätt.\n\n' +
+        'Bedöm också **BPM-mognaden**, kartlägg **BPM-resan hittills**, identifiera de ' +
+        'viktigaste **drivers** och bestäm **bredden** på BPM-arbetet i fem nivåer: små ' +
+        'förbättringar → förbättring av delprocesser → omdesign av processer → omdesign av ' +
+        'verksamheten → att störa hela branschens värdekedja.\n\n' +
+        '**Red Wine Test** är en visionsövning: deltagarna föreställer sig att de sitter i ' +
+        'framtiden med ett glas vin och att **BPM-projektet redan är perfekt genomfört**. ' +
+        'Vad har förändrats för kunder, medarbetare och ledning? Hur arbetar organisationen ' +
+        'nu? Vad är de stolta över?\n\n' +
+        'Workshopen skapar ett **gemensamt narrativ om hur framgång ser ut**, och för varje ' +
+        'svar bestäms **vem som ansvarar för leveransen** — BPM-teamet eller linjeledningen. ' +
+        'Den används också som checklista när projektet ska utvärderas.'
     },
     {
-      rubrik: 'Agentisk AI-orkestrering — nästa våg, samma grundfråga',
+      rubrik: 'Steg 3–5: Ansats, TOM och kommunikation',
       text:
-        'RPA-leverantörer konkurrerar nu med en ny våg av **agentisk AI-orkestrering**, där ' +
-        'AI-agenter inte bara efterliknar klick utan kan **fatta beslut och hantera hela ' +
-        'arbetsflöden** från start till slut, i vissa visioner med minimal mänsklig ' +
-        'inblandning. Kursens poäng är att detta inte upphäver BPM-tänkandet — det gör det ' +
-        'bara mer akut. Frågan "vilken roll spelar människor?" (som föreläsning 1 ställer ' +
-        'explicit) är obesvarad, och grundproblemet är detsamma som i produktivitetsparadoxen ' +
-        'från kapitel 1: **ny teknik ovanpå oförstådda eller odokumenterade processer löser ' +
-        'ingenting** — oavsett om tekniken heter RPA eller agentisk AI.'
+        '**Steg 3** — välj **top-down eller bottom-up** utifrån vilken typ av BPM-aktivitet ' +
+        'det är (se kapitel 3).\n\n' +
+        '**Steg 4 — Target Operating Model (TOM).** En **övergripande beskrivning av hur ' +
+        'organisationens olika delar ska fungera i framtiden** för att BPM ska lyckas. ' +
+        'Komponenterna som måste hänga ihop:\n\n' +
+        '- Strategi (kopplad till BPM-aktiviteterna)\n' +
+        '- Processtyrning (roller och ansvar)\n' +
+        '- Prestationsstyrning (t.ex. balanced scorecard)\n' +
+        '- Organisationsdesign\n' +
+        '- Människor och kultur\n' +
+        '- Teknik\n\n' +
+        'TOM är **inte** en IT-arkitektur, inte en kostnadskalkyl och inte en karta över ' +
+        'nuläget. Den kan ses som den önskade framtida verksamhets- eller ' +
+        'företagsarkitekturen.\n\n' +
+        '**Steg 5 — Kommunikation.** Det enda stället i 7FE där kommunikation är det ' +
+        '**sista** steget, eftersom allt i Foundations och TOM måste vara överenskommet ' +
+        'först. Sedan kommuniceras syfte och ansats löpande: ledningens budskap, ' +
+        'informationsmöten, information online.\n\n' +
+        '**Output** — TOM-komponenterna och samstämmigheten mellan BPM-projektet och ' +
+        'strategin — blir **input** till alla följande faser.'
+    },
+    {
+      rubrik: 'Enablement: gör målbilden genomförbar',
+      text:
+        'Enablement bygger på TOM. Att genomföra målbilden kräver att förmågor byggs i ' +
+        'människor (organisation, kultur), teknik (IT-strategi och resurser) och process ' +
+        '(ansats och arkitektur). Fasen har **sju steg**: kommunikation, processtyrning, ' +
+        'processarkitektur, prestationsstyrning, människor och kultur, organisationsdesign ' +
+        'samt teknik.\n\n' +
+        '**End-to-end-processer** löper horisontellt genom organisationen, över ' +
+        'funktionssilos. De syns sällan i organisationsscheman — så vem äger dem? En ' +
+        '**organisationsprocessbild** visar strategiska processer, kärnprocesser och ' +
+        'stödprocesser. Jeston rekommenderar **fem processnivåer**:\n\n' +
+        '| Nivå | Innehåll |\n' +
+        '| --- | --- |\n' +
+        '| 0–1 | Företaget ur processperspektiv: karta över end-to-end-processerna |\n' +
+        '| 2 | Lista över affärsprocesser, värdekedjan för varje nivå 1-process |\n' +
+        '| 3 | Övergripande beskrivning av varje process, tvärfunktionella beroenden (BPMN) |\n' +
+        '| 4 | Delprocesser: aktiviteter, beslut, händelser, resurser, system |\n' +
+        '| 5 | Steg för steg — så detaljerat att en nyanställd klarar processen, och underlag för systemutvecklare |\n\n' +
+        'Nivåerna ger en **spårbar koppling mellan strategi och genomförande**.'
+    },
+    {
+      rubrik: 'Processtyrning och processarkitektur',
+      text:
+        '**Process governance** är nyckeln till långsiktiga förbättringar: vem fattar ' +
+        'beslut, hur hanteras affärsrisker, hur styrs prestationen? Rollerna:\n\n' +
+        '- **Strategic process council** — det högsta styrande organet för BPM\n' +
+        '- **Chief Process Officer (CPO)** — idealiskt men sällsynt i verkligheten\n' +
+        '- **Process sponsor** och **process executive**\n' +
+        '- **Process champion** — chef med ansvar för processer\n' +
+        '- **Process owner**\n' +
+        '- **Process steward** — ansvarar för enskilda processer och BPM-projekt, och för ' +
+        'prestationsstyrning på processnivå\n\n' +
+        'En **processarkitektur** ger regler, principer och riktlinjer för hur processer ' +
+        'designas och styrs: standarder för modellnivåer, vägledning för referensramverk, ' +
+        'och motiveringar kopplade till strategin. Typiska delar: processriktlinjer, ' +
+        'process assets, ett register över affärsregler, ett ramverk för nyttostyrning och ' +
+        'samordning med enterprise architecture. Graden av **standardisering och ' +
+        'integration** måste anpassas — varje organisation är unik.'
+    },
+    {
+      rubrik: 'Process asset',
+      text:
+        'En **process asset** är det centrala arkivet för en process: **processmodellerna** ' +
+        'plus dokumentation och metadata — regler, IT-system, roller, risker, ägarskap. Det ' +
+        'gör processer till strategiska och värdefulla resurser och ger:\n\n' +
+        '- konsekventa och återanvändbara processer\n' +
+        '- mindre omarbete och bättre kvalitet\n' +
+        '- enklare konsekvensanalys vid förändringar\n' +
+        '- transparens för risk, regelefterlevnad och revision\n' +
+        '- integration med företagets och den digitala strategin\n\n' +
+        '> **Processmodellen är en del av process asset**, som dessutom innehåller roller, ' +
+        'policyer, regler, risker och andra styrande element. Vid en incident där man ' +
+        'behöver förstå steg, regler, ansvar och beslutspunkter är det process asset man ' +
+        'tar fram.\n\n' +
+        'Så bygger man den: definiera modelleringsstandarder, enas om nivåerna 1–5, bygg ett ' +
+        '**pragmatiskt arkiv som växer** i stället för att överdesigna från början, fyll ' +
+        'nivå 1–2 (gärna med branschmallar som SCOR) och nivå 3–4 med processerna som tas ' +
+        'fram i projektet (i BPMN). Process asset och processarkitekturen är **länken mellan ' +
+        'verksamhet och IT**: vilken produkt, roll, applikation, data, affärsregel och ' +
+        'riskpunkt hör till varje aktivitet. I moderna BOAT-plattformar blir den en levande ' +
+        'digital representation av processen med versionshistorik.'
+    },
+    {
+      rubrik: 'Prestationsstyrning, människor, organisation och teknik',
+      text:
+        '**Prestationsstyrning:** *om du inte mäter prestationen styr du inte din ' +
+        'verksamhet* (Jeston). Utan prestationsdata går det inte att fatta välgrundade beslut ' +
+        'eller upprätthålla förbättringar. Det kräver en kultur av ansvarstagande, riktlinjer ' +
+        'för KPI:er och rapportering, och belöningar för god prestation.\n\n' +
+        '**Människor och kultur:** rätt kompetens, attityder och miljö — processförmåga, ' +
+        'service- och prestationskultur, incitament, lärande och uppförandekod.\n\n' +
+        '**Organisationsdesign:** strukturen ska **stödja processerna**, styrningen och ' +
+        'prestationsstyrningen, och uppmuntra samarbete över silos. Ordningen är ' +
+        '**processer → struktur → människor**.\n\n' +
+        '**Teknik:** TOM och process asset ska kopplas till befintliga IT-styrdokument. ' +
+        'Tekniken ska **möjliggöra, inte diktera** processdesignen — inte all ' +
+        'processförbättring behöver teknik, även om RPA och AI automatiserar allt fler ' +
+        'processer.'
     }
   ],
   nyckelbegrepp: [
-    'Processoptimeringslösningar: redesign, outsourcing, shared services, RPA, molntjänster',
-    'Customer-centric BPM fokuserar på snabbare svar, färre hand-offs, tydlig kontaktpunkt för kunden',
-    'RPA arbetar via UI-interaktioner (inte systemintegration) — därför skalar det sällan robust',
-    'Agentisk AI-orkestrering är BPM:s nya våg, men grundproblemet (process före teknik) är detsamma'
+    'Foundations skapar inte strategin — den säkerställer samstämmighet mellan strategi och processer',
+    'Strategy execution void: gapet mellan strategisk avsikt och förmåga att genomföra',
+    'Management effectiveness ger uthållig fördel; operational efficiency ensam ger "different sameness"',
+    'Red Wine Test: föreställ dig att projektet redan lyckats; ger ett gemensamt narrativ och ansvar per svar',
+    'TOM: övergripande beskrivning av hur organisationen ska fungera i framtiden',
+    'Fem processnivåer ger spårbarhet från strategi till genomförande',
+    'Process asset = processmodellen plus roller, regler, risker, ägarskap, IT-stöd',
+    'Organisationsdesign: processer → struktur → människor'
   ],
   tentakoppling:
-    'Ett scenario om ett team som kopierar fakturarader mellan e-post och ett ERP-system, ' +
-    'steg för steg utan omdöme, är precis den typ av uppgift RPA passar för — känn igen ' +
-    'mönstret "repetitivt, regelstyrt, UI-baserat" som RPA:s signum.'
+    'HT25 hade flervalsfrågor om Red Wine Test (två gånger), TOM och process asset (två ' +
+    'gånger), och omtentan en hel essä om strategy execution void och hur BPM och 7FE kan ' +
+    'överbrygga gapet.'
 },
 
 /* ====================== KAPITEL 7 ====================== */
 {
-  id: 'proc-k7',
+  id: 'proc-bpm-7',
   nr: 7,
-  titel: 'BPM som forskningsfält: akademi, hållbarhet och AI',
-  ingress: 'Tre artiklar, tre bilder av vart BPM-forskningen är på väg — vad fältet faktiskt studerar, varför Green BPM inte slog igenom, och hur AI förskjuter grunderna.',
-  lastid: 8,
-  amnen: ['proc-akademisk'],
+  titel: 'Launch och Understand',
+  ingress: 'Hur ett BPM-initiativ formellt startar, och hur man skaffar en gemensam, faktabaserad bild av nuläget: workshops, mätning, rotorsaker, Process Worth Matrix och quick wins.',
+  lastid: 13,
+  amnen: ['proc-understand'],
   avsnitt: [
     {
-      rubrik: 'Reijers (2021): sju teman i BPM-forskningen',
+      rubrik: 'Launch: den formella starten',
       text:
-        'Hajo Reijers gick igenom över 100 vetenskapliga artiklar om BPM publicerade i ' +
-        'tidskriften *Computers in Industry* under fyrtio år, och destillerade sju ' +
-        'teman som tillsammans beskriver hur fältet utvecklats:\n\n' +
-        '1. **BPM Systems (BPMS)** — mjukvaruplattformar för att definiera, exekvera och ' +
-        'spåra processer\n' +
-        '2. **Process modeling** — hur man representerar processer (BPMN hör hit)\n' +
-        '3. **Process design** — hur man designar bättre processer, inte bara beskriver dem\n' +
-        '4. **Coordination and interoperability** — hur processer som spänner över flera ' +
-        'system och organisationer samordnas\n' +
-        '5. **Model management** — hur man hanterar stora samlingar av processmodeller ' +
-        'över tid\n' +
-        '6. **Process mining** — att automatiskt upptäcka och analysera processer utifrån ' +
-        'loggdata\n' +
-        '7. **New technologies** — hur nya tekniska möjligheter (t.ex. AI) förändrar vad ' +
-        'BPM kan göra\n\n' +
-        'Reijers utgångspunkt är densamma som i föreläsning 1: processorienterade ' +
-        'organisationer presterar bättre än de som saknar det fokuset, eftersom en process ' +
-        'ofta spänner över avdelningar, specialiteter och geografier — utan samordning ' +
-        'suboptimeras varje del för sig, frikopplat från vad kunden faktiskt behöver.'
+        'Organisationer vet ofta att det finns ineffektivitet men vet inte **var och hur** de ' +
+        'ska börja. Launch sätter **omfattning, struktur och riktning**, säkerställer att ' +
+        'nyckelintressenter är identifierade, engagerade och har samma förväntningar, och att ' +
+        'allt är kopplat till de strategiska målen. Fasens steg:\n\n' +
+        '1. **Kommunikation** — mål, omfattning och tidplan. Ta upp rädslor för ' +
+        'nedskärningar, outsourcing och automatisering, vad medarbetarna kan förvänta sig, ' +
+        'och hur ofta de informeras.\n' +
+        '2. **Inledande intervjuer med nyckelintressenter** — bred överblick, deras bild av ' +
+        'problemen, meningsfulla quick wins, och att bygga förtroende tidigt.\n' +
+        '3. **Övergripande processgenomgång** — korta end-to-end-genomgångar, prata med dem ' +
+        'som gör jobbet och med IT. **Orientering, inte utvärdering.**\n' +
+        '4. **Identifiera intressenter** — interna och externa: leverantörer, kunder, ' +
+        'partners, leverantörens leverantör, kundens kund.\n' +
+        '5. **Ledningsworkshops** — se nedan.\n' +
+        '6. **Överlämnings- och övertagandeplaner** — från projektteamet till verksamheten: ' +
+        'kostnader, risker, tidpunkt, reservplaner, styrning.\n' +
+        '7. **Implementeringsansats** — en strukturerad ansats lägger mer tid i början och ' +
+        'undviker suboptimala lösningar och omtag senare.\n' +
+        '8. **Business case** — på vanligt språk (inte BPMN), helst på **en sida**, med ' +
+        'påståenden som stöds av belägg. Kan behöva uppdateras senare.\n' +
+        '9. **Teamstruktur** — projektledare, styrgrupp, processteam och användarteam.\n' +
+        '10. **Initial plan** som grund för nästa fas.'
     },
     {
-      rubrik: 'Houy et al. (2012): Green BPM',
+      rubrik: 'Ledningsworkshopen: scope, mål och processval',
       text:
-        '**Green BPM** är idén att använda BPM:s metoder och verktyg för att förbättra ' +
-        'organisationers **hållbarhet** — mäta, analysera och minska en process ' +
-        'miljöpåverkan (energi, utsläpp, resursanvändning) på samma sätt man idag mäter ' +
-        'tid och kostnad. Houy et al. undersöker potentialen och utmaningarna, och ' +
-        'demonstrerar en delvis automatiserad ansats för att förbättra processers ' +
-        'hållbarhet — kopplat till forskningsfältet **Green IS** (informationssystem för ' +
-        'hållbarhet) i stort.\n\n' +
-        'Enligt kursens egen bedömning har visionen från 2012 **inte fått det breda ' +
-        'genomslag** som förutspåddes. Skälet som lyfts fram är tekniskt, inte juridiskt ' +
-        'eller konceptuellt: **de flesta BPM-verktyg saknar inbyggt stöd för att lagra, ' +
-        'räkna och analysera energi-, utsläpps- och resursdata** i själva ' +
-        'processmodellerna. Det är alltså inte att hållbarhetsdata är förbjuden att lagra, ' +
-        'och inte att process mining är oförmöget att hantera CO₂-data — verktygen är ' +
-        'bara inte byggda för den typen av mätning ännu.'
+        'Med sponsorer och chefer från berörda enheter bestämmer man BPM-aktivitetens ' +
+        '**scope**, initiala **processmål**, en **checklista** för vad framgång är, ' +
+        'intressenter, en första lista över **end-to-end-processer**, en övergripande analys ' +
+        'med mätvärden, implementeringsplan och styrning.\n\n' +
+        '**Scope och bredd:** scope är om aktiviteten sträcker sig **utanför ' +
+        'affärsenheten eller organisationen**; bredd är **hur omvälvande** den är (de fem ' +
+        'nivåerna från små förbättringar till att störa branschens värdekedja).\n\n' +
+        '**Processmål:**\n\n' +
+        '- Bestäm hur stor förbättring som behövs och jämför nuläge med förväntat läge\n' +
+        '- Håll antalet mått **lågt — helst högst fem per process**\n' +
+        '- Koppla processprestation till **ansvariga personer**\n' +
+        '- Alla mål ska vara **SMART**: specifika, mätbara, uppnåeliga, realistiska och ' +
+        'tidsatta\n\n' +
+        '**Process Selection Matrix (PSM)** visualiserar alla processer i en affärsenhet: ' +
+        'huvudprocesser (end-to-end, t.ex. order) mot scenarier (produkter, geografi, ' +
+        'distributionssätt). Den visar komplexitet och kopplingar och vilka processer som är ' +
+        'unika eller gemensamma för flera produkter.'
     },
     {
-      rubrik: 'Rosemann et al. (2024): tre förskjutningar i AI-eran',
+      rubrik: 'Understand: varför man kartlägger nuläget',
       text:
-        'Rosemann, vom Brocke och kollegor argumenterar att AI-eran innebär tre ' +
-        '**förskjutningar (drifts)** i hur BPM behöver tänkas, sammanfattade som en ' +
-        'rörelse bort från det tänkande som etablerades under den industriella ' +
-        'revolutionens övergång från hantverk till massproduktion:\n\n' +
-        '1. **Från transaktion till konversation** — processer slutar vara stela ' +
-        'sekvenser av formulärifyllnad och blir dialogdrivna, där AI-agenter för ett ' +
-        'samtal med användaren snarare än att bara exekvera fasta steg\n' +
-        '2. **Från automatisering till autonomisering** — skillnaden mellan att en robot ' +
-        'utför ett i förväg definierat steg (automatisering) och att en agent själv ' +
-        '**beslutar** vad som ska göras härnäst utifrån målet (autonomisering)\n' +
-        '3. **Från förenkling till sofistikering** — traditionell processdesign har strävat ' +
-        'efter att göra processer så **enkla och standardiserade** som möjligt; AI gör det ' +
-        'möjligt (och ibland önskvärt) att hantera betydligt mer **sofistikerad**, ' +
-        'kontextkänslig processlogik utan att offra hanterbarheten\n\n' +
-        'Poängen med alla tre förskjutningar är densamma som i föreläsning 1:s avslutande ' +
-        'fråga om agentisk AI — BPM:s grundläggande tänkande (processer, roller, styrning) ' +
-        'består, men förutsättningarna det tänkandet vilar på håller på att förändras i ' +
-        'grunden.'
+        'Understand-fasen ska:\n\n' +
+        '- **Ge processförståelse** — förstå dagens processer så att de kan omdesignas i ' +
+        'Innovate\n' +
+        '- **Etablera en baslinje** — mätvärden att jämföra as-is och to-be mot\n' +
+        '- **Bedöma människor och kompetens** — vilka nya färdigheter som behövs\n' +
+        '- **Starta förändringsresan** — involvera människor i att hitta problem och ' +
+        'möjligheter\n\n' +
+        '> Huvudsyftet med modellering i Understand är att få fram en **gemensam, ' +
+        'faktabaserad bild av hur processen faktiskt fungerar i dag**, för att kunna analysera ' +
+        'hur den kan förbättras — **inte** fullständiga beskrivningar för automatisering, ' +
+        'detaljerade KPI:er eller dokumentation för revision.\n\n' +
+        'Steg 1–2: **kommunicera** (skapa en trygg miljö där man kan prata om verkliga problem ' +
+        'utan att söka syndabockar, ta upp oro för jobben) och **validera scope igen** — har ' +
+        'tid gått sedan Launch, kontrollera att det fortfarande är relevant, och engagera ' +
+        'externa intressenter för att hitta dubbelarbete och onödiga hand-offs.'
+    },
+    {
+      rubrik: 'Understand-workshops: modellera lagom mycket',
+      text:
+        'Workshopparna ska ge en **faktisk** bild, inte antaganden: vilka processer behöver ' +
+        'små förbättringar, omdesign eller innovation; hand-offs och systemgränssnitt över ' +
+        'avdelningar; och mätvärden för prioritering.\n\n' +
+        '- Bjud in teamledare och de som **utför** processen\n' +
+        '- Modellerna ska vara **fit for purpose, inte perfekta**. Fråga hela tiden: är ' +
+        'processen ändamålsenlig, uppfyller den kraven, är den kritisk?\n' +
+        '- Låt deltagarna själva använda modelleringsverktyget — det signalerar ägarskap\n' +
+        '- Håll tiden och låt ingen dominera — facilitering är avgörande\n' +
+        '- **Sluta modellera** när det finns tillräckligt för att gå vidare till Innovate\n\n' +
+        'Det finns ingen enda rätt modelleringsmetod. I kursen används BPMN, men alternativ i ' +
+        'workshops är flödesscheman och swimlane-diagram, **EPC** (event-driven process ' +
+        'chains, vanligt i SAP-sammanhang), berättelser och storyboards, och post-it-skisser.'
+    },
+    {
+      rubrik: 'Mätning, rotorsaker och kompetens',
+      text:
+        '**Steg 4 — mätvärden.** Ger en objektiv grund för prioritering, kostnadsavstämning, ' +
+        'business case och **baslinje** för jämförelse. Exempel: ledtider, volymer, ' +
+        'resursanvändning, kostnad per process, SLA-uppfyllelse, fel- och omarbetsgrad, samt ' +
+        'kundmått (klagomål, servicekvalitet). Ta in **Voice of Customer** och överreagera ' +
+        'inte på sällsynta undantag ("exceptional exceptions").\n\n' +
+        '**Steg 5 — rotorsaksanalys.** Hitta de **verkliga orsakerna**, inte symptomen — ' +
+        'annars upprepar eller döljer omdesignen samma problem. Jeston använder **FMEA** ' +
+        '(Failure Mode and Effect Analysis): vad kan gå fel, vilken effekt får det, hur ' +
+        'allvarligt, hur ofta och hur lätt upptäcks det? Poängen ger en **värmekarta** över ' +
+        'processernas kritiska svagheter.\n\n' +
+        '**Steg 6 — People Capability Matrix.** Jämför nuvarande och **framtida** ' +
+        'kompetensbehov per process. Varje färdighet graderas 1 = obligatorisk, 2 = ' +
+        'rekommenderad, 3 = önskvärd.\n\n' +
+        '**Steg 7 — tillgänglig information.** Både **tyst kunskap** (erfarenhet som inte är ' +
+        'dokumenterad) och **explicit kunskap** (manualer, rutiner, affärsregler).'
+    },
+    {
+      rubrik: 'Process Worth Matrix, prioriteringar och quick wins',
+      text:
+        '**Steg 8 — Process Worth Matrix.** Delar in processer efter **strategisk betydelse ' +
+        '(salience)** och **ekonomiskt värde (worth)**:\n\n' +
+        '| Salience | Tillgång (skapar värde) | Skuld (förstör värde) |\n' +
+        '| --- | --- | --- |\n' +
+        '| **Identity** | Definierar varumärket, t.ex. McDonald’s snabba service | Försvagar varumärket om den sköts dåligt |\n' +
+        '| **Priority** | Stöder identiteten, t.ex. pålitlig leveranskedja | Synliga fel direkt när den brister |\n' +
+        '| **Background** | Stöder vardagen (HR, administration) | Ofta ineffektiv — lätt vinst men liten effekt |\n' +
+        '| **Mandated** | Krävs enligt regelverk, tillför sällan värde | Bördor som kan motivera automatisering eller outsourcing |\n\n' +
+        '**Steg 9 — prioriteringar för Innovate.** Möjliga beslut per process: låt vara, ' +
+        'förbättra, slå ihop, omdesigna från grunden, innovera radikalt, outsourca, ta hem ' +
+        '(insourcing) eller eliminera. Värmekartor (FMEA + PSM) visar var vinsterna är ' +
+        'störst.\n\n' +
+        '**Steg 10 — quick wins.** Små förbättringar som går att genomföra **snabbt, utan ' +
+        'stora kostnader**, och som ger **omedelbar** förbättring — gärna inom **4–8 veckor**. ' +
+        'De bygger trovärdighet och momentum, kan göra BPM-projektet självfinansierande, och ' +
+        'stärker engagemanget: låt medarbetare i frontlinjen föreslå dem och ge dem erkännande ' +
+        'offentligt.\n\n' +
+        '**Output från Understand:** as-is-modeller, mätvärden som baslinje, styrkor, ' +
+        'svagheter och rotorsaker, quick wins, och en **Understand-rapport** med prioriteringar ' +
+        'för Innovate.'
     }
   ],
   nyckelbegrepp: [
-    'Reijers sju forskningsteman: BPMS, process modeling, process design, coordination/interoperability, model management, process mining, new technologies',
-    'Green BPM: använd BPM-metoder för att mäta och minska processers miljöpåverkan',
-    'Green BPM:s genomslag hämmas av att BPM-verktyg saknar inbyggt stöd för hållbarhetsdata — inte av lagstiftning',
-    'Rosemann et al:s tre drifts: transaktion → konversation, automatisering → autonomisering, förenkling → sofistikering'
+    'Launch: scope, struktur och riktning; intressenter; business case på en sida',
+    'Processmål: högst fem mått per process, kopplade till ansvariga, SMART',
+    'Process Selection Matrix: huvudprocesser mot scenarier',
+    'Understand-modellering: gemensam, faktabaserad bild av nuläget — fit for purpose, inte perfekt',
+    'FMEA för rotorsaker, People Capability Matrix för kompetensgap',
+    'Process Worth Matrix: salience (identity, priority, background, mandated) mot worth (tillgång/skuld)',
+    'Quick wins: snabba, billiga, omedelbar effekt, ofta 4–8 veckor'
   ],
   tentakoppling:
-    'HT25-tentan testar explicit varför Green BPM inte fått genomslag — läs alternativen ' +
-    'noga på riktiga tentor, för tre av fyra svarsalternativ brukar vara rimligt formulerade ' +
-    'men fel (juridik, teknikbyte, mätbarhet) medan det verkliga svaret handlar om ' +
-    'verktygens datastöd.'
+    'HT25-omtentan frågade om syftet med modellering i Understand och om kännetecknen för ' +
+    'en quick win. Process Worth Matrix förekommer som felaktigt svarsalternativ — lär dig ' +
+    'vad den faktiskt är till för.'
+},
+
+/* ====================== KAPITEL 8 ====================== */
+{
+  id: 'proc-bpm-8',
+  nr: 8,
+  titel: 'Innovate, People, Develop och Implement',
+  ingress: 'Från as-is till to-be: innovationsworkshops och deras output, att anpassa människor och roller, att bygga lösningen och att sätta den i drift.',
+  lastid: 11,
+  amnen: ['proc-innovate'],
+  avsnitt: [
+    {
+      rubrik: 'Innovate: där framtidens process designas',
+      text:
+        'Innovate omvandlar insikterna från Understand till konkreta förbättringar och ' +
+        'innovationer — den mest kreativa och mest utmanande fasen. Syftet är att göra ' +
+        'processerna så effektiva, ändamålsenliga och framtidssäkra som möjligt, leverera ' +
+        'mätbart affärsvärde, och **kvantifiera nyttor och kostnader** för att förfina ' +
+        'business caset.\n\n' +
+        '**Steg 1–5: rätt inställning.**\n\n' +
+        '1. **Kommunikation** — öppen miljö för idéer, men undvik informationsöverflöd\n' +
+        '2. **Ledningens kick-off-workshop** — sätter **spelreglerna**: processmål och mått, ' +
+        'begränsningar (tid, resurser, automatiseringsnivå) och koppling till strategin. En ' +
+        'skicklig facilitator är avgörande.\n' +
+        '3. **Uppdatera innovationsansatsen** — rätt deltagare, tidshorisonter (3, 12 eller ' +
+        '24 månader), automatiserat eller inte\n' +
+        '4. **Fokusgrupper med externa intressenter** — kunder, leverantörer, partners: ' +
+        'informera, samla synpunkter på problem, skapa ägarskap. Håll det övergripande.\n' +
+        '5. **Intern mobilisering** — samla idéer från personalen, **kvalitet före ' +
+        'kvantitet**\n\n' +
+        '**Steg 6 — RPA** prövas som en möjlig del av lösningen (se kapitel 4).'
+    },
+    {
+      rubrik: 'Innovate-workshops i tre steg',
+      text:
+        'Innovate-workshopparna är kärnan i omdesignen. De skiljer sig från ' +
+        'Understand-workshopparna: fokus flyttas från att **dokumentera nuet** till att ' +
+        '**designa framtiden**. Skicka ut underlag i förväg (scope, mål, begränsningar, ' +
+        'as-is-modeller, rotorsaksanalyser).\n\n' +
+        '1. **Initial redesign-workshop** — kreativ omdesign, ungefär **70 %** klart\n' +
+        '2. **Bekräftelseworkshop** — förfina och ta in nya idéer, ungefär **95 %**\n' +
+        '3. **Slutworkshop** — presentera den slutliga processen för godkännande\n\n' +
+        'Därefter steg 9–18: beräkna framtida mätvärden, **simulera**, uppdatera People ' +
+        'Capability Matrix och kapacitetsplanering, workshop om lösningsförslagen, ' +
+        '**demonstrera och validera** genomförbarheten, **gap-analys** mellan as-is och ' +
+        'to-be, kvantifiera nyttor och uppdatera business case, rapport och presentation, ' +
+        '**godkännande** från ledningen, och till sist **affärskrav** som lämnas över till ' +
+        'Develop.\n\n' +
+        '> **Typisk output från Innovate:** design av framtida processer (**to-be**) och ' +
+        '**validerade lösningsförslag** — inte rotorsaker (Understand), inte riskregister och ' +
+        'inte utbildningsplaner (People).'
+    },
+    {
+      rubrik: 'People: människor och roller för de nya processerna',
+      text:
+        'People-fasen anpassar människor, roller och organisationsdesign till processerna ' +
+        'från Innovate, så att medarbetarna är motiverade, kapabla och har stöd i den nya ' +
+        'målbilden. Den löper parallellt med Develop, som fokuserar på teknik. Åtta steg:\n\n' +
+        '1. **Kommunikation** — öppen, i båda riktningar; ta upp oro för förändrade jobb ' +
+        'tidigt och varsamt\n' +
+        '2. **People strategy** — principer med HR för roller, struktur, ledarskap, lärande, ' +
+        'prestation och belöning\n' +
+        '3. **Aktiviteter och rolldesign** — gruppera uppgifter till aktiviteter och definiera ' +
+        'generiska roller med **RACI**; ett jobb kan rymma flera roller\n' +
+        '4. **Prestationsstyrning** — mål och KPI:er för roller och team\n' +
+        '5. **Kompetensgapanalys** — utbildning, coachning eller rekrytering\n' +
+        '6. **Organisationsstruktur** — rapportvägar och kontrollspann efter den nya ' +
+        'processmodellen, färre hand-offs\n' +
+        '7. **Utbildning** — processbaserad, "train the trainer", just in time\n' +
+        '8. **HR-policyer** — rekrytering, lärande, belöning och kvarhållande i linje med ' +
+        'den nya organisationen'
+    },
+    {
+      rubrik: 'Develop: bygg lösningen',
+      text:
+        'Develop gör om de omdesignade processerna och affärskraven till **fungerande ' +
+        'lösningar eller system**: utveckla, konfigurera och testa tekniken, i linje med ' +
+        'verksamhetens behov.\n\n' +
+        '> **BPM kräver inte teknik** — men när automatisering ingår är det här den byggs.\n\n' +
+        'Steg: kommunicera (automatiseringens påverkan på roller och kompetens), **bestäm ' +
+        'BPM-komponenterna** (workflow, regelmotor, RPA, dokumenthantering), bestäm ' +
+        'utvecklingsansats, och ta fram **funktionella och tekniska specifikationer** med ' +
+        'tydlig gräns mellan verksamhets- och teknisk design. Ett **Business Process ' +
+        'Architecture Committee** ser till att allt stämmer med TOM och IT-arkitekturen. ' +
+        'Utmaningar: databeroenden, äldre system och integration.'
+    },
+    {
+      rubrik: 'Implement: i drift',
+      text:
+        'Implement sätter processförbättringar, organisationsförändringar och system i ' +
+        '**drift**. Här börjar **nyttorealiseringen**, och fasen ska säkerställa att det nya ' +
+        'arbetssättet accepteras, fungerar och består. Stegen:\n\n' +
+        '1. Uppdatera implementeringsstrategi och plan\n' +
+        '2. Kommunikation i båda riktningar\n' +
+        '3. Involvera ledningen — chefer ska vara förändringens förespråkare\n' +
+        '4. Förbered **användaracceptanstest (UAT)**\n' +
+        '5. Utbilda personalen, rollspecifikt och praktiskt\n' +
+        '6. Marknadsföringskampanjer, internt och externt\n' +
+        '7. Affärstester och **piloter** under verkliga förhållanden\n' +
+        '8. Uppdatera all dokumentation till den slutliga lösningen\n' +
+        '9. Planer för utrullning, **back-out** och reserv — hur man backar säkert om det går fel\n' +
+        '10. Genomför lösningen\n' +
+        '11. Mentorstöd efter driftsättningen\n' +
+        '12. **Handover/takeover** — ansvaret går från projektteamet till linjen\n' +
+        '13. Följ upp och justera mot business case och KPI:er\n' +
+        '14. Återkoppla resultat och lärdomar, och ge erkännande'
+    }
+  ],
+  nyckelbegrepp: [
+    'Innovate: to-be-design, simulering, gap-analys, uppdaterat business case och godkännande',
+    'Innovate-workshops i tre steg: ca 70 % → 95 % → slutgodkännande',
+    'Output från Innovate: to-be-processer och validerade lösningsförslag',
+    'People: roller med RACI, kompetensgap, struktur, utbildning, HR-policyer',
+    'Develop: BPM kräver inte teknik, men automatisering byggs här',
+    'Implement: UAT, piloter, back-out-planer, handover/takeover — nyttorealiseringen börjar'
+  ],
+  tentakoppling:
+    'HT25-ordinarie frågade vilka som är typiska outputs från Innovate. De felaktiga ' +
+    'alternativen hörde till andra faser: rotorsaker (Understand), riskregister och ' +
+    'utbildningsplaner (People och Implement).'
+},
+
+/* ====================== KAPITEL 9 ====================== */
+{
+  id: 'proc-bpm-9',
+  nr: 9,
+  titel: 'Realize, Sustainability och de tre essentials',
+  ingress: 'Att få ut nyttorna och behålla dem, och de tre förmågor som måste bära alla faser — projektledning, förändringsledning (60 % av arbetet) och ledarskap.',
+  lastid: 10,
+  amnen: ['proc-realize'],
+  avsnitt: [
+    {
+      rubrik: 'Realize: från leverans till värde',
+      text:
+        'Realize säkerställer att **nyttorna i business caset faktiskt uppnås** och består. ' +
+        'Många tror att ett projekt är klart vid driftsättning; Realize flyttar fokus **från ' +
+        'leverans till värdeskapande**.\n\n' +
+        'Nyttorealisering är **inte ett enskilt steg** utan en tråd genom alla faser:\n\n' +
+        '| Steg | När |\n' +
+        '| --- | --- |\n' +
+        '| Ramverk för nyttostyrning | Enablement |\n' +
+        '| Identifiera nyttor i ett **benefits register** | Launch |\n' +
+        '| Baslinje och jämförande mätning | Understand |\n' +
+        '| Förfina och optimera nyttomixen | Innovate |\n' +
+        '| Nyttodetaljer i en **Benefits Delivery Matrix** | Develop, People, Implement |\n' +
+        '| Leverans och uppföljning | Realize |\n' +
+        '| Värdeövervakning och maximering | Sustainability |\n\n' +
+        'Benefits register innehåller för varje nytta: ägare, värde i kronor, måldatum, ' +
+        'beroenden, risker och koppling till strategin. Det **tar tid** innan nyttorna syns, ' +
+        'och projektkostnaderna kan vara stora. Uteblir nyttan i ett område måste det ' +
+        'upptäckas tidigt så att man kan rätta till eller avbryta.'
+    },
+    {
+      rubrik: 'Sustainability: att förbättringarna består',
+      text:
+        'Sustainability är sista fasen och målet är **uthållig konkurrensfördel**. ' +
+        'Resultatet ska gå över från projekt till **business as usual** och fortsätta ' +
+        'förbättras. Utan den eroderar nyttorna när omvärlden förändras, och förtroendet för ' +
+        'framtida BPM-arbete skadas. Stegen:\n\n' +
+        '1. Utvärdera projektresultaten mot business case och nyttomatris\n' +
+        '2. Utvärdera handover/takeover — fungerar processägarskapet?\n' +
+        '3. Säkerställ att **process stewards** är utbildade\n' +
+        '4. Utvärdera processmått och prestationsstyrning\n' +
+        '5. Kvalitetssäkring av processen (regelbundna kontroller)\n' +
+        '6. Uppdatera processdokumentationen\n' +
+        '7. Kommunikation — lyft nyttorna och uppmuntra nya idéer\n\n' +
+        '**Organisatorisk hållbarhet** (kapitel 27) betyder att förbättring går från projekt ' +
+        'till **permanent förmåga**: ledningens engagemang, integrerad styrning, aktiv ' +
+        'prestationsstyrning och en lärande kultur. BPM ska vara ett **sätt att leda ' +
+        'verksamheten**, inte ett engångsprogram.'
+    },
+    {
+      rubrik: 'Tre essentials som bär alla faser',
+      text:
+        'De tio faserna räcker inte. De tre essentials ska genomsyra varje fas — de är ' +
+        'benen BPM-arbetet står på. Väl utförda ger de stabilt stöd; försummade får arbetet ' +
+        'att **luta, sjunka eller rasa**.\n\n' +
+        '**1. Project management.** BPM-projekt är mer komplexa än vanliga IT- eller ' +
+        'verksamhetsprojekt: tvärfunktionella processer, kulturförändring och kontinuerlig ' +
+        'förbättring. Vanlig projektledning (scope, tid, budget) räcker inte. BPM-projektledning ' +
+        'kräver dessutom **förändringsledning**, **intressenthantering** och ' +
+        '**BPM-expertis**.\n\n' +
+        '**2. People change management.** Se nästa avsnitt.\n\n' +
+        '**3. Leadership.** Ger vision, förtroende och koppling till strategin. Jeston ser ' +
+        'ledarskap som ett **kontinuerligt inflytande på alla nivåer**, inte bara hos högsta ' +
+        'ledningen. Det handlar om att inspirera mer än att administrera: tydlig ' +
+        'kommunikation, strategisk samstämmighet, förtroende, att vara förebild och att ' +
+        '**ge mandat snarare än kontrollera**.'
+    },
+    {
+      rubrik: '60 procent handlar om människor',
+      text:
+        'Jeston menar att **minst 60 % av BPM-arbetet** bör gå till förändringsledning och ' +
+        'kommunikation kring människor. Många BPM-initiativ misslyckas för att de ' +
+        '**försummar de mänskliga och kulturella dimensionerna**.\n\n' +
+        'Effektiv förändringsledning gör att medarbetarna är både **able** (kan, genom ' +
+        'utbildning) och **willing** (vill, genom motivation och engagemang) att arbeta på ' +
+        'nya sätt. Det gör BPM till en **mänsklig förändring**, inte en teknisk övning. Det ' +
+        'kräver förtroende, engagerat ledarskap, konsekvent kommunikation och medarbetare med ' +
+        'mandat.\n\n' +
+        'Risker om det inte prioriteras: motstånd och rädsla (för nedskärningar, outsourcing ' +
+        'och automatisering), låg användning av nya processer och system, att nyttorna ' +
+        'uteblir, att man faller tillbaka i gamla arbetssätt, och att förtroendet för ' +
+        'framtida BPM-arbete skadas — samma mönster som när BPR misslyckades.\n\n' +
+        '**Appreciative inquiry** är en framåtblickande, deltagande modell som hjälper ' +
+        'organisationen att **skapa** förändring i stället för att bara reagera på den — ' +
+        'genom att utgå från det som fungerar.'
+    }
+  ],
+  nyckelbegrepp: [
+    'Realize: nyttorna i business caset ska uppnås; nyttostyrning är en tråd genom alla faser',
+    'Benefits register (Launch) och Benefits Delivery Matrix',
+    'Sustainability = uthållig konkurrensfördel; från projekt till business as usual',
+    'Tre essentials: project management, people change management, leadership',
+    'BPM-projektledning kräver förändringsledning, intressenthantering och BPM-expertis',
+    'Minst 60 % av BPM-arbetet handlar om människor och kommunikation: able och willing',
+    'Ledarskap på alla nivåer: inspirera och ge mandat snarare än kontrollera'
+  ],
+  tentakoppling:
+    'HT25-ordinarie hade en hel essä om varför de 60 % kommunikation och mänskliga ' +
+    'aspekter är avgörande och vilka riskerna är. HT24-tentorna frågade flera gånger om ' +
+    'Realize och Sustainability.'
+},
+
+/* ====================== KAPITEL 10 ====================== */
+{
+  id: 'proc-bpm-10',
+  nr: 10,
+  titel: 'Andra perspektiv: Green BPM, process mining och AI',
+  ingress: 'Artiklarna och föreläsning 4b: BPM för hållbarhet och varför det inte slog igenom, process mining mot workshops, Rosemanns tre drifts och agentisk AI.',
+  lastid: 12,
+  amnen: ['proc-perspektiv'],
+  avsnitt: [
+    {
+      rubrik: 'Green BPM (Houy et al. 2012)',
+      text:
+        '**Green BPM** ligger i skärningen mellan BPM och **Green IS**. Idén är att BPM:s ' +
+        'metoder — modellering, design, exekvering och övervakning — kan anpassas för att ' +
+        'stödja hållbarhet, särskilt miljömässiga och ekonomiska mål: resurseffektivitet ' +
+        '(energi, bränsle, material), avfall och utsläpp, och hållbarhet över hela livscykeln.\n\n' +
+        'Varje aktivitet i en processmodell (BPMN eller EPC) kan **annoteras** med ' +
+        'miljöindikatorer som energiförbrukning eller CO₂-utsläpp, så att organisationen kan ' +
+        'mäta och styra sitt ekologiska fotavtryck direkt i processmodellerna.\n\n' +
+        '**Användningsområden:**\n\n' +
+        '- **IT-tjänster:** gröna servicenivåavtal (**gSLA**) i ramverk som ITIL, med tak för ' +
+        'energi per transaktion; incidenthantering som även fångar avvikelser i ' +
+        'hållbarhetsmått; kapacitetsplanering som undviker överdimensionering\n' +
+        '- **Alla affärsprocesser:** varje aktivitet annoteras med resursanvändning och avfall\n' +
+        '- **Leveranskedjor:** partner sätter gemensamma mål (t.ex. bränsle per transport) ' +
+        'och jämför planerat mot faktiskt — bättre miljö och lägre kostnader\n\n' +
+        '**Möjligheter:** miljömål vid sidan av kostnad, tid och kvalitet; datadrivna ' +
+        'hållbarhetsbeslut på processnivå; större medvetenhet om enskilda uppgifters påverkan. ' +
+        '**Utmaningar:** inga standardiserade hållbarhetsindikatorer i BPM-verktygen, behov ' +
+        'av nya mått och konventioner, avvägning mellan ekologi och ekonomi, och kultur- ' +
+        'och ledningsförändring.'
+    },
+    {
+      rubrik: 'Varför Green BPM inte slog igenom',
+      text:
+        'Visionen från 2012 har inte fått det breda genomslag som förutspåddes. Föreläsningen ' +
+        'förklarar varför:\n\n' +
+        '- **Redovisningsstandarderna** (GHG-protokollet, ISO, och i EU **CSRD/ESRS**) ' +
+        'fokuserar på organisationens **totala** koldioxidavtryck per år, inte på ' +
+        'processnivå\n' +
+        '- **BPMN och DMN är inte byggda** för att lagra kvantitativ hållbarhetsdata — de ' +
+        'flesta "gröna" annoteringar är egna tillägg\n' +
+        '- **Verktygen:** få BPM-verktyg kopplar direkt till utsläppsdatabaser, IoT eller ' +
+        'koldioxidredovisning\n' +
+        '- **Standardisering:** det finns inget branschschema som kopplar processteg till ' +
+        'utsläppsfaktorer och GHG-scopes\n' +
+        '- **Silos:** hållbarhetsteamen sköter rapporteringen och processteamen sköter BPM\n\n' +
+        '> Kärnan: **de flesta BPM-verktyg saknar inbyggt stöd för att lagra, räkna och ' +
+        'analysera energi-, utsläpps- och resursdata i modellerna.** Det är inte förbjudet ' +
+        'enligt lag, och process mining är inte oförmöget att hantera CO₂-data.'
+    },
+    {
+      rubrik: 'Process mining',
+      text:
+        '**Process mining** är tekniker som använder **händelseloggar** från ' +
+        'informationssystem för att automatiskt upptäcka, analysera och förbättra processer ' +
+        'utifrån hur de **faktiskt** körs. Forskningen började i slutet av 1990-talet, ' +
+        'kommersiella tillämpningar kom runt 2005, och Big Data och beräkningskraft gjorde det ' +
+        'möjligt i företagsskala. Det ligger i skärningen mellan datavetenskap, Big Data och ' +
+        'BPM — och är i hög grad europeiskt (tre av fyra ledande leverantörer är tyska).\n\n' +
+        '| | Traditionell BPM (workshops) | Process mining |\n' +
+        '| --- | --- | --- |\n' +
+        '| As-is | Hur vi **tror** att processen fungerar, ur intervjuer och workshops | Hur processen **faktiskt** fungerar, ur händelseloggar |\n' +
+        '| Källa | Människor, dokumentation, BPMN-modeller | Loggar från ERP, CRM, workflow-system |\n' +
+        '| Fråga | "Hur ska processen fungera?" | "Hur fungerar processen egentligen?" |\n' +
+        '| Styrkor | Rik verksamhetskunskap, mål, undantag, framtida design | Flaskhalsar, avvikelser, omarbete och varianter ur miljontals körningar |\n' +
+        '| Begränsningar | Subjektivt, ofullständigt, tidskrävande | Kräver bra loggdata; ser bara det som IT-systemen registrerar |\n\n' +
+        'Tre förmågor kompletterar Jeston-BPM:\n\n' +
+        '1. **Process discovery** — återskapa en processmodell ur loggarna\n' +
+        '2. **Conformance checking** — jämför den upptäckta processen med den avsedda ' +
+        'BPMN-modellen: följer man processen, var avviker man, bryts regler?\n' +
+        '3. **Process improvement** — hitta flaskhalsar, onödig väntan, omarbete och ' +
+        'varianter'
+    },
+    {
+      rubrik: 'Rosemann et al. (2024): tre drifts i AI-eran',
+      text:
+        'Tekniken skapar förutsättningar som förskjuter BPM-tänkandet i tre riktningar. ' +
+        'Förskjutningarna är illustrativa, inte uttömmande.\n\n' +
+        '| Drift | Från | Till (med AI) |\n' +
+        '| --- | --- | --- |\n' +
+        '| 1 | **Transaktion:** processer som diskreta steg, "start–uppgift–slut" | **Konversation:** naturligt språk med processer; människor och AI i samtal |\n' +
+        '| 2 | **Automatisering:** uppgifter och flöden automatiseras, förutsägbart, designat och testat av människor | **Autonomisering:** maskiner fattar och ändrar beslut, inte förutsägbart eller testat i förväg |\n' +
+        '| 3 | **Förenkling:** to-be ska alltid vara enklare än as-is | **Sofistikering:** AI möjliggör rika processer som tidigare var otänkbara, t.ex. hyperpersonalisering |\n\n' +
+        '**Konversationell BPM** börjar med kundchattbotar ("var är min order?") men går mot ' +
+        'att interna frågor ställs till processerna ("varför tar den här processen så lång ' +
+        'tid?") och att agentisk AI instrueras och rapporterar på naturligt språk.'
+    },
+    {
+      rubrik: 'Agentisk AI och Large Process Models',
+      text:
+        '**Agentisk AI** är ett spektrum av förmågor. Ett AI-system är mer agentiskt ju mer ' +
+        'komplex miljö det klarar med mindre instruktioner, ju bättre det förstår naturligt ' +
+        'språk och agerar självständigt för användaren, och ju mer det använder ' +
+        'designmönster som **verktygsanvändning och planering** med en språkmodell som ' +
+        'orkestrerare av arbetsflödet. Agentisk AI kan fungera som processens ' +
+        '**orkestrerare** och utmanar i dag de renodlade RPA-företagen.\n\n' +
+        'En **Large Process Model (LPM)** enligt Kampik et al. (2025), som förekom på ' +
+        'HT25-omtentan, är tanken att skapa en **samlad, datadriven kunskapsbas om processer** ' +
+        'som kan ge **automatiserade rekommendationer för processförbättring**. Den ersätter ' +
+        'inte processanalytiker eller BPM-arbete.\n\n' +
+        '**BPMN och DMN och förklarbarhet:** när beslut fattas automatiskt gör BPMN och DMN ' +
+        'beslutsflöden **visuella och begripliga**, så att man kan förklara för exempelvis ' +
+        'medborgare **varför** ett beslut blev som det blev.'
+    },
+    {
+      rubrik: 'Reijers (2021): disciplinens utveckling',
+      text:
+        'Reijers gick igenom fyra decennier av BPM-forskning och beskriver sju teman: ' +
+        '**BPM-system**, **processmodellering**, **processdesign**, **samordning och ' +
+        'interoperabilitet**, **hantering av modellsamlingar**, **process mining** och ' +
+        '**ny teknik**. Utgångspunkten är densamma som kursens: processorienterade ' +
+        'organisationer presterar bättre, eftersom en process ofta spänner över avdelningar ' +
+        'och utan samordning suboptimeras varje del för sig.\n\n' +
+        'Kom ihåg skillnaden från kapitel 2: Reijers, Houy och Rosemann är ' +
+        '**forskningslitteratur** — beskrivande och analytisk — medan Jeston är **normativ**.'
+    }
+  ],
+  nyckelbegrepp: [
+    'Green BPM: annotera aktiviteter med miljöindikatorer; gSLA i IT-tjänster',
+    'Green BPM slog inte igenom: verktygen saknar stöd för hållbarhetsdata, redovisning sker på organisationsnivå',
+    'Process mining: händelseloggar visar hur processen faktiskt körs',
+    'Tre förmågor: discovery, conformance checking, improvement',
+    'Rosemanns drifts: transaktion → konversation, automatisering → autonomisering, förenkling → sofistikering',
+    'LPM: samlad datadriven kunskapsbas som ger automatiserade förbättringsförslag',
+    'BPMN/DMN gör automatiserade beslut förklarbara'
+  ],
+  tentakoppling:
+    'HT25-ordinarie frågade varför Green BPM inte slog igenom och hur BPMN och DMN stödjer ' +
+    'förklarbarhet. HT25-omtentan frågade om Large Process Models.'
 }
 
 );

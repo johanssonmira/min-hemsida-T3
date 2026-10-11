@@ -1,754 +1,1227 @@
 /* =========================================================================
    Frågor – Processorienterad verksamhetsutveckling: BPM och 7FE-ramverket
 
-   Grundade i föreläsning 1 (01_SYSB23_BPM_HT26.pdf) och i de begrepp som
-   faktiskt förekommer i kursens fyra riktiga tentor (HT24 ordinarie och
-   omtenta, HT25 ordinarie och omtenta) — men frågorna här är egna
-   formuleringar, inte kopior av tentornas frågetext. Flera är medvetet
-   byggda som sant/falskt-påståenden, eftersom det är det dominerande
-   formatet på BPM-delen av den riktiga tentan.
+   Grundade i föreläsningarna F1–F4b HT26 och artiklarna. Tentorna HT24 och
+   HT25 har använts för att se vilka begrepp som prövas och i vilken form,
+   men alla frågor och scenarier här är egna formuleringar — ingen tentatext
+   är kopierad (se minnesregeln om att tentatext aldrig får in i koden).
+
+   Ett ämne per kapitel i kompendiet, så att Öva kan filtrera kapitel för
+   kapitel. Rätt alternativ är spritt över positionerna.
    ========================================================================= */
 
 window.SYSB23 = window.SYSB23 || {};
 window.SYSB23.fragor = (window.SYSB23.fragor || []).concat([
 
-  /* -------------------- BPM: definition, historia, drivkrafter -------------------- */
+  /* ============ Kapitel 1: definition, historia, drivkrafter ============ */
   {
-    id: 'proc-intro-01', delkurs: 'processer', amne: 'proc-intro',
-    typ: 'flerval', svarighet: 1,
-    fraga: 'Enligt Jeston (2022) är BPM i grunden...',
+    id: 'p1-01', delkurs: 'processer', amne: 'proc-intro', typ: 'flerval', svarighet: 1,
+    fraga: 'Hur beskriver Jeston (2022) vad BPM i grunden är?',
     alternativ: [
-      'En mjukvarusvit för att rita processdiagram',
-      'Implementeringen, exekveringen och styrningen av processer',
-      'Enbart modellering av verksamhetens processer',
-      'Ett projekt som avslutas när processerna är dokumenterade'
+      'Ett verktyg för att rita och lagra processdiagram',
+      'Ett avgränsat projekt som är klart när processerna är dokumenterade',
+      'Implementering, exekvering och styrning av processer',
+      'En samling mjukvarumoduler för automatisering'
     ],
-    ratt: 1,
+    ratt: 2,
     forklaringar: [
-      'Fel. Jeston är uttrycklig med att BPM inte är en mjukvarusvit eller viss teknik.',
-      'Rätt. BPM är implementeringen, exekveringen och styrningen (governance) av processer — inte bara att rita dem.',
-      'Fel. Jeston avfärdar explicit uppfattningen att BPM bara är modellering.',
-      'Fel. BPM är en pågående cykel (se BPM-livscykeln), inte ett engångsprojekt som tar slut.'
+      'Fel. Att modellera är bara en del. Jeston avfärdar uttryckligen att BPM är modellering.',
+      'Fel. BPM är löpande, inte ett engångsprojekt.',
+      'Rätt. Det handlar om att faktiskt införa, köra och styra processerna.',
+      'Fel. BPM är inte en mjukvarusvit eller teknik.'
     ],
-    forklaring: 'Ett vackert processdiagram som ingen använder är inte BPM — det är en bild.',
-    kalla: 'Föreläsning 1'
+    forklaring: 'Ett diagram som ingen arbetar efter är inte BPM — det är en bild.',
+    kalla: 'F1'
   },
   {
-    id: 'proc-intro-02', delkurs: 'processer', amne: 'proc-intro',
-    typ: 'flerval', svarighet: 1,
-    fraga: 'Produktivitetsparadoxen, som Robert Solow formulerade 1987, innebär att...',
+    id: 'p1-02', delkurs: 'processer', amne: 'proc-intro', typ: 'flerval', svarighet: 2,
+    fraga: 'En ledningsgrupp undrar om BPM och Enterprise Architecture är samma sak. Vilket svar stämmer med föreläsningen?',
     alternativ: [
-      'IT-investeringar syntes inte som ökad produktivitet i statistiken',
-      'Produktiviteten steg snabbare än företagen hann anställa folk',
-      'Produktiva företag investerade mindre i IT än oproduktiva',
-      'Produktivitetsmått blev omöjliga att beräkna efter datoriseringen'
+      'EA är den övergripande ritningen för att realisera strategin; BPM är ett operativt lager som kopplar strategi, verksamhet och IT',
+      'BPM är det strategiska ramverket som bestämmer hur EA ska se ut',
+      'De är olika namn på i stort sett samma angreppssätt',
+      'De är oberoende: EA handlar bara om IT-system, BPM bara om vardagens arbete'
     ],
     ratt: 0,
     forklaringar: [
-      'Rätt. "You can see the computer age everywhere but in the productivity statistics." Förklaringen är att IT ovanpå oförändrade processer inte ger effekt.',
-      'Fel. Det motsatta gällde — produktiviteten steg just inte.',
-      'Fel. Paradoxen handlar om att investeringarna inte gav utslag, inte om vem som investerade.',
-      'Fel. Måtten fanns och fungerade, det var resultatet som uteblev.'
+      'Rätt. EA är helhetsritningen; BPM verkar i verksamhetsskiktet och binder ihop strategi och IT.',
+      'Fel. Det är tvärtom — EA är den övergripande visionen.',
+      'Fel. De har gemensamma mål men olika roller.',
+      'Fel. EA rör hela företaget, inte bara IT, och de hänger tätt ihop.'
     ],
-    forklaring: 'Samma paradox motiverade både 90-talets managementtrender och senare BPR och BPM.',
-    kalla: 'Föreläsning 1'
+    forklaring: 'Tre skikt: strategi, verksamhet, applikationer och infrastruktur. BPM sitter i mitten.',
+    kalla: 'F1'
   },
   {
-    id: 'proc-intro-03', delkurs: 'processer', amne: 'proc-intro',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Påstående: BPR (Business Process Reengineering) misslyckades framför allt för att metoden saknade koppling till modern IT.',
-    alternativ: ['Sant', 'Falskt'],
-    ratt: 1,
-    forklaringar: [
-      'Fel. BPR handlade tvärtom uttryckligen om att använda IT för att radikalt designa om processer.',
-      'Rätt. BPR misslyckades ofta för att projekten blev för radikala, kostsamma och mötte starkt motstånd från medarbetare — inte för att IT-kopplingen saknades.'
-    ],
-    forklaring: 'Hammers ursprungliga idé ("obliterate, don\'t automate") satte IT i centrum. Det som gick fel var genomförandet: top-down, disruptivt, och ofta en ursäkt för nedskärningar.',
-    kalla: 'Föreläsning 1'
-  },
-  {
-    id: 'proc-intro-04', delkurs: 'processer', amne: 'proc-intro',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Vad var den centrala tesen i Hammers artikel "Reengineering Work: Don\'t Automate, Obliterate" (1990)?',
+    id: 'p1-03', delkurs: 'processer', amne: 'proc-intro', typ: 'flerval', svarighet: 1,
+    fraga: 'Vad innebar produktivitetsparadoxen som Solow beskrev 1987?',
     alternativ: [
-      'Processer bör automatiseras så snabbt som möjligt, oavsett kvalitet',
-      'Gamla, ineffektiva processer ska raderas och byggas om från grunden, inte bara datoriseras',
-      'IT-investeringar bör undvikas tills processerna är perfekta',
-      'Automatisering bör alltid ske stegvis, aldrig radikalt'
-    ],
-    ratt: 1,
-    forklaringar: [
-      'Fel. Hammers poäng var att blind automatisering av dåliga processer bara ger en snabbare dålig process.',
-      'Rätt. "Obliterate" betyder just att radera och börja om — radikal omdesign, inte att lägga teknik ovanpå det gamla.',
-      'Fel. Hammer förespråkade tvärtom kraftfull användning av modern IT.',
-      'Fel. Hammer förespråkade radikal, inte stegvis, förändring — det var själva poängen med BPR.'
-    ],
-    forklaring: 'Klassiska exempel är Ford (leverantörsreskontra, personalen minskade drastiskt genom att ta bort ett helt avstämningssteg) och IBM Credit (handläggningstid från en vecka till några timmar genom generalister i stället för en kedja av specialister).',
-    kalla: 'Föreläsning 1; Hammer (1990)'
-  },
-  {
-    id: 'proc-intro-05', delkurs: 'processer', amne: 'proc-intro',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Var uppstod den formella, matematiska modelleringen av processflöden (t.ex. Petri-nät) som senare blev en förlaga till BPMN?',
-    alternativ: [
-      'I amerikansk managementkonsultverksamhet',
-      'I europeisk (särskilt tysk och nederländsk) akademisk datavetenskap',
-      'I japansk kvalitetsrörelse (Kaizen, Six Sigma)',
-      'I brittisk redovisningsforskning'
-    ],
-    ratt: 1,
-    forklaringar: [
-      'Fel. Det amerikanska spåret handlade om affärsprocesstänkande (BPR, TQM), inte formell modellering.',
-      'Rätt. Petri-nät (Carl Adam Petri, 1962) och liknande formella modeller kom ur europeisk, EU-centrerad akademisk informatik.',
-      'Fel. Det är en separat strömning inom 90-talets managementtrender.',
-      'Fel. Inte kopplat till processflödesmodellering.'
-    ],
-    forklaring: 'BPM som eget fält föds 1998–2003 när det europeiska akademiska spåret möter det amerikanska affärsprocesstänkandet. Första BPM-konferensen: Eindhoven 2003.',
-    kalla: 'Föreläsning 1'
-  },
-  {
-    id: 'proc-intro-06', delkurs: 'processer', amne: 'proc-intro',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Vilken händelse ledde till Sarbanes-Oxley-regleringen (SOX) 2002, som i sin tur drev igenom bred BPM-adoption?',
-    alternativ: [
-      'Finanskrisen 2008',
-      'Enron-skandalen 2001',
-      'Införandet av ISO 9000',
-      'Millennieskiftets IT-buggar (Y2K)'
-    ],
-    ratt: 1,
-    forklaringar: [
-      'Fel. Finanskrisen kom senare och gav andra regleringar.',
-      'Rätt. Enron-skandalen 2001 ledde till SOX 2002, som krävde rigorös, granskningsbar dokumentation av processer kopplade till finansiell rapportering.',
-      'Fel. ISO 9000:2000 var en parallell, separat drivkraft för processdokumentation.',
-      'Fel. Y2K var ett tekniskt icke-problem utan koppling till BPM:s uppkomst.'
-    ],
-    forklaring: 'SOX gav BPM en konkret, tvingande anledning: metoder, verktyg och notation (t.ex. BPMN) för att dokumentera processer i syfte att klara revision.',
-    kalla: 'Föreläsning 1'
-  },
-  {
-    id: 'proc-intro-07', delkurs: 'processer', amne: 'proc-intro',
-    typ: 'flerval', svarighet: 3,
-    fraga: 'Vad är den tekniska begränsningen som gjorde att många tidiga RPA-satsningar inte skalade?',
-    alternativ: [
-      'RPA kräver omfattande kodning av specialister, en trång resurs i de flesta organisationer',
-      'RPA saknade helt stöd för molnbaserade applikationer',
-      'RPA arbetar via UI-interaktioner snarare än robusta systemintegrationer, vilket ger skörhet',
-      'RPA kunde bara automatisera processer med mänsklig inblandning'
-    ],
-    ratt: 2,
-    forklaringar: [
-      'Fel. RPA marknadsfördes tvärtom som low-code/no-code, tillgängligt för icke-tekniska medarbetare.',
-      'Fel. Molnstöd var inte huvudbegränsningen.',
-      'Rätt. RPA simulerar en användares klick i ett gränssnitt i stället för att integrera direkt mot systemen — ett litet gränssnittsbyte kan slå ut en hel bot.',
-      'Fel. RPA:s hela poäng är att automatisera bort mänsklig inblandning i repetitiva uppgifter.'
-    ],
-    forklaring: 'Samma sköra UI-baserade arkitektur är skälet till att agentisk AI-orkestrering nu utmanar renodlade RPA-leverantörer.',
-    kalla: 'Föreläsning 1'
-  },
-
-  /* -------------------- BPM-livscykeln och normativ litteratur -------------------- */
-  {
-    id: 'proc-livscykel-01', delkurs: 'processer', amne: 'proc-livscykel',
-    typ: 'flerval', svarighet: 1,
-    fraga: 'I vilket steg av den akademiska BPM-livscykeln kartläggs hur en process faktiskt fungerar i dag (as-is)?',
-    alternativ: ['Process identification', 'Process discovery', 'Process redesign', 'Process monitoring'],
-    ratt: 1,
-    forklaringar: [
-      'Fel. Identification handlar om att välja vilka processer som ska prioriteras, inte kartlägga dem i detalj.',
-      'Rätt. Process discovery kartlägger as-is.',
-      'Fel. Redesign designar to-be, den framtida processen.',
-      'Fel. Monitoring sker efter implementering.'
-    ],
-    forklaring: 'Ordningen är identification → modelling → discovery (as-is) → analysis → redesign (to-be) → implementation → monitoring.',
-    kalla: 'Föreläsning 1'
-  },
-  {
-    id: 'proc-livscykel-02', delkurs: 'processer', amne: 'proc-livscykel',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Vilket steg i BPM-livscykeln identifierar gapet mellan as-is och to-be?',
-    alternativ: ['Process design', 'Process analysis', 'Process implementation', 'Process optimization'],
-    ratt: 1,
-    forklaringar: [
-      'Fel. Design/redesign kommer efter att gapet redan identifierats.',
-      'Rätt. Analysfasen jämför nuläget med det önskade läget och pekar ut vad som behöver förändras.',
-      'Fel. Implementation genomför den redan beslutade förändringen.',
-      'Fel. "Process optimization" är inget eget steg i den akademiska sjustegslivscykeln.'
-    ],
-    forklaring: 'Frågan har förekommit ordagrant på en riktig tenta.',
-    kalla: 'Tentamen HT24'
-  },
-  {
-    id: 'proc-livscykel-03', delkurs: 'processer', amne: 'proc-livscykel',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Påstående: Jestons bok är ett exempel på forskningslitteratur, eftersom den testar hypoteser om varför organisationer beter sig som de gör.',
-    alternativ: ['Sant', 'Falskt'],
-    ratt: 1,
-    forklaringar: [
-      'Fel.',
-      'Rätt. Jestons bok är normativ managementlitteratur — den föreskriver vad chefer bör göra, bedömd efter om den fungerar i praktiken, inte efter vetenskaplig evidens.'
-    ],
-    forklaring: 'Reijers (2021), Houy et al. (2012) och Rosemann et al. (2024) är exempel på forskningslitteratur i kursen.',
-    kalla: 'Föreläsning 1'
-  },
-  {
-    id: 'proc-livscykel-04', delkurs: 'processer', amne: 'proc-livscykel',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Vad är sanningskriteriet för normativ managementlitteratur, till skillnad från forskningslitteratur?',
-    alternativ: [
-      'Om påståendet stöds av systematisk evidens eller resonemang',
-      'Om det fungerar för chefer — en praktikers logik',
-      'Om studien går att replikera av andra forskare',
-      'Om resultatet är generaliserbart till andra kontexter'
-    ],
-    ratt: 1,
-    forklaringar: [
-      'Fel. Det är forskningslitteraturens sanningskriterium.',
-      'Rätt. Normativ litteratur bedöms efter praktisk nytta ("does it work for managers?"), inte efter vetenskaplig evidens.',
-      'Fel. Replikerbarhet är ett forskningskriterium.',
-      'Fel. Generaliserbarhet är också ett forskningskriterium.'
-    ],
-    forklaring: 'Det betyder inte att normativ litteratur är sämre — men den kräver kritisk reflektion: under vilka förutsättningar gäller rådet?',
-    kalla: 'Föreläsning 1'
-  },
-  {
-    id: 'proc-livscykel-05', delkurs: 'processer', amne: 'proc-livscykel',
-    typ: 'flerval', svarighet: 1,
-    fraga: 'Enligt Jestons "avmystifiering" av BPM: stämmer det att BPM kräver en specifik mjukvarusvit för att fungera?',
-    alternativ: ['Sant', 'Falskt'],
-    ratt: 1,
-    forklaringar: [
-      'Fel.',
-      'Rätt. Det finns bra teknikstöd, men lyckad BPM är inte beroende av en viss lösning eller leverantör.'
-    ],
-    forklaring: 'Samma missuppfattning ("BPM är bara mjukvara") avfärdas redan i kapitel 1:s definition av BPM.',
-    kalla: 'Föreläsning 1'
-  },
-
-  /* -------------------- 7FE-ramverket -------------------- */
-  {
-    id: 'proc-7fe-01', delkurs: 'processer', amne: 'proc-7fe',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Vilka fyra huvudkomponenter bildar bokstäverna "FE" (upprepat) i namnet "7FE Process Framework"?',
-    alternativ: [
-      'Foundation, Follow-up, Feedback, Facilitation',
-      'Findings and Solutions, Foundations, Fulfilment, Future',
-      'Engagement, Empowerment, Execution, Evaluation',
-      'Enablement, Engagement, Evaluation, Execution'
-    ],
-    ratt: 1,
-    forklaringar: [
-      'Fel. Dessa alliterativa F-ord låter rimliga men är inte ramverkets riktiga komponenter.',
-      'Rätt. De fyra "F"-komponenterna är Findings and Solutions, Foundations, Fulfilment och Future — tillsammans med enablerna Leadership, People Change Management och Business Process Project Management.',
-      'Fel. Dessa E-ord är en konstruerad distraktor, inte ramverkets riktiga namn.',
-      'Fel. Samma sak — låter rimligt men är fel kombination.'
-    ],
-    forklaring: 'En riktig tentafråga bad specifikt om att välja ut ALLA sju komponenter bland en lista där flera alliterativa men falska alternativ blandats in. Lär dig de sju riktiga namnen utantill.',
-    kalla: 'Tentamen HT24'
-  },
-  {
-    id: 'proc-7fe-02', delkurs: 'processer', amne: 'proc-7fe',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Vad är huvudsyftet med processmodellering i Understand-fasen, enligt Jeston?',
-    alternativ: [
-      'Att producera fullständiga modeller redo för automatisering i ett BPMS',
-      'Att definiera detaljerade KPI:er för framtida styrning',
-      'Att få fram en gemensam, faktabaserad bild av hur processen fungerar i dag, som underlag för analys',
-      'Att skapa dokumentation enbart för revision och kvalitetssäkring'
-    ],
-    ratt: 2,
-    forklaringar: [
-      'Fel. Det är för tidigt i BPM-arbetet för automatiseringsklara modeller.',
-      'Fel. KPI-definition sker senare.',
-      'Rätt. Understand-fasens modellering skapar en gemensam bild av nuläget, som grund för att analysera hur processen kan optimeras.',
-      'Fel. Revision/kvalitetssäkring är en bieffekt, inte huvudsyftet i just den här fasen.'
-    ],
-    forklaring: 'Precis den här frågan förekom på HT25:s omtenta med samma fyra typer av felaktiga distraktorer.',
-    kalla: 'Tentamen HT25'
-  },
-  {
-    id: 'proc-7fe-03', delkurs: 'processer', amne: 'proc-7fe',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Vad skiljer en "process asset" från en ren processmodell, enligt Jeston?',
-    alternativ: [
-      'Process asset används bara för små förändringar, processmodellen för stora',
-      'Processmodellen beskriver en specifik sekvens av aktiviteter, medan process asset dessutom innehåller regler, ägarskap, risker, IT-stöd och dokumentationskrav',
-      'Process asset är en typ av BPMN-diagram, medan processmodellen är textbaserad',
-      'Det finns ingen egentlig skillnad — termerna används synonymt'
-    ],
-    ratt: 1,
-    forklaringar: [
-      'Fel. Skillnaden handlar om innehåll, inte förändringens storlek.',
-      'Rätt. Process asset är ett vidare begrepp: modellen plus regler, ägarskap, risker, IT-stöd och dokumentationskrav.',
-      'Fel. Ingetdera är kopplat till en specifik diagramtyp.',
-      'Fel. De är uttryckligen olika begrepp i kursen.'
-    ],
-    forklaring: 'Vid en incident kopplad till en process är det process asseten — inte bara diagrammet — man vänder sig till för att förstå steg, regler, ansvar och beslutspunkter.',
-    kalla: 'Tentamen HT25'
-  },
-  {
-    id: 'proc-7fe-04', delkurs: 'processer', amne: 'proc-7fe',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Vad är huvudsyftet med en Target Operating Model (TOM)?',
-    alternativ: [
-      'En detaljerad karta över organisationens processer i nuläget (as-is)',
-      'Ett verktyg för att beräkna kostnadsbesparingar från processförbättringar',
-      'En schematisk överblick över organisationens framtida IT-arkitektur',
-      'En övergripande beskrivning av hur organisationens olika delar ska fungera i framtiden för en lyckad BPM-implementering'
+      'Att företag med mycket IT anställde fler än andra',
+      'Att produktiviteten inte längre gick att mäta',
+      'Att produktiva företag investerade mindre i IT',
+      'Att stora IT-investeringar inte syntes som högre produktivitet'
     ],
     ratt: 3,
     forklaringar: [
-      'Fel. TOM handlar om framtiden, inte nuläget — det är motsatsen till as-is.',
-      'Fel. TOM är inte primärt ett kalkylverktyg.',
-      'Fel. TOM är bredare än bara IT-arkitektur — den omfattar hela organisationen.',
-      'Rätt. TOM fastställs i Foundations-fasen och beskriver helhetsbilden av det önskade framtida tillståndet.'
+      'Fel. Paradoxen handlade om produktivitet, inte anställningar.',
+      'Fel. Den gick att mäta — den ökade bara inte.',
+      'Fel. Det var inte så sambandet beskrevs.',
+      'Rätt. "Datorålder överallt utom i produktivitetsstatistiken." Teknik ovanpå oförändrade processer gav ingen effekt.'
     ],
-    forklaring: 'Håll TOM isär från Red Wine Test: TOM är en mer strukturerad, formell beskrivning; Red Wine Test är en informell workshop-övning med samma framåtblickande syfte.',
-    kalla: 'Tentamen HT25'
+    forklaring: 'Paradoxen är ett av skälen till att 90-talet angrep själva processerna — med BPR, ERP, TQM och till slut BPM.',
+    kalla: 'F1'
   },
   {
-    id: 'proc-7fe-05', delkurs: 'processer', amne: 'proc-7fe',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Vad kännetecknar ett Red Wine Test, enligt Jeston?',
+    id: 'p1-04', delkurs: 'processer', amne: 'proc-intro', typ: 'flerval', svarighet: 2,
+    fraga: 'Varför levde Business Process Reengineering inte upp till sina löften?',
     alternativ: [
-      'En kartläggning och analys av organisationens as-is-processer',
-      'En workshop där man analyserar strategidokument och kopplar dem till centrala processer',
-      'Deltagarna föreställer sig att BPM-projektet redan är genomfört och beskriver det önskade framtida tillståndet',
-      'En genomgång av riskerna kopplade till olika processer'
+      'Projekten blev ofta för radikala och dyra och mötte starkt motstånd',
+      'Metoden saknade koppling till IT',
+      'Den användes nästan bara i små företag',
+      'Den fokuserade så mycket på personalen att effektiviteten glömdes bort'
+    ],
+    ratt: 0,
+    forklaringar: [
+      'Rätt. Radikala top-down-projekt med hög risk, ofta en ursäkt för nedskärningar, och medarbetarna togs inte med.',
+      'Fel. BPR satte tvärtom IT i centrum — "use the power of modern IT".',
+      'Fel. BPR var stort i stora organisationer.',
+      'Fel. Det var snarare tvärtom: medarbetarna försummades.'
+    ],
+    forklaring: 'BPM växte fram som en mognare efterföljare: stegvis och kontinuerligt i stället för allt på en gång.',
+    kalla: 'F1; Hammer (1990)'
+  },
+  {
+    id: 'p1-05', delkurs: 'processer', amne: 'proc-intro', typ: 'flerval', svarighet: 2,
+    fraga: 'Vad var kärnan i Hammers "Don’t Automate, Obliterate" (1990)?',
+    alternativ: [
+      'Automatisera så snabbt som möjligt för att vinna marknadsandelar',
+      'Undvik IT tills processerna är perfekta',
+      'Gamla processer ska rivas och göras om radikalt med hjälp av IT, inte bara datoriseras',
+      'Förbättra processer i små steg med hjälp av medarbetarnas förslag'
     ],
     ratt: 2,
     forklaringar: [
-      'Fel. Det är Understand-fasens jobb, inte Red Wine Test.',
-      'Fel. Det beskriver ett annat sorts strategiworkshop-upplägg.',
-      'Rätt. Red Wine Test skapar ett gemensamt narrativ om hur framgång ser ut, genom att föreställa sig att projektet redan lyckats.',
-      'Fel. Riskgenomgång är en annan aktivitet.'
+      'Fel. Hammer varnade just för att automatisera gamla processer.',
+      'Fel. IT var hans verktyg för omdesignen.',
+      'Rätt. Att automatisera en dålig process ger en snabbare dålig process.',
+      'Fel. Det låter mer som Kaizen eller BPM — Hammer ville vara radikal.'
     ],
-    forklaring: 'Namnet syftar på den avslappnade, informella tonen — som ett samtal över ett glas rödvin om hur bra allt blivit.',
-    kalla: 'Tentamen HT25'
+    forklaring: 'Exemplet i artikeln är Fords leverantörsreskontra, där avstämningssteget togs bort helt.',
+    kalla: 'F1; Hammer (1990)'
   },
   {
-    id: 'proc-7fe-06', delkurs: 'processer', amne: 'proc-7fe',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Vad kännetecknar en "quick win" i BPM-sammanhang?',
+    id: 'p1-06', delkurs: 'processer', amne: 'proc-intro', typ: 'flerval', svarighet: 2,
+    fraga: 'Vilka två spår möttes när BPM blev ett eget fält kring 1998–2003?',
     alternativ: [
-      'Den kräver ofta extern konsultkompetens och omfattande förstudier',
-      'Den har liten praktisk effekt men stor symbolisk betydelse',
-      'Den kan genomföras snabbt, utan stora kostnader, och ger omedelbar förbättring',
-      'Den minskar behovet av workshops och andra tidskrävande BPM-aktiviteter'
+      'Japansk kvalitetsrörelse och amerikansk redovisning',
+      'Amerikanskt affärsprocesstänkande och europeisk akademisk workflow-modellering',
+      'Brittisk organisationsteori och skandinavisk systemutveckling',
+      'Leanproduktion och agil mjukvaruutveckling'
+    ],
+    ratt: 1,
+    forklaringar: [
+      'Fel.',
+      'Rätt. BPR och managementtrender från USA möttes av formell modellering, t.ex. Petri-nät, från Tyskland och Nederländerna. Första BPM-konferensen var i Eindhoven 2003.',
+      'Fel.',
+      'Fel. Lean är en rot till kvalitetstänkandet, men det var inte de två spår som möttes.'
+    ],
+    forklaring: 'Det europeiska spåret gav den visuella representationen av formella modeller — en föregångare till BPMN.',
+    kalla: 'F1'
+  },
+  {
+    id: 'p1-07', delkurs: 'processer', amne: 'proc-intro', typ: 'flerval', svarighet: 2,
+    fraga: 'Vilket regelverk från 2002 drev igenom bred processdokumentation och BPM?',
+    alternativ: [
+      'GDPR',
+      'Basel II',
+      'Sarbanes-Oxley (SOX), efter Enron-skandalen',
+      'ISO 14001'
     ],
     ratt: 2,
     forklaringar: [
-      'Fel. Tvärtom — quick wins kräver just inte omfattande förstudier.',
-      'Fel. Effekten ska vara verklig och omedelbar, inte bara symbolisk.',
-      'Rätt. Snabbt, billigt, omedelbar effekt — poängen är att bygga momentum tidigt.',
-      'Fel. Quick wins ersätter inte det grundläggande BPM-arbetet.'
-    ],
-    forklaring: 'En quick win är ett sätt att visa värde tidigt medan de större, mer tidskrävande förändringarna fortfarande pågår.',
-    kalla: 'Tentamen HT25'
-  },
-  {
-    id: 'proc-7fe-07', delkurs: 'processer', amne: 'proc-7fe',
-    typ: 'flerval', svarighet: 3,
-    fraga: 'Påstående: Enligt 7FE-ramverket blir uppföljning (Follow-up/Sustainability) onödig så snart Evaluation-fasen visar att BPM-målen är fullt uppnådda.',
-    alternativ: ['Sant', 'Falskt'],
-    ratt: 1,
-    forklaringar: [
+      'Fel. GDPR kom 2018.',
       'Fel.',
-      'Rätt. Sustainability handlar om löpande styrning och kontinuerlig förbättring, oavsett vad en enskild utvärdering visat. BPM är en cykel, inte ett engångsprojekt.'
+      'Rätt. SOX krävde granskningsbar dokumentation av alla processer kring finansiell rapportering.',
+      'Fel. ISO 9000:2000 drev processdokumentation, men det var inte ett regelverk från 2002.'
     ],
-    forklaring: 'Samma logik som BPM-livscykeln: monitoring leder tillbaka till identification, det tar aldrig riktigt slut.',
-    kalla: 'Tentamen HT24'
-  },
-  {
-    id: 'proc-7fe-08', delkurs: 'processer', amne: 'proc-7fe',
-    typ: 'flerval', svarighet: 3,
-    fraga: 'Påstående: Enablement-fasen i 7FE handlar uteslutande om tekniskt stöd, som BPM-mjukvara och verktyg.',
-    alternativ: ['Sant', 'Falskt'],
-    ratt: 1,
-    forklaringar: [
-      'Fel.',
-      'Rätt. Enablement handlar om strukturerat stöd och resurser i vidare mening — inklusive kompetens och organisatoriskt stöd, inte bara teknik. "Uteslutande" är ordet som gör påståendet falskt.'
-    ],
-    forklaring: 'En vanlig anledning till BPM-misslyckanden är just en svag Enablement-grund: brist på strukturerat stöd och resurser för BPM-kompetens, inte bristande mjukvara.',
-    kalla: 'Tentamen HT24'
+    forklaring: 'Processer dokumenterades nu för regelefterlevnad, inte bara för prestation — och BPMN fick fart.',
+    kalla: 'F1'
   },
 
-  /* -------------------- Att starta och driva BPM-arbete -------------------- */
+  /* ============ Kapitel 2: livscykeln och normativ litteratur ============ */
   {
-    id: 'proc-impl-01', delkurs: 'processer', amne: 'proc-implementering',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Vad är skillnaden mellan en driver och en trigger i BPM-sammanhang?',
+    id: 'p2-01', delkurs: 'processer', amne: 'proc-livscykel', typ: 'flerval', svarighet: 1,
+    fraga: 'I vilket steg av BPM-livscykeln kartläggs hur processen faktiskt fungerar i dag?',
+    alternativ: ['Process discovery', 'Process identification', 'Process redesign', 'Process monitoring'],
+    ratt: 0,
+    forklaringar: [
+      'Rätt. Discovery ger as-is.',
+      'Fel. Identification handlar om vilka processer som finns och vilka som ska prioriteras.',
+      'Fel. Redesign skapar to-be.',
+      'Fel. Monitoring följer processen efter implementering.'
+    ],
+    forklaring: 'Identification → modelling → discovery → analysis → redesign → implementation → monitoring.',
+    kalla: 'F1'
+  },
+  {
+    id: 'p2-02', delkurs: 'processer', amne: 'proc-livscykel', typ: 'flerval', svarighet: 2,
+    fraga: 'Var i livscykeln identifieras gapet mellan as-is och to-be?',
+    alternativ: ['Process implementation', 'Process monitoring', 'Process identification', 'Process analysis'],
+    ratt: 3,
+    forklaringar: [
+      'Fel.',
+      'Fel.',
+      'Fel.',
+      'Rätt. Analysen hittar flaskhalsar och avvikelser och visar vad som måste ändras.'
+    ],
+    forklaring: 'As-is är en beskrivning; to-be är ett beslut. Analysen bygger bron däremellan.',
+    kalla: 'F1'
+  },
+  {
+    id: 'p2-03', delkurs: 'processer', amne: 'proc-livscykel', typ: 'flerval', svarighet: 2,
+    fraga: 'Vad är sanningskriteriet för normativ managementlitteratur som Jestons bok?',
     alternativ: [
-      'Drivers är externa faktorer, triggers är interna initiativ från ledningen',
-      'Drivers är operativa frågor, triggers är strategiska mål',
-      'Drivers är långsiktiga strategiska motivatorer, triggers är specifika händelser som utlöser omedelbar handling',
-      'Drivers är mätbara processmått, triggers är milstolpar som visar processframgång'
+      'Att påståendena stöds av systematisk evidens',
+      'Att råden fungerar för chefer i praktiken',
+      'Att resultaten går att replikera',
+      'Att slutsatserna är generaliserbara'
+    ],
+    ratt: 1,
+    forklaringar: [
+      'Fel. Det är forskningslitteraturens kriterium.',
+      'Rätt. Normativ litteratur bedöms efter användbarhet och ger tumregler för handling.',
+      'Fel. Det hör till forskningens logik.',
+      'Fel. Forskningen strävar efter generaliserbarhet; normativa råd är "tillräckligt bra" men inte universella.'
+    ],
+    forklaring: 'Läs Jeston kritiskt: under vilka förutsättningar gäller rådet, och vad bygger exemplet på?',
+    kalla: 'F1'
+  },
+  {
+    id: 'p2-04', delkurs: 'processer', amne: 'proc-livscykel', typ: 'flerval', svarighet: 2,
+    fraga: 'Påstående: Reijers (2021) och Jeston (2022) är samma sorts litteratur, eftersom båda handlar om BPM.',
+    alternativ: ['Sant', 'Falskt'],
+    ratt: 1,
+    forklaringar: [
+      'Fel.',
+      'Rätt. Reijers är forskningslitteratur (beskrivande och analytisk); Jeston är normativ (föreskrivande).'
+    ],
+    forklaring: 'Samma ämne, olika logik: vetenskapens validitet mot praktikens användbarhet.',
+    kalla: 'F1'
+  },
+  {
+    id: 'p2-05', delkurs: 'processer', amne: 'proc-livscykel', typ: 'flerval', svarighet: 2,
+    fraga: 'Vilken av Jestons "avmystifieringar" stämmer?',
+    alternativ: [
+      'BPM är enkelt om man har rätt mjukvara',
+      'Lyckad BPM kräver alltid externa konsulter',
+      'BPM är komplext, så det är bättre att börja litet och växa än att gå all-in',
+      'Varje organisation bör utveckla en egen BPM-metod'
     ],
     ratt: 2,
     forklaringar: [
-      'Fel. Skillnaden handlar inte om internt/externt.',
-      'Fel. Det är tvärtom — drivers är snarare de mer strategiska.',
-      'Rätt. Driver = långsiktig motivator, trigger = specifik händelse som kräver handling nu.',
-      'Fel. Ingetdera begrepp definieras som ett mått eller en milstolpe.'
+      'Fel. BPM är inte beroende av en viss teknik, och det är inte enkelt.',
+      'Fel. Konsulter kan hjälpa men beror på mognad och kompetens.',
+      'Rätt.',
+      'Fel. Jeston avråder från egna "DIY"-metoder — det finns få beprövade.'
     ],
-    forklaring: 'En organisation kan ha en driver (t.ex. konkurrenstryck) i bakgrunden länge innan en konkret trigger (t.ex. en kundförlust) får dem att faktiskt agera.',
-    kalla: 'Tentamen HT24'
+    forklaring: 'BPM är moget, men beror fortfarande på ledningens och medarbetarnas engagemang.',
+    kalla: 'F1'
+  },
+
+  /* ============ Kapitel 3: att starta BPM ============ */
+  {
+    id: 'p3-01', delkurs: 'processer', amne: 'proc-start', typ: 'flerval', svarighet: 1,
+    fraga: 'Vilken framgångsfaktor är enligt Jeston den enskilt viktigaste?',
+    alternativ: [
+      'Ett modernt BPM-system',
+      'Synligt stöd och drivkraft från VD och högsta ledningen',
+      'Externa konsulter med branscherfarenhet',
+      'Detaljerade as-is-modeller'
+    ],
+    ratt: 1,
+    forklaringar: [
+      'Fel. Teknik är en möjliggörare, inte en framgångsfaktor i sig.',
+      'Rätt. Saknas det stödet i ett storskaligt program ska man enligt Jeston helt enkelt låta bli.',
+      'Fel.',
+      'Fel.'
+    ],
+    forklaring: 'De sex: ledningens drivkraft, tydliga drivers, tydlig vision, mätbart värde, BPM-team med mandat, kopplade incitament.',
+    kalla: 'F2'
   },
   {
-    id: 'proc-impl-02', delkurs: 'processer', amne: 'proc-implementering',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'En myndighet måste anpassa sina processer till nya nationella regler som påverkar hela verksamheten. Enligt Jeston bör de...',
+    id: 'p3-02', delkurs: 'processer', amne: 'proc-start', typ: 'flerval', svarighet: 2,
+    fraga: 'En bank måste ändra sin kundkontroll efter en ny EU-förordning. Vad är förordningen i Jestons termer?',
     alternativ: [
-      'skjuta upp projektet tills varje enhet skapat egna interna planer',
-      'köra ett rent bottom-up-angreppssätt eftersom det engagerar flest personer',
-      'lämna lösningen till varje avdelning att hantera decentraliserat',
-      'driva arbetet top-down för att säkerställa styrning, mandat och samordning över hela organisationen'
+      'En driver',
+      'En quick win',
+      'En trigger',
+      'Ett implementeringsscenario'
+    ],
+    ratt: 2,
+    forklaringar: [
+      'Fel. En driver är ett affärsskäl eller motiv, som att öka lönsamheten.',
+      'Fel.',
+      'Rätt. En händelse som tvingar fram handling, ofta en förändring utifrån.',
+      'Fel.'
+    ],
+    forklaring: 'Driver = varför vi vill. Trigger = det som händer och gör att vi måste. Båda ska vara dokumenterade och förstådda innan BPM startar.',
+    kalla: 'F2'
+  },
+  {
+    id: 'p3-03', delkurs: 'processer', amne: 'proc-start', typ: 'flerval', svarighet: 2,
+    fraga: 'Ekonomiavdelningen på ett företag vill förbättra sina processer, men ledningen visar inget intresse och strategin är otydlig. Vad rekommenderar Jeston?',
+    alternativ: [
+      'Vänta tills ledningen tagit fram en ny strategi',
+      'Starta ett företagsövergripande top-down-program ändå',
+      'Outsourca de krångligaste processerna',
+      'Börja i liten skala bottom-up och bygg momentum med synliga förbättringar'
     ],
     ratt: 3,
     forklaringar: [
-      'Fel. Att vänta löser inget regulatoriskt tvingande krav.',
-      'Fel. Bottom-up passar bättre för lokala förbättringar, inte tvärfunktionella, strategiskt tvingande förändringar.',
-      'Fel. Decentraliserad hantering ger inkonsekvent efterlevnad av ett krav som gäller hela verksamheten.',
-      'Rätt. Strategiskt viktiga, tvärfunktionella förändringar kräver top-down-styrning för samordning.'
+      'Fel. Att vänta ger ingenting.',
+      'Fel. Utan ledningens stöd fungerar inte top-down.',
+      'Fel.',
+      'Rätt. Små lokala vinster visar värde och kan väcka ledningens intresse.'
     ],
-    forklaring: 'Jämför med "under the radar" och "bottom-up", som passar bättre när ledningen INTE är engagerad och strategin är oklar — motsatt situation.',
-    kalla: 'Tentamen HT25'
+    forklaring: 'Top-down ger riktning, bottom-up ger fäste. När riktningen saknas får man börja med fästet.',
+    kalla: 'F2'
   },
   {
-    id: 'proc-impl-03', delkurs: 'processer', amne: 'proc-implementering',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Två processanalytiker på en HR-avdelning har på eget initiativ börjat kartlägga sina processer. Cheferna känner till det men har inte prioriterat det — arbetet sker sporadiskt utan budget eller formell styrning. Vilket Jeston-scenario beskriver detta?',
-    alternativ: ['Business as usual', 'Under the radar', 'In the driver’s seat', 'Pilot project'],
+    id: 'p3-04', delkurs: 'processer', amne: 'proc-start', typ: 'flerval', svarighet: 2,
+    fraga: 'En kommun ska ställa om hela sin ärendehantering till ett nytt nationellt system. Det berör alla förvaltningar och är strategiskt viktigt. Hur bör BPM-arbetet drivas?',
+    alternativ: [
+      'Top-down, för mandat, styrning och samordning över hela organisationen',
+      'Bottom-up, eftersom det engagerar flest',
+      'Decentraliserat — varje förvaltning löser det själv',
+      'Som ett under the radar-projekt'
+    ],
+    ratt: 0,
+    forklaringar: [
+      'Rätt. Tvärfunktionellt och strategiskt kräver top-down.',
+      'Fel. Bottom-up får inte räckvidd nog.',
+      'Fel. Då tappas samordningen.',
+      'Fel.'
+    ],
+    forklaring: 'Typ 4-projekt (företagsövergripande) måste drivas av VD eller ledningsgruppen.',
+    kalla: 'F2'
+  },
+  {
+    id: 'p3-05', delkurs: 'processer', amne: 'proc-start', typ: 'flerval', svarighet: 2,
+    fraga: 'På ett lager har en driftchef och en kollega på eget initiativ börjat rita sina flöden. Ledningen vet om det men har inte avsatt pengar eller tid, och ingen styr arbetet. Vilket av Jestons scenarier är det?',
+    alternativ: ['Pilot project', 'In the driver’s seat', 'Business as usual', 'Under the radar'],
+    ratt: 3,
+    forklaringar: [
+      'Fel. En pilot är ett riktat projekt för att bevisa värdet.',
+      'Fel. Där ses BPM som strategiskt med växande styrning.',
+      'Fel. Där är BPM helt inbäddat.',
+      'Rätt. Små, informella insatser med begränsat stöd.'
+    ],
+    forklaring: 'Scenariot avgör hur strikt och brett 7FE tillämpas.',
+    kalla: 'F2'
+  },
+  {
+    id: 'p3-06', delkurs: 'processer', amne: 'proc-start', typ: 'flerval', svarighet: 2,
+    fraga: 'Ett BPM-initiativ startas för att kundklagomålen på leveranser har ökat kraftigt. Vilken typ av initiering är det?',
+    alternativ: ['Strategy-led', 'Business issue-led', 'Process-led', 'Benefits-led'],
     ratt: 1,
     forklaringar: [
-      'Fel. Business as usual innebär att BPM redan är en etablerad, löpande del av verksamheten.',
-      'Rätt. Under the radar: känt av ledningen men inte formellt prioriterat, sporadiskt och utan styrning.',
-      'Fel. In the driver’s seat innebär tydlig, aktiv kontroll — motsatsen till scenariot här.',
-      'Fel. Ett pilotprojekt är avgränsat och tidsbestämt, inte ett odefinierat, informellt initiativ.'
+      'Fel. Strategy-led utgår från strategin och startar i Foundations och Enablement.',
+      'Rätt. Ett svar på ett konkret verksamhetsproblem, oftast taktiskt och lokalt.',
+      'Fel. Process-led startas av processchefer eller analytiker oberoende av strategin.',
+      'Fel. Det är inte en av de tre.'
     ],
-    forklaring: 'Ordagrant hämtat scenario från HT25:s omtenta.',
-    kalla: 'Tentamen HT25'
+    forklaring: 'Tre sätt: strategy-led, business issue-led, process-led.',
+    kalla: 'F2'
   },
   {
-    id: 'proc-impl-04', delkurs: 'processer', amne: 'proc-implementering',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Påstående: I ett "business-as-usual"-scenario är BPM-arbetet pausat, och det finns inget behov av löpande processutvärdering förrän ett uttryckligt behov uppstår.',
+    id: 'p3-07', delkurs: 'processer', amne: 'proc-start', typ: 'flerval', svarighet: 1,
+    fraga: 'Påstående: Jeston menar att BPM-kompetensen på lång sikt helst ska finnas hos externa konsulter.',
     alternativ: ['Sant', 'Falskt'],
     ratt: 1,
     forklaringar: [
       'Fel.',
-      'Rätt. Business as usual betyder att BPM är en etablerad, ständigt pågående del av verksamheten — inte att den är pausad.'
+      'Rätt. Konsulter är bra som coacher, granskare och startstöd, men BPM-chefer bör vara integrerade i organisationen.'
     ],
-    forklaring: 'Namnet är lite missvisande om man läser det bokstavligt: "vanligt" här betyder normaliserat och inbäddat, inte vilande.',
-    kalla: 'Tentamen HT24'
-  },
-  {
-    id: 'proc-impl-05', delkurs: 'processer', amne: 'proc-implementering',
-    typ: 'flerval', svarighet: 3,
-    fraga: 'Ett projekt bör enligt Jeston involvera endast ledningsgruppen, för att beslut ska kunna fattas snabbt och effektivt. Sant eller falskt?',
-    alternativ: ['Sant', 'Falskt'],
-    ratt: 1,
-    forklaringar: [
-      'Fel.',
-      'Rätt. Kursen understryker tvärtom att brett engagemang (inte bara ledningen) är avgörande — kom ihåg att cirka 60 % av BPM-arbetet handlar om just kommunikation och mänskliga aspekter.'
-    ],
-    forklaring: 'Att begränsa deltagandet till ledningen ökar risken för motstånd och uteblivet adoption längre ner i organisationen — samma misstag som fällde många BPR-projekt.',
-    kalla: 'Tentamen HT24'
+    forklaring: 'Externa experter kan också lösa konflikter när program kört fast och utvärdera slutresultatet oberoende.',
+    kalla: 'F2'
   },
 
-  /* -------------------- Leadership och people change management -------------------- */
+  /* ============ Kapitel 4: improve before automate ============ */
   {
-    id: 'proc-forandring-01', delkurs: 'processer', amne: 'proc-forandring',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Ungefär hur stor andel av arbetet i ett BPM-initiativ menar Jeston handlar om kommunikation och mänskliga aspekter, snarare än teknik eller modellering?',
-    alternativ: ['Cirka 20 %', 'Cirka 40 %', 'Cirka 60 %', 'Cirka 90 %'],
+    id: 'p4-01', delkurs: 'processer', amne: 'proc-teknik', typ: 'flerval', svarighet: 1,
+    fraga: 'Varför ska en process enligt Jeston förbättras innan den automatiseras?',
+    alternativ: [
+      'Automatisering är alltid dyrare än förbättring',
+      'Automatisering förstärker det som finns — en ineffektiv process blir bara snabbare dålig',
+      'BPM-system klarar inte processer som inte är dokumenterade i BPMN',
+      'Medarbetarna vill hellre ha förbättringar än ny teknik'
+    ],
+    ratt: 1,
+    forklaringar: [
+      'Fel. Det är inte en kostnadsjämförelse.',
+      'Rätt. Teknik är en möjliggörare och kan inte kompensera för dålig processdesign.',
+      'Fel.',
+      'Fel.'
+    ],
+    forklaring: 'Risken med att automatisera dåliga processer: bortkastade investeringar, frustration och system som inte används.',
+    kalla: 'F2'
+  },
+  {
+    id: 'p4-02', delkurs: 'processer', amne: 'proc-teknik', typ: 'flerval', svarighet: 2,
+    fraga: 'En controller berättar att månadsbokslutet bygger på sju kalkylblad som skickas runt via e-post. Vad säger det enligt Jestons spreadsheet-test?',
+    alternativ: [
+      'Att processen är flexibel och väl anpassad',
+      'Att ett nytt ERP-system direkt bör köpas in',
+      'Att processen först behöver förbättras innan den automatiseras',
+      'Att kalkylbladen bör ersättas av RPA'
+    ],
     ratt: 2,
     forklaringar: [
       'Fel.',
-      'Fel.',
-      'Rätt. Cirka 60 % — en majoritet, men inte "nästan allt".',
-      'Fel. Överdriver andelen.'
+      'Fel. Att automatisera direkt är precis felet.',
+      'Rätt. Kalkylblad är ett tecken på att man täcker över processproblem i stället för att lösa grundorsaken.',
+      'Fel. Då automatiserar man den dåliga processen.'
     ],
-    forklaring: 'Siffran är central i en av HT25:s essäfrågor: diskutera varför dessa delar är avgörande, och vilka risker som uppstår om de inte prioriteras.',
-    kalla: 'Tentamen HT25'
+    forklaring: 'System som är fit for purpose ska göra kalkylbladen onödiga.',
+    kalla: 'F2'
   },
   {
-    id: 'proc-forandring-02', delkurs: 'processer', amne: 'proc-forandring',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Vad innebär BPM-husets metafor, enligt Jeston?',
+    id: 'p4-03', delkurs: 'processer', amne: 'proc-teknik', typ: 'flerval', svarighet: 2,
+    fraga: 'Vilka fem processoptimeringslösningar räknar Jeston med?',
     alternativ: [
-      'BPM ska ses som ett enskilt, avgränsat projekt',
-      'BPM byggs upp stegvis från processkartläggning och automatisering, innan strategi utvecklas',
-      'BPM består av flera samverkande lager — från strategiska grunder till operativa och innovativa processer — som tillsammans skapar en effektiv organisation',
-      'BPM handlar om att bygga IT-system steg för steg enligt en arkitekturplan'
+      'Leadership, project management, people change management, governance och IT',
+      'Processomdesign (BPM), outsourcing, shared services, RPA och cloud computing',
+      'Customer-, employee-, system-, integration- och human-centric BPM',
+      'ABC, BPMN, DMN, process mining och BI'
+    ],
+    ratt: 1,
+    forklaringar: [
+      'Fel. De tre första är 7FE:s essentials.',
+      'Rätt.',
+      'Fel. Det är perspektiv, inte lösningar.',
+      'Fel. Det är verktyg och notationer.'
+    ],
+    forklaring: 'Teknik är fortfarande en möjliggörare — utan att kultur och människor tas om hand misslyckas även bra verktyg.',
+    kalla: 'F4a'
+  },
+  {
+    id: 'p4-04', delkurs: 'processer', amne: 'proc-teknik', typ: 'flerval', svarighet: 2,
+    fraga: 'På ett försäkringsbolag läser en handläggare varje morgon av skadeanmälningar i en e-postlåda och skriver in samma fält i skadesystemet. Inget omdöme krävs. Vad passar enligt Jeston?',
+    alternativ: [
+      'Agentisk AI-orkestrering',
+      'Outsourcing',
+      'RPA',
+      'En fullständig BPM-omdesign av skadeprocessen'
     ],
     ratt: 2,
     forklaringar: [
-      'Fel. Metaforen betonar tvärtom att BPM inte är ett enskilt projekt.',
-      'Fel. Ordningen är fel — strategiska grunder kommer inte efter kartläggning.',
-      'Rätt. Flera lager som tillsammans bär upp organisationen, inklusive processtransformation, people change management och benefits realization.',
-      'Fel. Det beskriver snarare en IT-arkitekturprocess, inte BPM-husets bredare idé.'
+      'Fel. Agentisk AI är till för beslut och varierande situationer, inte fasta steg.',
+      'Fel.',
+      'Rätt. Repetitivt, regelstyrt och utan omdöme är RPA:s typfall.',
+      'Fel. Det är överdrivet för ett fast, enkelt delsteg.'
     ],
-    forklaring: 'Utan alla lager samtidigt — inte bara den tekniska processdesignen — riskerar "huset" att inte hålla ihop.',
-    kalla: 'Tentamen HT25'
+    forklaring: 'RPA = en virtuell medarbetare som efterliknar hur en människa klickar i systemen.',
+    kalla: 'F4a'
   },
   {
-    id: 'proc-forandring-03', delkurs: 'processer', amne: 'proc-forandring',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Vilket av följande stämmer om Leadership som stödjande komponent i 7FE?',
+    id: 'p4-05', delkurs: 'processer', amne: 'proc-teknik', typ: 'flerval', svarighet: 2,
+    fraga: 'Varför skalade många tidiga RPA-satsningar dåligt?',
     alternativ: [
-      'Leadership handlar om att säkerställa att resurser, budget, tidsplaner och leverabler hanteras',
-      'Leadership handlar om att organisationens ledare ger stöd och vägledning så att BPM-arbetet och organisationen är i linje och levererar rätt affärsutfall',
-      'Leadership handlar om att säkerställa att alla intressenter är villiga att bidra till den framtida lösningen',
-      'Leadership handlar enbart om extern kommunikation med kunder'
+      'RPA kunde bara köras i molnet',
+      'RPA arbetar via användargränssnittet i stället för robusta integrationer, så den går sönder när skärmarna ändras',
+      'RPA kräver avancerad programmering av specialister',
+      'RPA saknade stöd för e-post'
     ],
     ratt: 1,
     forklaringar: [
-      'Fel. Det beskriver snarare Business Process Project Management.',
-      'Rätt. Ledarnas stöd och vägledning för att hålla BPM och organisationen i linje.',
-      'Fel. Det beskriver People Change Management.',
-      'Fel. Leadership handlar om intern styrning, inte extern kundkommunikation.'
+      'Fel.',
+      'Rätt. UI-baserad automatisering är skör, och att skala kräver tid, kompetens och styrning.',
+      'Fel. RPA är tvärtom low-code och användarvänligt.',
+      'Fel. E-posthantering är ett typiskt RPA-fall.'
     ],
-    forklaring: 'De tre enablerna Leadership, People Change Management och Business Process Project Management har varsin tydlig, avgränsad roll — blanda inte ihop dem.',
-    kalla: 'Tentamen HT24'
+    forklaring: 'RPA-bolagen konkurrerar i dag med agentisk AI-orkestrering.',
+    kalla: 'F1; F4a'
   },
   {
-    id: 'proc-forandring-04', delkurs: 'processer', amne: 'proc-forandring',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Vad kännetecknar appreciative inquiry som förändringsledningsansats?',
-    alternativ: [
-      'Fokus på vad som är fel, och sökande efter rotorsaker till misslyckanden',
-      'Fokus på vad som fungerar, och sökande efter rotorsaker till framgång',
-      'Hinder behandlas alltid som barriärer som måste undanröjas',
-      'Metoden bygger på att analysera konkurrenters misstag'
+    id: 'p4-06', delkurs: 'processer', amne: 'proc-teknik', typ: 'flerval', svarighet: 2,
+    fraga: 'En vårdcentral gör om sin tidsbokning så att patienter får ett enda nummer att ringa, svar samma dag och slipper slussas mellan mottagningar. Vilket perspektiv dominerar?',
+    alternativ: ['Employee-centric BPM', 'System-centric BPM', 'Integration-centric BPM', 'Customer-centric BPM'],
+    ratt: 3,
+    forklaringar: [
+      'Fel. Då hade fokus legat på personalens arbetsmiljö och empowerment.',
+      'Fel.',
+      'Fel.',
+      'Rätt. Snabbare svar, färre hand-offs och en kontaktpunkt för kunden.'
     ],
+    forklaring: 'Jeston: ta bort det som irriterar kunden hellre än att satsa på dyra wow-faktorer.',
+    kalla: 'F2'
+  },
+  {
+    id: 'p4-07', delkurs: 'processer', amne: 'proc-teknik', typ: 'flerval', svarighet: 2,
+    fraga: 'Vad står "FAIL" för i det medarbetarcentrerade perspektivet?',
+    alternativ: ['First Attempt In Learning', 'Failure Analysis In Logistics', 'Find, Assess, Improve, Learn', 'Fast Automation In Line'],
+    ratt: 0,
+    forklaringar: ['Rätt. En lärande kultur där misstag är en del av lärandet.', 'Fel.', 'Fel.', 'Fel.'],
+    forklaring: 'Employee-centric BPM: tjänande ledarskap, empowerment och omsorg — motiverade medarbetare är grunden för bra service.',
+    kalla: 'F2'
+  },
+  {
+    id: 'p4-08', delkurs: 'processer', amne: 'proc-teknik', typ: 'flerval', svarighet: 3,
+    fraga: 'Vilken av följande hör till "modellering och design" bland BPMS-komponenterna?',
+    alternativ: ['Regelmotor', 'Processimulering', 'Balanced scorecard', 'Ärendehantering'],
     ratt: 1,
     forklaringar: [
-      'Fel. Det beskriver den traditionella problemfokuserade ansatsen — motsatsen till appreciative inquiry.',
-      'Rätt. Appreciative inquiry bygger organisationens förändring på det som redan fungerar.',
-      'Fel. Hinder ses snarare som något att lära av än som rena barriärer.',
-      'Fel. Metoden handlar om den egna organisationen, inte konkurrentanalys.'
+      'Fel. Hör till exekvering och spårning.',
+      'Rätt. Tillsammans med BPMN-modellering och activity-based costing.',
+      'Fel. Hör till prestationsstyrning.',
+      'Fel. Hör till exekvering och spårning.'
     ],
-    forklaring: 'Samma framåtblickande, positiva grundlogik som Red Wine Test (kapitel 3).',
-    kalla: 'Tentamen HT24'
+    forklaring: 'Tre grupper: modellering och design, exekvering och spårning, prestationsstyrning.',
+    kalla: 'F2'
   },
 
-  /* -------------------- Processoptimering -------------------- */
+  /* ============ Kapitel 5: 7FE och BPM-huset ============ */
   {
-    id: 'proc-opt-01', delkurs: 'processer', amne: 'proc-optimering',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Vilka räknar Jeston som typiska processoptimeringslösningar att välja mellan?',
+    id: 'p5-01', delkurs: 'processer', amne: 'proc-7fe', typ: 'flerval', svarighet: 2,
+    fraga: 'Vad vill Jeston visa med sin hus-metafor?',
     alternativ: [
-      'Process redesign, outsourcing, shared services, RPA och molntjänster',
+      'Att BPM ska byggas som ett IT-system, steg för steg enligt en arkitekturplan',
+      'Att BPM består av flera lager — från strategiska grunder till operativa och innovativa processer — som tillsammans ger en effektiv organisation',
+      'Att processkartläggning och automatisering ska göras innan strategin tas fram',
+      'Att BPM är ett avgränsat projekt'
+    ],
+    ratt: 1,
+    forklaringar: [
+      'Fel.',
+      'Rätt. Grund, enablement, alignment, programstyrning, tre processlager och ett tak av sustainability och performance management.',
+      'Fel. Strategin kommer först — den är drivkraften.',
+      'Fel. Taket handlar om att bära processfokus över tid.'
+    ],
+    forklaring: 'Operativa processer ger effektivitet, ledningsprocesser uthållig konkurrensfördel, innovationsprocesser framtidssäkring.',
+    kalla: 'F2'
+  },
+  {
+    id: 'p5-02', delkurs: 'processer', amne: 'proc-7fe', typ: 'flerval', svarighet: 2,
+    fraga: 'Vilka fyra grupper ger "F:en" i 7FE?',
+    alternativ: [
+      'Foundations, Findings & solutions, Fulfilment, Future',
+      'Foundations, Facilitation, Follow-up, Feedback',
+      'Focus, Flow, Function, Finance',
+      'Foundations, Framework, Fulfilment, Flexibility'
+    ],
+    ratt: 0,
+    forklaringar: ['Rätt.', 'Fel.', 'Fel.', 'Fel.'],
+    forklaring: '10 faser i 4 F-grupper och 3 essentials ("10P3" vore ärligare, säger föreläsningen).',
+    kalla: 'F2'
+  },
+  {
+    id: 'p5-03', delkurs: 'processer', amne: 'proc-7fe', typ: 'flerval', svarighet: 2,
+    fraga: 'Vilka är 7FE:s tre essentials?',
+    alternativ: [
+      'Strategy, process och technology',
       'Leadership, project management och people change management',
-      'Integration-centric BPM, human-centric BPM och customer-centric BPM',
-      'Activity-based costing, processmodellering och workflow management'
+      'Understand, Innovate och Implement',
+      'Governance, architecture och performance management'
     ],
-    ratt: 0,
-    forklaringar: [
-      'Rätt. Detta är Jestons uppräkning av konkreta lösningar.',
-      'Fel. Det är stödjande komponenter/enablers, inte optimeringslösningar.',
-      'Fel. Det är olika BPM-perspektiv (vad initiativet fokuserar på), inte lösningar.',
-      'Fel. Blandad lista utan koppling till Jestons uppräkning.'
-    ],
-    forklaring: 'Håll isär "lösningar man väljer mellan" från "perspektiv ett initiativ kan ha" och "stödjande komponenter" — tre olika sorters listor som lätt blandas ihop på tentan.',
-    kalla: 'Tentamen HT25'
-  },
-  {
-    id: 'proc-opt-02', delkurs: 'processer', amne: 'proc-optimering',
-    typ: 'flerval', svarighet: 1,
-    fraga: 'Ett team hanterar dagligen hundratals fakturarader genom att kopiera data från e-post till ett ERP-system. Stegen är alltid likadana och kräver inget omdöme. Vilken optimeringslösning passar bäst?',
-    alternativ: ['Agentic AI process orchestration', 'RPA (Robotic Process Automation)', 'Redesign av processen med hjälp av BPM', 'Outsourcing i kombination med molnbaserad lösning'],
     ratt: 1,
     forklaringar: [
-      'Fel. Agentisk AI-orkestrering passar mer komplexa, beslutsberoende flöden.',
-      'Rätt. Repetitivt, regelstyrt och UI-baserat — precis det RPA är gjort för.',
-      'Fel. Redesign är en större insats än vad ett rent kopieringsproblem kräver.',
-      'Fel. Outsourcing löser inte den underliggande, mycket repetitiva uppgiften på samma direkta sätt.'
+      'Fel. Det är BOM:s förmågedimensioner, ungefär.',
+      'Rätt. De ska genomsyra alla tio faser.',
+      'Fel. Det är faser.',
+      'Fel. Det är delar av Enablement.'
     ],
-    forklaring: 'Kom ihåg RPA:s begränsning (kapitel 6): fungerar bra just för den här typen av enkla, regelstyrda UI-uppgifter, men skalar sämre för mer komplexa flöden.',
-    kalla: 'Tentamen HT25'
+    forklaring: 'Försummas de får BPM-arbetet att luta, sjunka eller rasa.',
+    kalla: 'F2; F4a'
   },
   {
-    id: 'proc-opt-03', delkurs: 'processer', amne: 'proc-optimering',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'En organisation redesignar sin ärendehantering med fokus på snabbare svar till kund, färre hand-offs mellan avdelningar och en tydlig kontaktpunkt. Vilket BPM-perspektiv dominerar?',
-    alternativ: ['Integration-centric BPM', 'System-centric BPM', 'Customer-centric BPM', 'Employee-centric BPM'],
+    id: 'p5-04', delkurs: 'processer', amne: 'proc-7fe', typ: 'flerval', svarighet: 2,
+    fraga: 'Påstående: Sustainability-fasen i 7FE handlar om miljömässig hållbarhet.',
+    alternativ: ['Sant', 'Falskt'],
+    ratt: 1,
+    forklaringar: ['Fel.', 'Rätt. Den handlar om uthållig konkurrensfördel — att förbättringarna består. Inte "hållbarhet".'],
+    forklaring: 'Miljöhållbarhet hör till Green BPM (Houy et al.), inte till 7FE:s sista fas.',
+    kalla: 'F2'
+  },
+  {
+    id: 'p5-05', delkurs: 'processer', amne: 'proc-7fe', typ: 'flerval', svarighet: 3,
+    fraga: 'Vilken är en svaghet hos 7FE som föreläsningen pekar på?',
+    alternativ: [
+      'Ramverket ignorerar strategi och ledarskap',
+      'Det passar bara små organisationer',
+      'Faserna överlappar och blandar sekventiellt och parallellt, så gränserna blir otydliga',
+      'Det saknar koppling till människor och kultur'
+    ],
     ratt: 2,
     forklaringar: [
-      'Fel. Integration-centric fokuserar på systemkoppling, inte kundupplevelse.',
-      'Fel. System-centric prioriterar IT-perspektivet.',
-      'Rätt. Snabbare svar, färre hand-offs, tydlig kontaktpunkt — allt handlar om kundens upplevelse.',
-      'Fel. Employee-centric fokuserar på medarbetarupplevelsen, inte kundens.'
+      'Fel. Tvärtom är helhetssynen en styrka.',
+      'Fel. Det ger en upprepbar struktur för stora organisationer.',
+      'Rätt. Plus: för komplext, svagt namn, pedagogiskt mest listor.',
+      'Fel. Att väva in människor är en styrka.'
     ],
-    forklaring: 'Vilket perspektiv som dominerar avgörs av VAD initiativet optimerar för, inte av vilken teknik som används.',
-    kalla: 'Tentamen HT25'
+    forklaring: 'Styrkor: helhetsbild, strategiskt förankrat, människor och teknik, upprepbart, användbart även utanför BPM.',
+    kalla: 'F2'
   },
   {
-    id: 'proc-opt-04', delkurs: 'processer', amne: 'proc-optimering',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Vad är den viktigaste skillnaden mellan traditionell BPM/RPA-automatisering och "autonomisering" i agentisk AI, enligt Rosemann et al. (2024)?',
+    id: 'p5-06', delkurs: 'processer', amne: 'proc-7fe', typ: 'flerval', svarighet: 2,
+    fraga: 'En organisation med låg BPM-mognad vill köra hela 7FE i full skala på ett halvår. Vad skulle Jeston invända?',
     alternativ: [
-      'Autonomisering är billigare att implementera',
-      'Vid autonomisering beslutar agenten själv vad som ska göras utifrån målet, i stället för att bara utföra ett i förväg definierat steg',
-      'Autonomisering kräver ingen mänsklig övervakning alls, någonsin',
-      'Autonomisering fungerar bara i molnbaserade system'
+      'Att 7FE bara får användas av konsulter',
+      'Att takten ska anpassas efter mognaden — går man fortare än den ökar risken att misslyckas',
+      'Att alla faser måste hoppas över utom Foundations',
+      'Ingenting — 7FE ska alltid tillämpas likadant'
     ],
     ratt: 1,
     forklaringar: [
-      'Fel. Kostnad är inte den definierande skillnaden i artikeln.',
-      'Rätt. Det är just förskjutningen "från automatisering till autonomisering" — agenten fattar egna beslut om hur målet ska nås.',
-      'Fel. Artikeln beskriver en förskjutning, inte en garanti för fullständig frånvaro av tillsyn.',
-      'Fel. Ingen sådan teknisk begränsning nämns.'
+      'Fel.',
+      'Rätt. One size fits all fungerar inte.',
+      'Fel. Att hoppa över faser avråds om man inte kan motivera det.',
+      'Fel.'
     ],
-    forklaring: 'De tre drifterna behandlas mer utförligt i kapitel 7 om BPM som forskningsfält.',
-    kalla: 'Rosemann et al. (2024)'
+    forklaring: 'Organisationer skiljer sig i mognad, kultur, ledarskap och processvana.',
+    kalla: 'F2'
   },
 
-  /* -------------------- BPM som forskningsfält -------------------- */
+  /* ============ Kapitel 6: Foundations och Enablement ============ */
   {
-    id: 'proc-akad-01', delkurs: 'processer', amne: 'proc-akademisk',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Varför har Green BPM, enligt Houy et al. (2012) och kursens egen bedömning, inte fått det breda genomslag som förutspåddes?',
+    id: 'p6-01', delkurs: 'processer', amne: 'proc-foundations', typ: 'flerval', svarighet: 2,
+    fraga: 'Vad är "strategy execution void"?',
     alternativ: [
-      'De flesta BPM-verktyg saknar inbyggt stöd för att lagra, räkna och analysera energi-, utsläpps- och resursdata i modellerna',
-      'BPM håller på att helt ersättas av agentisk AI-orkestrering',
-      'Hållbarhetsdata får enligt lag inte lagras i BPM- eller ERP-system',
-      'Process mining fungerar inte alls för CO₂-relaterad data'
+      'Bristen på strategi i organisationer som saknar BPM',
+      'Gapet mellan den strategiska avsikten och förmågan att faktiskt genomföra strategin',
+      'Tiden mellan att en process designas och att den automatiseras',
+      'Skillnaden mellan as-is och to-be'
+    ],
+    ratt: 1,
+    forklaringar: [
+      'Fel. Problemet är sällan att strategin saknas.',
+      'Rätt. Att formulera strategi är svårt, men de flesta misslyckas med genomförandet.',
+      'Fel.',
+      'Fel. Det är analysfasens gap.'
+    ],
+    forklaring: 'Två komponenter: management effectiveness och operational efficiency.',
+    kalla: 'F3'
+  },
+  {
+    id: 'p6-02', delkurs: 'processer', amne: 'proc-foundations', typ: 'flerval', svarighet: 3,
+    fraga: 'Ett företag effektiviserar alla sina operativa processer men rör inte ledningsprocesser, styrning eller kultur. Vad blir resultatet enligt Jeston?',
+    alternativ: [
+      'En uthållig konkurrensfördel',
+      '"Different sameness" — små förbättringar utan verklig förändring',
+      'Att strategy execution void stängs',
+      'Att BPM blir business as usual'
+    ],
+    ratt: 1,
+    forklaringar: [
+      'Fel. Uthållig fördel kräver management effectiveness.',
+      'Rätt.',
+      'Fel. Båda dimensionerna måste angripas.',
+      'Fel.'
+    ],
+    forklaring: 'Operational efficiency höjer produktiviteten men ger sällan bestående fördel på egen hand.',
+    kalla: 'F3'
+  },
+  {
+    id: 'p6-03', delkurs: 'processer', amne: 'proc-foundations', typ: 'flerval', svarighet: 2,
+    fraga: 'Hur går ett Red Wine Test till?',
+    alternativ: [
+      'Man analyserar strategidokumenten och kopplar dem till centrala processer',
+      'Man kartlägger nuläget i en workshop med dem som utför processerna',
+      'Deltagarna föreställer sig att BPM-projektet redan är genomfört och beskriver hur det ser ut då',
+      'Man går igenom riskerna för varje process'
+    ],
+    ratt: 2,
+    forklaringar: [
+      'Fel. Det låter som steg 1 i Foundations.',
+      'Fel. Det är Understand.',
+      'Rätt. Vad har förändrats för kunder, medarbetare och ledning? Vad är man stolt över?',
+      'Fel.'
+    ],
+    forklaring: 'Varje svar får en ansvarig för leveransen: BPM-teamet eller linjeledningen.',
+    kalla: 'F3'
+  },
+  {
+    id: 'p6-04', delkurs: 'processer', amne: 'proc-foundations', typ: 'flerval', svarighet: 2,
+    fraga: 'Under en workshop säger cheferna: "beställningar levereras nästa dag", "teamen samarbetar över avdelningsgränserna" och "kunderna rekommenderar oss". Vad åstadkommer övningen?',
+    alternativ: [
+      'Ett gemensamt narrativ om hur framgång ser ut efter BPM-projektet',
+      'En avgränsning av projektets scope',
+      'Detaljerade to-be-modeller',
+      'Ett underlag för att välja optimeringslösning'
     ],
     ratt: 0,
-    forklaringar: [
-      'Rätt. Det är en teknisk begränsning i verktygen, inte ett juridiskt eller konceptuellt hinder.',
-      'Fel. Det är inte skälet till Green BPM:s uteblivna genomslag specifikt.',
-      'Fel. Ingen sådan lagstiftning nämns eller antyds i materialet.',
-      'Fel. Överdrivet och obelagt påstående.'
-    ],
-    forklaring: 'Lägg märke till att tre av fyra alternativ låter rimliga men pekar på fel sorts hinder (juridik, teknikbyte, mätbarhet) — det korrekta svaret handlar specifikt om verktygens datastöd.',
-    kalla: 'Tentamen HT25; Houy et al. (2012)'
+    forklaringar: ['Rätt. Det är ett Red Wine Test.', 'Fel.', 'Fel.', 'Fel.'],
+    forklaring: 'Red Wine Test-svaren används senare också som checklista vid utvärderingen.',
+    kalla: 'F3'
   },
   {
-    id: 'proc-akad-02', delkurs: 'processer', amne: 'proc-akademisk',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Vilket av följande är INTE ett av Reijers (2021) sju forskningsteman inom BPM?',
-    alternativ: ['Process mining', 'Coordination and interoperability', 'Model management', 'Marknadsföringsstrategi'],
+    id: 'p6-05', delkurs: 'processer', amne: 'proc-foundations', typ: 'flerval', svarighet: 2,
+    fraga: 'Vad är en Target Operating Model (TOM)?',
+    alternativ: [
+      'En karta över dagens processer',
+      'En kalkyl över besparingarna från processförbättringar',
+      'Den framtida IT-arkitekturen',
+      'En övergripande beskrivning av hur organisationens delar ska fungera i framtiden för att BPM ska lyckas'
+    ],
+    ratt: 3,
+    forklaringar: ['Fel. Det är as-is.', 'Fel.', 'Fel. Teknik är bara en av komponenterna.', 'Rätt. Strategi, processtyrning, prestationsstyrning, organisation, människor och kultur, teknik.'],
+    forklaring: 'TOM tas fram i Foundations och ligger till grund för hela Enablement.',
+    kalla: 'F3'
+  },
+  {
+    id: 'p6-06', delkurs: 'processer', amne: 'proc-foundations', typ: 'flerval', svarighet: 2,
+    fraga: 'Hur förhåller sig en processmodell till en process asset?',
+    alternativ: [
+      'De är samma sak',
+      'Processmodellen är en del av process asset, som dessutom innehåller roller, regler, risker, ägarskap och IT-stöd',
+      'Process asset används för små förändringar, processmodeller för stora',
+      'Process asset är tyst kunskap, processmodellen explicit kunskap'
+    ],
+    ratt: 1,
+    forklaringar: ['Fel.', 'Rätt.', 'Fel.', 'Fel. Båda är dokumenterad, explicit kunskap.'],
+    forklaring: 'Process asset gör processen till en strategisk resurs: återanvändbar, spårbar och granskningsbar.',
+    kalla: 'F3'
+  },
+  {
+    id: 'p6-07', delkurs: 'processer', amne: 'proc-foundations', typ: 'flerval', svarighet: 2,
+    fraga: 'Ett fel i fakturahanteringen ska utredas. Teamet behöver se stegen, reglerna, vem som ansvarar och var besluten fattas. Vad tar de fram?',
+    alternativ: ['Process Worth Matrix', 'Strategidokumentet', 'Process asset för fakturaprocessen', 'Target Operating Model'],
+    ratt: 2,
+    forklaringar: ['Fel. Den prioriterar processer efter värde.', 'Fel.', 'Rätt.', 'Fel. TOM är för övergripande.'],
+    forklaring: 'Process asset är länken mellan verksamhet och IT för varje aktivitet.',
+    kalla: 'F3'
+  },
+  {
+    id: 'p6-08', delkurs: 'processer', amne: 'proc-foundations', typ: 'flerval', svarighet: 3,
+    fraga: 'Vilken roll i processtyrningen ansvarar för enskilda processer och prestationsstyrning på processnivå?',
+    alternativ: ['Strategic process council', 'Chief Process Officer', 'Process sponsor', 'Process steward'],
     ratt: 3,
     forklaringar: [
-      'Fel svar på frågan, men sant: process mining är ett av de sju.',
-      'Fel svar på frågan, men sant: koordinering/interoperabilitet är ett av de sju.',
-      'Fel svar på frågan, men sant: model management är ett av de sju.',
-      'Rätt — det här är INTE ett av Reijers teman. De sju är: BPMS, process modeling, process design, coordination and interoperability, model management, process mining och new technologies.'
+      'Fel. Det högsta styrande organet.',
+      'Fel. Idealisk men sällsynt, högst upp.',
+      'Fel.',
+      'Rätt.'
     ],
-    forklaring: 'Reijers gick igenom över 100 artiklar publicerade i Computers in Industry under fyrtio år för att identifiera dessa sju teman.',
-    kalla: 'Reijers (2021)'
+    forklaring: 'Process governance är nyckeln till långsiktiga förbättringar: beslut, risk och prestation.',
+    kalla: 'F3'
   },
   {
-    id: 'proc-akad-03', delkurs: 'processer', amne: 'proc-akademisk',
-    typ: 'flerval', svarighet: 2,
-    fraga: 'Rosemann et al. (2024) beskriver tre "drifts" (förskjutningar) för BPM i AI-eran. Vilken av följande är EN av dem?',
+    id: 'p6-09', delkurs: 'processer', amne: 'proc-foundations', typ: 'flerval', svarighet: 2,
+    fraga: 'I vilken ordning ska organisationen utvecklas enligt Enablement-fasens steg om organisationsdesign?',
+    alternativ: ['Struktur → människor → processer', 'Människor → struktur → processer', 'Processer → struktur → människor', 'Teknik → processer → struktur'],
+    ratt: 2,
+    forklaringar: ['Fel.', 'Fel.', 'Rätt. Strukturen ska stödja processerna.', 'Fel. Tekniken ska möjliggöra, inte diktera.'],
+    forklaring: 'Organisationsdesign ska också uppmuntra samarbete över silos.',
+    kalla: 'F3'
+  },
+  {
+    id: 'p6-10', delkurs: 'processer', amne: 'proc-foundations', typ: 'flerval', svarighet: 2,
+    fraga: 'Påstående: I Foundations-fasen tar BPM-teamet fram organisationens strategi.',
+    alternativ: ['Sant', 'Falskt'],
+    ratt: 1,
+    forklaringar: ['Fel.', 'Rätt. Uppgiften är att förstå strategin och säkerställa samstämmighet — inte att skapa eller kritisera den.'],
+    forklaring: 'Spårbarhet: strategi → BPM-program → Red Wine Test → BPM-kompetenscentrets aktiviteter.',
+    kalla: 'F3'
+  },
+
+  /* ============ Kapitel 7: Launch och Understand ============ */
+  {
+    id: 'p7-01', delkurs: 'processer', amne: 'proc-understand', typ: 'flerval', svarighet: 2,
+    fraga: 'Vad är huvudsyftet med att modellera processer i Understand-fasen?',
+    alternativ: [
+      'Att få kompletta modeller som kan köras direkt i ett BPMS',
+      'Att få en gemensam, faktabaserad bild av hur processen fungerar i dag, som grund för förbättring',
+      'Att ta fram detaljerade KPI:er för framtida styrning',
+      'Att dokumentera för revision och kvalitetssäkring'
+    ],
+    ratt: 1,
+    forklaringar: ['Fel. Modellerna ska vara fit for purpose, inte perfekta.', 'Rätt.', 'Fel.', 'Fel.'],
+    forklaring: 'Sluta modellera när det finns tillräckligt för att gå vidare till Innovate.',
+    kalla: 'F4a'
+  },
+  {
+    id: 'p7-02', delkurs: 'processer', amne: 'proc-understand', typ: 'flerval', svarighet: 1,
+    fraga: 'Vad kännetecknar en quick win?',
+    alternativ: [
+      'Den kräver en omfattande förstudie',
+      'Den har stort symbolvärde men liten praktisk effekt',
+      'Den ersätter behovet av workshops',
+      'Den går snabbt och billigt att genomföra och ger omedelbar förbättring'
+    ],
+    ratt: 3,
+    forklaringar: ['Fel.', 'Fel. Den ska ge verklig nytta.', 'Fel.', 'Rätt. Gärna inom 4–8 veckor.'],
+    forklaring: 'Quick wins bygger trovärdighet och momentum och kan göra projektet självfinansierande.',
+    kalla: 'F4a'
+  },
+  {
+    id: 'p7-03', delkurs: 'processer', amne: 'proc-understand', typ: 'flerval', svarighet: 3,
+    fraga: 'En reklambyrå sköter löneadministrationen internt. Den syns inte för kunderna och sköts ganska ineffektivt. Var hamnar den i Process Worth Matrix?',
+    alternativ: ['Identity', 'Priority', 'Background', 'Mandated'],
+    ratt: 2,
+    forklaringar: [
+      'Fel. Identity-processer definierar varumärket.',
+      'Fel. Priority-processer stöder identiteten och får synliga fel direkt.',
+      'Rätt. Stöder vardagen, låg strategisk synlighet — ofta en lätt vinst men liten effekt.',
+      'Fel. Mandated krävs enligt regelverk.'
+    ],
+    forklaring: 'Matrisen ställer strategisk betydelse (salience) mot värde (worth) och hjälper att välja: förbättra, outsourca eller eliminera.',
+    kalla: 'F4a'
+  },
+  {
+    id: 'p7-04', delkurs: 'processer', amne: 'proc-understand', typ: 'flerval', svarighet: 2,
+    fraga: 'Vilket verktyg använder Jeston för att hitta de verkliga orsakerna till processproblem i Understand?',
+    alternativ: ['FMEA (Failure Mode and Effect Analysis)', 'Red Wine Test', 'Process Selection Matrix', 'Balanced scorecard'],
+    ratt: 0,
+    forklaringar: [
+      'Rätt. Allvarlighet, frekvens och upptäckbarhet ger poäng och en värmekarta över svagheterna.',
+      'Fel. Det är en visionsövning i Foundations.',
+      'Fel. Den visualiserar processerna i Launch.',
+      'Fel.'
+    ],
+    forklaring: 'Utan rotorsaksanalys riskerar omdesignen att upprepa eller dölja samma problem.',
+    kalla: 'F4a'
+  },
+  {
+    id: 'p7-05', delkurs: 'processer', amne: 'proc-understand', typ: 'flerval', svarighet: 2,
+    fraga: 'Hur många prestationsmått per process rekommenderas när processmålen sätts i Launch?',
+    alternativ: ['Minst tio', 'Helst högst fem', 'Exakt ett', 'Så många som möjligt för full insyn'],
+    ratt: 1,
+    forklaringar: ['Fel.', 'Rätt. Målen ska vara SMART och kopplade till ansvariga personer.', 'Fel.', 'Fel.'],
+    forklaring: 'SMART: specifika, mätbara, uppnåeliga, realistiska, tidsatta.',
+    kalla: 'F3'
+  },
+  {
+    id: 'p7-06', delkurs: 'processer', amne: 'proc-understand', typ: 'flerval', svarighet: 2,
+    fraga: 'Hur ska business caset i Launch se ut enligt föreläsningen?',
+    alternativ: [
+      'Som en detaljerad BPMN-modell av to-be',
+      'På vanligt språk, helst en sida, med påståenden som stöds av belägg',
+      'Som en teknisk kravspecifikation',
+      'Det tas fram först i Realize'
+    ],
+    ratt: 1,
+    forklaringar: ['Fel.', 'Rätt. Det kan behöva uppdateras i senare faser.', 'Fel. Det kommer i Develop.', 'Fel.'],
+    forklaring: 'Launch avslutas med en initial plan och ett business case som grund för Understand.',
+    kalla: 'F3'
+  },
+  {
+    id: 'p7-07', delkurs: 'processer', amne: 'proc-understand', typ: 'flerval', svarighet: 2,
+    fraga: 'Påstående: Den övergripande processgenomgången i Launch är en kritisk utvärdering av hur väl processerna fungerar.',
+    alternativ: ['Sant', 'Falskt'],
+    ratt: 1,
+    forklaringar: ['Fel.', 'Rätt. Den ska vara övergripande och okritisk — orientering, inte utvärdering.'],
+    forklaring: 'Den detaljerade granskningen sker i Understand.',
+    kalla: 'F3'
+  },
+
+  /* ============ Kapitel 8: Innovate, People, Develop, Implement ============ */
+  {
+    id: 'p8-01', delkurs: 'processer', amne: 'proc-innovate', typ: 'flerval', svarighet: 2,
+    fraga: 'Vilket är en typisk output från Innovate-fasen?',
+    alternativ: [
+      'Identifierade rotorsaker',
+      'Utbildningsplaner för personalen',
+      'Ett riskregister för projektet',
+      'To-be-processer och validerade lösningsförslag'
+    ],
+    ratt: 3,
+    forklaringar: ['Fel. Hör till Understand.', 'Fel. Hör till People och Implement.', 'Fel.', 'Rätt.'],
+    forklaring: 'Innovate avslutas med godkännande och affärskrav som lämnas till Develop.',
+    kalla: 'F4a'
+  },
+  {
+    id: 'p8-02', delkurs: 'processer', amne: 'proc-innovate', typ: 'flerval', svarighet: 2,
+    fraga: 'Vad är syftet med ledningens kick-off-workshop i Innovate?',
+    alternativ: [
+      'Att sätta spelreglerna: processmål, begränsningar och koppling till strategin',
+      'Att modellera as-is',
+      'Att utse process stewards',
+      'Att testa lösningen med användare'
+    ],
+    ratt: 0,
+    forklaringar: ['Rätt. En skicklig facilitator är avgörande.', 'Fel.', 'Fel.', 'Fel. Det är UAT i Implement.'],
+    forklaring: 'Begränsningar kan vara tid, resurser och hur mycket som får automatiseras.',
+    kalla: 'F4a'
+  },
+  {
+    id: 'p8-03', delkurs: 'processer', amne: 'proc-innovate', typ: 'flerval', svarighet: 3,
+    fraga: 'Innovate-workshopparna sker i tre steg. Ungefär hur färdig ska designen vara efter bekräftelseworkshopen?',
+    alternativ: ['Cirka 30 %', 'Cirka 50 %', 'Cirka 70 %', 'Cirka 95 %'],
+    ratt: 3,
+    forklaringar: ['Fel.', 'Fel.', 'Fel. Det gäller efter den första workshopen.', 'Rätt. Slutworkshopen presenterar sedan för godkännande.'],
+    forklaring: 'Initial redesign (~70 %) → bekräftelse (~95 %) → slutgodkännande.',
+    kalla: 'F4a'
+  },
+  {
+    id: 'p8-04', delkurs: 'processer', amne: 'proc-innovate', typ: 'flerval', svarighet: 2,
+    fraga: 'Vilken modell används i People-fasen för att definiera roller och ansvar?',
+    alternativ: ['SWOT', 'RACI', 'FMEA', 'SCOR'],
+    ratt: 1,
+    forklaringar: ['Fel.', 'Rätt. Uppgifter grupperas till aktiviteter och generiska roller.', 'Fel. Används för rotorsaker.', 'Fel. En branschmall för processer.'],
+    forklaring: 'Ett jobb kan rymma flera roller.',
+    kalla: 'F4a'
+  },
+  {
+    id: 'p8-05', delkurs: 'processer', amne: 'proc-innovate', typ: 'flerval', svarighet: 2,
+    fraga: 'Påstående: Ett BPM-projekt kräver alltid att ny teknik byggs i Develop-fasen.',
+    alternativ: ['Sant', 'Falskt'],
+    ratt: 1,
+    forklaringar: ['Fel.', 'Rätt. BPM kräver inte teknik — men när automatisering ingår är det i Develop den byggs.'],
+    forklaring: 'Develop: bestäm BPM-komponenter, utvecklingsansats och specifikationer.',
+    kalla: 'F4a'
+  },
+  {
+    id: 'p8-06', delkurs: 'processer', amne: 'proc-innovate', typ: 'flerval', svarighet: 2,
+    fraga: 'Vad innebär handover/takeover i Implement?',
+    alternativ: [
+      'Att leverantören tar över driften av systemet',
+      'Att ansvaret för de nya processerna och systemen går från projektteamet till linjen',
+      'Att en ny projektledare tar över',
+      'Att processen outsourcas'
+    ],
+    ratt: 1,
+    forklaringar: ['Fel.', 'Rätt. Ansvar, dokumentation och stöd ska finnas på plats.', 'Fel.', 'Fel.'],
+    forklaring: 'Implement innehåller även UAT, piloter och planer för back-out.',
+    kalla: 'F4a'
+  },
+
+  /* ============ Kapitel 9: Realize, Sustainability, essentials ============ */
+  {
+    id: 'p9-01', delkurs: 'processer', amne: 'proc-realize', typ: 'flerval', svarighet: 1,
+    fraga: 'Ungefär hur stor del av BPM-arbetet menar Jeston bör handla om människor och kommunikation?',
+    alternativ: ['Cirka 20 %', 'Cirka 40 %', 'Minst 60 %', 'Cirka 90 %'],
+    ratt: 2,
+    forklaringar: ['Fel.', 'Fel.', 'Rätt.', 'Fel.'],
+    forklaring: 'Många BPM-initiativ misslyckas för att de försummar den mänskliga och kulturella sidan.',
+    kalla: 'F4a'
+  },
+  {
+    id: 'p9-02', delkurs: 'processer', amne: 'proc-realize', typ: 'flerval', svarighet: 2,
+    fraga: 'Vad ska förändringsledningen enligt Jeston se till att medarbetarna är?',
+    alternativ: ['Informerade och kontrollerade', 'Able och willing — kan och vill', 'Fler och billigare', 'Specialiserade och självgående'],
+    ratt: 1,
+    forklaringar: ['Fel.', 'Rätt. Kan genom utbildning, vill genom motivation och engagemang.', 'Fel.', 'Fel.'],
+    forklaring: 'Det gör BPM till en mänsklig förändring, inte en teknisk övning.',
+    kalla: 'F4a'
+  },
+  {
+    id: 'p9-03', delkurs: 'processer', amne: 'proc-realize', typ: 'flerval', svarighet: 2,
+    fraga: 'Vad kännetecknar appreciative inquiry?',
+    alternativ: [
+      'Man letar efter rotorsaker till misslyckanden',
+      'Man bygger förändringen på det som redan fungerar, framåtblickande och deltagande',
+      'Man analyserar konkurrenternas misstag',
+      'Man ser varje hinder som en barriär som måste rivas'
+    ],
+    ratt: 1,
+    forklaringar: ['Fel.', 'Rätt. Den hjälper organisationen att skapa förändring i stället för att bara reagera.', 'Fel.', 'Fel.'],
+    forklaring: 'Samma framåtblickande logik som Red Wine Test.',
+    kalla: 'F4a'
+  },
+  {
+    id: 'p9-04', delkurs: 'processer', amne: 'proc-realize', typ: 'flerval', svarighet: 2,
+    fraga: 'Vad lägger BPM-projektledning till utöver traditionell projektledning (scope, tid, budget)?',
+    alternativ: [
+      'Agil utveckling, sprintar och backlog',
+      'Förändringsledning, intressenthantering och BPM-expertis',
+      'Upphandling, avtal och juridik',
+      'Inget — det räcker med traditionell projektledning'
+    ],
+    ratt: 1,
+    forklaringar: ['Fel.', 'Rätt.', 'Fel.', 'Fel. Jeston menar att vanliga metoder inte räcker för BPM.'],
+    forklaring: 'BPM-projekt är tvärfunktionella och utmanar strukturer och arbetssätt.',
+    kalla: 'F4a'
+  },
+  {
+    id: 'p9-05', delkurs: 'processer', amne: 'proc-realize', typ: 'flerval', svarighet: 3,
+    fraga: 'När registreras de potentiella nyttorna i ett benefits register?',
+    alternativ: ['I Launch', 'I Realize', 'I Sustainability', 'I Implement'],
+    ratt: 0,
+    forklaringar: [
+      'Rätt. Med ägare, värde, måldatum, beroenden, risker och koppling till strategin.',
+      'Fel. I Realize levereras och följs nyttorna upp.',
+      'Fel. Där övervakas och maximeras värdet.',
+      'Fel.'
+    ],
+    forklaring: 'Nyttorealisering är en tråd genom alla faser, inte ett enskilt steg.',
+    kalla: 'F4a'
+  },
+  {
+    id: 'p9-06', delkurs: 'processer', amne: 'proc-realize', typ: 'flerval', svarighet: 2,
+    fraga: 'Påstående: När Realize visar att målen är uppnådda behövs ingen Sustainability-fas.',
+    alternativ: ['Sant', 'Falskt'],
+    ratt: 1,
+    forklaringar: ['Fel.', 'Rätt. Utan Sustainability eroderar nyttorna när omvärlden förändras.'],
+    forklaring: 'Sustainability gör förbättringen till en permanent förmåga: utvärdering, QA, utbildade stewards, uppdaterad dokumentation.',
+    kalla: 'F4a'
+  },
+  {
+    id: 'p9-07', delkurs: 'processer', amne: 'proc-realize', typ: 'flerval', svarighet: 2,
+    fraga: 'Hur ser Jeston på ledarskap i BPM?',
+    alternativ: [
+      'Som ett ansvar enbart för högsta ledningen',
+      'Som att kontrollera att resurser och tidplaner hålls',
+      'Som ett kontinuerligt inflytande på alla nivåer, som inspirerar och ger mandat snarare än kontrollerar',
+      'Som extern kommunikation med kunder'
+    ],
+    ratt: 2,
+    forklaringar: ['Fel.', 'Fel. Det är projektledning.', 'Rätt.', 'Fel.'],
+    forklaring: 'Ledarskap ger vision, förtroende och koppling till strategin.',
+    kalla: 'F4a'
+  },
+
+  /* ============ Kapitel 10: Green BPM, process mining, AI ============ */
+  {
+    id: 'p10-01', delkurs: 'processer', amne: 'proc-perspektiv', typ: 'flerval', svarighet: 2,
+    fraga: 'Varför har Green BPM inte slagit igenom som Houy et al. (2012) hoppades?',
+    alternativ: [
+      'Lagen förbjuder att hållbarhetsdata lagras i BPM-system',
+      'BPM-verktygen saknar i regel inbyggt stöd för att lagra och analysera energi-, utsläpps- och resursdata i modellerna',
+      'Agentisk AI har ersatt BPM',
+      'Process mining kan inte hantera CO₂-data'
+    ],
+    ratt: 1,
+    forklaringar: ['Fel.', 'Rätt. Dessutom sker redovisningen på organisationsnivå (GHG-protokollet, CSRD), inte per process.', 'Fel.', 'Fel.'],
+    forklaring: 'Andra hinder: ingen standard som kopplar processteg till utsläppsfaktorer, och silos mellan hållbarhets- och processteam.',
+    kalla: 'F4b; Houy et al. (2012)'
+  },
+  {
+    id: 'p10-02', delkurs: 'processer', amne: 'proc-perspektiv', typ: 'flerval', svarighet: 2,
+    fraga: 'Vad skiljer process mining från traditionell Jeston-BPM när man tar fram as-is?',
+    alternativ: [
+      'Process mining bygger på intervjuer och workshops',
+      'Process mining visar hur processen faktiskt körs, utifrån händelseloggar i IT-systemen',
+      'Process mining fångar även arbete som aldrig registreras i något system',
+      'Process mining kräver ingen data'
+    ],
+    ratt: 1,
+    forklaringar: ['Fel. Det är den traditionella metoden.', 'Rätt. "Hur fungerar processen egentligen?"', 'Fel. Den ser bara det som IT-systemen loggar.', 'Fel. Den kräver bra loggdata.'],
+    forklaring: 'Tre förmågor: discovery, conformance checking, improvement.',
+    kalla: 'F4b'
+  },
+  {
+    id: 'p10-03', delkurs: 'processer', amne: 'proc-perspektiv', typ: 'flerval', svarighet: 2,
+    fraga: 'Ett företag vill veta om medarbetarna faktiskt följer den godkända BPMN-modellen för reklamationer. Vilken process mining-förmåga behövs?',
+    alternativ: ['Process discovery', 'Conformance checking', 'Process simulation', 'Activity-based costing'],
+    ratt: 1,
+    forklaringar: ['Fel. Den återskapar modellen ur loggarna.', 'Rätt. Den jämför verkligheten med den avsedda modellen.', 'Fel.', 'Fel.'],
+    forklaring: 'Conformance checking visar avvikelser och regelbrott.',
+    kalla: 'F4b'
+  },
+  {
+    id: 'p10-04', delkurs: 'processer', amne: 'proc-perspektiv', typ: 'flerval', svarighet: 2,
+    fraga: 'Vilken av följande är en av Rosemann et al:s (2024) tre drifts?',
     alternativ: [
       'Från konversation till transaktion',
+      'Från autonomisering till automatisering',
       'Från transaktion till konversation',
-      'Från sofistikering till förenkling',
-      'Från autonomisering till automatisering'
+      'Från sofistikering till förenkling'
     ],
-    ratt: 1,
-    forklaringar: [
-      'Fel. Riktningen är omvänd mot artikelns argument.',
-      'Rätt. En av de tre drifterna: processer blir mer dialogdrivna (konversation) i stället för stela formulärsekvenser (transaktion).',
-      'Fel. Riktningen är omvänd — artikeln beskriver en rörelse MOT sofistikering.',
-      'Fel. Riktningen är omvänd — artikeln beskriver en rörelse MOT autonomisering.'
-    ],
-    forklaring: 'De tre drifterna är: transaktion → konversation, automatisering → autonomisering, förenkling → sofistikering. Lägg märke till att alla tre distraktorer bara vänder på en riktig drifts riktning.',
-    kalla: 'Rosemann et al. (2024)'
+    ratt: 2,
+    forklaringar: ['Fel. Omvänt.', 'Fel. Omvänt.', 'Rätt.', 'Fel. Omvänt.'],
+    forklaring: 'Transaktion → konversation, automatisering → autonomisering, förenkling → sofistikering.',
+    kalla: 'F4b; Rosemann et al. (2024)'
   },
   {
-    id: 'proc-akad-04', delkurs: 'processer', amne: 'proc-akademisk',
-    typ: 'flerval', svarighet: 1,
-    fraga: 'Vad är BPMS, som Reijers lyfter fram som ett centralt forskningstema?',
+    id: 'p10-05', delkurs: 'processer', amne: 'proc-perspektiv', typ: 'flerval', svarighet: 3,
+    fraga: 'Vad är skillnaden mellan automatisering och autonomisering enligt Rosemann et al.?',
     alternativ: [
-      'En metod för förändringsledning',
-      'En mjukvaruplattform som stödjer definition, exekvering och spårning av processer',
-      'Ett annat namn för BPMN',
-      'En typ av gateway i processdiagram'
+      'Autonomisering är billigare',
+      'Vid autonomisering fattar och ändrar maskinen beslut själv, utan att det är förutsägbart och testat i förväg av människor',
+      'Autonomisering fungerar bara i molnet',
+      'Det finns ingen egentlig skillnad'
     ],
     ratt: 1,
-    forklaringar: [
-      'Fel. Det beskriver snarare change management-metoder.',
-      'Rätt. Business Process Management System — mjukvaran som kör och övervakar processer.',
-      'Fel. BPMN är notationen, BPMS är exekveringsplattformen — olika saker.',
-      'Fel. Gateways är ett BPMN-notationsbegrepp, inte kopplat till BPMS.'
+    forklaringar: ['Fel.', 'Rätt. Automatisering är designad och testad av människor och därmed förutsägbar.', 'Fel.', 'Fel.'],
+    forklaring: 'Det är därför förklarbarhet blir viktigare — se BPMN och DMN.',
+    kalla: 'F4b; Rosemann et al. (2024)'
+  },
+  {
+    id: 'p10-06', delkurs: 'processer', amne: 'proc-perspektiv', typ: 'flerval', svarighet: 2,
+    fraga: 'Hur kan BPMN och DMN hjälpa när beslut fattas automatiskt och måste kunna förklaras?',
+    alternativ: [
+      'De översätter beslut till naturligt språk',
+      'De skapar automatiskt loggar över alla beslut',
+      'De gör beslutsflödet visuellt och begripligt, så att man kan förklara varför ett beslut blev som det blev',
+      'De gör besluten enklare genom att optimera processen'
     ],
-    forklaring: 'Håll isär BPM (disciplinen), BPMN (notationen för att rita processer) och BPMS (mjukvaran som kör dem).',
+    ratt: 2,
+    forklaringar: ['Fel.', 'Fel.', 'Rätt.', 'Fel.'],
+    forklaring: 'Viktigt t.ex. när en myndighet ska förklara ett beslut för en medborgare.',
+    kalla: 'F4b'
+  },
+  {
+    id: 'p10-07', delkurs: 'processer', amne: 'proc-perspektiv', typ: 'flerval', svarighet: 2,
+    fraga: 'Vad är en grön SLA (gSLA) i Green BPM?',
+    alternativ: [
+      'Ett avtal om att bara använda förnybar el',
+      'En servicenivå som även sätter tak för energi- och resursanvändning, t.ex. kWh per transaktion',
+      'En certifiering för miljövänliga BPM-verktyg',
+      'En policy om papperslösa processer'
+    ],
+    ratt: 1,
+    forklaringar: ['Fel.', 'Rätt. Används i IT-tjänstehantering som ITIL.', 'Fel.', 'Fel.'],
+    forklaring: 'Incidenthantering kan då även fånga avvikelser i hållbarhetsmått.',
+    kalla: 'F4b; Houy et al. (2012)'
+  },
+  {
+    id: 'p10-08', delkurs: 'processer', amne: 'proc-perspektiv', typ: 'flerval', svarighet: 3,
+    fraga: 'Vad är tanken bakom en Large Process Model (LPM) enligt Kampik et al. (2025)?',
+    alternativ: [
+      'Att ersätta processanalytikerna',
+      'En samlad, datadriven kunskapsbas om processer som kan ge automatiserade förbättringsförslag',
+      'Att styra alla processer med agentisk AI',
+      'Att slippa dokumentera processer i BPMN'
+    ],
+    ratt: 1,
+    forklaringar: ['Fel.', 'Rätt.', 'Fel.', 'Fel.'],
+    forklaring: 'Begreppet förekom på HT25-omtentan.',
+    kalla: 'Tentamen HT25'
+  },
+  {
+    id: 'p10-09', delkurs: 'processer', amne: 'proc-perspektiv', typ: 'flerval', svarighet: 2,
+    fraga: 'Vilket av följande är INTE ett av Reijers (2021) teman i BPM-forskningen?',
+    alternativ: ['Process mining', 'Model management', 'Coordination and interoperability', 'Marknadsföringsstrategi'],
+    ratt: 3,
+    forklaringar: ['Fel — det är ett tema.', 'Fel — det är ett tema.', 'Fel — det är ett tema.', 'Rätt.'],
+    forklaring: 'De sju: BPMS, modellering, design, samordning och interoperabilitet, model management, process mining, ny teknik.',
     kalla: 'Reijers (2021)'
   },
 
-  /* -------------------- Essäfrågor -------------------- */
+  /* ============ Essäfrågor (egna formuleringar av tentans teman) ============ */
   {
-    id: 'proc-essa-01', delkurs: 'processer', amne: 'proc-forandring',
-    typ: 'oppen', svarighet: 3,
+    id: 'p-essa-01', delkurs: 'processer', amne: 'proc-realize', typ: 'oppen', svarighet: 3,
     fraga:
-      'Jeston (2022) framhåller att cirka 60 % av arbetet i ett BPM-initiativ handlar om ' +
-      'kommunikation och mänskliga aspekter snarare än teknik eller modellering. Diskutera ' +
-      'varför dessa delar är avgörande för att BPM-arbetet ska lyckas, och vilka risker som ' +
-      'uppstår om de inte prioriteras.',
+      'Jeston (2022) menar att en stor del av BPM-arbetet — runt 60 procent — handlar om ' +
+      'människor och kommunikation snarare än om modeller och teknik. Förklara varför den ' +
+      'mänskliga sidan är så avgörande, och vad som riskeras om den nedprioriteras.',
     nyckelpunkter: [
-      'Nämn siffran (cirka 60 %) och att den handlar om kommunikation/mänskliga aspekter, inte teknik',
-      'Koppla till att processer utförs av människor — även en perfekt designad process kräver att medarbetarna faktiskt förändrar sitt beteende',
-      'Nämn BPM-husets metafor: people change management är en av grundpelarna, inte ett tillägg',
-      'Risk: motstånd från medarbetare om de inte involveras eller informeras',
-      'Risk: uteblivet adoption — processen ser bra ut på papper men används aldrig i praktiken',
-      'Koppla till BPR:s historiska misslyckanden (kapitel 1) som varnande exempel på vad som händer när man ignorerar den mänskliga sidan',
-      'Nämn gärna appreciative inquiry eller Leadership/People Change Management som konkreta motmedel'
+      'Nämn att minst 60 % bör gå till förändringsledning och kommunikation',
+      'Processer utförs av människor — en bra to-be ger inget om ingen ändrar sitt arbetssätt',
+      'Able och willing: utbildning och motivation',
+      'People change management är en av tre essentials som genomsyrar alla faser',
+      'Risker: motstånd och rädsla, låg användning, uteblivna nyttor, återfall i gamla arbetssätt',
+      'Koppla till BPR, som misslyckades bland annat för att medarbetarna inte togs med',
+      'Motmedel: kommunikation i varje fas, ledarskap, quick wins, appreciative inquiry'
     ],
     modellsvar:
-      'Jestons poäng är att BPM till sin natur är ett förändringsarbete, inte ett ' +
-      'tekniskt projekt — processer utförs av människor, och även den mest välformulerade ' +
-      'to-be-processen ger ingen effekt om medarbetarna inte faktiskt ändrar hur de arbetar. ' +
-      'Det är därför BPM-huset bygger på flera lager samtidigt, där people change management ' +
-      'är en lika grundläggande pelare som själva processdesignen — inte ett tillägg i ' +
-      'slutet av projektet.\n\n' +
-      'Riskerna med att nedprioritera detta är konkreta och historiskt väldokumenterade. ' +
-      'BPR-vågen på 90-talet floppade ofta av precis den anledningen: radikala, ' +
-      'toppstyrda förändringar möttes av starkt motstånd, användes som förevändning för ' +
-      'nedskärningar i stället för att "empowra" medarbetare, och misslyckades med att ta ' +
-      'hänsyn till adoption. Konsekvensen blev att tekniskt sett välfungerande nya processer ' +
-      'aldrig slog rot i den dagliga verksamheten.\n\n' +
-      'Jestons egna motmedel är dels enablern People Change Management (att säkerställa att ' +
-      'berörda är kapabla och villiga att bidra till lösningen), dels Leadership (att ' +
-      'ledningen ger stöd och riktning så att BPM-arbetet hålls i linje med organisationen), ' +
-      'och dels förändringsledningsverktyg som appreciative inquiry, som bygger förändringen ' +
-      'på det som redan fungerar i stället för att bara peka ut fel.',
-    kalla: 'Tentamen HT25'
+      'BPM är i grunden en förändring av hur människor arbetar, inte ett tekniskt projekt. ' +
+      'Även en välgjord to-be-process ger ingen effekt om medarbetarna inte förstår, ' +
+      'accepterar och använder den. Därför menar Jeston att minst 60 % av arbetet bör handla ' +
+      'om förändringsledning och kommunikation, och people change management är en av 7FE:s ' +
+      'tre essentials som ska genomsyra alla tio faser. Målet är att medarbetarna ska vara ' +
+      'både able — kunna, genom utbildning — och willing — vilja, genom engagemang.\n\n' +
+      'Riskerna med att nedprioritera detta syns redan i BPR-erfarenheterna på 90-talet: ' +
+      'radikala, toppstyrda förändringar mötte starkt motstånd och blev ofta en ursäkt för ' +
+      'nedskärningar. Utan kommunikation växer rädslan för nedskärningar, outsourcing och ' +
+      'automatisering, nya processer och system används inte, nyttorna i business caset ' +
+      'uteblir och organisationen faller tillbaka i gamla arbetssätt. Förtroendet för ' +
+      'framtida BPM-arbete skadas också.\n\n' +
+      '7FE bygger därför in kommunikation som ett steg i varje fas, betonar ledarskap på ' +
+      'alla nivåer, använder quick wins för att visa värde tidigt och erkänna medarbetarnas ' +
+      'bidrag, och förordar framåtblickande metoder som appreciative inquiry, där förändringen ' +
+      'byggs på det som redan fungerar.',
+    kalla: 'F4a; tema på tentan HT25'
   },
   {
-    id: 'proc-essa-02', delkurs: 'processer', amne: 'proc-livscykel',
-    typ: 'oppen', svarighet: 3,
+    id: 'p-essa-02', delkurs: 'processer', amne: 'proc-teknik', typ: 'oppen', svarighet: 3,
     fraga:
-      'Jeston (2022) framhåller att processer bör förbättras innan de automatiseras med hjälp ' +
-      'av teknologiska lösningar. Diskutera varför detta är en central princip i BPM-arbetet.',
+      'Förklara Jestons princip att processer ska förbättras innan de automatiseras, och ' +
+      'diskutera varför den är så central i BPM-arbetet.',
     nyckelpunkter: [
-      'Koppla till produktivitetsparadoxen: teknik ovanpå oförändrade processer ger ingen effekt',
-      'Koppla till Hammers grundtes: "obliterate, don\'t automate" — att automatisera en dålig process bara ger en snabbare dålig process',
-      'Nämn RPA:s begränsning som ett modernt exempel: en robot som efterliknar en dålig manuell process ärver samma svagheter',
-      'Nämn as-is/to-be: processen måste förstås och designas om (to-be) innan implementering/automatisering',
-      'Ge ett konkret exempel (Ford, IBM Credit, eller eget resonerat exempel) på vad som händer när man automatiserar utan att först redesigna'
+      'Automatisering förstärker befintliga förhållanden — effektivt blir effektivare, ineffektivt sämre',
+      'Teknik är en möjliggörare, inte en lösning',
+      'Koppla till produktivitetsparadoxen och Hammers "don’t automate, obliterate"',
+      'Spreadsheet-testet som diagnos',
+      'Risker: bortkastade investeringar, frustration, låg användning',
+      'RPA som modernt exempel: en robot ärver den dåliga processens svagheter',
+      'Livscykeln/7FE: förstå (as-is), analysera och designa om (to-be) före Develop'
     ],
     modellsvar:
-      'Principen bygger direkt på produktivitetsparadoxen: 70- och 80-talets erfarenhet var ' +
-      'att IT-investeringar inte gav ökad produktivitet, eftersom tekniken lades ovanpå ' +
-      'processer som i grunden inte förändrades. Hammers artikel formulerade samma insikt ' +
-      'som en tydlig tes — "obliterate, don\'t automate" — att automatisera en dålig process ' +
-      'bara ger en snabbare dålig process, eftersom felen och friktionen i arbetssättet ' +
-      'följer med rakt in i den nya tekniken.\n\n' +
-      'BPM-livscykelns ordning speglar samma logik: man kartlägger as-is, analyserar var ' +
-      'problemen finns, och designar om till ett bättre to-be — innan man implementerar och ' +
-      'automatiserar. Hoppar man över analys- och redesignstegen riskerar man att bygga in ' +
-      'gamla ineffektiviteter i ett nytt, dyrare och svårare-att-ändra system.\n\n' +
-      'Samma mönster syns i modern tid med RPA: en robot som efterliknar en människas klick ' +
-      'i ett dåligt designat gränssnitt ärver exakt samma svagheter (och blir dessutom skör, ' +
-      'eftersom UI-baserad automatisering är känslig för minsta förändring). Lärdomen är ' +
-      'konsekvent genom hela kursens historik, från BPR via RPA till dagens agentiska AI: ' +
-      'teknik löser inget som en dålig process inte redan har löst konceptuellt.',
-    kalla: 'Tentamen HT25'
+      'Principen vilar på att automatisering förstärker det som redan finns. En effektiv ' +
+      'process blir effektivare, men en ineffektiv process blir bara snabbare dålig — ' +
+      'felen, dubbelarbetet och de onödiga stegen byggs in i ett system som dessutom är dyrt ' +
+      'och svårt att ändra. Teknik är en möjliggörare, inte en lösning, och kan inte ' +
+      'kompensera för dålig processdesign.\n\n' +
+      'Insikten har djupa rötter. Produktivitetsparadoxen visade att IT ovanpå oförändrade ' +
+      'processer inte gav ökad produktivitet, och Hammer formulerade samma sak som "don’t ' +
+      'automate, obliterate". Jestons spreadsheet-test är en praktisk diagnos: bygger ' +
+      'kritiska processer på kalkylblad har man täckt över problem i stället för att lösa ' +
+      'grundorsaken, och processen behöver förbättras först.\n\n' +
+      'I 7FE syns principen i ordningen mellan faserna: i Understand skapas en faktabaserad ' +
+      'bild av nuläget och rotorsakerna, i Innovate designas to-be, och först i Develop byggs ' +
+      'eventuell teknik — BPM kräver inte ens teknik. Hoppar man över detta riskerar man ' +
+      'bortkastade investeringar, frustrerade medarbetare och system som inte används. RPA ' +
+      'är ett modernt exempel: en robot som efterliknar en dålig manuell process ärver dess ' +
+      'svagheter och blir dessutom skör.',
+    kalla: 'F2; tema på tentan HT25'
+  },
+  {
+    id: 'p-essa-03', delkurs: 'processer', amne: 'proc-foundations', typ: 'oppen', svarighet: 3,
+    fraga:
+      'Många organisationer har en genomtänkt strategi men lyckas ändå inte genomföra den. ' +
+      'Förklara vad Jeston menar med "strategy execution void", och hur BPM och ' +
+      '7FE-ramverket kan bidra till att stänga gapet.',
+    nyckelpunkter: [
+      'Definition: gapet mellan strategisk avsikt och förmågan att genomföra strategin',
+      'Två komponenter: management effectiveness och operational efficiency',
+      'Bara operativ effektivitet ger "different sameness"',
+      'BPM-huset: blå, röd och grön zon',
+      'Foundations: förstå strategin och skapa spårbarhet, Red Wine Test, TOM',
+      'Processnivåer och processtyrning kopplar strategi till genomförande',
+      'Samordnade program, överlämning och ägarskap, och kontinuerliga återkopplingsloopar'
+    ],
+    modellsvar:
+      'Strategy execution void är gapet mellan vad organisationen vill uppnå strategiskt och ' +
+      'dess förmåga att faktiskt genomföra det. Jeston menar att strategiformulering är svår ' +
+      'men att genomförandet är svårare, och att det är där de flesta misslyckas. Gapet har ' +
+      'två sammanhängande delar: management effectiveness — kvaliteten i ledningsprocesserna, ' +
+      'styrningen och kulturen — och operational efficiency, kvaliteten i de operativa ' +
+      'processerna. Satsar man bara på det operativa blir resultatet "different sameness": ' +
+      'små förbättringar utan verklig förändring.\n\n' +
+      'BPM kan stänga gapet genom att vara det strukturerade ramverk som binder ihop de två ' +
+      'dimensionerna, den gröna zonen i BPM-huset. I Foundations hämtas strategin och ' +
+      'spårbarhet byggs från strategi till BPM-program och aktiviteter; Red Wine Test ger en ' +
+      'gemensam bild av framgång med tydligt ansvar; och Target Operating Model beskriver hur ' +
+      'organisationens delar ska fungera. I Enablement kopplar processnivåerna 1–5 strategin ' +
+      'till det dagliga arbetet, och processtyrning, prestationsstyrning och process assets ' +
+      'ger ägarskap och mätbarhet.\n\n' +
+      'Till sist behövs samordnade program mot flaskhalsarna, tydlig överlämning till linjen ' +
+      'och kontinuerliga återkopplingsloopar mellan strategi och verksamhet, så att ' +
+      'genomförandet följs upp och justeras — det Realize och Sustainability står för.',
+    kalla: 'F3; tema på tentan HT25'
+  },
+  {
+    id: 'p-essa-04', delkurs: 'processer', amne: 'proc-7fe', typ: 'oppen', svarighet: 3,
+    fraga:
+      'Jeston varnar för att använda samma BPM-upplägg överallt. Förklara vad BPM-mognad är ' +
+      'och diskutera varför ett BPM-initiativ måste anpassas efter organisationens mognad, ' +
+      'kultur och förutsättningar.',
+    nyckelpunkter: [
+      'BPM-mognad: hur långt organisationen kommit i att arbeta processorienterat',
+      'Låg mognad gör BPM svårare; anpassa takten — för snabbt ökar risken att misslyckas',
+      'Organisationer skiljer sig i kultur, ledarskap, processvana och befintliga grunder',
+      'Scenarierna (under the radar … business as usual) styr hur strikt 7FE tillämpas',
+      'Top-down och bottom-up efter situation; börja litet och växa',
+      'Faser kan anpassas men bör inte hoppas över utan motivering',
+      'Bedöm mognad och BPM-resa i Foundations steg 2'
+    ],
+    modellsvar:
+      'BPM-mognad beskriver hur långt en organisation har kommit i att leda och förbättra ' +
+      'verksamheten genom processer: finns processägarskap, processarkitektur, mätning och en ' +
+      'kultur av kontinuerlig förbättring? Organisationer skiljer sig också i kultur, ' +
+      'ledarskap och processvana. Vissa har redan vision, mål och processarkitektur på plats, ' +
+      'andra börjar med splittrade insatser.\n\n' +
+      'Därför fungerar inte one size fits all. Låg mognad gör BPM-insatserna svårare, och ' +
+      'Jeston varnar för att gå fortare än mognaden tillåter eftersom risken att misslyckas ' +
+      'då ökar. Ett företagsövergripande top-down-program i en organisation utan ' +
+      'processtänkande möter motstånd och saknar förutsättningar, medan en mogen organisation ' +
+      'kan ha BPM som business as usual. Implementeringsscenariot — från under the radar via ' +
+      'pilot och in the driver’s seat till business as usual — avgör hur strikt och brett ' +
+      '7FE tillämpas.\n\n' +
+      'Anpassningen börjar i Foundations, där mognaden, BPM-resan hittills och arbetets ' +
+      'bredd bedöms. Utifrån det väljs top-down, bottom-up eller en kombination, och man ' +
+      'börjar hellre litet och växer, gärna med quick wins som bygger förtroende. Faser kan ' +
+      'anpassas i djup och omfattning, men bör inte hoppas över utan god motivering.',
+    kalla: 'F2; F3; tema på tentan HT25'
   }
 ]);

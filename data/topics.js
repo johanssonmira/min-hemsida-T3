@@ -49,10 +49,10 @@ window.SYSB23.delkurser = [
     examination:
       'Digital salstentamen 3,0 hp (individuell) + gruppuppgift i BPMN/DMN 3,0 hp. Betygsskala U–A.',
     tentaInfo:
-      'Tentan har två delar: en BPM-del med flervalsfrågor (rätt svar 5 p, fel −1 p, ' +
-      'obesvarad 0 p) och ett fåtal essäfrågor (max 15 p, inga minuspoäng) om Jeston-kursboken, ' +
-      'samt en BPMN-del med flervalsfrågor där poängen anges per fråga (samma minuspoäng). ' +
-      'BPMN-delen kan innehålla diagram att läsa och räkna ut körningsförlopp för.'
+      'Digital salstenta 13 november, inga hjälpmedel. 2–3 kortare essäfrågor à max 15 p ' +
+      '(inte om BPMN, max 300 ord) och 10–15 flervalsfrågor. I BPM-delen ger rätt svar 5 p; ' +
+      'i BPMN-delen anges poängen per fråga, och där finns diagram att köra. Fel svar ger ' +
+      '−1 p, obesvarad 0 p. Betyg: A 85 %, B 75, C 65, D 55, E 50. Omtenta 7 januari.'
   }
 ];
 
@@ -330,82 +330,97 @@ window.SYSB23.amnen = [
     id: 'proc-intro',
     delkurs: 'processer',
     namn: 'BPM: definition, historia och drivkrafter',
-    kapitel: 'Föreläsning 1',
+    kapitel: 'Kapitel 1 · F1',
     kalla: '01_SYSB23_BPM_HT26.pdf',
     beskrivning:
-      'Vad BPM är enligt Jeston, produktivitetsparadoxen, 1990-talets managementtrender, ' +
-      'Business Process Reengineering, Petri-nät, BPM:s uppkomst 1998–2003, SOX och ' +
-      'utvecklingen mot RPA och agentisk AI.'
+      'Vad BPM är enligt Jeston, BPM och Enterprise Architecture, produktivitetsparadoxen, BPR, Petri-nät, SOX och utvecklingen mot RPA och agentisk AI.'
   },
   {
     id: 'proc-livscykel',
     delkurs: 'processer',
     namn: 'BPM-livscykeln och normativ litteratur',
-    kapitel: 'Föreläsning 1–2',
+    kapitel: 'Kapitel 2 · F1',
     kalla: '01_SYSB23_BPM_HT26.pdf',
     beskrivning:
-      'BPM-livscykelns sju steg, skillnaden mellan normativ managementlitteratur och ' +
-      'forskningslitteratur, samt Jestons avmystifiering av vanliga missuppfattningar om BPM.'
+      'BPM-livscykeln, as-is och to-be, normativ litteratur mot forskningslitteratur, och Jestons avmystifiering av BPM.'
+  },
+  {
+    id: 'proc-start',
+    delkurs: 'processer',
+    namn: 'Att starta BPM: vem, när och hur',
+    kapitel: 'Kapitel 3 · F2',
+    kalla: '02_SYSB23_BPM_HT26.pdf',
+    beskrivning:
+      'Projekttyper, de sex framgångsfaktorerna, drivers och triggers, top-down och bottom-up, tre sätt att initiera BPM och fyra implementeringsscenarier.'
+  },
+  {
+    id: 'proc-teknik',
+    delkurs: 'processer',
+    namn: 'Improve before automate: teknik och perspektiv',
+    kapitel: 'Kapitel 4 · F2, F4a',
+    kalla: '02_SYSB23_BPM_HT26.pdf; 04a_SYSB23_BPM_HT26.pdf',
+    beskrivning:
+      'Förbättra före automatisering, spreadsheet-testet, BPMS och BOAT, processoptimeringslösningar och RPA, samt customer- och employee-centric BPM.'
   },
   {
     id: 'proc-7fe',
     delkurs: 'processer',
-    namn: '7FE-ramverket: faser och artefakter',
-    kapitel: 'Föreläsning 2–4',
-    kalla: 'Jeston (2022)',
+    namn: '7FE-ramverket och BPM-huset',
+    kapitel: 'Kapitel 5 · F2',
+    kalla: '02_SYSB23_BPM_HT26.pdf',
     beskrivning:
-      'Förstå-fasen, Target Operating Model, process assets, Red Wine Test, quick wins ' +
-      'och de artefakter Jeston knyter till varje fas i BPM-arbetet.'
+      'Husmetaforen, 7FE:s tio faser i fyra F och tre essentials, framgångspallen, styrkor och svagheter, och BPM-mognad.'
   },
   {
-    id: 'proc-implementering',
+    id: 'proc-foundations',
     delkurs: 'processer',
-    namn: 'Att starta och driva BPM-arbete',
-    kapitel: 'Föreläsning 2–4',
-    kalla: 'Jeston (2022)',
+    namn: 'Foundations och Enablement',
+    kapitel: 'Kapitel 6 · F3',
+    kalla: '03_SYSB23_BPM_HT26.pdf',
     beskrivning:
-      'Drivers och triggers, business-issue-led kontra strategy-led initiativ, ' +
-      'top-down och bottom-up, samt Jestons fyra implementeringsscenarier: business as ' +
-      'usual, under the radar, pilot project och in the driver’s seat.'
+      'Strategy execution void, Red Wine Test, Target Operating Model, processnivåer, processtyrning, processarkitektur och process asset.'
   },
   {
-    id: 'proc-forandring',
+    id: 'proc-understand',
     delkurs: 'processer',
-    namn: 'Leadership och people change management',
-    kapitel: 'Föreläsning 3–4',
-    kalla: 'Jeston (2022)',
+    namn: 'Launch och Understand',
+    kapitel: 'Kapitel 7 · F3, F4a',
+    kalla: '03_SYSB23_BPM_HT26.pdf; 04a_SYSB23_BPM_HT26.pdf',
     beskrivning:
-      'BPM-husets grundpelare, varför cirka 60 % av BPM-arbetet handlar om människor, ' +
-      'appreciative inquiry som förändringsansats, samt ledarskapets och ' +
-      'projektstyrningens roll som stödjande komponenter.'
+      'Launch-fasens steg, processmål och Process Selection Matrix, Understand-workshops, FMEA, Process Worth Matrix och quick wins.'
   },
   {
-    id: 'proc-optimering',
+    id: 'proc-innovate',
     delkurs: 'processer',
-    namn: 'Processoptimering: från BPR till agentisk AI',
-    kapitel: 'Föreläsning 4',
-    kalla: 'Jeston (2022); Hammer (1990)',
+    namn: 'Innovate, People, Develop och Implement',
+    kapitel: 'Kapitel 8 · F4a',
+    kalla: '04a_SYSB23_BPM_HT26.pdf',
     beskrivning:
-      'Processoptimeringslösningar (redesign, outsourcing, shared services, RPA, ' +
-      'molntjänster), varför RPA sällan skalar, och hur agentisk AI-orkestrering ' +
-      'skiljer sig från både RPA och traditionell BPM.'
+      'Innovate-workshops och to-be, People-fasens rolldesign, Develop och Implement med UAT, piloter och handover.'
   },
   {
-    id: 'proc-akademisk',
+    id: 'proc-realize',
     delkurs: 'processer',
-    namn: 'BPM som forskningsfält: akademi, hållbarhet och AI',
-    kapitel: 'Reijers (2021); Houy et al. (2012); Rosemann et al. (2024)',
-    kalla: 'Reijers_2021.pdf; Houy_2012.pdf; Rosemann_2024.pdf',
+    namn: 'Realize, Sustainability och de tre essentials',
+    kapitel: 'Kapitel 9 · F4a',
+    kalla: '04a_SYSB23_BPM_HT26.pdf',
     beskrivning:
-      'BPM:s akademiska rötter i europeisk workflow-forskning, Reijers sju forskningsteman, ' +
-      'Green BPM och varför det inte fått genomslag, samt Rosemann et al:s tre ' +
-      'förskjutningar för BPM i AI-eran.'
+      'Nyttorealisering och benefits register, Sustainability som uthållig konkurrensfördel, projektledning, förändringsledning (60 %) och ledarskap.'
+  },
+  {
+    id: 'proc-perspektiv',
+    delkurs: 'processer',
+    namn: 'Andra perspektiv: Green BPM, process mining och AI',
+    kapitel: 'Kapitel 10 · F4b',
+    kalla: '04b_SYSB23_BPM_HT26.pdf; Houy (2012); Rosemann (2024); Reijers (2021)',
+    beskrivning:
+      'Green BPM och varför det inte slog igenom, process mining, Rosemanns tre drifts, agentisk AI och Large Process Models.'
   },
   {
     id: 'bpmn-grund',
     delkurs: 'processer',
     namn: 'BPMN-grunder: pooler, roller och aktiviteter',
-    kapitel: 'BPMN Walkthrough',
+    kapitel: 'Kapitel 11 · BPMN Walkthrough',
     kalla: 'BPMN Walkthrough (Silver 2017)',
     beskrivning:
       'Vad BPMN är till för, instansbegreppet, namnkonventioner, pooler och lanes, ' +
@@ -415,7 +430,7 @@ window.SYSB23.amnen = [
     id: 'bpmn-gateways',
     delkurs: 'processer',
     namn: 'Gateways: förgrening och sammanslagning',
-    kapitel: 'BPMN Walkthrough',
+    kapitel: 'Kapitel 12 · BPMN Walkthrough',
     kalla: 'BPMN Walkthrough (Silver 2017)',
     beskrivning:
       'Exclusive (XOR), parallel (AND), inclusive (OR) och event-based gateway, ' +
@@ -425,7 +440,7 @@ window.SYSB23.amnen = [
     id: 'bpmn-events',
     delkurs: 'processer',
     namn: 'Events: starta, vänta och reagera',
-    kapitel: 'BPMN Walkthrough',
+    kapitel: 'Kapitel 13 · BPMN Walkthrough',
     kalla: 'BPMN Walkthrough (Silver 2017)',
     beskrivning:
       'Start-, intermediate- och end-event, kastande kontra fångande händelser, ' +
@@ -436,7 +451,7 @@ window.SYSB23.amnen = [
     id: 'bpmn-avancerat',
     delkurs: 'processer',
     namn: 'Subprocesser, återanvändning och dataflöden',
-    kapitel: 'BPMN Walkthrough',
+    kapitel: 'Kapitel 14 · BPMN Walkthrough',
     kalla: 'BPMN Walkthrough (Silver 2017)',
     beskrivning:
       'Vanlig subprocess kontra event-subprocess, call activities för återanvändning, ' +
@@ -446,7 +461,7 @@ window.SYSB23.amnen = [
     id: 'bpmn-dmn',
     delkurs: 'processer',
     namn: 'Beslutsregler: business rule task och DMN',
-    kapitel: 'Föreläsning 1; BPMN Walkthrough',
+    kapitel: 'Kapitel 14 · BPMN Walkthrough',
     kalla: 'DMN/DRD',
     beskrivning:
       'Hur en business rule task i BPMN länkar till en DMN-beslutstabell (DRD), och ' +
