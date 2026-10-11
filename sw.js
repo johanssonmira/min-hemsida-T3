@@ -8,7 +8,7 @@
    filer städas bort i activate.
    ========================================================================= */
 
-var VERSION = 'sysb23-v14';
+var VERSION = 'sysb23-v15';
 
 var FILER = [
   './',
@@ -57,6 +57,7 @@ var FILER = [
   'js/essa.js',
   'js/statistik.js',
   'js/schema.js',
+  'js/attgora.js',
   'js/passform.js',
   'js/sqlverkstad.js',
   'js/modellera.js',

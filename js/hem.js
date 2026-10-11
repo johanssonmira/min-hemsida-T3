@@ -146,7 +146,13 @@ window.SYSB23.hem = (function () {
       h += '<p class="muted vk-tom">Inget inbokat.</p>';
     }
 
-    h += '<button class="lankbtn" data-gatill="schema">Hela kalendern →</button>';
+    var ag = S.attgora.idagsLage();
+    h += '<div class="vk-lankar">';
+    h += '<button class="lankbtn" data-gatill="attgora">' + (ag.antal
+      ? 'Att göra idag · ' + ag.klara + ' av ' + ag.antal + ' klara →'
+      : 'Skriv dagens att göra-lista →') + '</button>';
+    h += '<button class="lankbtn neutral" data-gatill="schema">Hela kalendern →</button>';
+    h += '</div>';
     return h + '</div>';
   }
 

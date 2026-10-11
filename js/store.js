@@ -25,6 +25,7 @@ window.SYSB23.store = (function () {
     sqlLosta: {},             // ovningsId -> ISO-datum, lösta SQL-övningar
     modellera: {},            // uppgiftsId -> { datum, poang, max, forsok }
     extentor: {},             // tentaId -> { inlast, tenta } ur användarens egen PDF
+    attgora: {},              // 'ÅÅÅÅ-MM-DD' -> [{ id, text, klar }] egen att göra-lista per dag
     datum: {}                 // egna anteckningar per etapp (kvar från v1)
   };
 
@@ -621,6 +622,66 @@ window.SYSB23.store = (function () {
     },
 
     /* ---------------------- Underhåll ---------------------- */
+    /* ---------------------- Att göra per dag ---------------------- */
+    attgora: function (datum) { return (data.attgora[datum] || []).slice(); },
+
+    attgoraDagar: function () {
+      return Object.keys(data.attgora)
+        .filter(function (d) { return data.attgora[d].length; })
+        .sort().reverse();
+    },
+
+    laggTillAttgora: function (datum, text) {
+      text = String(text || '').trim();
+      if (!text) return;
+      (data.attgora[datum] = data.attgora[datum] || []).push({
+        id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+        text: text.slice(0, 300),
+        klar: false
+      });
+      spara();
+    },
+
+    vaxlaAttgora: function (datum, id) {
+      (data.attgora[datum] || []).forEach(function (p) { if (p.id === id) p.klar = !p.klar; });
+      spara();
+    },
+
+    andraAttgora: function (datum, id, text) {
+      text = String(text || '').trim();
+      if (!text) return;
+      (data.attgora[datum] || []).forEach(function (p) { if (p.id === id) p.text = text.slice(0, 300); });
+      spara();
+    },
+
+    taBortAttgora: function (datum, id) {
+      data.attgora[datum] = (data.attgora[datum] || []).filter(function (p) { return p.id !== id; });
+      if (!data.attgora[datum].length) delete data.attgora[datum];
+      spara();
+    },
+
+    /* Flyttar en punkt ett steg upp eller ned i dagens lista */
+    flyttaAttgora: function (datum, id, steg) {
+      var lista = data.attgora[datum] || [];
+      var i = lista.findIndex(function (p) { return p.id === id; });
+      var j = i + steg;
+      if (i < 0 || j < 0 || j >= lista.length) return;
+      var tmp = lista[i]; lista[i] = lista[j]; lista[j] = tmp;
+      spara();
+    },
+
+    /* Det man inte hann med en dag följer med till en annan. Punkterna
+       flyttas — de ligger inte kvar som ogjorda på den gamla dagen. */
+    flyttaOklara: function (fran, till) {
+      var kvar = [], flytt = [];
+      (data.attgora[fran] || []).forEach(function (p) { (p.klar ? kvar : flytt).push(p); });
+      if (!flytt.length) return 0;
+      data.attgora[till] = (data.attgora[till] || []).concat(flytt);
+      if (kvar.length) data.attgora[fran] = kvar; else delete data.attgora[fran];
+      spara();
+      return flytt.length;
+    },
+
     exportera: function () { return JSON.stringify(data, null, 2); },
 
     importera: function (json) {
@@ -633,8 +694,12 @@ window.SYSB23.store = (function () {
       spara();
     },
 
+    /* "Rensa allt" gäller plugghistoriken. Att göra-listorna är något man
+       skrivit själv, inte statistik, och följer inte med. */
     rensa: function () {
+      var attgora = data.attgora;
       data = JSON.parse(JSON.stringify(tomtLage));
+      data.attgora = attgora || {};
       try { localStorage.removeItem(NYCKEL); } catch (e) { /* ignoreras */ }
       spara();
     }

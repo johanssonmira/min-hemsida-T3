@@ -1,7 +1,7 @@
 /* =========================================================================
    SYSB23 Plugg – formgivning
    -------------------------------------------------------------------------
-   Ett enda utseende: ljust papper, vita kort med tunn kant, mörkgrönt för
+   Ett enda utseende: ljust papper, vita kort med tunn kant, marinblått för
    det man ska göra och mässing för det man ska lägga märke till. Fraunces
    i rubrikerna, Inter i allt annat.
 
@@ -9,48 +9,48 @@
    1. LUGNT. Inga färgade banderoller, inga skuggor att tala om, inga
       teman. Färg används när den betyder något.
    2. FÄRG BÄR BETYDELSE. Grönt = rätt, rött = fel, mässing = titta hit,
-      mörkgrönt = nästa handling. Samma färg betyder samma sak överallt.
+      marinblått = nästa handling. Samma färg betyder samma sak överallt.
    3. LÄSBART FÖRST. 17 px brödtext, generöst radavstånd, rader som inte
       blir längre än ögat orkar följa.
    4. KONTRAST. All text ligger över WCAG AA mot sin bakgrund.
 
    Variabelnamnen är kvar från den gamla paletten (creme-*, blaa-*,
    ockra-*) så att varje komponent längre ner i filen byter utseende utan
-   att röras. blaa-* är alltså numera mörkgrönt och ockra-* mässing.
+   att röras. blaa-* är alltså numera marinblått och ockra-* mässing.
    ========================================================================= */
 
 :root {
   /* --- Ytor och linjer --- */
   --creme-50:  #FFFFFF;   /* kort */
-  --creme-100: #FBFAF6;   /* sidbakgrund, papper */
-  --creme-200: #F3F1EA;   /* dämpade band, inaktiva ytor */
-  --creme-300: #E5E1D6;   /* kantlinjer */
-  --creme-400: #CFC8B6;   /* starkare kantlinjer */
+  --creme-100: #F8F8F5;   /* sidbakgrund, papper */
+  --creme-200: #EFEFEA;   /* dämpade band, inaktiva ytor */
+  --creme-300: #E3E1D9;   /* kantlinjer */
+  --creme-400: #CBC8BC;   /* starkare kantlinjer */
 
-  /* --- Text --- 15,0:1 · 9,4:1 · 5,9:1 mot papperet */
-  --ink:      #22282A;
-  --ink-mid:  #3F4749;
-  --ink-soft: #5B6365;
+  /* --- Text --- */
+  --ink:      #23262E;
+  --ink-mid:  #3E4555;
+  --ink-soft: #5A6070;
 
-  /* --- Mörkgrönt: handling och navigering --- */
-  --blaa-50:  #EAF1EF;
-  --blaa-100: #CFE0DA;
-  --blaa-500: #1F4E45;
-  --blaa-600: #173B34;
-  --blaa-700: #122F29;
-  --blaa-900: #0E2420;
+  /* --- Marinblått: handling och navigering --- */
+  --blaa-50:  #E9EDF5;
+  --blaa-100: #CCD5E6;
+  --blaa-500: #1B2A4A;
+  --blaa-600: #142039;
+  --blaa-700: #0F1830;
+  --blaa-900: #0B1224;
 
   /* --- Mässing: uppmärksamhet, tentor --- */
-  --ockra-50:  #F8F1DE;
-  --ockra-100: #EFE1B8;
-  --ockra-500: #B9932F;   /* dekor och linjer – aldrig bakgrund till vit text */
-  --ockra-600: #7A5C10;   /* text på ljus mässing: 5,6:1 */
-  --ockra-700: #654C0D;   /* bakgrund till vit text: 7,5:1 */
+  --ockra-50:  #F7F1E1;
+  --ockra-100: #ECDDB6;
+  --ockra-500: #B08D3C;   /* dekor och linjer – aldrig bakgrund till vit text */
+  --ockra-600: #7A5D1C;   /* text på ljus mässing */
+  --ockra-700: #654C14;   /* bakgrund till vit text */
 
   /* --- Neutrala sektioner (hette rosa förr) --- */
-  --rosa-100: #F6F4EE;
-  --rosa-200: #E9E4D6;
-  --rosa-400: #CFC4A8;
+  --rosa-100: #F3F3EE;
+  --rosa-200: #E3E1D9;
+  --rosa-400: #CBC8BC;
 
   /* --- Rätt och fel --- */
   --gron-50:  #EAF4EF;
@@ -160,7 +160,7 @@ body {
 }
 .delkursval {
   -webkit-appearance: none; appearance: none;
-  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2322282A'/%3E%3C/svg%3E") no-repeat right center;
+  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2323262E'/%3E%3C/svg%3E") no-repeat right center;
   color: var(--ink); border: none; width: 100%;
   padding: .05rem 1.1rem .05rem 0; font-size: 1rem; font-weight: 600;
   font-family: var(--serif); cursor: pointer;
@@ -328,7 +328,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 }
 .vk-idag { color: var(--ockra-600); font-weight: 500; }
 .vk-tom { margin: 0 0 .8rem; font-size: .92rem; }
-.hem-veckan .lankbtn { margin-top: .5rem; }
+.vk-lankar { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; margin-top: .6rem; }
 @media (max-width: 400px) { .vk-namn { font-size: .58rem; letter-spacing: .02em; } .vk-nr { font-size: .95rem; } }
 
 .hem-intro { margin: 2rem 0 1.25rem; }
@@ -1767,3 +1767,70 @@ body.fokus #vy-ova, body.fokus #vy-prov { max-width: 760px; }
   .sqlfalt { min-height: 7rem; font-size: .88rem; }
   .sqlu-text { -webkit-line-clamp: 3; }
 }
+
+/* ============================ Att göra ============================ */
+#vy-attgora .huvud { min-width: 0; }
+.ag-huvud { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.ag-datum { flex: 1; min-width: 0; text-align: center; }
+.ag-datum h1 { margin: 0; font-size: 1.6rem; }
+.ag-idag { padding: .4rem .8rem; }
+.ag-framsteg { display: flex; align-items: center; gap: .8rem; margin-bottom: .8rem; }
+.ag-framsteg .progress { flex: 1; margin: 0; }
+
+.ag-lista { list-style: none; margin: 0; padding: 0; }
+.ag-punkt {
+  display: flex; align-items: center; gap: .4rem;
+  border-top: 1px solid var(--creme-300); padding: .15rem 0;
+}
+.ag-punkt:last-child { border-bottom: 1px solid var(--creme-300); }
+.ag-rad {
+  flex: 1; min-width: 0; display: flex; align-items: flex-start; gap: .75rem;
+  padding: .7rem .2rem; cursor: pointer;
+}
+.ag-rad input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.ag-bock {
+  flex: 0 0 22px; width: 22px; height: 22px; margin-top: .05rem;
+  border: 1.5px solid var(--creme-400); border-radius: 6px; background: var(--creme-50);
+  display: flex; align-items: center; justify-content: center;
+}
+.ag-rad:hover .ag-bock { border-color: var(--blaa-500); }
+.ag-rad input:focus-visible + .ag-bock { outline: 2px solid var(--blaa-500); outline-offset: 2px; }
+.ag-rad input:checked + .ag-bock { background: var(--gron-500); border-color: var(--gron-500); }
+.ag-rad input:checked + .ag-bock::after { content: '✓'; color: #fff; font-size: .85rem; font-weight: 700; }
+.ag-text { overflow-wrap: anywhere; line-height: 1.5; }
+.ag-punkt.klar .ag-text { text-decoration: line-through; color: var(--ink-soft); }
+.ag-verktyg { display: flex; flex: 0 0 auto; }
+.ag-verktyg .ikonknapp { padding: .35rem .45rem; font-size: .85rem; color: var(--ink-soft); }
+@media (hover: hover) {
+  .ag-verktyg { opacity: 0; transition: opacity .1s; }
+  .ag-punkt:hover .ag-verktyg, .ag-punkt:focus-within .ag-verktyg { opacity: 1; }
+}
+.ag-redigera {
+  flex: 1; min-width: 0; font: inherit; padding: .55rem .7rem; margin: .4rem 0;
+  border: 1px solid var(--blaa-500); border-radius: var(--r-s); background: var(--falt-yta); color: var(--ink);
+}
+.ag-tom { margin: .4rem 0 .9rem; }
+
+.ag-ny { display: flex; gap: .5rem; margin-top: 1.1rem; }
+.ag-ny input {
+  flex: 1; min-width: 0; font: inherit; font-size: 1rem; padding: .62rem .8rem;
+  border: 1px solid var(--creme-400); border-radius: var(--r-s);
+  background: var(--falt-yta); color: var(--ink);
+}
+.ag-ny input:focus { outline: 2px solid var(--blaa-500); outline-offset: 1px; border-color: var(--blaa-500); }
+.fel-text { color: var(--rod-600); font-size: .85rem; margin: .4rem 0 0; }
+.ag-notis { margin-top: 1rem; margin-bottom: 0; }
+
+.ag-forslag { display: flex; flex-wrap: wrap; gap: .45rem; }
+.ag-forslag .chip { text-align: left; }
+
+.ag-dagar { display: grid; gap: .1rem; }
+.ag-dagrad {
+  display: flex; justify-content: space-between; gap: .5rem; width: 100%; text-align: left;
+  background: none; border: none; color: var(--ink); font-weight: 400;
+  padding: .5rem .55rem; border-radius: var(--r-s);
+}
+.ag-dagrad:hover { background: var(--creme-100); }
+.ag-dagrad.vald { background: var(--blaa-50); font-weight: 600; }
+.ag-raknare { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.ag-dagrad.alla .ag-raknare { color: var(--gron-600); font-weight: 600; }

@@ -10,6 +10,7 @@
 
   var vyer = {
     hem:       function () { S.hem.rendera(); },
+    attgora:   function () { S.attgora.rendera(); },
     las:       function () { S.las.rendera(); },
     sql:       function () { S.sqlverkstad.rendera(); },
     modellera: function () { S.modellera.rendera(); },
@@ -57,14 +58,14 @@
      med åtta flikar där tre är meningslösa är svårare att navigera än en
      med fem som alla leder någonstans. */
   var VYER_PER_DELKURS = {
-    strategi:  ['hem', 'las', 'ova', 'prov', 'essa', 'statistik', 'schema'],
-    databaser: ['hem', 'las', 'sql', 'modellera', 'ova', 'statistik', 'schema'],
+    strategi:  ['hem', 'attgora', 'las', 'ova', 'prov', 'essa', 'statistik', 'schema'],
+    databaser: ['hem', 'attgora', 'las', 'sql', 'modellera', 'ova', 'statistik', 'schema'],
     /* Ingen Prov-flik än: tentornas riktiga frågor är antingen engelska med
        flerval-med-flera-rätt (ett format Prov-formuläret inte stödjer) eller
        byggda kring BPMN-diagram som bilder, som inte går att extrahera ur
        PDF:en på samma sätt som Strategis rena textfrågor. Öva och Essä
        täcker samma begrepp, bara inte tentans exakta ordalydelse. */
-    processer: ['hem', 'las', 'ova', 'essa', 'statistik', 'schema']
+    processer: ['hem', 'attgora', 'las', 'ova', 'essa', 'statistik', 'schema']
   };
 
   function synligaVyer() {
