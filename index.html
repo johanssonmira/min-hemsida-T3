@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#F8F8F5">
+  <meta name="theme-color" content="#FAF6EE">
   <title>SYSB23 Plugg</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +24,6 @@
 
     <nav class="navrad" id="mainnav">
       <button class="navbtn active" data-vy="hem">Hem</button>
-      <button class="navbtn" data-vy="attgora">Att göra</button>
       <button class="navbtn" data-vy="las">Läs</button>
       <button class="navbtn" data-vy="sql">SQL</button>
       <button class="navbtn" data-vy="modellera">Modellera</button>
@@ -36,12 +35,23 @@
     </nav>
 
 
-    <div class="delkursvaljare">
-      <span class="dv-etikett" aria-hidden="true">Delkurs</span>
-      <span class="dv-kontroll">
-        <i class="dv-prick" aria-hidden="true"></i>
-        <select id="sel-delkurs" class="delkursval" aria-label="Välj vilken delkurs du pluggar"></select>
-      </span>
+    <!-- Att göra hör inte till någon delkurs: egen knapp, samma lista överallt -->
+    <button id="btn-attgora" class="attgora-knapp" data-vy="attgora">
+      <span class="agk-bock" aria-hidden="true"></span>
+      <span class="agk-text">Att göra</span>
+      <span class="agk-raknare" id="agk-raknare"></span>
+    </button>
+
+    <div class="delkursvaljare" id="delkursvaljare">
+      <button id="dv-knapp" class="dv-knapp" aria-haspopup="listbox" aria-expanded="false" aria-controls="dv-meny">
+        <span class="dv-etikett">Delkurs</span>
+        <span class="dv-kontroll">
+          <i class="dv-prick" aria-hidden="true"></i>
+          <span class="dv-namn" id="dv-namn"></span>
+          <span class="dv-pil" aria-hidden="true"></span>
+        </span>
+      </button>
+      <div id="dv-meny" class="dv-meny" role="listbox" aria-label="Välj delkurs" hidden></div>
     </div>
   </div>
 </header>

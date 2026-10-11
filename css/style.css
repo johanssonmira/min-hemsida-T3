@@ -22,10 +22,10 @@
 :root {
   /* --- Ytor och linjer --- */
   --creme-50:  #FFFFFF;   /* kort */
-  --creme-100: #F8F8F5;   /* sidbakgrund, papper */
-  --creme-200: #EFEFEA;   /* dämpade band, inaktiva ytor */
-  --creme-300: #E3E1D9;   /* kantlinjer */
-  --creme-400: #CBC8BC;   /* starkare kantlinjer */
+  --creme-100: #FAF6EE;   /* sidbakgrund: elfenben */
+  --creme-200: #F2ECE0;   /* dämpade band, inaktiva ytor */
+  --creme-300: #EAE3D3;   /* kantlinjer */
+  --creme-400: #D4CBB8;   /* starkare kantlinjer */
 
   /* --- Text --- */
   --ink:      #23262E;
@@ -48,9 +48,9 @@
   --ockra-700: #654C14;   /* bakgrund till vit text */
 
   /* --- Neutrala sektioner (hette rosa förr) --- */
-  --rosa-100: #F3F3EE;
-  --rosa-200: #E3E1D9;
-  --rosa-400: #CBC8BC;
+  --rosa-100: #F5F0E6;
+  --rosa-200: #EAE3D3;
+  --rosa-400: #D4CBB8;
 
   /* --- Rätt och fel --- */
   --gron-50:  #EAF4EF;
@@ -140,38 +140,88 @@ body {
 }
 .logo span { font-weight: 600; }
 
-/* ---- Delkursväljaren: ett litet kort med etikett ovanför ---- */
-/* min-width:0 hela vägen ner, annars vägrar select krympa och sidan får
-   vågrät rullning på smala skärmar. */
-.delkursvaljare {
-  order: 2; margin-left: auto; flex: 0 1 17rem; min-width: 0;
-  position: relative;
-  background: var(--creme-50); border: 1px solid var(--creme-300);
-  border-radius: var(--r-m); padding: .4rem .85rem .45rem;
+/* ---- Att göra: egen knapp, hör inte till någon delkurs ---- */
+.attgora-knapp {
+  order: 2; margin-left: auto; flex: 0 0 auto;
+  display: flex; align-items: center; gap: .5rem;
+  background: var(--creme-50); color: var(--ink);
+  border: 1px solid var(--creme-300); border-radius: var(--r-m);
+  padding: .55rem .9rem; font-weight: 500;
 }
+.attgora-knapp:hover { border-color: var(--blaa-500); }
+.attgora-knapp.active { background: var(--blaa-600); border-color: var(--blaa-600); color: #fff; }
+.agk-bock {
+  width: 16px; height: 16px; border: 1.5px solid currentColor; border-radius: 4px;
+  display: inline-flex; align-items: center; justify-content: center; flex: 0 0 16px;
+}
+.agk-bock::after { content: '✓'; font-size: .7rem; font-weight: 700; line-height: 1; }
+.agk-raknare {
+  font-size: .78rem; font-variant-numeric: tabular-nums; color: var(--ink-soft);
+  background: var(--creme-200); border-radius: 999px; padding: .05rem .45rem;
+}
+.agk-raknare:empty { display: none; }
+.agk-raknare.klar { background: var(--gron-50); color: var(--gron-600); }
+.attgora-knapp.active .agk-raknare { background: rgba(255,255,255,.18); color: #fff; }
+
+/* ---- Delkursväljaren: knapp som öppnar en meny ---- */
+.delkursvaljare { order: 3; position: relative; flex: 0 1 18rem; min-width: 0; }
+.dv-knapp {
+  display: block; width: 100%; text-align: left;
+  background: var(--creme-50); color: var(--ink);
+  border: 1px solid var(--creme-300); border-radius: var(--r-m);
+  padding: .4rem .85rem .45rem; font-weight: 400;
+}
+.dv-knapp:hover, .delkursvaljare.oppen .dv-knapp { border-color: var(--blaa-500); }
 .dv-etikett {
   display: block; font-size: .66rem; font-weight: 600; letter-spacing: .12em;
   text-transform: uppercase; color: var(--ockra-600); line-height: 1.3;
 }
-.dv-kontroll { display: flex; align-items: center; gap: .45rem; min-width: 0; }
+.dv-kontroll { display: flex; align-items: center; gap: .5rem; min-width: 0; }
 .dv-prick {
   width: 9px; height: 9px; border-radius: 50%; flex: 0 0 9px;
   background: var(--aktiv, var(--blaa-500));
 }
-.delkursval {
-  -webkit-appearance: none; appearance: none;
-  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2323262E'/%3E%3C/svg%3E") no-repeat right center;
-  color: var(--ink); border: none; width: 100%;
-  padding: .05rem 1.1rem .05rem 0; font-size: 1rem; font-weight: 600;
-  font-family: var(--serif); cursor: pointer;
-  min-width: 0; text-overflow: ellipsis;
+.dv-namn {
+  flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-family: var(--serif); font-size: 1rem; font-weight: 600;
 }
-.delkursval:focus-visible { outline: 2px solid var(--blaa-500); outline-offset: 4px; border-radius: 4px; }
-.delkursval option, .delkursval optgroup { color: var(--ink); background: var(--falt-yta); font-family: var(--sans); font-weight: 500; }
+.dv-pil {
+  flex: 0 0 auto; width: 0; height: 0; border-left: 5px solid transparent;
+  border-right: 5px solid transparent; border-top: 6px solid var(--ink); transition: transform .15s;
+}
+.delkursvaljare.oppen .dv-pil { transform: rotate(180deg); }
+
+.dv-meny {
+  position: absolute; right: 0; top: calc(100% + .4rem); z-index: 60;
+  width: max(100%, 22rem); max-width: calc(100vw - 2rem); max-height: 70vh; overflow-y: auto;
+  background: var(--creme-50); border: 1px solid var(--creme-300); border-radius: var(--r-m);
+  box-shadow: var(--skugga-l); padding: .4rem;
+}
+.dv-grupp + .dv-grupp { border-top: 1px solid var(--creme-300); margin-top: .35rem; padding-top: .35rem; }
+.dv-grupprubrik {
+  font-size: .68rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink-soft); padding: .45rem .6rem .25rem;
+}
+.dv-val {
+  display: flex; align-items: center; gap: .7rem; width: 100%; text-align: left;
+  background: none; border: none; border-radius: var(--r-s); color: var(--ink);
+  padding: .6rem .6rem; font-weight: 400;
+}
+.dv-val:hover:not(.avstangd), .dv-val:focus-visible { background: var(--creme-100); outline: none; }
+.dv-val:focus-visible { box-shadow: inset 0 0 0 2px var(--blaa-500); }
+.dv-val.vald { background: var(--blaa-50); }
+.dv-val .fargprick { width: 11px; height: 11px; flex: 0 0 11px; margin: 0; }
+.dv-val-text { flex: 1; min-width: 0; }
+.dv-val-namn { display: block; font-weight: 500; line-height: 1.35; }
+.dv-val.vald .dv-val-namn { font-weight: 600; color: var(--blaa-600); }
+.dv-val-info { display: block; font-size: .8rem; color: var(--ink-soft); line-height: 1.35; }
+.dv-bock { flex: 0 0 1.2rem; color: var(--blaa-500); font-weight: 700; text-align: center; }
+.dv-val.avstangd { cursor: default; }
+.dv-val.avstangd .dv-val-namn { color: var(--ink-soft); }
 
 /* ---- Flikraden ---- */
 .navrad {
-  order: 3; flex-basis: 100%;
+  order: 4; flex-basis: 100%;
   display: flex; gap: .3rem; overflow-x: auto;
   scrollbar-width: none; -ms-overflow-style: none;
   padding: .1rem 0;
@@ -205,7 +255,8 @@ body {
 @media (max-width: 640px) {
   .topbar-rad { gap: .55rem .75rem; padding-top: .65rem; padding-bottom: .55rem; }
   .logo { font-size: 1.2rem; }
-  .delkursvaljare { flex-basis: 12.5rem; padding: .3rem .7rem .35rem; }
+  .delkursvaljare { flex: 1 1 100%; order: 3; }
+  .attgora-knapp { padding: .45rem .7rem; }
   .navbtn { padding: .45rem .65rem; font-size: .9rem; }
   .dkb-rad { font-size: .78rem; }
 }

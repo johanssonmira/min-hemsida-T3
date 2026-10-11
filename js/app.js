@@ -35,9 +35,11 @@
     Object.keys(vyer).forEach(function (v) {
       U.el('vy-' + v).classList.toggle('dold', v !== namn);
     });
-    Array.prototype.forEach.call(document.querySelectorAll('.navbtn'), function (b) {
+    Array.prototype.forEach.call(document.querySelectorAll('.navbtn, .attgora-knapp'), function (b) {
       b.classList.toggle('active', b.dataset.vy === namn);
+      if (b.dataset.vy === namn) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
     });
+    uppdateraAttgoraKnapp();
 
     vyer[namn]();
     window.scrollTo(0, 0);
@@ -58,18 +60,22 @@
      med åtta flikar där tre är meningslösa är svårare att navigera än en
      med fem som alla leder någonstans. */
   var VYER_PER_DELKURS = {
-    strategi:  ['hem', 'attgora', 'las', 'ova', 'prov', 'essa', 'statistik', 'schema'],
-    databaser: ['hem', 'attgora', 'las', 'sql', 'modellera', 'ova', 'statistik', 'schema'],
+    strategi:  ['hem', 'las', 'ova', 'prov', 'essa', 'statistik', 'schema'],
+    databaser: ['hem', 'las', 'sql', 'modellera', 'ova', 'statistik', 'schema'],
     /* Ingen Prov-flik än: tentornas riktiga frågor är antingen engelska med
        flerval-med-flera-rätt (ett format Prov-formuläret inte stödjer) eller
        byggda kring BPMN-diagram som bilder, som inte går att extrahera ur
        PDF:en på samma sätt som Strategis rena textfrågor. Öva och Essä
        täcker samma begrepp, bara inte tentans exakta ordalydelse. */
-    processer: ['hem', 'attgora', 'las', 'ova', 'essa', 'statistik', 'schema']
+    processer: ['hem', 'las', 'ova', 'essa', 'statistik', 'schema']
   };
 
+  /* Vyer som inte hör till någon delkurs. De har ingen flik i raden utan
+     egna knappar, och finns kvar vad man än byter till. */
+  var GLOBALA_VYER = ['attgora'];
+
   function synligaVyer() {
-    return VYER_PER_DELKURS[S.store.delkurs()] || VYER_PER_DELKURS.strategi;
+    return (VYER_PER_DELKURS[S.store.delkurs()] || VYER_PER_DELKURS.strategi).concat(GLOBALA_VYER);
   }
 
   function uppdateraFlikar() {
@@ -86,6 +92,7 @@
 
   function rendera() {
     uppdateraDelkursband();
+    uppdateraAttgoraKnapp();
     uppdateraFlikar();
     vyer[aktuellVy]();
   }
@@ -94,8 +101,7 @@
     S.store.sattDelkurs(id);
     S.ova.aterstall();
     S.las.stang();
-    var sel = U.el('sel-delkurs');
-    if (sel) sel.value = id;
+    uppdateraDelkursknapp();
     rendera();
   }
 
@@ -157,52 +163,148 @@
     if (!a) return;
     if (a.delkurs !== S.store.delkurs()) {
       S.store.sattDelkurs(a.delkurs);
-      var sel = U.el('sel-delkurs');
-      if (sel) sel.value = a.delkurs;
+      uppdateraDelkursknapp();
     }
     S.ova.ovaAmne(amneId);
   }
 
   /* ---------------------------------------------------------------- */
 
-  function fyllDelkursval() {
-    var sel = U.el('sel-delkurs');
-    sel.innerHTML = '';
+  /* ---------------------------------------------------------------- */
+  /* Delkursmenyn                                                      */
+  /* En egen meny i stället för webbläsarens rullgardin: varje delkurs  */
+  /* är en tydlig rad med färg, namn och nästa datum, och den valda     */
+  /* har en bock. Tre grupper i terminens ordning — det man pluggar nu, */
+  /* det som kommer, och det som är avklarat.                          */
+  /* ---------------------------------------------------------------- */
 
-    /* Tre grupper i terminens ordning: det man pluggar nu, det som kommer,
-       och det som redan är avklarat. Avslutade delkurser ligger sist men
-       finns kvar — omtentan kan fortfarande behöva dem. */
-    function grupp(etikett) {
-      var g = document.createElement('optgroup');
-      g.label = etikett;
-      return g;
+  var MANADER_KORT = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
+
+  function kortDag(iso) {
+    var d = U.parse(iso);
+    return d.getDate() + ' ' + MANADER_KORT[d.getMonth()];
+  }
+
+  function delkursInfo(id, avslutad, harMaterial) {
+    if (!harMaterial) {
+      var forsta = S.pass.filter(function (p) { return p.delkurs === id; })
+                         .map(function (p) { return p.datum; }).sort()[0];
+      return (forsta ? 'Startar ' + kortDag(forsta) + ' · ' : '') + 'inget material än';
     }
-    function alternativ(id, namn, avstangd) {
-      var o = document.createElement('option');
-      o.value = id;
-      o.textContent = namn;
-      o.disabled = !!avstangd;
-      return o;
-    }
+    if (avslutad) return 'Avslutad';
+    var t = U.nastaTenta(id, false) || U.nastaTenta(id, true);
+    if (!t) return 'Inga fler tentor';
+    var dagar = U.dagarTill(t.datum);
+    return 'Tenta ' + kortDag(t.datum) + ' · ' + (dagar === 0 ? 'idag' : 'om ' + dagar + (dagar === 1 ? ' dag' : ' dagar'));
+  }
 
-    var aktuella = grupp('Aktuella');
-    var kommande = grupp('Kommer senare — inget material än');
-    var avslutade = grupp('Avslutade');
+  function byggDelkursmeny() {
+    var meny = U.el('dv-meny');
+    var vald = S.store.delkurs();
+    var grupper = [
+      { rubrik: 'Aktuella', rader: [] },
+      { rubrik: 'Kommer senare', rader: [] },
+      { rubrik: 'Avslutade', rader: [] }
+    ];
 
-    S.delkurser.forEach(function (d) {
-      (d.avslutad ? avslutade : aktuella).appendChild(alternativ(d.id, d.namn));
-    });
     S.kalenderDelkurser.forEach(function (k) {
-      if (S.delkurser.some(function (d) { return d.id === k.id; })) return;
-      kommande.appendChild(alternativ(k.id, k.namn, true));
+      var d = S.delkurser.filter(function (x) { return x.id === k.id; })[0];
+      var grupp = !d ? grupper[1] : (d.avslutad ? grupper[2] : grupper[0]);
+      grupp.rader.push({ id: k.id, namn: k.namn, farg: k.farg, aktiv: !!d,
+                         info: delkursInfo(k.id, d && d.avslutad, !!d) });
     });
 
-    [aktuella, kommande, avslutade].forEach(function (g) {
-      if (g.children.length) sel.appendChild(g);
+    var h = '';
+    grupper.forEach(function (g) {
+      if (!g.rader.length) return;
+      h += '<div class="dv-grupp" role="group" aria-label="' + g.rubrik + '">';
+      h += '<div class="dv-grupprubrik" aria-hidden="true">' + g.rubrik + '</div>';
+      g.rader.forEach(function (r) {
+        var ar = r.id === vald;
+        h += '<button type="button" role="option" class="dv-val' + (ar ? ' vald' : '') +
+             (r.aktiv ? '' : ' avstangd') + '" data-delkurs="' + r.id + '"' +
+             ' aria-selected="' + ar + '"' + (r.aktiv ? '' : ' aria-disabled="true" tabindex="-1"') + '>';
+        h += '<i class="fargprick" style="background:' + r.farg + '" aria-hidden="true"></i>';
+        h += '<span class="dv-val-text"><span class="dv-val-namn">' + U.esc(r.namn) + '</span>' +
+             '<span class="dv-val-info">' + U.esc(r.info) + '</span></span>';
+        h += '<span class="dv-bock" aria-hidden="true">' + (ar ? '✓' : '') + '</span>';
+        h += '</button>';
+      });
+      h += '</div>';
+    });
+    meny.innerHTML = h;
+
+    Array.prototype.forEach.call(meny.querySelectorAll('.dv-val'), function (b) {
+      b.addEventListener('click', function () {
+        if (b.classList.contains('avstangd')) return;
+        stangDelkursmeny(true);
+        if (b.dataset.delkurs !== S.store.delkurs()) bytDelkurs(b.dataset.delkurs);
+      });
+    });
+  }
+
+  function uppdateraDelkursknapp() {
+    var id = S.store.delkurs();
+    var namn = U.el('dv-namn');
+    if (namn) namn.textContent = U.delkursNamn(id);
+    var knapp = U.el('dv-knapp');
+    if (knapp) knapp.setAttribute('aria-label', 'Delkurs: ' + U.delkursNamn(id) + '. Byt delkurs');
+  }
+
+  function oppnaDelkursmeny() {
+    byggDelkursmeny();
+    var meny = U.el('dv-meny');
+    meny.hidden = false;
+    U.el('dv-knapp').setAttribute('aria-expanded', 'true');
+    U.el('delkursvaljare').classList.add('oppen');
+    var forsta = meny.querySelector('.dv-val.vald') || meny.querySelector('.dv-val:not(.avstangd)');
+    if (forsta) forsta.focus();
+  }
+
+  function stangDelkursmeny(fokusTillbaka) {
+    var meny = U.el('dv-meny');
+    if (!meny || meny.hidden) return;
+    meny.hidden = true;
+    U.el('dv-knapp').setAttribute('aria-expanded', 'false');
+    U.el('delkursvaljare').classList.remove('oppen');
+    if (fokusTillbaka) U.el('dv-knapp').focus();
+  }
+
+  function kopplaDelkursmeny() {
+    var knapp = U.el('dv-knapp');
+    var meny = U.el('dv-meny');
+    uppdateraDelkursknapp();
+
+    knapp.addEventListener('click', function () {
+      if (meny.hidden) oppnaDelkursmeny(); else stangDelkursmeny(false);
+    });
+    knapp.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown' && meny.hidden) { e.preventDefault(); oppnaDelkursmeny(); }
     });
 
-    sel.value = S.store.delkurs();
-    sel.addEventListener('change', function () { bytDelkurs(sel.value); });
+    /* Piltangenter mellan raderna, Escape stänger */
+    meny.addEventListener('keydown', function (e) {
+      var rader = Array.prototype.slice.call(meny.querySelectorAll('.dv-val:not(.avstangd)'));
+      var i = rader.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown') { e.preventDefault(); (rader[i + 1] || rader[0]).focus(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); (rader[i - 1] || rader[rader.length - 1]).focus(); }
+      else if (e.key === 'Escape') { e.preventDefault(); stangDelkursmeny(true); }
+      else if (e.key === 'Tab') { stangDelkursmeny(false); }
+    });
+
+    /* Klick utanför stänger */
+    document.addEventListener('click', function (e) {
+      if (!U.el('delkursvaljare').contains(e.target)) stangDelkursmeny(false);
+    });
+  }
+
+  /* Räknaren på Att göra-knappen: hur dagens lista ligger till */
+  function uppdateraAttgoraKnapp() {
+    var r = U.el('agk-raknare');
+    if (!r || !S.attgora) return;
+    var l = S.attgora.idagsLage();
+    r.textContent = l.antal ? l.klara + '/' + l.antal : '';
+    r.classList.toggle('klar', l.antal > 0 && l.klara === l.antal);
   }
 
   function koppla() {
@@ -210,6 +312,7 @@
       b.addEventListener('click', function () { visaVy(b.dataset.vy); });
     });
     U.el('btn-hem').addEventListener('click', function () { visaVy('hem'); });
+    U.el('btn-attgora').addEventListener('click', function () { visaVy('attgora'); });
 
     /* Siffertangenterna hör till Öva, där man svarar på en fråga i taget.
        Provet är ett formulär med alla frågor på en gång — där skulle de
@@ -293,7 +396,7 @@
       S.store.sattDelkurs(nasta.delkurs);
     }
 
-    fyllDelkursval();
+    kopplaDelkursmeny();
     koppla();
     registreraOffline();
 
@@ -348,6 +451,7 @@
     visaVy: visaVy,
     synligaVyer: synligaVyer,
     rendera: rendera,
+    uppdateraAttgoraKnapp: uppdateraAttgoraKnapp,
     bytDelkurs: bytDelkurs,
     ovaAmne: ovaAmne
   };

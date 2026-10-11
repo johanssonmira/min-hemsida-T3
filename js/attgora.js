@@ -6,8 +6,10 @@
    gjorde. Det man inte hann med går att flytta till idag med ett klick —
    annars blir gamla ogjorda punkter liggande och skaver.
 
-   Förslagen under listan är bara förslag: de läggs till först när man
-   klickar på dem.
+   Listan hör inte till någon delkurs. Den är samma vad man än pluggar,
+   och rymmer allt — "handla på Coop" lika väl som "plugga till databastentan".
+   Förslagen under listan hämtas därför från alla aktuella delkurser, och
+   läggs till först när man klickar på dem.
    ========================================================================= */
 
 window.SYSB23 = window.SYSB23 || {};
@@ -45,7 +47,7 @@ window.SYSB23.attgora = (function () {
     h += '<div class="kort ag-kort">';
     h += '<div class="ag-huvud">';
     h += '<button class="ikonknapp" id="ag-fore" aria-label="Föregående dag">←</button>';
-    h += '<div class="ag-datum"><h1>' + U.esc(rubrik(dag, idag)) + '</h1>';
+    h += '<div class="ag-datum"><span class="overrubrik">Att göra</span><h1>' + U.esc(rubrik(dag, idag)) + '</h1>';
     h += '<span class="muted liten">' + U.esc(U.langtDatum(dag)) + '</span></div>';
     h += '<button class="ikonknapp" id="ag-nasta" aria-label="Nästa dag">→</button>';
     if (dag !== idag) h += '<button class="sekundar ag-idag" id="ag-tillidag">Idag</button>';
@@ -81,11 +83,11 @@ window.SYSB23.attgora = (function () {
     if (!lista.length) {
       h += '<p class="muted ag-tom">' + (dag < idag
         ? 'Ingenting skrevs upp den här dagen.'
-        : 'Inget att göra än. Skriv en punkt nedan — kort och konkret går lättast att bocka av.') + '</p>';
+        : 'Inget att göra än. Skriv allt du ska hinna — plugg och annat. Samma lista oavsett vilken delkurs du står i.') + '</p>';
     }
 
     h += '<form class="ag-ny" id="ag-ny" autocomplete="off">';
-    h += '<input id="ag-text" type="text" maxlength="300" placeholder="Läs kapitel 3 och gör 10 frågor" ' +
+    h += '<input id="ag-text" type="text" maxlength="300" placeholder="Handla på Coop, plugga quiz till Databaser …" ' +
          'aria-label="Ny punkt">';
     h += '<button class="primar" type="submit">Lägg till</button>';
     h += '</form>';
@@ -113,7 +115,7 @@ window.SYSB23.attgora = (function () {
     var forslag = byggForslag(dag);
     if (forslag.length) {
       h += '<div class="kort">';
-      h += '<h2>Förslag</h2>';
+      h += '<h2>Förslag från dina kurser</h2>';
       h += '<p class="muted liten">Klicka för att lägga till i listan.</p>';
       h += '<div class="ag-forslag">';
       forslag.forEach(function (f) {
@@ -147,6 +149,7 @@ window.SYSB23.attgora = (function () {
 
     vy.innerHTML = h;
     koppla(vy, dag);
+    if (S.app && S.app.uppdateraAttgoraKnapp) S.app.uppdateraAttgoraKnapp();
   }
 
   function rubrik(dag, idag, kort) {
@@ -168,31 +171,38 @@ window.SYSB23.attgora = (function () {
     return null;
   }
 
-  /* Konkreta förslag ur läget: nästa olästa kapitel, övning, och dagens pass */
+  /* Förslag ur läget i ALLA aktuella delkurser, inte bara den valda:
+     nästa olästa kapitel, en övningsrunda, dagens schemapass och
+     Ladok-anmälan när den närmar sig. */
   function byggForslag(dag) {
-    var delkurs = S.store.delkurs();
     var finns = S.store.attgora(dag).map(function (p) { return p.text; });
+    var aktuella = S.delkurser.filter(function (d) { return !d.avslutad; });
     var ut = [];
-
-    var komp = S.kompendium[delkurs];
-    if (komp) {
-      var nasta = komp.kapitel.filter(function (k) { return !S.store.arLast(k.id); })[0];
-      if (nasta) ut.push('Läs kapitel ' + nasta.nr + ': ' + nasta.titel);
-    }
-    var namn = U.delkursKort(delkurs);
-    ut.push('Öva 10 frågor i ' + namn);
 
     U.allaPass().filter(function (p) { return p.datum === dag; }).forEach(function (p) {
       ut.push(p.tid.split('–')[0] + ' ' + p.rubrik + (p.delkurs ? ' (' + U.delkursKort(p.delkurs) + ')' : ''));
     });
 
-    var tenta = U.nastaAktuellTenta();
-    if (tenta) {
-      var anm = flytta(tenta.datum, -7);
-      if (anm >= dag && U.dagarTill(anm) <= 10) ut.push('Anmäl mig till tentan i ' + U.delkursKort(tenta.delkurs) + ' i Ladok');
-    }
+    S.tentor.forEach(function (t) {
+      if (t.typ !== 'ordinarie' || !aktuella.some(function (d) { return d.id === t.delkurs; })) return;
+      var anm = flytta(t.datum, -7);
+      var kvar = U.dagarTill(anm);
+      if (anm >= dag && kvar !== null && kvar >= 0 && kvar <= 10) {
+        ut.push('Anmäl mig till tentan i ' + U.delkursKort(t.delkurs) + ' i Ladok');
+      }
+    });
 
-    return ut.filter(function (t) { return finns.indexOf(t) === -1; }).slice(0, 6);
+    aktuella.forEach(function (d) {
+      var namn = U.delkursKort(d.id);
+      var komp = S.kompendium[d.id];
+      if (komp) {
+        var nasta = komp.kapitel.filter(function (k) { return !S.store.arLast(k.id); })[0];
+        if (nasta) ut.push('Läs kapitel ' + nasta.nr + ' i ' + namn + ': ' + nasta.titel);
+      }
+      ut.push('Öva 10 frågor i ' + namn);
+    });
+
+    return ut.filter(function (t) { return finns.indexOf(t) === -1; }).slice(0, 8);
   }
 
   function koppla(vy, dag) {
