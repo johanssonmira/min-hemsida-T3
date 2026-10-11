@@ -282,6 +282,16 @@
     }
 
     kontrolleraData();
+    /* En avslutad delkurs är ingen bra startpunkt. Står man i en när sidan
+       öppnas byts den mot delkursen med närmast kommande tenta — man kan
+       fortfarande välja den avslutade i väljaren under besöket. */
+    var nu = S.delkurser.filter(function (d) { return d.id === S.store.delkurs(); })[0];
+    var nasta = U.nastaAktuellTenta();
+    if ((!nu || nu.avslutad) && nasta &&
+        S.delkurser.some(function (d) { return d.id === nasta.delkurs; })) {
+      S.store.sattDelkurs(nasta.delkurs);
+    }
+
     fyllDelkursval();
     koppla();
     registreraOffline();
