@@ -190,5 +190,168 @@ window.SYSB23.extentor = [
           'prestationer med vinst som enda mål, utan att bry sig om människorna eller hur omvandlingen går ' +
           'till. Öppet system med intressenter är intressentmodellen.' }
     ]
+  },
+
+  /* ---------------- Processorienterad verksamhetsutveckling ----------------
+     HT25: två essäer à 15 p, en BPM-sektion med flervalsfrågor à 5 p och en
+     BPMN-sektion där varje fråga har sin egen poäng (3–7 p). Fel −1 överallt.
+     BPMN-frågorna har diagram; de klipps ut ur PDF:en vid inläsningen. */
+  {
+    id: 'bpm-ht25-ordinarie',
+    delkurs: 'processer',
+    titel: 'Ordinarie tentamen',
+    datum: '2025-11-21',
+    fil: 'SYSB23_BPM_21nov2025.pdf',
+    rubrik: ['HT25', 'Processorienterad', 'Ordinarie tentamen'],
+    poang: { flerval: 5, essa: 15 },
+    beskrivning: '2 essäer à 15 p, 10 BPM-frågor à 5 p och 4 BPMN-frågor (3–7 p, tre med diagram)',
+    poangsattning: 'Essäfrågorna ger max 15 poäng, utan minuspoäng. I BPM-sektionen ger rätt svar ' +
+      '5 poäng; i BPMN-sektionen det antal poäng som står under frågan. Fel svar ger −1 poäng och ' +
+      'obesvarad fråga 0 poäng. Max 300 ord per essä.',
+    maxOrd: 300,
+    fragor: [
+      { typ: 'essa', summa: 'fr4180', bank: 'p-essa-01' },
+      { typ: 'essa', summa: '1hb4d2f', bank: 'p-essa-02' },
+      { typ: 'flerval', antal: 4, ratt: 3, summa: 'bhxs1j',
+        forklaring: 'EA är den övergripande ritningen över hur strategin ska förverkligas — affär, ' +
+          'information, applikationer och teknik. **BPM är det operativa lagret** som kopplar ihop ' +
+          'strategi, verksamhet och IT genom processerna. De är alltså inte samma sak, inte oberoende, ' +
+          'och det är EA (inte BPM) som är den övergripande ramen.' },
+      { typ: 'flerval', antal: 4, ratt: 2, summa: '1sebeum',
+        forklaring: 'BPR på 90-talet ville riva upp och göra om processerna från grunden. Projekten blev ' +
+          'ofta **för radikala, dyra och toppstyrda**, mötte starkt motstånd och blev i praktiken ofta ' +
+          'nedskärningar. Det var tvärtom tätt kopplat till IT — "don’t automate, obliterate".' },
+      { typ: 'flerval', antal: 4, ratt: 1, summa: '19ypnmo',
+        forklaring: 'Regelstyrda, repetitiva steg utan omdöme i flera system är **RPA:s** typfall — en ' +
+          'mjukvarurobot gör samma klick som människan. Agentic AI behövs när uppgiften kräver tolkning ' +
+          'och beslut, och en redesign är överdriven när stegen redan är enkla och stabila.' },
+      { typ: 'flerval', antal: 4, ratt: 2, summa: 'lkvuqm',
+        forklaring: 'BPM-huset har **flera lager** som tillsammans ger en effektiv organisation: ' +
+          'strategiska grunder som fundament, ledning och styrning (blå zon, management effectiveness), ' +
+          'de operativa processerna (röd zon, operational efficiency) och BPM som ramverket som binder ' +
+          'ihop dem (grön zon). Det handlar inte om IT-system, och strategin kommer före — inte efter — ' +
+          'kartläggningen.' },
+      { typ: 'flerval', antal: 4, ratt: 0, summa: '1em0itb',
+        forklaring: 'Green BPM fastnade i praktiken för att **verktygen saknar stöd** för att lagra, räkna ' +
+          'på och analysera energi-, utsläpps- och resursdata i processmodellerna. Ingen lag förbjuder det, ' +
+          'och BPM har inte ersatts.' },
+      { typ: 'flerval', antal: 4, ratt: 2, summa: 'cbspu',
+        forklaring: 'Snabbare svar, färre överlämningar och en kontaktpunkt — allt utgår från kundens ' +
+          'upplevelse. Det är **customer-centric BPM**. Integration- och system-centric handlar om ' +
+          'systemkopplingar, employee-centric om medarbetarnas arbete.' },
+      { typ: 'flerval', antal: 4, ratt: 1, summa: 'u4lhec',
+        forklaring: 'Utan engagerad ledning och tydlig strategi rekommenderar Jeston att **börja lokalt, ' +
+          'bottom-up**: små förbättringar som visar värde och bygger momentum (jämför scenariot under ' +
+          'the radar). Ett top-down-program kräver just det mandat som saknas.' },
+      { typ: 'flerval', antal: 4, ratt: 2, summa: 'pplocw',
+        forklaring: 'Innovate tar fram **to-be**: framtida processer och validerade lösningsförslag. ' +
+          'Rotorsaker hör till Understand, utbildningsplaner till People och Implement, och ' +
+          'riskregistret till projektstyrningen.' },
+      { typ: 'flerval', antal: 4, ratt: 2, summa: '13x5arg',
+        forklaring: 'Red Wine Test: deltagarna föreställer sig att projektet redan är klart och beskriver ' +
+          'hur det ser ut. Syftet är ett **gemensamt narrativ om hur framgång ser ut** — inte scope, ' +
+          'lösningsval eller detaljerade modeller.' },
+      { typ: 'flerval', antal: 4, ratt: 3, summa: 'pq3aow',
+        forklaring: 'En process asset är mer än modellen: **modellen är en del av den**, och till den hör ' +
+          'roller, ägarskap, policyer, regler, risker, mått och andra styrande element. Det första ' +
+          'alternativet låter likt men skiljer modellen från asseten i stället för att se den som en del.' },
+      { typ: 'flerval', antal: 4, ratt: 1, summa: '1mhw2hq',
+        forklaring: 'BPMN och DMN gör processflöden och beslutsregler **visuella och begripliga**, så att ' +
+          'man kan visa varför ett automatiserat beslut blev som det blev. Det är förklarbarheten. ' +
+          'Loggar och optimering förklarar inget i sig.' },
+      { typ: 'flerval', antal: 5, ratt: 1, summa: '7gbwff',
+        forklaring: 'Message A startar processen och Activity A körs. Sedan kommer en **händelsebaserad ' +
+          'gateway**: den väg vars händelse inträffar först vinner, och den andra stängs. Message B kommer ' +
+          'efter 2 dagar, före 4-dagarstimern, så det blir Activity B och sedan Activity D. ' +
+          'Activity C körs aldrig. **A, B, D.**' },
+      { typ: 'flerval', antal: 6, ratt: 4, summa: 'q91k19',
+        forklaring: 'Event-subprocessen startar med en meddelandehändelse med **heldragen kant — den är ' +
+          'avbrytande**. När Message A kommer 5 minuter efter Activity A avbryts huvudprocessen, och ' +
+          'subprocessen kör Activity E och F. Message B och 3-timmarstimern hinns aldrig med, så B, C och ' +
+          'D blir inte av. **A, E, F.** (Streckad kant hade betytt icke-avbrytande — då hade huvudflödet ' +
+          'fortsatt parallellt.)' },
+      { typ: 'flerval', antal: 6, ratt: 4, summa: 'p46atd',
+        forklaring: 'Processen startar 4 december kl. 00:01. Activity A tar 1 timme, alltså klar 01:01. ' +
+          'Den mellanliggande timern väntar **48 timmar**, till 6 december 01:01. Activity B tar 1 timme. ' +
+          'Processen är klar **6 december kl. 02:01**. Fällan är att glömma någon av de två aktiviteternas ' +
+          'timme.' }
+    ]
+  },
+
+  {
+    id: 'bpm-ht25-omtenta',
+    delkurs: 'processer',
+    titel: 'Omtentamen',
+    datum: '2026-01-09',
+    fil: 'SYSB23_BPM_9jan2026.pdf',
+    rubrik: ['HT25', 'Processorienterad', 'Omtentamen'],
+    poang: { flerval: 5, essa: 15 },
+    beskrivning: '2 essäer à 15 p, 10 BPM-frågor à 5 p och 4 BPMN-frågor (3–7 p, tre med diagram)',
+    poangsattning: 'Essäfrågorna ger max 15 poäng, utan minuspoäng. I BPM-sektionen ger rätt svar ' +
+      '5 poäng; i BPMN-sektionen det antal poäng som står under frågan. Fel svar ger −1 poäng och ' +
+      'obesvarad fråga 0 poäng. Max 300 ord per essä.',
+    maxOrd: 300,
+    fragor: [
+      { typ: 'essa', summa: '1f0e643', bank: 'p-essa-03' },
+      { typ: 'essa', summa: 'd5roqt', bank: 'p-essa-04' },
+      { typ: 'flerval', antal: 4, ratt: 2, summa: '1mtnkdy',
+        forklaring: 'I ett Red Wine Test **föreställer sig deltagarna att BPM-projektet redan är klart** ' +
+          'och beskriver hur organisationen då fungerar — som när man skålar efter ett lyckat projekt. ' +
+          'Det är framåtblickande, inte en analys av as-is eller av risker.' },
+      { typ: 'flerval', antal: 4, ratt: 3, summa: '1m98k5i',
+        forklaring: 'Target Operating Model är en **övergripande bild av hur organisationens delar ska ' +
+          'fungera i framtiden** — processer, människor, teknik och styrning tillsammans. Den är varken ' +
+          'en IT-arkitektur, en kostnadskalkyl eller en as-is-karta.' },
+      { typ: 'flerval', antal: 4, ratt: 3, summa: '1kcyh0o',
+        forklaring: 'Steg, regler, ansvar och beslutspunkter för **en specifik process** — det är precis ' +
+          'vad en process asset samlar. TOM är för övergripande, Process Worth Matrix prioriterar mellan ' +
+          'processer, och strategidokumentet säger inget om hur processen går till.' },
+      { typ: 'flerval', antal: 4, ratt: 2, summa: '1ynqmb1',
+        forklaring: 'I Understand modellerar man för att få **en gemensam, faktabaserad bild av hur ' +
+          'processen fungerar i dag** och kunna analysera den. Jeston varnar för att modellera för ' +
+          'detaljerat — det är inte automatiseringsunderlag eller färdiga KPI:er.' },
+      { typ: 'flerval', antal: 4, ratt: 2, summa: 'f9d8nl',
+        forklaring: 'En quick win går att **genomföra snabbt och billigt och ger en direkt förbättring**. ' +
+          'Den bygger förtroende för BPM-arbetet, men den ersätter inte workshops och kräver inte ' +
+          'externa konsulter.' },
+      { typ: 'flerval', antal: 4, ratt: 3, summa: 'sk57gt',
+        forklaring: 'RPA klickar sig fram i **användargränssnittet** i stället för att integrera systemen ' +
+          'på riktigt. Ändras en skärmbild går roboten sönder, och därför skalade många tidiga case dåligt. ' +
+          'RPA kräver tvärtom lite kodning.' },
+      { typ: 'flerval', antal: 4, ratt: 1, summa: 'mac05g',
+        forklaring: 'Några engagerade personer, inget mandat, ingen budget, sporadiska insatser — det är ' +
+          '**under the radar**. Pilot project är ett avgränsat projekt med uppdrag att visa värde, in the ' +
+          'driver’s seat innebär ledningens stöd, och business as usual att BPM är inbäddat.' },
+      { typ: 'flerval', antal: 4, ratt: 3, summa: '1cxfrpj',
+        forklaring: 'Strategiskt viktigt, tvärfunktionellt och påverkar hela verksamheten: då behövs ' +
+          '**top-down** för styrning, mandat och samordning. Bottom-up eller decentraliserat ger ingen ' +
+          'helhet, och att vänta löser inget när regelverket kräver anpassning.' },
+      { typ: 'flerval', antal: 4, ratt: 3, summa: '1pm102g',
+        forklaring: 'En Large Process Model (Kampik m.fl. 2025) är en **samlad, datadriven kunskapsbas** ' +
+          'om processer som kan ge automatiska förbättringsförslag. Den ska stödja analytikerna, inte ' +
+          'ersätta dem eller styra allt via agenter.' },
+      { typ: 'flerval', antal: 4, ratt: 0, summa: 'l5t4wi',
+        forklaring: 'Jestons processoptimeringslösningar: **process redesign, outsourcing, shared services, ' +
+          'RPA och cloud computing**. Ledarskap och change management är 7FE:s essentials, och ' +
+          'customer- och human-centric är BPM-perspektiv.' },
+      { typ: 'flerval', antal: 6, ratt: 0, summa: '3aya1r',
+        forklaring: 'En event-subprocess ritas med **prickad kant**. Startar den med en **streckad** ' +
+          'cirkel är den icke-avbrytande, och kuvertet gör den till en meddelandestart. Det är **B**. ' +
+          'D har heldragen cirkel och är därför avbrytande, och F startar på en timer. C är en send task ' +
+          '(fyllt kuvert), E en receive task (tomt kuvert), och A är en call activity.' },
+      { typ: 'flerval', antal: 4, ratt: 3, summa: '1q6ingt',
+        forklaring: 'En BPMN-process behöver en **tydlig start, ett förutsägbart flöde och tydliga slut**. ' +
+          'Reseräkningen har allt det: inskick, kontroll, komplettering, attest och sluten Utbetald eller ' +
+          'Avslagen. De andra är löpande, ad hoc eller saknar slutpunkt.' },
+      { typ: 'flerval', antal: 6, ratt: 4, summa: 'so3mon',
+        forklaring: 'Activity A, sedan Subprocess A: Activity B och gatewayn "Missing Information?". Svaret ' +
+          'är Yes, så det blir Activity C, som slutar i en **error end event**. Felet fångas av ' +
+          'feltriggern på subprocessens kant, och flödet går vidare till Activity F. Activity D och E ' +
+          'körs aldrig. **A, B, C, F.**' },
+      { typ: 'flerval', antal: 6, ratt: 2, summa: '1ox4gbt',
+        forklaring: 'Start 2 februari kl. 00.01. Activity A tar två timmar, så den är klar 02.01. Timern ' +
+          'väntar **36 timmar**, till 3 februari kl. 14.01. Activity B tar två timmar. Processen är klar ' +
+          '**3 februari kl. 16.01**.' }
+    ]
   }
 ];

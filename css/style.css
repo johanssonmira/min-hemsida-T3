@@ -1641,13 +1641,24 @@ body.fokus #vy-ova, body.fokus #vy-prov { max-width: 760px; }
 .provfraga { display: flex; gap: 1rem; align-items: flex-start; }
 .provnr {
   flex: 0 0 auto;
-  width: 2rem; height: 2rem; border-radius: 50%;
+  min-width: 2rem; height: 2rem; padding: 0 .45rem; border-radius: 999px;
   display: flex; align-items: center; justify-content: center;
   background: var(--creme-200); color: var(--ink-mid);
-  font-weight: 800; font-size: .88rem;
+  font-weight: 800; font-size: .88rem; white-space: nowrap;
 }
 .provinnehall { flex: 1; min-width: 0; }
 .provtext { font-size: 1rem; line-height: 1.6; margin: .15rem 0 .9rem; font-weight: 600; }
+
+/* BPMN-diagrammet ur tentans PDF. Vit bakgrund som på tentan, och det
+   får rulla i sidled på smala skärmar i stället för att bli oläsligt. */
+.provbild {
+  margin: .4rem 0 .9rem; padding: .5rem;
+  background: #fff; border: 1px solid var(--creme-300); border-radius: var(--r-s);
+  overflow-x: auto;
+}
+.provbild img { display: block; width: 100%; min-width: 480px; height: auto; }
+.provord { margin: .35rem 0 0; }
+.provord.over { color: var(--rod-600); font-weight: 700; }
 
 .provalternativ { display: grid; gap: .4rem; }
 

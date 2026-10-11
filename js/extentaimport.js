@@ -69,12 +69,80 @@ window.SYSB23.extentaimport = (function () {
       for (var n = 1; n <= doc.numPages; n++) {
         (function (nr) {
           kedja = kedja.then(function () {
-            return doc.getPage(nr).then(function (s) { return s.getTextContent(); })
-              .then(function (inn) { sidor.push(bitar(inn)); });
+            var sida;
+            return doc.getPage(nr).then(function (s) {
+              sida = s;
+              return s.getTextContent();
+            }).then(function (inn) {
+              var b = bitar(inn);
+              sidor.push(b);
+              return bilderPaSida(sida).then(function (bilder) { b.bilder = bilder; });
+            });
           });
         })(n);
       }
       return kedja.then(function () { return sidor; });
+    });
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Diagram                                                           */
+  /* BPMN-frågorna har diagrammet som en bild i PDF:en. Bildernas läge  */
+  /* tas ur sidans ritinstruktioner, och sedan ritas sidan och just     */
+  /* den rutan klipps ut — så att diagrammet ser ut exakt som på tentan */
+  /* utan att finnas någon annanstans än i din webbläsare.             */
+  /* ---------------------------------------------------------------- */
+
+  var MIN_BILD = 40;   /* pt — mindre bilder är svarsrutans ikoner, inte diagram */
+  var SKALA = 2;       /* upplösning på det urklippta diagrammet */
+
+  function bildrutor(ops, OPS) {
+    var rutor = [];
+    var stack = [[1, 0, 0, 1, 0, 0]];
+    function mul(a, b) {
+      return [a[0] * b[0] + a[2] * b[1], a[1] * b[0] + a[3] * b[1],
+              a[0] * b[2] + a[2] * b[3], a[1] * b[2] + a[3] * b[3],
+              a[0] * b[4] + a[2] * b[5] + a[4], a[1] * b[4] + a[3] * b[5] + a[5]];
+    }
+    for (var k = 0; k < ops.fnArray.length; k++) {
+      var fn = ops.fnArray[k], a = ops.argsArray[k];
+      if (fn === OPS.save) stack.push(stack[stack.length - 1].slice());
+      else if (fn === OPS.restore) { if (stack.length > 1) stack.pop(); }
+      else if (fn === OPS.transform) stack[stack.length - 1] = mul(stack[stack.length - 1], a);
+      else if (fn === OPS.paintImageXObject || fn === OPS.paintInlineImageXObject ||
+               fn === OPS.paintImageXObjectRepeat) {
+        var m = stack[stack.length - 1];
+        var r = { x: m[4], y: m[5], w: m[0], h: m[3] };
+        if (r.w >= MIN_BILD && r.h >= MIN_BILD) rutor.push(r);
+      }
+    }
+    return rutor;
+  }
+
+  function bilderPaSida(sida) {
+    return sida.getOperatorList().then(function (ops) {
+      var rutor = bildrutor(ops, pdfjs.OPS);
+      if (!rutor.length) return [];
+
+      var vp = sida.getViewport({ scale: SKALA });
+      var duk = document.createElement('canvas');
+      duk.width = Math.ceil(vp.width);
+      duk.height = Math.ceil(vp.height);
+      var ctx = duk.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, duk.width, duk.height);
+
+      return sida.render({ canvasContext: ctx, viewport: vp }).promise.then(function () {
+        return rutor.map(function (r) {
+          var v = vp.convertToViewportRectangle([r.x, r.y, r.x + r.w, r.y + r.h]);
+          var x = Math.floor(Math.min(v[0], v[2])), y = Math.floor(Math.min(v[1], v[3]));
+          var w = Math.ceil(Math.abs(v[2] - v[0])), h = Math.ceil(Math.abs(v[3] - v[1]));
+          var ut = document.createElement('canvas');
+          ut.width = w; ut.height = h;
+          ut.getContext('2d').drawImage(duk, x, y, w, h, 0, 0, w, h);
+          return { x: r.x, y: r.y, w: r.w, h: r.h, src: ut.toDataURL('image/png') };
+        });
+      });
     });
   }
 
@@ -127,7 +195,7 @@ window.SYSB23.extentaimport = (function () {
         slut = b.x + b.w;
       });
 
-      return { y: g.y, x: g.bitar[0].x, delar: slaIhop(delar) };
+      return { y: g.y, x: g.bitar[0].x, slut: slut, delar: slaIhop(delar) };
     });
   }
 
@@ -176,19 +244,33 @@ window.SYSB23.extentaimport = (function () {
     var rubrik = '';
 
     sidor.forEach(function (sida, si) {
+      var sidrader = [];
       tillRader(sida).forEach(function (r) {
         var t = text(r);
         if (!t) return;
         if (arSidhuvud(t) && !rubrik) rubrik = t;
         if (arBrus(t)) return;
-        r.sida = si;
-        rader.push(r);
+        sidrader.push(r);
       });
+      /* Diagrammen blir egna "rader" på sin plats i texten, sorterade
+         efter bildens överkant. */
+      (sida.bilder || []).forEach(function (b) {
+        sidrader.push({ y: b.y + b.h, x: b.x, slut: b.x + b.w, delar: [], bild: b });
+      });
+      sidrader.sort(function (a, b) { return b.y - a.y; });
+      sidrader.forEach(function (r) { r.sida = si; rader.push(r); });
     });
 
-    /* Frågorna börjar efter poängsättningen i instruktionerna */
+    /* Frågorna börjar efter poängsättningen i instruktionerna. På
+       BPM-tentorna följer fler rader om flervalssektionerna efter
+       "Essäfrågorna ger …", så resten av den sidan hoppas också över. */
     var start = 0;
     rader.forEach(function (r, i) { if (/^Essäfrågorna ger/.test(text(r))) start = i + 1; });
+    if (start > 0) {
+      var instrSida = rader[start - 1].sida;
+      while (start < rader.length && rader[start].sida === instrSida &&
+             !/^1(?!\d)/.test(text(rader[start]))) start++;
+    }
 
     var fragor = [];
     var block = [];
@@ -213,24 +295,35 @@ window.SYSB23.extentaimport = (function () {
   }
 
   function tolkaBlock(rader, nr, poang) {
-    var iVal = -1, iSkriv = -1;
+    var iVal = -1, iSkriv = -1, iInstr = -1;
     rader.forEach(function (r, i) {
       var t = text(r);
-      if (/^Välj ett alternativ/.test(t)) iVal = i;
+      /* "Välj ett alternativ:" — ibland bruten så att "alternativ:" hamnar
+         ensamt på nästa rad. Alternativen börjar efter den raden. */
+      if (/^Välj ett alternativ/.test(t) || /Välj ett alternativ:?\s*$/.test(t)) iVal = i;
+      else if (/^alternativ:?\s*$/.test(t) && i > 0 && /Välj ett\s*$/.test(text(rader[i - 1]))) iVal = i;
       /* "Skriv in ditt svar här" eller "Skriv ditt svar här. Ändringar …" —
          det som följer är svarsrutans verktygsrad, inte frågan. */
       if (/^Skriv (in )?ditt svar/.test(t) && iSkriv === -1) iSkriv = i;
+      /* BPM-tentorna upprepar poängen under varje fråga ("Rätt svar ger
+         5 poäng …", "Frågan ger max 15 poäng.") — det visar appen själv. */
+      if (/^(Rätt svar ger \d+ poäng|Frågan ger max \d+ poäng)/.test(t) && iInstr === -1) iInstr = i;
     });
 
-    var slutFraga = iVal > -1 ? iVal : (iSkriv > -1 ? iSkriv : rader.length);
+    var slutFraga = [iInstr, iVal, iSkriv].filter(function (i) { return i > -1; })
+      .reduce(function (a, b) { return Math.min(a, b); }, rader.length);
     var fragerader = rader.slice(0, slutFraga);
 
     /* Frågenumret står först, ibland ensamt på raden och ibland ihopskrivet
-       med frågan. Det tas bort bara om det är just det väntade numret. */
-    if (fragerader.length) {
+       med frågan. Det tas bort bara om det är just det väntade numret —
+       eller en deluppgift som "2(a)", som då blir frågans etikett. */
+    var etikett = String(nr);
+    if (fragerader.length && !fragerader[0].bild) {
       var forsta = fragerader[0].delar;
-      var re = new RegExp('^\\s*' + nr + '(?!\\d)');
-      if (re.test(forsta[0].t)) {
+      var re = new RegExp('^\\s*(' + nr + '(?!\\d|\\s*\\()|\\d+\\s*\\([a-z]\\))');
+      var m = re.exec(forsta[0].t);
+      if (m) {
+        etikett = m[1].replace(/\s+/g, '');
         forsta[0] = { t: forsta[0].t.replace(re, ''), f: forsta[0].f };
         if (!forsta[0].t.trim()) forsta.shift();
         if (!forsta.length) fragerader = fragerader.slice(1);
@@ -240,7 +333,7 @@ window.SYSB23.extentaimport = (function () {
     var fraga = stycken(fragerader);
 
     if (iVal === -1) {
-      return { nr: nr, typ: 'essa', poang: poang, fraga: fraga };
+      return { nr: nr, etikett: etikett, typ: 'essa', poang: poang, fraga: fraga };
     }
 
     /* Alternativ: ny rad efter ett stort glapp startar ett nytt alternativ.
@@ -263,7 +356,7 @@ window.SYSB23.extentaimport = (function () {
     });
 
     return {
-      nr: nr, typ: 'flerval', poang: poang, fraga: fraga,
+      nr: nr, etikett: etikett, typ: 'flerval', poang: poang, fraga: fraga,
       alternativ: alternativ.map(function (a) { return slaIhop(a).map(trimma); })
     };
   }
@@ -276,19 +369,34 @@ window.SYSB23.extentaimport = (function () {
   }
 
   /* Frågetextens rader blir stycken: ett större glapp mellan två rader
-     betyder nytt stycke, annars är det en radbrytning i samma mening. */
+     betyder nytt stycke, annars är det en radbrytning i samma mening.
+     En kort rad följd av en rad med versal är en egen rad i en lista
+     ("Message A mottages" / "Message B mottages …") och blir eget stycke.
+     Ett diagram blir ett stycke av formen { bild }. */
+  var KORT_RAD = 400;   /* pt — en rad som slutar före detta är inte radbruten */
+
   function stycken(rader) {
     var ut = [], nu = [];
+    function avsluta() { if (nu.length) ut.push(slaIhop(nu).map(trimma)); nu = []; }
+
     rader.forEach(function (r, i) {
-      if (i > 0 && glapp(rader[i - 1], r) > NYTT_STYCKE && glapp(rader[i - 1], r) !== Infinity) {
-        ut.push(slaIhop(nu).map(trimma));
-        nu = [];
-      } else if (i > 0) {
+      if (r.bild) {
+        avsluta();
+        ut.push({ bild: { x: r.bild.x, y: r.bild.y, w: r.bild.w, h: r.bild.h, src: r.bild.src } });
+        return;
+      }
+      var forra = rader[i - 1];
+      var g = glapp(forra, r);
+      var lista = forra && !forra.bild && g !== Infinity && forra.slut < KORT_RAD &&
+                  /^[A-ZÅÄÖ0-9]/.test(text(r));
+      if (!nu.length || (g > NYTT_STYCKE && g !== Infinity) || lista) {
+        avsluta();
+      } else {
         nu.push({ t: skarv(nu, text(r)), f: 0 });
       }
       r.delar.forEach(function (d) { nu.push(d); });
     });
-    if (nu.length) ut.push(slaIhop(nu).map(trimma));
+    avsluta();
     return ut;
   }
 
@@ -299,7 +407,7 @@ window.SYSB23.extentaimport = (function () {
   /* Bara bokstäverna, gemener. Tål att mellanslag och betoning tolkas lite
      olika mellan webbläsare, men inte att frågan är en annan. */
   function kontrollsumma(delarLista) {
-    var s = [].concat.apply([], delarLista).map(function (d) { return d.t; }).join('')
+    var s = [].concat.apply([], delarLista.filter(Array.isArray)).map(function (d) { return d.t; }).join('')
       .toLowerCase().replace(/[^a-zåäöé]/g, '');
     var h = 5381;
     for (var i = 0; i < s.length; i++) h = ((h * 33) ^ s.charCodeAt(i)) >>> 0;

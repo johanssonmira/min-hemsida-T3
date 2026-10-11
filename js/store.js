@@ -85,6 +85,23 @@ window.SYSB23.store = (function () {
 
   var data = las();
 
+  /* Diagrammen ur inlästa tentor, under en egen nyckel. Hålls även i
+     minnet, så att de syns under sessionen fast lagringen skulle vara full. */
+  var BILDNYCKEL = 'sysb23-extentabilder';
+  var bildcache = null;
+
+  function lasBilder() {
+    if (bildcache) return bildcache;
+    try { bildcache = JSON.parse(localStorage.getItem(BILDNYCKEL) || '{}'); }
+    catch (e) { bildcache = {}; }
+    return bildcache;
+  }
+
+  function sparaBilder(b) {
+    try { localStorage.setItem(BILDNYCKEL, JSON.stringify(b)); return true; }
+    catch (e) { console.warn('Kunde inte spara tentans diagram.', e); return false; }
+  }
+
   var api = {
 
     /* ---------------------- Vald delkurs ---------------------- */
@@ -619,6 +636,21 @@ window.SYSB23.store = (function () {
     taBortExtenta: function (id) {
       if (data.extentor) delete data.extentor[id];
       spara();
+      var b = lasBilder();
+      if (b[id]) { delete b[id]; sparaBilder(b); }
+    },
+
+    /* Diagrammen ur tentorna (urklippta bilder) ligger under en egen
+       nyckel — de är stora, och ska inte tynga varje sparning eller
+       säkerhetskopian. Saknas de visas en uppmaning att läsa in PDF:en
+       igen. */
+    extentaBilder: function (id) { return lasBilder()[id] || {}; },
+
+    sparaExtentaBilder: function (id, bilder) {
+      var b = lasBilder();
+      b[id] = bilder;
+      bildcache = b;
+      return sparaBilder(b);
     },
 
     /* ---------------------- Underhåll ---------------------- */
@@ -701,6 +733,8 @@ window.SYSB23.store = (function () {
       data = JSON.parse(JSON.stringify(tomtLage));
       data.attgora = attgora || {};
       try { localStorage.removeItem(NYCKEL); } catch (e) { /* ignoreras */ }
+      try { localStorage.removeItem(BILDNYCKEL); } catch (e) { /* ignoreras */ }
+      bildcache = {};
       spara();
     }
   };

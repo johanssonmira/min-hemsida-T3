@@ -1,14 +1,14 @@
 /* =========================================================================
    tentaprov.js – Prov: de riktiga gamla tentorna, exakt som de såg ut.
 
-   Inga andra frågor. Provet består av de gamla strategitentorna, med
+   Inga andra frågor. Provet består av delkursens gamla tentor, med
    frågor och svarsalternativ ord för ord och i originalets ordning. Texten
-   kommer från tentans PDF, som man läser in själv — se js/extentaimport.js
-   för varför den inte ligger i appen.
+   — och BPMN-frågornas diagram — kommer från tentans PDF, som man läser in
+   själv. Se js/extentaimport.js för varför den inte ligger i appen.
 
    Som på salstentan: allt på en sida, man kryssar i, kan ändra sig och
-   ta bort ett svar, och rättar först vid inlämning. Rätt ger 6 poäng, fel
-   −1, obesvarad 0. Essäfrågorna självrättas mot en checklista.
+   ta bort ett svar, och rättar först vid inlämning. Rätt ger frågans egen
+   poäng, fel −1, obesvarad 0. Essäfrågorna självrättas mot en checklista.
 
    Facit och förklaringar är appens egna (data/extentor.js). Tentorna kom
    utan facit, och det står tydligt i gränssnittet.
@@ -30,6 +30,7 @@ window.SYSB23.tentaprov = (function () {
 
   var laddar = null;      /* tentaId som läses in just nu */
   var fel = {};           /* tentaId -> felmeddelande från senaste inläsning */
+  var info = {};          /* tentaId -> upplysning som inte är ett fel */
 
   /* ---------------------------------------------------------------- */
 
@@ -55,9 +56,27 @@ window.SYSB23.tentaprov = (function () {
     }).join('');
   }
 
+  /* Ett stycke är antingen text (en lista delar) eller ett diagram
+     ({ bild: { nyckel, w, h } }) vars bild ligger i den separata
+     bildlagringen. */
   function styckenTillHtml(stycken) {
-    return (stycken || []).map(function (s) { return '<p>' + delarTillHtml(s) + '</p>'; }).join('');
+    var bilder = prov ? S.store.extentaBilder(prov.id) : {};
+    return (stycken || []).map(function (s) {
+      if (!s.bild) return '<p>' + delarTillHtml(s) + '</p>';
+      var src = bilder[s.bild.nyckel];
+      if (!src || !/^data:image\/png;base64,/.test(src)) {
+        return '<div class="notis liten">Diagrammet saknas på den här enheten. Ta bort tentan ' +
+               'under Prov och läs in PDF:en igen.</div>';
+      }
+      return '<figure class="provbild" style="max-width:' + Math.round(s.bild.w * 1.25) + 'px">' +
+             '<img src="' + src + '" alt="BPMN-diagrammet i uppgiften, ur tentans PDF"></figure>';
+    }).join('');
   }
+
+  /* Frågans nummer som på tentan: "2(a)" på BPM-tentorna, annars 1, 2, 3 … */
+  function etikett(f) { return U.esc(f.etikett || String(f.nr)); }
+
+  function antalOrd(t) { return (t.trim().match(/\S+/g) || []).length; }
 
   /* ---------------------------------------------------------------- */
   /* Startsidan                                                        */
@@ -104,15 +123,16 @@ window.SYSB23.tentaprov = (function () {
 
   function tentakort(e) {
     var inlast = S.store.extenta(e.id);
-    var h = '<div class="kort tentakort">';
+    var h = '<div class="kort provtenta">';
     h += '<div class="tentakort-rad">';
     h += '<div><h3 style="margin:0">' + U.esc(e.titel) + '</h3>';
     h += '<p class="muted liten" style="margin:.2rem 0 0">' + U.esc(e.rubrik[0]) + ' · ' +
          U.esc(U.langtDatum(e.datum)) + ' · ' +
-         e.fragor.filter(function (f) { return f.typ === 'flerval'; }).length +
-         ' flervalsfrågor à ' + e.poang.flerval + ' p och ' +
-         e.fragor.filter(function (f) { return f.typ === 'essa'; }).length +
-         ' essäfrågor à ' + e.poang.essa + ' p</p></div>';
+         (e.beskrivning ? U.esc(e.beskrivning) :
+           e.fragor.filter(function (f) { return f.typ === 'flerval'; }).length +
+           ' flervalsfrågor à ' + e.poang.flerval + ' p och ' +
+           e.fragor.filter(function (f) { return f.typ === 'essa'; }).length +
+           ' essäfrågor à ' + e.poang.essa + ' p') + '</p></div>';
 
     if (inlast) {
       h += '<button class="primar" data-starta="' + U.esc(e.id) + '">Starta provet</button>';
@@ -131,6 +151,9 @@ window.SYSB23.tentaprov = (function () {
            '<button class="lankbtn" data-taborttenta="' + U.esc(e.id) + '">Ta bort från den här enheten</button></p>';
     }
 
+    if (info[e.id]) {
+      h += '<div class="notis info liten" style="margin:.8rem 0 0">' + U.esc(info[e.id]) + '</div>';
+    }
     if (fel[e.id]) {
       h += '<div class="notis" style="margin:.8rem 0 0"><strong>Det gick inte att läsa in.</strong> ' +
            U.esc(fel[e.id]) + '</div>';
@@ -160,6 +183,7 @@ window.SYSB23.tentaprov = (function () {
   function lasIn(id, fil) {
     laddar = id;
     delete fel[id];
+    delete info[id];
     visaStart();
 
     S.extentaimport.lasPdf(fil).then(function (sidor) {
@@ -168,9 +192,24 @@ window.SYSB23.tentaprov = (function () {
       if (m.fel) { fel[id] = m.fel; visaStart(); return; }
       if (m.id !== id) {
         /* Rätt tenta men fel knapp — spara den ändå där den hör hemma */
-        fel[id] = 'Det där var en annan av tentorna. Den är nu inläst på sin plats.';
+        info[id] = 'Det där var en annan av tentorna. Den är nu inläst på sin plats.';
       }
+      /* Diagrammen flyttas ut till den separata bildlagringen; i tentan
+         står bara en nyckel till dem. */
+      var bilder = {}, n = 0;
+      m.tenta.fragor.forEach(function (f) {
+        f.fraga.forEach(function (s) {
+          if (!s.bild) return;
+          var k = 'b' + (n++);
+          bilder[k] = s.bild.src;
+          s.bild = { nyckel: k, w: s.bild.w, h: s.bild.h };
+        });
+      });
       S.store.sparaExtenta(m.id, m.tenta);
+      if (n && !S.store.sparaExtentaBilder(m.id, bilder)) {
+        info[m.id] = 'Tentan är inläst, men diagrammen fick inte plats i webbläsarens lagring. ' +
+                    'De syns tills du laddar om sidan.';
+      }
       visaStart();
     }).catch(function (e) {
       laddar = null;
@@ -213,11 +252,13 @@ window.SYSB23.tentaprov = (function () {
     var h = '<div class="provark">';
 
     h += '<div class="kort provhuvud">';
-    h += '<div class="muted mini">' + U.esc(e.rubrik[0]) + ' · SYSB23, Strategi och ekonomistyrning</div>';
+    h += '<div class="muted mini">' + U.esc(e.rubrik[0]) + ' · SYSB23, ' + U.esc(U.delkursNamn(e.delkurs)) + '</div>';
     h += '<h2 style="margin:.2rem 0 .6rem">' + U.esc(e.titel) + '</h2>';
-    h += '<p class="liten" style="margin:0"><strong>Poängsättning.</strong> I flervalssektionen ' +
-         'ger rätt svar ' + e.poang.flerval + ' poäng, fel svar −1 poäng och obesvarad fråga 0 poäng. ' +
-         'Essäfrågorna ger max ' + e.poang.essa + ' poäng, utan minuspoäng.</p>';
+    h += '<p class="liten" style="margin:0"><strong>Poängsättning.</strong> ' +
+         (e.poangsattning ? U.esc(e.poangsattning) :
+           'I flervalssektionen ger rätt svar ' + e.poang.flerval + ' poäng, fel svar −1 poäng och ' +
+           'obesvarad fråga 0 poäng. Essäfrågorna ger max ' + e.poang.essa + ' poäng, utan minuspoäng.') +
+         '</p>';
     h += '<p class="muted mini" style="margin:.5rem 0 0">Klicka på ett markerat alternativ igen ' +
          'för att ta bort svaret.</p>';
     h += '</div>';
@@ -242,7 +283,7 @@ window.SYSB23.tentaprov = (function () {
 
   function flervalsfraga(f) {
     var h = '<div class="kort provfraga" id="tf-' + f.nr + '">';
-    h += '<div class="provnr">' + f.nr + '</div>';
+    h += '<div class="provnr">' + etikett(f) + '</div>';
     h += '<div class="provinnehall">';
     h += '<div class="provtext">' + styckenTillHtml(f.fraga) + '</div>';
     h += '<p class="muted mini" style="margin:0 0 .5rem">Välj ett alternativ:</p>';
@@ -261,11 +302,15 @@ window.SYSB23.tentaprov = (function () {
 
   function essafraga(f) {
     var h = '<div class="kort provfraga">';
-    h += '<div class="provnr">' + f.nr + '</div>';
+    h += '<div class="provnr">' + etikett(f) + '</div>';
     h += '<div class="provinnehall">';
     h += '<div class="provtext">' + styckenTillHtml(f.fraga) + '</div>';
     h += '<textarea class="provessa" data-essa="' + f.nr + '" rows="10" ' +
          'placeholder="Skriv in ditt svar här">' + U.esc(prov.essasvar[f.nr] || '') + '</textarea>';
+    if (prov.nyckel.maxOrd) {
+      h += '<p class="muted mini provord" data-ord="' + f.nr + '">Ord: ' +
+           antalOrd(prov.essasvar[f.nr] || '') + '/' + prov.nyckel.maxOrd + '</p>';
+    }
     h += '<p class="muted mini provpoangrad">Totalpoäng: ' + f.poang + '</p>';
     h += '</div></div>';
     return h;
@@ -293,6 +338,12 @@ window.SYSB23.tentaprov = (function () {
     Array.prototype.forEach.call(vy.querySelectorAll('[data-essa]'), function (t) {
       t.addEventListener('input', function () {
         prov.essasvar[t.dataset.essa] = t.value;
+        var ord = vy.querySelector('[data-ord="' + t.dataset.essa + '"]');
+        if (ord) {
+          var n = antalOrd(t.value);
+          ord.textContent = 'Ord: ' + n + '/' + prov.nyckel.maxOrd;
+          ord.classList.toggle('over', n > prov.nyckel.maxOrd);
+        }
         uppdateraRaknare();
       });
     });
@@ -436,7 +487,7 @@ window.SYSB23.tentaprov = (function () {
     var korrekt = !blank && svar === k.ratt;
 
     var h = '<div class="kort provfraga rattad ' + (korrekt ? 'ratt' : (blank ? 'blank' : 'fel')) + '">';
-    h += '<div class="provnr">' + f.nr + '</div><div class="provinnehall">';
+    h += '<div class="provnr">' + etikett(f) + '</div><div class="provinnehall">';
     h += '<div class="provtext">' + styckenTillHtml(f.fraga) + '</div>';
 
     f.alternativ.forEach(function (alt, i) {
@@ -461,7 +512,7 @@ window.SYSB23.tentaprov = (function () {
     var kryss = punkter.filter(Boolean).length;
 
     var h = '<div class="kort provfraga">';
-    h += '<div class="provnr">' + f.nr + '</div><div class="provinnehall">';
+    h += '<div class="provnr">' + etikett(f) + '</div><div class="provinnehall">';
     h += '<div class="provtext">' + styckenTillHtml(f.fraga) + '</div>';
 
     var mitt = (prov.essasvar[f.nr] || '').trim();
